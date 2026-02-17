@@ -49,6 +49,13 @@ cp ../patterns/git/pre-commit/base.sh .git/hooks/pre-commit
 cp ../patterns/git/commit-msg/conventional.sh .git/hooks/commit-msg
 chmod +x .git/hooks/pre-commit .git/hooks/commit-msg
 
+# Copy Docker patterns
+echo "🐳 Adding Docker patterns..."
+cp ../patterns/docker/Dockerfile.node.template Dockerfile
+cp ../patterns/docker/docker-compose.dev.yml docker-compose.yml
+cp ../patterns/docker/docker-compose.prod.yml docker-compose.prod.yml
+cp ../patterns/docker/.dockerignore .dockerignore
+
 # Create package.json for Node.js projects
 if [ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ]; then
   cat > package.json << EOF
@@ -66,7 +73,11 @@ if [ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ]; then
     "lint": "eslint src --ext .ts,.js",
     "lint:fix": "eslint src --ext .ts,.js --fix",
     "format": "prettier --write src/**/*.{ts,js,json}",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "docker:build": "docker build -t $PROJECT_NAME .",
+    "docker:run": "docker run -p 3000:3000 $PROJECT_NAME",
+    "docker:dev": "docker-compose up -d",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
@@ -225,6 +236,9 @@ replacements.txt
 bfg.jar
 SECURITY_INCIDENT.md
 POST_CLEANUP_CHECKLIST.md
+
+# Docker
+.dockerignore
 EOF
 
 # Create README
@@ -244,6 +258,37 @@ $([ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ] && echo "npm te
 
 # Start development
 $([ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ] && echo "npm run dev" || echo "python src/main.py")
+
+# Docker development
+docker-compose up -d
+\`\`\`
+
+## 🐳 Docker Development
+
+This project includes Docker patterns for consistent development and deployment:
+
+### Development Environment
+\`\`\`bash
+# Start development environment
+docker-compose up -d
+
+# View logs
+docker-compose logs -f app
+
+# Stop environment
+docker-compose down
+\`\`\`
+
+### Production Deployment
+\`\`\`bash
+# Build production image
+docker build -t $PROJECT_NAME .
+
+# Run production container
+docker run -p 3000:3000 $PROJECT_NAME
+
+# Or use production compose
+docker-compose -f docker-compose.prod.yml up -d
 \`\`\`
 
 ## 📋 Requirements
@@ -253,9 +298,11 @@ EOF
 if [ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ]; then
   echo "- Node.js 22+" >> README.md
   echo "- npm 9+" >> README.md
+  echo "- Docker & Docker Compose" >> README.md
 elif [ "$PROJECT_TYPE" = "python" ]; then
   echo "- Python 3.12+" >> README.md
   echo "- pip" >> README.md
+  echo "- Docker & Docker Compose" >> README.md
 fi
 
 cat >> README.md << EOF
@@ -287,6 +334,7 @@ This project follows UIForge security patterns:
 - [UIForge Patterns](https://github.com/LucasSantana-Dev/uiforge-patterns)
 - [Security Guidelines](docs/SECURITY.md)
 - [Development Guide](docs/DEVELOPMENT.md)
+- [Docker Patterns](docs/DOCKER.md)
 
 ## 🤝 Contributing
 
@@ -373,6 +421,5 @@ echo "Next steps:"
 echo "1. cd $PROJECT_NAME"
 echo "2. Install dependencies"
 echo "3. Run tests to verify setup"
-echo "4. Start development"
-echo ""
-echo "Happy coding! 🚀"
+echo "4. Start development with: docker-compose up -d"
+echo "5. Happy coding! 🚀"

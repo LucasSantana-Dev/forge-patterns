@@ -13,6 +13,7 @@ UIForge Patterns provides a comprehensive set of shared configurations, workflow
 - 🔄 **Automation**: Scripts and workflows for consistent project setup
 - 📊 **Quality Standards**: 80% test coverage, linting, and security scanning
 - 🛡️ **Security First**: Built-in security scanning and validation
+- 🐳 **Docker Patterns**: Containerization and deployment patterns
 
 ## 📋 Projects Using These Patterns
 
@@ -29,7 +30,7 @@ UIForge Patterns provides a comprehensive set of shared configurations, workflow
 git clone https://github.com/LucasSantana-Dev/uiforge-patterns.git
 cd uiforge-patterns
 
-# Bootstrap a new project
+# Bootstrap a new project with Docker support
 ./scripts/bootstrap/project.sh my-new-project node
 
 # Or for Python projects
@@ -47,6 +48,11 @@ cp -r patterns/code-quality/eslint/base.config.js .eslintrc.js
 cp -r patterns/code-quality/prettier/base.config.json .prettierrc.json
 cp -r patterns/coverage/jest.config.template.js jest.config.js
 cp -r patterns/coverage/codecov.template.yml .codecov.yml
+
+# Add Docker patterns
+cp patterns/docker/Dockerfile.node.template Dockerfile
+cp patterns/docker/docker-compose.dev.yml docker-compose.yml
+cp patterns/docker/.dockerignore .dockerignore
 
 # Set up Git hooks
 cp patterns/git/pre-commit/base.sh .git/hooks/pre-commit
@@ -66,7 +72,7 @@ uiforge-patterns/
 │   ├── git/               # Git hooks and workflows
 │   ├── security/          # Security patterns and env templates
 │   ├── coverage/          # Test coverage configurations
-│   └── documentation/     # Documentation templates
+│   └── docker/            # Docker and containerization patterns
 ├── scripts/
 │   ├── security/          # Security validation scripts
 │   ├── bootstrap/         # Project bootstrap scripts
@@ -100,6 +106,32 @@ module.exports = {
   "arrowParens": "always",
   "endOfLine": "lf"
 }
+```
+
+### Docker Patterns
+
+#### Multi-stage Dockerfile
+```dockerfile
+# Build stage
+FROM node:22-alpine AS builder
+# ... build process
+
+# Production stage
+FROM node:22-alpine AS runtime
+# ... optimized production image
+```
+
+#### Docker Compose Development
+```yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: npm run dev
 ```
 
 ### Test Coverage Patterns
@@ -162,6 +194,41 @@ API_KEY=REPLACE_WITH_API_KEY
 ./scripts/security/validate-no-secrets.sh
 ./scripts/security/validate-placeholders.sh
 ```
+
+## 🐳 Docker Development
+
+### Quick Start with Docker
+
+```bash
+# Start development environment
+docker-compose up -d
+
+# View logs
+docker-compose logs -f app
+
+# Stop environment
+docker-compose down
+```
+
+### Production Deployment
+
+```bash
+# Build production image
+docker build -t my-app .
+
+# Run production container
+docker run -p 3000:3000 my-app
+
+# Or use production compose
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+### Available Docker Patterns
+
+- **Multi-stage builds**: Optimized production images
+- **Development environments**: Hot reload and debugging
+- **Production deployments**: Scaling and monitoring
+- **Security best practices**: Non-root users, minimal images
 
 ## 🛡️ Security
 
@@ -250,26 +317,6 @@ This repository is designed to be **completely public** with zero secrets:
 ./scripts/validate/quality.sh
 ```
 
-## 📚 Documentation
-
-### Getting Started
-
-- [Setup Guide](docs/getting-started.md) - Complete setup instructions
-- [Customization Guide](docs/customization-guide.md) - How to adapt patterns
-- [Maintenance Guide](docs/maintenance-guide.md) - Ongoing maintenance
-
-### Architecture
-
-- [Architecture Overview](docs/ARCHITECTURE.md) - System architecture
-- [Security Guidelines](docs/SECURITY.md) - Security best practices
-- [Deployment Guide](docs/DEPLOYMENT.md) - Deployment patterns
-
-### Reference
-
-- [Pattern Catalog](docs/pattern-catalog.md) - All available patterns
-- [Configuration Reference](docs/configuration-reference.md) - All options
-- [Troubleshooting](docs/troubleshooting.md) - Common issues
-
 ## 🚀 CI/CD Integration
 
 ### GitHub Actions Workflows
@@ -295,6 +342,27 @@ This repository is designed to be **completely public** with zero secrets:
 - ✅ Code coverage ≥ 80%
 - ✅ Security scans pass
 - ✅ Build verification succeeds
+
+## 📚 Documentation
+
+### Getting Started
+
+- [Setup Guide](docs/getting-started.md) - Complete setup instructions
+- [Customization Guide](docs/customization-guide.md) - How to adapt patterns
+- [Maintenance Guide](docs/maintenance-guide.md) - Ongoing maintenance
+- [Docker Guide](docs/docker-guide.md) - Containerization patterns
+
+### Architecture
+
+- [Architecture Overview](docs/ARCHITECTURE.md) - System architecture
+- [Security Guidelines](docs/SECURITY.md) - Security best practices
+- [Deployment Guide](docs/DEPLOYMENT.md) - Deployment patterns
+
+### Reference
+
+- [Pattern Catalog](docs/pattern-catalog.md) - All available patterns
+- [Configuration Reference](docs/configuration-reference.md) - All options
+- [Troubleshooting](docs/troubleshooting.md) - Common issues
 
 ## 🤝 Contributing
 
@@ -337,4 +405,4 @@ For questions, issues, or suggestions:
 
 ---
 
-**UIForge Patterns** - Consistency, Security, Quality, Automation 🚀
+**UIForge Patterns** - Consistency, Security, Quality, Automation, Docker 🚀

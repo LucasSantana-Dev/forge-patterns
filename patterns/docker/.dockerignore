@@ -1,0 +1,96 @@
+# Docker ignore file for UIForge projects
+# Optimizes build context and excludes unnecessary files
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.template
+
+# Logs
+*.log
+logs/
+
+# Testing
+coverage/
+htmlcov/
+.coverage
+.nyc_output
+.jest/
+test-results/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.windsurf/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Temporary files
+*.tmp
+*.temp
+stdin
+test.local.js
+*.local
+
+# Cache
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Security cleanup
+cleanup-*.sh
+replacements.txt
+bfg.jar
+SECURITY_INCIDENT.md
+POST_CLEANUP_CHECKLIST.md
+
+# Docker files (exclude from build context)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Backup files
+*.bak
+*.backup
+*.tgz
+
+# Tools
+.npm
+.yarn-integrity
+.pnpm-debug.log*
+.snyk/
+bandit-report.json
