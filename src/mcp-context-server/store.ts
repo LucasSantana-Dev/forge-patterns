@@ -1,9 +1,13 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'fs';
-import { resolve, sep } from 'path';
+import { resolve, sep, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const STORE_DIR = process.env.MCP_CONTEXT_STORE_PATH
   ? resolve(process.env.MCP_CONTEXT_STORE_PATH)
-  : resolve(process.cwd(), 'src', 'mcp-context-server', 'context-store');
+  : resolve(__dirname, '..', '..', 'src', 'mcp-context-server', 'context-store');
 
 export interface ProjectEntry {
   project: string;
