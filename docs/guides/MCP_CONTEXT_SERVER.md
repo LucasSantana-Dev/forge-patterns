@@ -1,22 +1,52 @@
 # UIForge Context MCP Server
 
-The `uiforge-context-server` is a local stdio MCP server that exposes the four UIForge project context documents as MCP **resources** and a query **tool**. Connect it to any MCP-compatible IDE to give AI agents live access to project plans, architecture, and status for all UIForge repos.
+The `uiforge-context-server` (v2) is a local stdio MCP server and the **absolute source of truth** for all UIForge project contexts. It manages a centralized `context-store/` directory — agents can read any project's context and write updates back through the same interface.
+
+## Architecture
+
+```
+src/mcp-context-server/
+├── context-store/          # Source of truth — one .md + .meta.json per project
+│   ├── forge-patterns.md
+│   ├── forge-patterns.meta.json
+│   ├── uiforge-webapp.md
+│   ├── uiforge-webapp.meta.json
+│   ├── uiforge-mcp.md
+│   ├── uiforge-mcp.meta.json
+│   ├── mcp-gateway.md
+│   └── mcp-gateway.meta.json
+├── store.ts                # Read/write/list with path-confinement security
+├── resources.ts            # Dynamic MCP resources from store
+├── tools.ts                # Tool handlers
+└── index.ts                # Server entry point (v2.0.0)
+```
 
 ## Resources
 
-| URI                                  | Document                                          |
-| ------------------------------------ | ------------------------------------------------- |
-| `uiforge://context/forge-patterns`   | `forge-patterns/docs/project/PROJECT_CONTEXT.MD`  |
-| `uiforge://context/uiforge-webapp`   | `uiforge-webapp/plan.MD`                          |
-| `uiforge://context/uiforge-mcp`      | `uiforge-mcp/plan.MD`                             |
-| `uiforge://context/mcp-gateway`      | `mcp-gateway/PROJECT_CONTEXT.md`                  |
+Resources are enumerated dynamically from the store. Each registered project is exposed at:
+
+```
+uiforge://context/<project-slug>
+```
+
+Current projects: `forge-patterns`, `uiforge-webapp`, `uiforge-mcp`, `mcp-gateway`
 
 ## Tools
 
-| Tool                  | Description                                            |
-| --------------------- | ------------------------------------------------------ |
-| `get_project_context` | Returns the full markdown content for a given project  |
-| `list_projects`       | Lists all available projects with descriptions         |
+| Tool                     | Description                                                                 |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `get_project_context`    | Returns the full context document for a project from the store              |
+| `update_project_context` | Writes/overwrites a project's context in the store (creates if new)         |
+| `list_projects`          | Lists all registered projects with slugs, descriptions, and last-updated    |
+
+### `update_project_context` parameters
+
+| Parameter     | Type   | Required | Description                                              |
+| ------------- | ------ | -------- | -------------------------------------------------------- |
+| `project`     | string | ✅       | Kebab-case slug (e.g. `my-project`)                      |
+| `title`       | string | ✅       | Human-readable title                                     |
+| `description` | string | ✅       | One-sentence description for the resource listing        |
+| `content`     | string | ✅       | Full markdown content — completely replaces existing doc |
 
 ## Setup
 
@@ -31,9 +61,8 @@ npm run mcp-context:build
 ### 2. Verify the build
 
 ```bash
-node dist/mcp-context-server/index.js
-# Should print: UIForge Context MCP Server running on stdio
-# (then wait for stdin — Ctrl+C to exit)
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node dist/mcp-context-server/index.js
+# Should return JSON with get_project_context, update_project_context, list_projects
 ```
 
 ## IDE Configuration
@@ -91,22 +120,36 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ## Usage Examples
 
-Once connected, agents can:
-
 ```text
-# Read a resource directly
-uiforge://context/uiforge-mcp
+# List all registered projects
+list_projects()
 
-# Call the tool
+# Read a project's full context
 get_project_context({ project: "mcp-gateway" })
 
-# List all projects
-list_projects()
+# Read via MCP resource URI
+uiforge://context/uiforge-mcp
+
+# Update a project's context (replaces existing)
+update_project_context({
+  project: "uiforge-webapp",
+  title: "uiforge-webapp Project Plan",
+  description: "Zero-cost AI-powered UI generation platform.",
+  content: "# UIForge Web App\n\n..."
+})
+
+# Add a brand-new project to the store
+update_project_context({
+  project: "my-new-project",
+  title: "My New Project",
+  description: "Short description for the listing.",
+  content: "# My New Project\n\n..."
+})
 ```
 
 ## Rebuilding After Changes
 
-The server reads files at request time — no rebuild needed when plan files change. Only rebuild when the TypeScript source changes:
+Only rebuild when the TypeScript source changes. The store is read at request time — updating context via `update_project_context` takes effect immediately without a rebuild.
 
 ```bash
 npm run mcp-context:build

@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **UIForge Context MCP Server** (`src/mcp-context-server/`): Local stdio MCP server exposing all four UIForge project context documents as MCP resources and tools
-  - `index.ts` — Server entry point with stdio transport, resource and tool handlers
-  - `resources.ts` — Resource definitions for `forge-patterns`, `uiforge-webapp`, `uiforge-mcp`, `mcp-gateway`
-  - `tools.ts` — `get_project_context` and `list_projects` tools
-  - `tsconfig.json` — TypeScript config outputting to `dist/mcp-context-server/`
+- **UIForge Context MCP Server v2** (`src/mcp-context-server/`): Centralized context store — the MCP server is now the absolute source of truth for all UIForge project contexts
+  - `store.ts` — Read/write/list operations on `context-store/` with slug validation and path-confinement security (0 Snyk issues)
+  - `context-store/` — Seeded with all 4 project contexts (`forge-patterns`, `uiforge-webapp`, `uiforge-mcp`, `mcp-gateway`) as `.md` + `.meta.json` pairs
+  - `update_project_context` tool — Writes/overwrites any project's context document in the store; supports adding new projects dynamically
+  - `resources.ts` — Rewritten to enumerate projects dynamically from the store (no hardcoded paths)
+  - `tools.ts` — All 3 tools (`get_project_context`, `update_project_context`, `list_projects`) read/write from the centralized store
+  - `index.ts` — Bumped to v2.0.0, wires all 3 tool handlers
   - `docs/guides/MCP_CONTEXT_SERVER.md` — Setup and IDE integration guide
 - `mcp-context:build` and `mcp-context:start` npm scripts
 - `@modelcontextprotocol/sdk` dependency

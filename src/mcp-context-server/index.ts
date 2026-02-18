@@ -8,20 +8,21 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 import {
-  PROJECT_RESOURCES,
-  findResource,
+  getProjectResources,
+  findResourceByUri,
   readResourceContent
 } from './resources.js';
 import {
   TOOLS,
   handleGetProjectContext,
+  handleUpdateProjectContext,
   handleListProjects
 } from './tools.js';
 
 const server = new Server(
   {
     name: 'uiforge-context-server',
-    version: '1.0.0'
+    version: '2.0.0'
   },
   {
     capabilities: {
@@ -33,7 +34,7 @@ const server = new Server(
 
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
   return {
-    resources: PROJECT_RESOURCES.map((r) => ({
+    resources: getProjectResources().map((r) => ({
       uri: r.uri,
       name: r.name,
       description: r.description,
@@ -44,20 +45,18 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   const { uri } = request.params;
-  const resource = findResource(uri);
+  const resource = findResourceByUri(uri);
 
   if (!resource) {
     throw new Error(`Resource not found: ${uri}`);
   }
-
-  const content = readResourceContent(resource);
 
   return {
     contents: [
       {
         uri: resource.uri,
         mimeType: resource.mimeType,
-        text: content
+        text: readResourceContent(resource.project)
       }
     ]
   };
@@ -76,6 +75,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       case 'get_project_context':
         result = handleGetProjectContext(args ?? {});
+        break;
+      case 'update_project_context':
+        result = handleUpdateProjectContext(args ?? {});
         break;
       case 'list_projects':
         result = handleListProjects();
@@ -99,7 +101,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  process.stderr.write('UIForge Context MCP Server running on stdio\n');
+  process.stderr.write('UIForge Context MCP Server v2.0.0 running on stdio\n');
 }
 
 main().catch((err) => {
