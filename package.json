@@ -12,6 +12,10 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -30,7 +34,7 @@
     "prepare": "npm run build && husky install",
     "pre-commit": "npm run lint && npm run format && npm run test && .husky/pre-commit-backup-check",
     "prepack": "npm run build",
-    "publish": "npm publish --access public",
+    "publish:npm": "npm publish --access public",
     "integrate": "node scripts/integrate.js",
     "integrate:mcp-gateway": "node scripts/integrate.js --project=mcp-gateway",
     "integrate:uiforge-mcp": "node scripts/integrate.js --project=uiforge-mcp",
@@ -104,12 +108,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LucasSantana-Dev/uiforge-patterns.git"
+    "url": "https://github.com/LucasSantana-Dev/forge-patterns.git"
   },
   "bugs": {
-    "url": "https://github.com/LucasSantana-Dev/uiforge-patterns/issues"
+    "url": "https://github.com/LucasSantana-Dev/forge-patterns/issues"
   },
-  "homepage": "https://github.com/LucasSantana-Dev/uiforge-patterns#readme",
+  "homepage": "https://github.com/LucasSantana-Dev/forge-patterns#readme",
   "engines": {
     "node": ">=22.0.0",
     "npm": ">=9.0.0"
