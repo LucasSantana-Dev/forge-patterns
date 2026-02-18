@@ -87,12 +87,13 @@ jobs:
       - name: Check file organization
         run: |
           echo "Checking root directory organization..."
-          if [ $(find . -maxdepth 1 -name "*.md" | grep -v "README.md" | wc -l) -gt 0 ]; then
-            echo "\u274c Found markdown files in root directory (should only be README.md)"
-            find . -maxdepth 1 -name "*.md" | grep -v "README.md"
+          EXTRA=$(find . -maxdepth 1 -name "*.md" | grep -v "README.md" | grep -v "CHANGELOG.md" | grep -v "CONTRIBUTING.md")
+          if [ -n "$EXTRA" ]; then
+            echo "❌ Found unexpected markdown files in root directory"
+            echo "$EXTRA"
             exit 1
           else
-            echo "\u2705 Root directory is properly organized"
+            echo "✅ Root directory is properly organized"
           fi
 
   security-scan:
