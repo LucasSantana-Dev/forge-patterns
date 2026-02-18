@@ -5,6 +5,15 @@
 
 const { initialize } = require('unleash-client-node');
 
+// Constants
+const DEFAULT_REFRESH_INTERVAL = 15000;
+const DEFAULT_METRICS_INTERVAL = 60000;
+const DEFAULT_TIME_SERIES_LIMIT = 1000;
+const DEFAULT_PERFORMANCE_LIMIT = 100;
+const PERFORMANCE_THRESHOLD = 100;
+const STATISTICAL_SIGNIFICANCE_THRESHOLD = 0.05;
+const MAX_CONFIDENCE = 0.95;
+
 class AdvancedFeatureToggles {
   constructor(options = {}) {
     this.options = {
@@ -12,8 +21,8 @@ class AdvancedFeatureToggles {
       projectNamespace: options.projectNamespace || 'default',
       unleashUrl: options.unleashUrl || process.env.UNLEASH_URL || 'http://localhost:4242',
       clientKey: options.clientKey || process.env.UNLEASH_CLIENT_KEY || 'default:development',
-      refreshInterval: options.refreshInterval || 15000,
-      metricsInterval: options.metricsInterval || 60000,
+      refreshInterval: options.refreshInterval || DEFAULT_REFRESH_INTERVAL,
+      metricsInterval: options.metricsInterval || DEFAULT_METRICS_INTERVAL,
       enableAnalytics: options.enableAnalytics !== false,
       enableABTesting: options.enableABTesting !== false,
       ...options
@@ -55,8 +64,10 @@ class AdvancedFeatureToggles {
         await this.loadABTestConfigurations();
       }
 
+      // eslint-disable-next-line no-console
       console.log(`Advanced Feature Toggles initialized for ${this.options.appName}`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to initialize Advanced Feature Toggles:', error);
       throw error;
     }
@@ -146,6 +157,7 @@ class AdvancedFeatureToggles {
     abTest.isActive = true;
     abTest.startDate = new Date();
     
+    // eslint-disable-next-line no-console
     console.log(`A/B test started for feature: ${featureName}`);
     return abTest;
   }
@@ -165,8 +177,10 @@ class AdvancedFeatureToggles {
     const results = this.generateABTestResults(abTest);
     abTest.results = results;
     
+    // eslint-disable-next-line no-console
     console.log(`A/B test stopped for feature: ${featureName}`);
-    console.log(`Results:`, results);
+    // eslint-disable-next-line no-console
+    console.log('Results:', results);
     
     return results;
   }
@@ -233,6 +247,7 @@ class AdvancedFeatureToggles {
     strategy.isActive = true;
     strategy.currentPhase = 0;
     
+    // eslint-disable-next-line no-console
     console.log(`Rollout strategy started for feature: ${featureName}`);
     return this.executeRolloutPhase(strategy);
   }
@@ -313,7 +328,7 @@ class AdvancedFeatureToggles {
       
       // Performance issues
       const avgResponseTime = usage.totalResponseTime / usage.enabledCount;
-      if (avgResponseTime > 100) {
+      if (avgResponseTime > PERFORMANCE_THRESHOLD) {
         recommendations.push({
           type: 'performance_issue',
           feature,
@@ -433,8 +448,8 @@ class AdvancedFeatureToggles {
     });
     
     // Keep only last 1000 data points
-    if (metrics.timeSeries.length > 1000) {
-      metrics.timeSeries = metrics.timeSeries.slice(-1000);
+    if (metrics.timeSeries.length > DEFAULT_TIME_SERIES_LIMIT) {
+      metrics.timeSeries = metrics.timeSeries.slice(-DEFAULT_TIME_SERIES_LIMIT);
     }
     
     // Trigger analytics callbacks
@@ -448,6 +463,7 @@ class AdvancedFeatureToggles {
           timestamp
         });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Analytics callback error:', error);
       }
     });
@@ -570,9 +586,9 @@ class AdvancedFeatureToggles {
     this.metrics.performanceMetrics.set(Date.now(), metrics);
     
     // Keep only last 100 data points
-    if (this.metrics.performanceMetrics.size > 100) {
+    if (this.metrics.performanceMetrics.size > DEFAULT_PERFORMANCE_LIMIT) {
       const keys = Array.from(this.metrics.performanceMetrics.keys()).sort((a, b) => b - a);
-      keys.slice(100).forEach(key => this.metrics.performanceMetrics.delete(key));
+      keys.slice(DEFAULT_PERFORMANCE_LIMIT).forEach(key => this.metrics.performanceMetrics.delete(key));
     }
   }
 
@@ -645,8 +661,8 @@ class AdvancedFeatureToggles {
     const difference = maxRate - minRate;
     
     return {
-      significant: difference > 0.05, // 5% difference threshold
-      confidence: Math.min(difference * 20, 0.95) // Simple confidence calculation
+      significant: difference > STATISTICAL_SIGNIFICANCE_THRESHOLD, // 5% difference threshold
+      confidence: Math.min(difference * 20, MAX_CONFIDENCE) // Simple confidence calculation
     };
   }
 
@@ -676,6 +692,7 @@ class AdvancedFeatureToggles {
         }
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log('No A/B test configurations found, using defaults');
     }
   }
