@@ -1,0 +1,141 @@
+# Centralized Feature Toggle Configuration
+# Controls features across all UIForge projects
+
+# Global Unleash Configuration
+unleash:
+  url: "http://localhost:4242"
+  api_url: "http://localhost:4242/api"
+  admin_url: "http://localhost:4242/admin"
+  client_key: "default:development"
+  
+# Cross-Project Configuration
+cross_project:
+  enabled: true
+  global_namespace: "global"
+  project_separator: "."
+
+# Project Namespaces
+projects:
+  mcp-gateway:
+    namespace: "mcp-gateway"
+    description: "MCP Gateway - Central authentication and routing"
+    features:
+      - rate-limiting
+      - request-validation
+      - security-headers
+      - performance-monitoring
+      - circuit-breaker
+      - health-checks
+  
+  uiforge-mcp:
+    namespace: "uiforge-mcp"
+    description: "UIForge MCP - AI-powered UI generation"
+    features:
+      - ai-chat
+      - template-management
+      - ui-generation
+      - cost-optimization
+      - provider-load-balancing
+      - streaming-responses
+  
+  uiforge-webapp:
+    namespace: "uiforge-webapp"
+    description: "UIForge WebApp - Frontend application"
+    features:
+      - dark-mode
+      - advanced-analytics
+      - feature-flags-ui
+      - experimental-components
+      - real-time-updates
+      - offline-mode
+
+# Global Features (apply to all projects)
+global_features:
+  - name: "debug-mode"
+    description: "Enable debug logging and diagnostics"
+    type: "boolean"
+    default: false
+    
+  - name: "beta-features"
+    description: "Enable beta features for testing"
+    type: "boolean"
+    default: false
+    
+  - name: "experimental-ui"
+    description: "Enable experimental UI components"
+    type: "boolean"
+    default: false
+    
+  - name: "enhanced-logging"
+    description: "Enable enhanced logging and monitoring"
+    type: "boolean"
+    default: false
+    
+  - name: "maintenance-mode"
+    description: "Put system in maintenance mode"
+    type: "boolean"
+    default: false
+
+# Feature Strategies
+strategies:
+  default:
+    name: "default"
+    description: "Default strategy for all users"
+    parameters: {}
+    
+  beta-users:
+    name: "beta-users"
+    description: "Enable features for beta users"
+    parameters:
+      userIds: ["user1", "user2", "user3"]
+      
+  gradual-rollout:
+    name: "gradual-rollout"
+    description: "Gradual rollout strategy"
+    parameters:
+      rolloutPercentage: 25
+      stickiness: "userId"
+      
+  environment-based:
+    name: "environment-based"
+    description: "Enable features based on environment"
+    parameters:
+      environments: ["development", "staging"]
+
+# Environment Configuration
+environments:
+  development:
+    unleash_url: "http://localhost:4242"
+    client_key: "default:development"
+    auto_create_features: true
+    
+  staging:
+    unleash_url: "https://staging-unleash.uiforge.com"
+    client_key: "staging:production"
+    auto_create_features: false
+    
+  production:
+    unleash_url: "https://unleash.uiforge.com"
+    client_key: "production:client"
+    auto_create_features: false
+
+# Monitoring and Analytics
+monitoring:
+  enabled: true
+  metrics_interval: 60000  # 1 minute
+  analytics_enabled: true
+  feature_usage_tracking: true
+  
+# Security Configuration
+security:
+  require_authentication: false  # Set to true in production
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "https://uiforge.com"
+  
+# Cache Configuration
+cache:
+  enabled: true
+  ttl: 300  # 5 minutes
+  max_size: 1000

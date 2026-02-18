@@ -191,7 +191,7 @@ const generationSlice = createSlice({
         id: generateId(),
         request: action.payload,
         status: 'pending',
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       };
     },
     generationProgress: (state, action: PayloadAction<GenerationProgress>) => {
@@ -204,7 +204,7 @@ const generationSlice = createSlice({
       if (state.currentGeneration) {
         state.currentGeneration.status = 'completed';
         state.currentGeneration.result = action.payload;
-        state.currentGeneration.completedAt = new Date();
+        state.currentGeneration.completedAt = new Date().toISOString();
         state.generationHistory.unshift(state.currentGeneration);
       }
     },
@@ -214,7 +214,7 @@ const generationSlice = createSlice({
       if (state.currentGeneration) {
         state.currentGeneration.status = 'failed';
         state.currentGeneration.error = action.payload;
-        state.currentGeneration.completedAt = new Date();
+        state.currentGeneration.completedAt = new Date().toISOString();
       }
     }
   }
@@ -396,8 +396,8 @@ class SubscriptionManager {
 ### Authentication Integration
 
 ```typescript
-// lib/auth/auth-config.ts
-export const authConfig: NextAuthConfig = {
+// app/auth.ts
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     SupabaseProvider({
       clientId: process.env.SUPABASE_CLIENT_ID!,
@@ -427,7 +427,7 @@ export const authConfig: NextAuthConfig = {
 };
 
 // app/api/auth/[...nextauth]/route.ts
-export { authConfig as GET, authConfig as POST } from 'next-auth';
+export { handlers as GET, handlers as POST } from './auth';
 
 // lib/auth/gateway-auth.ts
 class GatewayAuth {

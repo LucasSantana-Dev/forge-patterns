@@ -5,7 +5,7 @@
 ### **YAML Syntax Errors Fixed**
 
 **File**:
-`/Users/lucassantana/Desenvolvimento/forge-patterns/patterns/cost/config/development-workflow.yml`
+`./patterns/cost/config/development-workflow.yml`
 
 **Issues Fixed**:
 
@@ -18,7 +18,7 @@
 ### **Markdown Linting Issues Fixed**
 
 **File**:
-`/Users/lucassantana/Desenvolvimento/forge-patterns/docs/architecture-decisions/ADR-003-mcp-server-design.md`
+`./docs/architecture-decisions/ADR-003-mcp-server-design.md`
 
 **Issues Fixed**:
 
@@ -30,7 +30,7 @@
 **Solution**: Reformatted entire document with proper markdown structure.
 
 **File**:
-`/Users/lucassantana/Desenvolvimento/forge-patterns/patterns/cost/VALIDATION_REPORT.md`
+`./patterns/cost/VALIDATION_REPORT.md`
 
 **Issues Fixed**:
 
@@ -43,7 +43,7 @@
 ### **Script Execution Issues Fixed**
 
 **File**:
-`/Users/lucassantana/Desenvolvimento/forge-patterns/patterns/cost/scripts/validate-development-workflow.sh`
+`./patterns/cost/scripts/validate-development-workflow.sh`
 
 **Issues Fixed**:
 

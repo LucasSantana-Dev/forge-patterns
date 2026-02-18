@@ -449,25 +449,49 @@ echo "🎉 All systems are operational!"
 #!/bin/bash
 # e2e-test.sh
 
-echo "🧪 Running End-to-End Integration Test..."
+# Check dependencies
+if ! command -v curl &> /dev/null; then
+    echo "❌ curl is required but not installed"
+    exit 1
+fi
+
+if ! command -v jq &> /dev/null; then
+    echo "❌ jq is required but not installed"
+    exit 1
+fi
+
+# Cleanup function
+cleanup() {
+    if [ -n "$TOKEN" ]; then
+        echo "� Cleaning up test user..."
+        curl -s -X DELETE http://localhost:3000/api/auth/user \
+            -H "Authorization: Bearer $TOKEN" > /dev/null 2>&1 || true
+    fi
+}
+
+trap cleanup EXIT
+
+echo "� Running End-to-End Integration Test..."
 
 # Test 1: User Registration and Login
 echo "👤 Testing User Authentication..."
-REGISTER_RESPONSE=$(curl -s -X POST http://localhost:3000/api/auth/register \
+TEST_EMAIL="test-$(date +%s)@example.com"
+REGISTER_RESPONSE=$(curl -s --max-time 10 -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"testpassword"}')
+  -d "{\"email\":\"$TEST_EMAIL\",\"password\":\"testpassword\"}")
 
 if echo "$REGISTER_RESPONSE" | grep -q "token"; then
     echo "✅ User registration successful"
     TOKEN=$(echo "$REGISTER_RESPONSE" | jq -r '.token')
 else
     echo "❌ User registration failed"
+    echo "Response: $REGISTER_RESPONSE"
     exit 1
 fi
 
 # Test 2: UI Component Generation
 echo "🎨 Testing UI Generation..."
-GENERATE_RESPONSE=$(curl -s -X POST http://localhost:3000/api/generate/component \
+GENERATE_RESPONSE=$(curl -s --max-time 30 -X POST http://localhost:3000/api/generate/component \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"description":"Create a modern login form with email and password fields","framework":"react"}')
@@ -476,18 +500,20 @@ if echo "$GENERATE_RESPONSE" | grep -q "component"; then
     echo "✅ UI component generation successful"
 else
     echo "❌ UI component generation failed"
+    echo "Response: $GENERATE_RESPONSE"
     exit 1
 fi
 
 # Test 3: Template Management
 echo "📋 Testing Template Management..."
-TEMPLATE_RESPONSE=$(curl -s -X GET http://localhost:3000/api/templates \
+TEMPLATE_RESPONSE=$(curl -s --max-time 10 -X GET http://localhost:3000/api/templates \
   -H "Authorization: Bearer $TOKEN")
 
 if echo "$TEMPLATE_RESPONSE" | grep -q "templates"; then
     echo "✅ Template management working"
 else
     echo "❌ Template management failed"
+    echo "Response: $TEMPLATE_RESPONSE"
     exit 1
 fi
 

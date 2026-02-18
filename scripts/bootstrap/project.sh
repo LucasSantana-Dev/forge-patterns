@@ -24,7 +24,7 @@ cd "$PROJECT_NAME"
 git init
 
 # Create basic structure
-mkdir -p src docs tests scripts kubernetes localstack cost feature-toggles
+mkdir -p src docs tests scripts feature-toggles
 
 # Copy patterns from uiforge-patterns
 echo "📋 Copying patterns from uiforge-patterns..."
@@ -56,41 +56,17 @@ cp ../patterns/docker/docker-compose.dev.yml docker-compose.yml
 cp ../patterns/docker/docker-compose.prod.yml docker-compose.prod.yml
 cp ../patterns/docker/.dockerignore .dockerignore
 
-# Copy Kubernetes patterns
-echo "☸️ Adding Kubernetes patterns..."
-mkdir -p kubernetes
-mkdir -p kubernetes/clusters
-mkdir -p kubernetes/manifests
-cp ../patterns/kubernetes/clusters/setup-k3s.sh kubernetes/clusters/
-cp ../patterns/kubernetes/manifests/deployment.template.yaml kubernetes/manifests/
-cp ../patterns/kubernetes/manifests/service.template.yaml kubernetes/manifests/
-cp ../patterns/kubernetes/manifests/ingress.template.yaml kubernetes/manifests/
-chmod +x kubernetes/clusters/setup-k3s.sh
-
-# Copy LocalStack patterns
-echo "🔧 Adding LocalStack patterns..."
-mkdir -p localstack
-cp ../patterns/localstack/docker-compose.yml localstack/
-cp ../patterns/localstack/README.md localstack/
-mkdir -p localstack/terraform
-mkdir -p localstack/scripts
-cp ../patterns/localstack/terraform/provider.tf localstack/terraform/ 2>/dev/null || echo "# LocalStack Terraform provider" > localstack/terraform/provider.tf
-
-# Copy cost monitoring patterns
-echo "💰 Adding cost monitoring patterns..."
-mkdir -p cost
-mkdir -p cost/scripts
-cp ../patterns/cost/README.md cost/
-cp ../patterns/cost/scripts/free-tier-tracker.sh cost/scripts/
-chmod +x cost/scripts/free-tier-tracker.sh
-
-# Copy feature toggles patterns
-echo "🎛️ Adding feature toggle patterns..."
+# Copy centralized feature toggle patterns
+echo "🎛️ Adding centralized feature toggle patterns..."
 mkdir -p feature-toggles
 mkdir -p feature-toggles/libraries
-mkdir -p feature-toggles/config
+mkdir -p feature-toggles/libraries/nodejs
 cp ../patterns/feature-toggles/README.md feature-toggles/
-cp ../patterns/feature-toggles/libraries/nodejs/package.json feature-toggles/libraries/ 2>/dev/null || echo "# Feature toggles for Node.js" > feature-toggles/libraries/nodejs/README.md
+cp ../patterns/feature-toggles/libraries/nodejs/index.js feature-toggles/libraries/nodejs/ 2>/dev/null || echo "# Feature toggle library will be added here" > feature-toggles/libraries/nodejs/index.js
+
+# Copy forge-features CLI tool
+cp ../scripts/forge-features scripts/ 2>/dev/null || echo "# Forge Features CLI will be added here" > scripts/forge-features
+chmod +x scripts/forge-features
 
 # Create package.json for Node.js projects
 if [ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ]; then
@@ -327,71 +303,38 @@ docker run -p 3000:3000 $PROJECT_NAME
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-## ☸️ Kubernetes Development
+## 🎛️ Centralized Feature Toggles
 
-This project includes Kubernetes patterns for container orchestration:
+This project includes centralized feature toggle management for the UIForge ecosystem:
 
-### Local Kubernetes Setup
+### Start Unleash Instance
 ```bash
-# Set up local k3s cluster
-./kubernetes/clusters/setup-k3s.sh
+# Start Unleash feature toggle service
+docker run -p 4242:4242 unleashorg/unleash-server
 
-# Apply manifests
-kubectl apply -f kubernetes/manifests/
+# Check Unleash health
+curl http://localhost:4242/api/health
 
-# View pods
-kubectl get pods
+# Access Unleash UI
+open http://localhost:4242
 ```
 
-### Kubernetes Deployment
+### Manage Features with CLI
 ```bash
-# Deploy to Kubernetes
-kubectl apply -f kubernetes/manifests/deployment.yaml
-kubectl apply -f kubernetes/manifests/service.yaml
+# Enable global features
+./scripts/forge-features enable global.debug-mode
+./scripts/forge-features enable global.beta-features
 
-# Check deployment status
-kubectl rollout status deployment/$PROJECT_NAME
-```
+# Enable project-specific features
+./scripts/forge-features enable mcp-gateway.rate-limiting
+./scripts/forge-features enable uiforge-mcp.ai-chat
 
-## 🔧 LocalStack Development
+# Check feature status
+./scripts/forge-features status --global
+./scripts/forge-features status --project=mcp-gateway
 
-This project includes LocalStack patterns for AWS service emulation:
-
-### Start LocalStack
-```bash
-# Start LocalStack services
-docker-compose -f localstack/docker-compose.yml up -d
-
-# Check service health
-curl http://localhost:4566/health
-
-# Access LocalStack UI
-open http://localhost:8080
-```
-
-### AWS CLI Configuration
-```bash
-# Configure AWS CLI for LocalStack
-aws configure set aws-access-key-id test
-aws configure set aws-secret-access-key test
-aws configure set default.region us-west-2
-aws configure set default.endpoint-url http://localhost:4566
-```
-
-## 💰 Cost Monitoring
-
-This project includes cost monitoring patterns for zero-cost development:
-
-### Track Free Tier Usage
-```bash
-# Check AWS free tier usage
-./cost/scripts/free-tier-tracker.sh
-
-# Generate cost report
-./cost/scripts/cost-report.sh
-
-# Monitor optimization opportunities
-./cost/scripts/optimization-suggestions.sh
+# List all available features
+./scripts/forge-features list
 ```
 
 ## 🎛️ Feature Toggles
@@ -408,7 +351,6 @@ cp feature-toggles/config/unleash.template.yml unleash.yml
 
 # Start development with feature toggles
 npm run dev:features
-```
 \`\`\`
 
 ## 📋 Requirements

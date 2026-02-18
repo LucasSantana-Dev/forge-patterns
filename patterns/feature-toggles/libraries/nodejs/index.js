@@ -1,24 +1,38 @@
 const { UnleashClient } = require('unleash-client-node');
 
 /**
- * UIForge Feature Toggles Library
- * Provides feature management capabilities for UIForge applications
+ * Centralized UIForge Feature Toggles Library
+ * Provides cross-project feature management capabilities for the UIForge ecosystem
  */
 class UIForgeFeatureToggles {
   constructor(config = {}) {
-    this.client = new UnleashClient({
-      appName: 'uiforge-app',
-      url: config.unleashUrl || 'http://localhost:4242/api',
+    this.config = {
+      appName: config.appName || 'uiforge-app',
+      unleashUrl: config.unleashUrl || 'http://localhost:4242/api',
       clientKey: config.clientKey || 'uiforge-token',
-      refreshInterval: 60000, // 1 minute
-      metricsInterval: 60000 // 1 minute
+      refreshInterval: config.refreshInterval || 60000,
+      metricsInterval: config.metricsInterval || 60000,
+      projectNamespace: config.projectNamespace || 'global',
+      crossProject: config.crossProject || false
+    };
+
+    this.client = new UnleashClient({
+      appName: this.config.appName,
+      url: this.config.unleashUrl,
+      clientKey: this.config.clientKey,
+      refreshInterval: this.config.refreshInterval,
+      metricsInterval: this.config.metricsInterval
     });
 
     this.context = {
       userId: null,
       sessionId: null,
-      properties: {}
+      properties: {},
+      projectName: this.config.projectNamespace
     };
+
+    this.globalFeatures = config.globalFeatures || [];
+    this.projectFeatures = config.projectFeatures || {};
   }
 
   /**
@@ -26,70 +40,160 @@ class UIForgeFeatureToggles {
    */
   async initialize() {
     await this.client.start();
-    console.log('✅ Feature toggles initialized');
+    console.log(`✅ Feature toggles initialized for ${this.config.projectNamespace}`);
   }
 
   /**
-   * Set the evaluation context
-   * @param {Object} context - Evaluation context
+   * Check if a feature is enabled (supports cross-project namespacing)
+   */
+  isEnabled(featureName, defaultValue = false) {
+    const namespacedFeature = this.getNamespacedFeature(featureName);
+    return this.client.isEnabled(namespacedFeature, defaultValue, this.context);
+  }
+
+  /**
+   * Get feature variant (supports cross-project namespacing)
+   */
+  getVariant(featureName, defaultValue = { enabled: false, name: 'disabled' }) {
+    const namespacedFeature = this.getNamespacedFeature(featureName);
+    return this.client.getVariant(namespacedFeature, defaultValue, this.context);
+  }
+
+  /**
+   * Set user context
    */
   setContext(context) {
     this.context = { ...this.context, ...context };
   }
 
   /**
-   * Check if a feature is enabled
-   * @param {string} featureName - Name of the feature
-   * @param {boolean} defaultValue - Default value if feature not found
-   * @returns {boolean} - Whether the feature is enabled
+   * Update context with user information
    */
-  isEnabled(featureName, defaultValue = false) {
-    return this.client.isEnabled(featureName, this.context, defaultValue);
+  updateUserContext(userId, properties = {}) {
+    this.context = {
+      ...this.context,
+      userId,
+      properties: { ...this.context.properties, ...properties }
+    };
   }
 
   /**
-   * Get feature variant with payload
-   * @param {string} featureName - Name of the feature
-   * @param {Object} defaultValue - Default variant if feature not found
-   * @returns {Object} - Feature variant with payload
+   * Get namespaced feature name for cross-project support
    */
-  getVariant(featureName, defaultValue = { enabled: false, payload: {} }) {
-    return this.client.getVariant(featureName, this.context, defaultValue);
+  getNamespacedFeature(featureName) {
+    if (this.config.crossProject && this.isGlobalFeature(featureName)) {
+      return `global.${featureName}`;
+    }
+    return `${this.config.projectNamespace}.${featureName}`;
   }
 
   /**
-   * Check if new UI design is enabled
-   * @returns {boolean} - Whether new UI is enabled
+   * Check if a feature is global
    */
-  isNewUIEnabled() {
-    return this.isEnabled('new-ui-design', false);
+  isGlobalFeature(featureName) {
+    return this.globalFeatures.includes(featureName);
   }
 
   /**
-   * Get API strategy variant
-   * @returns {Object} - API strategy variant
+   * Get all enabled features for the current project
    */
-  getAPIStrategy() {
-    return this.getVariant('api-strategy', {
-      enabled: true,
-      payload: { version: 'v1' }
+  getEnabledFeatures() {
+    const features = [];
+
+    // Check global features
+    this.globalFeatures.forEach(feature => {
+      if (this.isEnabled(feature)) {
+        features.push(`global.${feature}`);
+      }
     });
+
+    // Check project-specific features
+    const projectFeatures = this.projectFeatures[this.config.projectNamespace] || [];
+    projectFeatures.forEach(feature => {
+      if (this.isEnabled(feature)) {
+        features.push(`${this.config.projectNamespace}.${feature}`);
+      }
+    });
+
+    return features;
   }
 
   /**
-   * Check if beta features are enabled for a user
-   * @param {string} userId - User ID
-   * @returns {boolean} - Whether beta features are enabled
+   * Get feature statistics
    */
-  isBetaFeatureEnabled(userId) {
-    this.setContext({ userId });
-    return this.isEnabled('beta-features', false);
+  getFeatureStats() {
+    const enabledFeatures = this.getEnabledFeatures();
+
+    return {
+      context: this.context,
+      clientReady: this.client.isReady(),
+      lastUpdate: this.client.lastUpdate || new Date().toISOString(),
+      projectNamespace: this.config.projectNamespace,
+      crossProject: this.config.crossProject,
+      enabledFeatures,
+      globalFeaturesEnabled: enabledFeatures.filter(f => f.startsWith('global.')).length,
+      projectFeaturesEnabled: enabledFeatures.filter(f => f.startsWith(`${this.config.projectNamespace}.`)).length
+    };
   }
 
   /**
-   * Get feature usage analytics
-   * @returns {Object} - Feature usage statistics
+   * Enable cross-project feature management
    */
+  enableGlobalFeature(featureName) {
+    if (!this.globalFeatures.includes(featureName)) {
+      this.globalFeatures.push(featureName);
+    }
+  }
+
+  /**
+   * Disable cross-project feature management
+   */
+  disableGlobalFeature(featureName) {
+    const index = this.globalFeatures.indexOf(featureName);
+    if (index > -1) {
+      this.globalFeatures.splice(index, 1);
+    }
+  }
+
+  /**
+   * Add project-specific feature
+   */
+  addProjectFeature(featureName) {
+    if (!this.projectFeatures[this.config.projectNamespace]) {
+      this.projectFeatures[this.config.projectNamespace] = [];
+    }
+    if (!this.projectFeatures[this.config.projectNamespace].includes(featureName)) {
+      this.projectFeatures[this.config.projectNamespace].push(featureName);
+    }
+  }
+
+  /**
+   * Remove project-specific feature
+   */
+  removeProjectFeature(featureName) {
+    const features = this.projectFeatures[this.config.projectNamespace];
+    if (features) {
+      const index = features.indexOf(featureName);
+      if (index > -1) {
+        features.splice(index, 1);
+      }
+    }
+  }
+
+  /**
+   * Get feature configuration
+   */
+  getFeatureConfig() {
+    return {
+      globalFeatures: this.globalFeatures,
+      projectFeatures: this.projectFeatures,
+      config: this.config
+    };
+  }
+}
+
+// Export the class
+module.exports = UIForgeFeatureToggles;
   getFeatureStats() {
     return {
       context: this.context,

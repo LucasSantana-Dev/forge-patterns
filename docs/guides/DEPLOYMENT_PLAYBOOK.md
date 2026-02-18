@@ -847,7 +847,7 @@ RUN adduser -S nextjs -u 1001
 # Build application
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Production image
 FROM node:22-alpine

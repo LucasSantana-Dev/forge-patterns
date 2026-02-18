@@ -5,8 +5,29 @@ set -e
 
 echo "🚀 Integrating Forge Patterns into UIForge MCP..."
 
-PROJECT_ROOT=${1:-$(pwd)}
-FORGE_PATTERNS_DIR=${2:-"/Users/lucassantana/Desenvolvimento/forge-patterns"}
+# Default: no backups, enable with --backup flag
+CREATE_BACKUPS=false
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --backup)
+      CREATE_BACKUPS=true
+      shift
+      ;;
+    *)
+      if [[ -z "$PROJECT_ROOT" ]]; then
+        PROJECT_ROOT="$1"
+      elif [[ -z "$FORGE_PATTERNS_DIR" ]]; then
+        FORGE_PATTERNS_DIR="$1"
+      fi
+      shift
+      ;;
+  esac
+done
+
+PROJECT_ROOT=${PROJECT_ROOT:-$(pwd)}
+FORGE_PATTERNS_DIR=${FORGE_PATTERNS_DIR:-"/Users/lucassantana/Desenvolvimento/forge-patterns"}
 
 if [ ! -d "$FORGE_PATTERNS_DIR" ]; then
     echo "❌ Forge Patterns directory not found: $FORGE_PATTERNS_DIR"
@@ -16,16 +37,20 @@ fi
 echo "📁 Project root: $PROJECT_ROOT"
 echo "📦 Forge Patterns: $FORGE_PATTERNS_DIR"
 
-# Backup existing files if they exist
+# Backup existing files if they exist and backups are enabled
 backup_file() {
     local file="$1"
-    if [ -f "$file" ]; then
+    if [[ "$CREATE_BACKUPS" == "true" ]] && [ -f "$file" ]; then
         cp "$file" "$file.backup.$(date +%Y%m%d_%H%M%S)"
         echo "📋 Backed up: $file"
     fi
 }
 
-echo "📋 Backing up existing files..."
+if [[ "$CREATE_BACKUPS" == "true" ]]; then
+    echo "📋 Backing up existing files..."
+else
+    echo "⚡ Skipping backups (use --backup flag to enable)"
+fi
 backup_file "$PROJECT_ROOT/.eslintrc.js"
 backup_file "$PROJECT_ROOT/.prettierrc.json"
 backup_file "$PROJECT_ROOT/package.json"
@@ -51,19 +76,19 @@ if [ -f "$PROJECT_ROOT/package.json" ]; then
         const fs = require('fs');
         const projectPkg = JSON.parse(fs.readFileSync('$PROJECT_ROOT/package.json', 'utf8'));
         const forgePkg = JSON.parse(fs.readFileSync('$FORGE_PATTERNS_DIR/package.json', 'utf8'));
-        
+
         // Merge devDependencies
         projectPkg.devDependencies = {
             ...projectPkg.devDependencies,
             ...forgePkg.devDependencies
         };
-        
+
         // Merge scripts
         projectPkg.scripts = {
             ...projectPkg.scripts,
             ...forgePkg.scripts
         };
-        
+
         fs.writeFileSync('$PROJECT_ROOT/package.json', JSON.stringify(projectPkg, null, 2));
         console.log('✅ Updated package.json');
     "
@@ -187,7 +212,7 @@ export const {{componentName}}: React.FC<{{componentName}}Props> = ({
   {{/if}}
 }) => {
   return (
-    <button 
+    <button
       onClick={onClick}
       className={\`btn btn-\${variant}\`}
     >
@@ -253,7 +278,7 @@ await templateManager.registerTemplate(reactButtonTemplate);
 export class MCPUIGenerationServer {
   async handleGenerateComponent(request) {
     const startTime = Date.now();
-    
+
     try {
       // Generate AI response with multi-provider support
       const aiResponse = await providerManager.generate(
@@ -312,7 +337,7 @@ export class MCPUIGenerationServer {
 
   async handleListTemplates(request) {
     const templates = await templateManager.listTemplates(request.filter);
-    
+
     return {
       success: true,
       data: {
@@ -408,6 +433,11 @@ See `examples/uiforge-mcp-integration.js` for complete integration example.
 - [Template Patterns](../patterns/mcp-servers/templates/)
 EOF
 
+echo ""
+echo "📋 Usage:"
+echo "  $0 [project_root] [forge_patterns_dir] [--backup]"
+echo "  --backup    Enable file backups (default: disabled)"
+echo ""
 echo "✅ UIForge MCP integration completed!"
 echo ""
 echo "📋 Next steps:"

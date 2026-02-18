@@ -141,7 +141,7 @@ class UserService:
 async def generate_component(
     description: str,
     framework: str,
-    options: Dict[str, Any] = None
+    options: Optional[Dict[str, Any]] = None
 ) -> Component:
     """Generate UI component from description."""
     # Implementation

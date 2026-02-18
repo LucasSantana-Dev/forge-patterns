@@ -275,17 +275,17 @@ class MCPClient {
     });
   }
 
-  async callTool(toolName: string, arguments: any): Promise<any> {
+  async callTool(toolName: string, args: any): Promise<any> {
     return this.circuitBreaker.execute(async () => {
       return this.retryPolicy.execute(async () => {
         // Validate connection
         if (!this.connection.isConnected()) {
-          await this.connection.connect();
+          throw new Error('MCP connection not established');
         }
 
         // Call tool with timeout
         const result = await Promise.race([
-          this.connection.callTool(toolName, arguments),
+          this.connection.callTool(toolName, args),
           this.timeout(30000) // 30 second timeout
         ]);
 
@@ -591,6 +591,12 @@ class APIVersionManager {
 
 ```typescript
 // shared/resilience/circuit-breaker.ts
+interface CircuitBreakerOptions {
+  failureThreshold: number;
+  recoveryTimeout: number;
+  successThreshold?: number;
+}
+
 class CircuitBreaker {
   private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
   private failureCount = 0;

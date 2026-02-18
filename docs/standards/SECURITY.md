@@ -300,7 +300,7 @@ class EncryptionService {
 
   encrypt(data: string, key: string): EncryptedData {
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipher(this.algorithm, key);
+    const cipher = crypto.createCipheriv(this.algorithm, key, iv);
     cipher.setAAD(Buffer.from('additional-data'));
 
     let encrypted = cipher.update(data, 'utf8', 'hex');
@@ -316,7 +316,7 @@ class EncryptionService {
   }
 
   decrypt(encryptedData: EncryptedData, key: string): string {
-    const decipher = crypto.createDecipher(this.algorithm, key);
+    const decipher = crypto.createDecipheriv(this.algorithm, key, Buffer.from(encryptedData.iv, 'hex'));
     decipher.setAAD(Buffer.from('additional-data'));
     decipher.setAuthTag(Buffer.from(encryptedData.tag, 'hex'));
 
@@ -850,7 +850,7 @@ class DatabaseService {
     limit: number = 10
   ): Promise<Component[]> {
     const query = `
-      SELECT * FROM components 
+      SELECT * FROM components
       WHERE name ILIKE $1 OR description ILIKE $1
       ORDER BY created_at DESC
       LIMIT $2

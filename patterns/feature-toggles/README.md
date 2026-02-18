@@ -1,9 +1,9 @@
-# Feature Toggle Patterns for UIForge Projects
-# Open-source feature management with Unleash for zero-cost deployment
+# Centralized Feature Toggle System for UIForge Ecosystem
+# Cross-project feature management with Unleash for unified control
 
 ## 🎯 Overview
 
-This directory contains feature toggle patterns designed for local development and production deployment. All patterns use self-hosted Unleash with zero licensing costs while providing comprehensive feature management capabilities.
+This directory contains a centralized feature toggle system designed to manage features across the entire UIForge ecosystem (MCP Gateway, UIForge MCP, UIForge WebApp). The system uses self-hosted Unleash with zero licensing costs and provides unified feature management capabilities across all projects.
 
 ## 📋 Available Patterns
 
@@ -65,6 +65,39 @@ curl -X POST http://localhost:4242/api/admin/api-tokens \
   -d '{"name":"uiforge-token","type":"CLIENT"}'
 ```
 
+### Centralized Feature Management CLI
+
+The `forge-features` CLI tool provides centralized management of features across all UIForge projects:
+
+```bash
+# Enable global features (affects all projects)
+forge-features enable global.debug-mode
+forge-features enable global.beta-features
+
+# Enable project-specific features
+forge-features enable mcp-gateway.rate-limiting
+forge-features enable uiforge-mcp.ai-chat
+forge-features enable uiforge-webapp.dark-mode
+
+# Disable features
+forge-features disable global.experimental-ui
+forge-features disable mcp-gateway.security-headers
+
+# Check feature status
+forge-features status --global
+forge-features status --project=mcp-gateway
+
+# List all available features
+forge-features list
+```
+
+#### Feature Namespaces
+
+- **Global Features**: `global.debug-mode`, `global.beta-features`, `global.experimental-ui`, `global.enhanced-logging`
+- **MCP Gateway**: `mcp-gateway.rate-limiting`, `mcp-gateway.request-validation`, `mcp-gateway.security-headers`
+- **UIForge MCP**: `uiforge-mcp.ai-chat`, `uiforge-mcp.template-management`, `uiforge-mcp.ui-generation`
+- **UIForge WebApp**: `uiforge-webapp.dark-mode`, `uiforge-webapp.advanced-analytics`, `uiforge-webapp.experimental-components`
+
 ## 📁 Pattern Structure
 
 ```
@@ -93,7 +126,7 @@ class UIForgeFeatureToggles {
       refreshInterval: 60000, // 1 minute
       metricsInterval: 60000,  // 1 minute
     });
-    
+
     this.context = {
       userId: null,
       sessionId: null,
@@ -124,9 +157,9 @@ class UIForgeFeatureToggles {
   }
 
   getAPIStrategy() {
-    return this.getVariant('api-strategy', { 
-      enabled: true, 
-      payload: { version: 'v1' } 
+    return this.getVariant('api-strategy', {
+      enabled: true,
+      payload: { version: 'v1' }
     });
   }
 
@@ -159,7 +192,7 @@ class UIForgeFeatureToggles:
             refresh_interval=60,  # 1 minute
             metrics_interval=60,  # 1 minute
         )
-        
+
         self.context = {
             'user_id': None,
             'session_id': None,
@@ -266,23 +299,23 @@ export const FeatureToggleProvider: React.FC<FeatureToggleProviderProps> = ({
 
   const isEnabled = (featureName: string, defaultValue = false) => {
     if (!client) return defaultValue;
-    
+
     const context = {
       userId,
       properties: {},
     };
-    
+
     return client.isEnabled(featureName, context, defaultValue);
   };
 
   const getVariant = (featureName: string, defaultValue = { enabled: false, payload: {} }) => {
     if (!client) return defaultValue;
-    
+
     const context = {
       userId,
       properties: {},
     };
-    
+
     return client.getVariant(featureName, context, defaultValue);
   };
 
@@ -325,7 +358,7 @@ const rolloutPercentage = (userId, featureName) => {
   // Use user ID hash for consistent rollout
   const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const percentage = (hash % 100) + 1;
-  
+
   return percentage <= getRolloutPercentage(featureName);
 };
 
@@ -341,16 +374,16 @@ const getRolloutPercentage = (featureName) => {
 // examples/ab-testing.js
 const getABTestVariant = (userId, testName) => {
   const variant = featureToggles.getVariant(testName);
-  
+
   if (!variant.enabled) {
     return 'control'; // Default to control group
   }
-  
+
   // Consistent assignment based on user ID
   const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const variants = ['control', 'variant_a', 'variant_b'];
   const variantIndex = hash % variants.length;
-  
+
   return variants[variantIndex];
 };
 ```
@@ -362,7 +395,7 @@ const isFeatureSafe = (featureName) => {
   // Check if feature is enabled and not killed
   const isEnabled = featureToggles.isEnabled(featureName);
   const isKilled = featureToggles.isEnabled(`${featureName}-killed`);
-  
+
   return isEnabled && !isKilled;
 };
 
@@ -378,7 +411,7 @@ const emergencyDisable = async (featureName) => {
       }
     ]
   });
-  
+
   // Create kill switch
   await unleashClient.createFeature(`${featureName}-killed`, {
     enabled: true,
@@ -438,12 +471,12 @@ unleash:
     type: 'unsecure'  # For local development
     createAdminUser: true
     adminEmail: 'admin@uiforge.local'
-  
+
   database:
     type: 'postgres'
     ssl: false
     url: 'postgres://postgres:unleash@postgres:5432/unleash'
-  
+
   featureToggles:
     # UI Features
     - name: 'new-ui-design'
@@ -452,7 +485,7 @@ unleash:
       strategies:
         - name: 'default'
           parameters: {}
-    
+
     - name: 'beta-features'
       description: 'Enable beta features for testing'
       enabled: false
@@ -461,7 +494,7 @@ unleash:
           parameters:
             rolloutPercentage: 10
             stickiness: 'default'
-    
+
     - name: 'api-strategy'
       description: 'API version strategy'
       enabled: true
@@ -504,9 +537,9 @@ class FeatureAnalytics {
     if (!this.usageData.has(featureName)) {
       this.usageData.set(featureName, []);
     }
-    
+
     this.usageData.get(featureName).push(usage);
-    
+
     // Send to analytics (optional)
     this.sendToAnalytics(usage);
   }
@@ -515,7 +548,7 @@ class FeatureAnalytics {
     const usage = this.usageData.get(featureName) || [];
     const total = usage.length;
     const enabled = usage.filter(u => u.enabled).length;
-    
+
     return {
       featureName,
       totalUsage: total,
@@ -550,31 +583,31 @@ case "$ACTION" in
       -H "Content-Type: application/json" \
       -d "{\"name\":\"$FEATURE_NAME\",\"description\":\"$FEATURE_NAME\",\"enabled\":false}"
     ;;
-    
+
   "enable")
     echo "✅ Enabling feature: $FEATURE_NAME"
     curl -X PATCH "http://localhost:4242/api/admin/features/$FEATURE_NAME" \
       -H "Content-Type: application/json" \
       -d '{"enabled":true}'
     ;;
-    
+
   "disable")
     echo "❌ Disabling feature: $FEATURE_NAME"
     curl -X PATCH "http://localhost:4242/api/admin/features/$FEATURE_NAME" \
       -H "Content-Type: application/json" \
       -d '{"enabled":false}'
     ;;
-    
+
   "delete")
     echo "🗑️ Deleting feature: $FEATURE_NAME"
     curl -X DELETE "http://localhost:4242/api/admin/features/$FEATURE_NAME"
     ;;
-    
+
   "list")
     echo "📋 Listing all features:"
     curl -s http://localhost:4242/api/admin/features | jq '.features[] | {name, enabled, description}'
     ;;
-    
+
   *)
     echo "Usage: $0 <feature-name> {create|enable|disable|delete|list}"
     exit 1
