@@ -111,7 +111,7 @@
   },
   "homepage": "https://github.com/LucasSantana-Dev/uiforge-patterns#readme",
   "engines": {
-    "node": ">=20.11.0",
+    "node": ">=22.0.0",
     "npm": ">=9.0.0"
   }
 }
