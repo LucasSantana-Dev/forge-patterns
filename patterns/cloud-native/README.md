@@ -17,7 +17,6 @@ cloud-native/
 
 ### Serverless
 
-- **Function-as-a-Service**: AWS Lambda, Google Cloud Functions, Azure Functions
 - **Edge Functions**: Cloudflare Workers, Vercel Edge, Supabase Edge Functions
 - **Scheduled Jobs**: Cron-based serverless execution
 - **Event Triggers**: Queue, storage, and HTTP-triggered functions
@@ -31,57 +30,12 @@ cloud-native/
 
 ### Event-Driven
 
-- **Message Queue**: Async communication via queues (SQS, RabbitMQ, Redis)
-- **Event Streaming**: High-throughput event processing (Kafka, Kinesis)
+- **Message Queue**: Async communication via queues (RabbitMQ, Redis)
+- **Event Streaming**: High-throughput event processing (Kafka)
 - **CQRS**: Command/Query Responsibility Segregation
 - **Saga Pattern**: Distributed transaction management
 
 ## 🚀 Serverless Patterns
-
-### AWS Lambda — Node.js Handler Pattern
-
-```javascript
-// Structured Lambda handler with error handling and logging
-const { Logger } = require('@aws-lambda-powertools/logger');
-const { Tracer } = require('@aws-lambda-powertools/tracer');
-const { Metrics, MetricUnits } = require('@aws-lambda-powertools/metrics');
-
-const logger = new Logger({ serviceName: '{{SERVICE_NAME}}' });
-const tracer = new Tracer({ serviceName: '{{SERVICE_NAME}}' });
-const metrics = new Metrics({ namespace: '{{NAMESPACE}}', serviceName: '{{SERVICE_NAME}}' });
-
-exports.handler = async (event, context) => {
-  logger.addContext(context);
-  logger.info('Processing event', { eventType: event.source });
-
-  try {
-    const result = await processEvent(event);
-
-    metrics.addMetric('SuccessfulInvocations', MetricUnits.Count, 1);
-    metrics.publishStoredMetrics();
-
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result)
-    };
-  } catch (error) {
-    logger.error('Handler error', { error: error.message });
-    metrics.addMetric('FailedInvocations', MetricUnits.Count, 1);
-    metrics.publishStoredMetrics();
-
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Internal server error' })
-    };
-  }
-};
-
-async function processEvent(event) {
-  // Business logic here
-  return { processed: true, timestamp: new Date().toISOString() };
-}
-```
 
 ### Supabase Edge Function Pattern
 
@@ -340,9 +294,8 @@ consumer
 
 - All service credentials use `{{PLACEHOLDER}}` syntax — never hardcode
 - Enforce mTLS between microservices in production
-- Apply least-privilege IAM roles for serverless functions
 - Validate and sanitize all event payloads before processing
-- Use secrets managers (AWS Secrets Manager, Vault) for runtime secrets
+- Use a secrets manager (e.g., Vault, Doppler) for runtime secrets
 
 ## 📊 Performance Targets
 
