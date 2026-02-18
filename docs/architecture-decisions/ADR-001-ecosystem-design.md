@@ -1,8 +1,8 @@
-# ADR-001: Hub-and-Spoke Ecosystem Architecture
+# ADR-001: Hub-and-Spoke Ecosystem Architecture with Centralized Feature Management
 
 ## Status
 
-Accepted
+Accepted (Updated 2025-02-17)
 
 ## Context
 
@@ -18,17 +18,23 @@ Key considerations:
 - Desire for modular, independently deployable components
 - Need for scalable architecture supporting multiple users
 - Requirement for clear separation of concerns
+- **NEW**: Need for centralized feature toggle management across all projects
+- **NEW**: Requirement for cross-project feature consistency and control
 
 ## Decision
 
 We chose a **hub-and-spoke architecture** with the forge-mcp-gateway as the
-central hub and specialized MCP servers as spokes. This means:
+central hub and specialized MCP servers as spokes, enhanced with **centralized
+feature toggle management**. This means:
 
 - **Central Hub (Gateway)**: Handles authentication, routing, virtual server
   management, and coordination
 - **Specialized Spokes (MCP Servers)**: Focus on specific capabilities like UI
   generation, with minimal cross-cutting concerns
 - **Management Interface**: Connects to the hub for all operations
+- **NEW**: **Centralized Feature Toggle System**: Unified feature management across all projects using Unleash
+- **NEW**: **Cross-Project Feature Namespacing**: Global and project-specific feature isolation
+- **NEW**: **CLI Tool Management**: forge-features CLI for centralized feature control
 
 ## Consequences
 
@@ -44,6 +50,10 @@ central hub and specialized MCP servers as spokes. This means:
   components
 - **Simplified Deployment**: Each component can be deployed and updated
   independently
+- **NEW**: **Unified Feature Control**: Centralized feature toggle management across all projects
+- **NEW**: **Cross-Project Consistency**: Features can be enabled/disabled consistently across ecosystem
+- **NEW**: **Real-time Feature Updates**: Immediate feature changes without redeployment
+- **NEW**: **Developer Experience**: CLI tool for easy feature management
 
 ### Negative Consequences
 
@@ -54,6 +64,9 @@ central hub and specialized MCP servers as spokes. This means:
 - **Complexity**: Additional infrastructure for managing the gateway and its
   state
 - **Single Point of Failure**: Gateway failure affects the entire ecosystem
+- **NEW**: **Feature Toggle Dependency**: Centralized feature system becomes critical dependency
+- **NEW**: **Unleash Infrastructure**: Additional infrastructure to maintain for feature management
+- **NEW**: **Cross-Project Coupling**: Features create coupling between otherwise independent projects
 
 ## Alternatives Considered
 

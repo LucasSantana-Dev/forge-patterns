@@ -76,6 +76,14 @@ global_features:
     type: "boolean"
     default: false
 
+# Global Features List
+global_features_list:
+  - debug-mode
+  - beta-features
+  - experimental-ui
+  - enhanced-logging
+  - maintenance-mode
+
 # Feature Strategies
 strategies:
   default:
