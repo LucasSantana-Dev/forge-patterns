@@ -123,9 +123,9 @@ class SharedConstantsValidator {
       this.assert(content.includes('AI_PROVIDERS'), 'Missing AI_PROVIDERS');
     });
     await this.test('ai-providers.ts: correct base URLs', async () => {
-      this.assert(content.includes('https://api.openai.com/v1'), 'Wrong OpenAI URL');
-      this.assert(content.includes('https://api.anthropic.com/v1'), 'Wrong Anthropic URL');
-      this.assert(content.includes('https://generativelanguage.googleapis.com/v1beta'), 'Wrong Google URL');
+      this.assert(/['"`]https:\/\/api\.openai\.com\/v1['"`]/.test(content), 'Wrong OpenAI URL');
+      this.assert(/['"`]https:\/\/api\.anthropic\.com\/v1['"`]/.test(content), 'Wrong Anthropic URL');
+      this.assert(/['"`]https:\/\/generativelanguage\.googleapis\.com\/v1beta['"`]/.test(content), 'Wrong Google URL');
     });
     await this.test('ai-providers.ts: API_KEY_EXPIRY_DAYS = 90', async () => {
       this.assert(content.includes('API_KEY_EXPIRY_DAYS') && content.includes('= 90'), 'Wrong value');
