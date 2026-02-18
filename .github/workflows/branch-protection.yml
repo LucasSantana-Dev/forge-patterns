@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -26,13 +26,13 @@ jobs:
           fi
 
           # Check feature branch naming
-          if [[ "$BRANCH_NAME" =~ ^(feature|fix|hotfix|chore|docs|refactor|test|perf)/.+$ ]]; then
+          if [[ "$BRANCH_NAME" =~ ^(feat|feature|fix|hotfix|chore|docs|refactor|test|perf)/.+$ ]]; then
             echo "✅ Branch follows naming convention: $BRANCH_NAME"
             exit 0
           fi
 
           echo "❌ Branch name doesn't follow conventions"
-          echo "Expected: feature/*, fix/*, hotfix/*, chore/*, docs/*, refactor/*, test/*, perf/*"
+          echo "Expected: feat/*, feature/*, fix/*, hotfix/*, chore/*, docs/*, refactor/*, test/*, perf/*"
           exit 1
 
       - name: Check commit messages follow Angular convention
@@ -44,7 +44,7 @@ jobs:
 
           for COMMIT in $COMMITS; do
             echo "Checking: $COMMIT"
-            
+
             # Check Angular convention
             if [[ "$COMMIT" =~ ^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert)(\(.+\))?: .+$ ]]; then
               echo "✅ $COMMIT follows convention"
@@ -90,7 +90,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -101,7 +101,7 @@ jobs:
           # Check if we're working against main (trunk)
           if [ "$GITHUB_BASE_REF" = "main" ]; then
             echo "✅ Working against trunk (main)"
-            
+
             # Check if branch is up to date with main
             BEHIND=$(git rev-list --count HEAD..origin/main)
             if [ "$BEHIND" -gt 0 ]; then
