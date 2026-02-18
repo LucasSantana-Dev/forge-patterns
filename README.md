@@ -21,7 +21,7 @@ UIForge Patterns provides a comprehensive set of shared configurations, workflow
 - **uiforge-webapp**: Next.js web application with multi-environment deployment
 - **uiforge-mcp**: Node.js MCP server with security-focused workflows
 
-## � Documentation
+## 📚 Documentation
 
 For complete documentation, see our **[Documentation Hub](docs/README.md)** which includes:
 
