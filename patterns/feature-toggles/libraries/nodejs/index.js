@@ -1,213 +1,373 @@
-const { UnleashClient } = require('unleash-client-node');
+const { initialize } = require('unleash-client-node');
 
 /**
- * Centralized UIForge Feature Toggles Library
- * Provides cross-project feature management capabilities for the UIForge ecosystem
+ * Centralized Feature Toggle System for UIForge Ecosystem
+ * Supports cross-project feature management with global and project-specific features
  */
 class UIForgeFeatureToggles {
-  constructor(config = {}) {
+  constructor(options = {}) {
     this.config = {
-      appName: config.appName || 'uiforge-app',
-      unleashUrl: config.unleashUrl || 'http://localhost:4242/api',
-      clientKey: config.clientKey || 'uiforge-token',
-      refreshInterval: config.refreshInterval || 60000,
-      metricsInterval: config.metricsInterval || 60000,
-      projectNamespace: config.projectNamespace || 'global',
-      crossProject: config.crossProject || false
+      appName: options.appName || process.env.UNLEASH_APP_NAME || 'uiforge-app',
+      unleashUrl: options.unleashUrl || process.env.UNLEASH_URL || 'http://localhost:4242',
+      clientKey: options.clientKey || process.env.UNLEASH_CLIENT_KEY || 'default:development',
+      refreshInterval: options.refreshInterval || 30000, // 30 seconds
+      metricsInterval: options.metricsInterval || 60000, // 1 minute
+      projectNamespace: options.projectNamespace || 'default',
+      crossProject: options.crossProject !== false,
+      ...options
     };
 
-    this.client = new UnleashClient({
-      appName: this.config.appName,
-      url: this.config.unleashUrl,
-      clientKey: this.config.clientKey,
-      refreshInterval: this.config.refreshInterval,
-      metricsInterval: this.config.metricsInterval
-    });
-
-    this.context = {
-      userId: null,
-      sessionId: null,
-      properties: {},
-      projectName: this.config.projectNamespace
-    };
-
-    this.globalFeatures = config.globalFeatures || [];
-    this.projectFeatures = config.projectFeatures || {};
+    this.context = {};
+    this.client = null;
+    this.globalFeatures = new Set();
+    this.projectFeatures = new Set();
+    
+    this.initialize();
   }
 
   /**
-   * Initialize the feature toggle client
+   * Initialize the Unleash client
    */
   async initialize() {
-    await this.client.start();
-    console.log(`✅ Feature toggles initialized for ${this.config.projectNamespace}`);
+    try {
+      this.client = initialize({
+        appName: this.config.appName,
+        url: this.config.unleashUrl,
+        clientKey: this.config.clientKey,
+        refreshInterval: this.config.refreshInterval,
+        metricsInterval: this.config.metricsInterval,
+        ...this.config
+      });
+
+      // Wait for client to be ready
+      await new Promise((resolve, reject) => {
+        if (this.client.isReady()) {
+          resolve();
+        } else {
+          this.client.on('ready', resolve);
+          this.client.on('error', reject);
+          
+          // Timeout after 10 seconds
+          setTimeout(() => reject(new Error('Unleash client initialization timeout')), 10000);
+        }
+      });
+
+      console.log(`🎛️ Feature toggles initialized for ${this.config.appName}`);
+    } catch (error) {
+      console.error('❌ Failed to initialize feature toggles:', error.message);
+      // Continue without feature toggles - fail gracefully
+      this.client = { isReady: () => false, isEnabled: () => false };
+    }
   }
 
   /**
-   * Check if a feature is enabled (supports cross-project namespacing)
-   */
-  isEnabled(featureName, defaultValue = false) {
-    const namespacedFeature = this.getNamespacedFeature(featureName);
-    return this.client.isEnabled(namespacedFeature, defaultValue, this.context);
-  }
-
-  /**
-   * Get feature variant (supports cross-project namespacing)
-   */
-  getVariant(featureName, defaultValue = { enabled: false, name: 'disabled' }) {
-    const namespacedFeature = this.getNamespacedFeature(featureName);
-    return this.client.getVariant(namespacedFeature, defaultValue, this.context);
-  }
-
-  /**
-   * Set user context
+   * Set user context for feature evaluation
+   * @param {Object} context - User context object
    */
   setContext(context) {
-    this.context = { ...this.context, ...context };
+    this.context = {
+      ...this.context,
+      ...context,
+      appName: this.config.appName,
+      environment: process.env.NODE_ENV || 'development'
+    };
   }
 
   /**
-   * Update context with user information
+   * Check if a feature is enabled
+   * @param {string} featureName - Name of the feature
+   * @param {boolean} defaultValue - Default value if feature not found
+   * @returns {boolean} - Whether the feature is enabled
    */
-  updateUserContext(userId, properties = {}) {
-    this.context = {
-      ...this.context,
-      userId,
-      properties: { ...this.context.properties, ...properties }
-    };
+  isEnabled(featureName, defaultValue = false) {
+    if (!this.client || !this.client.isReady()) {
+      return defaultValue;
+    }
+
+    try {
+      const namespacedFeature = this.getNamespacedFeature(featureName);
+      return this.client.isEnabled(namespacedFeature, this.context, defaultValue);
+    } catch (error) {
+      console.error(`❌ Error checking feature ${featureName}:`, error.message);
+      return defaultValue;
+    }
+  }
+
+  /**
+   * Get feature variant
+   * @param {string} featureName - Name of the feature
+   * @param {Object} defaultVariant - Default variant if feature not found
+   * @returns {Object} - Feature variant
+   */
+  getVariant(featureName, defaultVariant = { enabled: false, name: 'disabled' }) {
+    if (!this.client || !this.client.isReady()) {
+      return defaultVariant;
+    }
+
+    try {
+      const namespacedFeature = this.getNamespacedFeature(featureName);
+      return this.client.getVariant(namespacedFeature, this.context, defaultVariant);
+    } catch (error) {
+      console.error(`❌ Error getting variant for ${featureName}:`, error.message);
+      return defaultVariant;
+    }
+  }
+
+  /**
+   * Update user context
+   * @param {Object} context - New user context
+   */
+  updateUserContext(context) {
+    this.setContext(context);
   }
 
   /**
    * Get namespaced feature name for cross-project support
+   * @param {string} featureName - Original feature name
+   * @returns {string} - Namespaced feature name
    */
   getNamespacedFeature(featureName) {
-    if (this.config.crossProject && this.isGlobalFeature(featureName)) {
+    if (!this.config.crossProject) {
+      return featureName;
+    }
+
+    // Handle global features
+    if (this.isGlobalFeature(featureName)) {
       return `global.${featureName}`;
     }
+
+    // Handle project-specific features
+    if (featureName.includes('.')) {
+      return featureName; // Already namespaced
+    }
+
+    // Add project namespace
     return `${this.config.projectNamespace}.${featureName}`;
   }
 
   /**
-   * Check if a feature is global
+   * Check if a feature is a global feature
+   * @param {string} featureName - Feature name to check
+   * @returns {boolean} - Whether the feature is global
    */
   isGlobalFeature(featureName) {
-    return this.globalFeatures.includes(featureName);
+    const globalFeatures = [
+      'debug-mode',
+      'beta-features',
+      'experimental-ui',
+      'enhanced-logging',
+      'maintenance-mode'
+    ];
+    
+    return globalFeatures.includes(featureName) || featureName.startsWith('global.');
   }
 
   /**
-   * Get all enabled features for the current project
+   * Get all enabled features
+   * @returns {Array} - Array of enabled feature names
    */
   getEnabledFeatures() {
-    const features = [];
+    if (!this.client || !this.client.isReady()) {
+      return [];
+    }
 
-    // Check global features
-    this.globalFeatures.forEach(feature => {
-      if (this.isEnabled(feature)) {
-        features.push(`global.${feature}`);
-      }
-    });
+    try {
+      // This would require the Unleash client to support listing all features
+      // For now, return known features that are enabled
+      const knownFeatures = [
+        'debug-mode',
+        'beta-features',
+        'experimental-ui',
+        'enhanced-logging',
+        'rate-limiting',
+        'request-validation',
+        'security-headers',
+        'ai-chat',
+        'template-management',
+        'ui-generation',
+        'dark-mode',
+        'advanced-analytics'
+      ];
 
-    // Check project-specific features
-    const projectFeatures = this.projectFeatures[this.config.projectNamespace] || [];
-    projectFeatures.forEach(feature => {
-      if (this.isEnabled(feature)) {
-        features.push(`${this.config.projectNamespace}.${feature}`);
-      }
-    });
-
-    return features;
+      return knownFeatures.filter(feature => this.isEnabled(feature));
+    } catch (error) {
+      console.error('❌ Error getting enabled features:', error.message);
+      return [];
+    }
   }
 
   /**
    * Get feature statistics
+   * @returns {Object} - Feature statistics
    */
   getFeatureStats() {
-    const enabledFeatures = this.getEnabledFeatures();
-
     return {
       context: this.context,
-      clientReady: this.client.isReady(),
-      lastUpdate: this.client.lastUpdate || new Date().toISOString(),
+      clientReady: this.client ? this.client.isReady() : false,
+      enabledFeatures: this.getEnabledFeatures(),
       projectNamespace: this.config.projectNamespace,
       crossProject: this.config.crossProject,
-      enabledFeatures,
-      globalFeaturesEnabled: enabledFeatures.filter(f => f.startsWith('global.')).length,
-      projectFeaturesEnabled: enabledFeatures.filter(f => f.startsWith(`${this.config.projectNamespace}.`)).length
+      unleashUrl: this.config.unleashUrl,
+      appName: this.config.appName
     };
   }
 
   /**
-   * Enable cross-project feature management
+   * Enable a global feature (admin operation)
+   * @param {string} featureName - Feature name to enable
+   * @returns {Promise<boolean>} - Success status
    */
-  enableGlobalFeature(featureName) {
-    if (!this.globalFeatures.includes(featureName)) {
-      this.globalFeatures.push(featureName);
+  async enableGlobalFeature(featureName) {
+    if (!this.isGlobalFeature(featureName)) {
+      throw new Error(`Feature ${featureName} is not a global feature`);
+    }
+
+    try {
+      const response = await fetch(`${this.config.unleashUrl}/api/admin/features`, {
+        method: 'POST',
+        headers: {
+          'Authorization': this.config.clientKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: `global.${featureName}`,
+          description: `Global feature: ${featureName}`,
+          type: 'release',
+          enabled: true,
+          strategies: [{
+            name: 'default',
+            parameters: {}
+          }]
+        })
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error(`❌ Error enabling global feature ${featureName}:`, error.message);
+      return false;
     }
   }
 
   /**
-   * Disable cross-project feature management
+   * Disable a global feature (admin operation)
+   * @param {string} featureName - Feature name to disable
+   * @returns {Promise<boolean>} - Success status
    */
-  disableGlobalFeature(featureName) {
-    const index = this.globalFeatures.indexOf(featureName);
-    if (index > -1) {
-      this.globalFeatures.splice(index, 1);
+  async disableGlobalFeature(featureName) {
+    if (!this.isGlobalFeature(featureName)) {
+      throw new Error(`Feature ${featureName} is not a global feature`);
+    }
+
+    try {
+      const response = await fetch(`${this.config.unleashUrl}/api/admin/features/global.${featureName}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': this.config.clientKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          enabled: false
+        })
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error(`❌ Error disabling global feature ${featureName}:`, error.message);
+      return false;
     }
   }
 
   /**
-   * Add project-specific feature
+   * Add a project-specific feature
+   * @param {string} featureName - Feature name
+   * @param {string} description - Feature description
+   * @returns {Promise<boolean>} - Success status
    */
-  addProjectFeature(featureName) {
-    if (!this.projectFeatures[this.config.projectNamespace]) {
-      this.projectFeatures[this.config.projectNamespace] = [];
-    }
-    if (!this.projectFeatures[this.config.projectNamespace].includes(featureName)) {
-      this.projectFeatures[this.config.projectNamespace].push(featureName);
-    }
-  }
+  async addProjectFeature(featureName, description = '') {
+    try {
+      const namespacedFeature = `${this.config.projectNamespace}.${featureName}`;
+      
+      const response = await fetch(`${this.config.unleashUrl}/api/admin/features`, {
+        method: 'POST',
+        headers: {
+          'Authorization': this.config.clientKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: namespacedFeature,
+          description: description || `Project feature: ${featureName}`,
+          type: 'release',
+          enabled: false,
+          strategies: [{
+            name: 'default',
+            parameters: {}
+          }]
+        })
+      });
 
-  /**
-   * Remove project-specific feature
-   */
-  removeProjectFeature(featureName) {
-    const features = this.projectFeatures[this.config.projectNamespace];
-    if (features) {
-      const index = features.indexOf(featureName);
-      if (index > -1) {
-        features.splice(index, 1);
+      if (response.ok) {
+        this.projectFeatures.add(featureName);
       }
+
+      return response.ok;
+    } catch (error) {
+      console.error(`❌ Error adding project feature ${featureName}:`, error.message);
+      return false;
+    }
+  }
+
+  /**
+   * Remove a project-specific feature
+   * @param {string} featureName - Feature name to remove
+   * @returns {Promise<boolean>} - Success status
+   */
+  async removeProjectFeature(featureName) {
+    try {
+      const namespacedFeature = `${this.config.projectNamespace}.${featureName}`;
+      
+      const response = await fetch(`${this.config.unleashUrl}/api/admin/features/${namespacedFeature}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': this.config.clientKey
+        }
+      });
+
+      if (response.ok) {
+        this.projectFeatures.delete(featureName);
+      }
+
+      return response.ok;
+    } catch (error) {
+      console.error(`❌ Error removing project feature ${featureName}:`, error.message);
+      return false;
     }
   }
 
   /**
    * Get feature configuration
+   * @returns {Object} - Current configuration
    */
   getFeatureConfig() {
     return {
-      globalFeatures: this.globalFeatures,
-      projectFeatures: this.projectFeatures,
+      globalFeatures: Array.from(this.globalFeatures),
+      projectFeatures: Array.from(this.projectFeatures),
       config: this.config
-    };
-  }
-}
-
-// Export the class
-module.exports = UIForgeFeatureToggles;
-  getFeatureStats() {
-    return {
-      context: this.context,
-      clientReady: this.client.isReady(),
-      lastUpdate: this.client.lastUpdate
     };
   }
 
   /**
    * Destroy the client and clean up resources
    */
-  async destroy() {
-    await this.client.stop();
+  destroy() {
+    if (this.client && typeof this.client.destroy === 'function') {
+      this.client.destroy();
+    }
+    
+    this.globalFeatures.clear();
+    this.projectFeatures.clear();
+    this.context = {};
   }
 }
 
+// Export the class
 module.exports = UIForgeFeatureToggles;

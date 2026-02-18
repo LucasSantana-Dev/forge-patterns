@@ -32,7 +32,7 @@ For complete documentation, see our **[Documentation Hub](docs/README.md)** whic
 - **[User Guides](docs/guides/)** - Deployment and user journey guides
 - **[Development Standards](docs/standards/)** - Coding and security standards
 
-## �🚀 Quick Start
+## 🚀 Quick Start
 
 ### 1. Install Forge Patterns
 
@@ -45,21 +45,13 @@ npm install @uiforge/forge-patterns
 ```bash
 # Navigate to your project directory
 cd /path/to/your-project
-# Copy patterns to your project
-cp -r patterns/code-quality/eslint/base.config.js .eslintrc.js
-cp -r patterns/code-quality/prettier/base.config.json .prettierrc.json
-cp -r patterns/coverage/jest.config.template.js jest.config.js
-cp -r patterns/coverage/codecov.template.yml .codecov.yml
+# Use the automated integration CLI
+npx forge-patterns integrate
 
-# Add Docker patterns
-cp patterns/docker/Dockerfile.node.template Dockerfile
-cp patterns/docker/docker-compose.dev.yml docker-compose.yml
-cp patterns/docker/.dockerignore .dockerignore
-
-# Set up Git hooks
-cp patterns/git/pre-commit/base.sh .git/hooks/pre-commit
-cp patterns/git/commit-msg/conventional.sh .git/hooks/commit-msg
-chmod +x .git/hooks/pre-commit .git/hooks/commit-msg
+# Or use individual integration commands
+npx forge-patterns integrate --project=mcp-gateway
+npx forge-patterns integrate --project=uiforge-mcp
+npx forge-patterns integrate --project=uiforge-webapp
 ```
 
 ## 📁 Repository Structure
@@ -71,10 +63,14 @@ uiforge-patterns/
 │   └── templates/          # GitHub templates (PR, issues)
 ├── patterns/
 │   ├── code-quality/       # ESLint, Prettier configurations
+│   ├── config/            # Centralized configuration management
+│   ├── docker/            # Docker and containerization patterns
+│   ├── feature-toggles/   # Centralized feature toggle system
 │   ├── git/               # Git hooks and workflows
-│   ├── security/          # Security patterns and env templates
-│   ├── coverage/          # Test coverage configurations
-│   └── docker/            # Docker and containerization patterns
+│   ├── mcp-gateway/       # MCP Gateway patterns (security, performance)
+│   ├── mcp-servers/       # MCP Server patterns (AI providers, streaming)
+│   ├── security/          # Security patterns (authentication, middleware)
+│   └── shared-infrastructure/ # Shared infrastructure patterns (optimization)
 ├── rules/                  # ✅ NEW: Development rules and guidelines
 │   ├── README.md          # Rules library overview
 │   ├── agent-rules.md     # Core agent behavior rules
@@ -106,6 +102,31 @@ uiforge-patterns/
 ```
 
 ## 🔧 Available Patterns
+
+### 🎛️ Centralized Feature Toggle System
+
+**NEW**: Cross-project feature management with unified control
+
+```bash
+# Enable global features
+forge-features enable global.debug-mode
+forge-features enable global.beta-features
+
+# Enable project-specific features
+forge-features enable mcp-gateway.rate-limiting
+forge-features enable uiforge-mcp.ai-chat
+forge-features enable uiforge-webapp.dark-mode
+
+# Check feature status
+forge-features status --global
+forge-features status --project=mcp-gateway
+```
+
+**Features**:
+- Global and project-specific feature namespaces
+- CLI tool for feature management
+- Real-time feature updates
+- Cross-project consistency
 
 ### Code Quality Patterns
 
