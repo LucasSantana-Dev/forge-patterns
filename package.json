@@ -32,7 +32,11 @@
     "integrate": "node scripts/integrate.js",
     "integrate:mcp-gateway": "node scripts/integrate.js --project=mcp-gateway",
     "integrate:uiforge-mcp": "node scripts/integrate.js --project=uiforge-mcp",
-    "integrate:uiforge-webapp": "node scripts/integrate.js --project=uiforge-webapp"
+    "integrate:uiforge-webapp": "node scripts/integrate.js --project=uiforge-webapp",
+    "patterns": "node scripts/forge-patterns-cli.js",
+    "patterns:list": "node scripts/forge-patterns-cli.js list",
+    "patterns:search": "node scripts/forge-patterns-cli.js search",
+    "patterns:validate": "node scripts/forge-patterns-cli.js validate"
   },
   "bin": {
     "forge-patterns": "dist/cli.js"
