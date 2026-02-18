@@ -212,7 +212,6 @@ async function createIntegrationExample(targetDir, projectType) {
   const spinner = ora('Creating integration example...').start();
 
   try {
-    const _config = PROJECT_CONFIGS[projectType];
     const examplesDir = path.join(targetDir, 'examples');
     const exampleFile = path.join(examplesDir, `${projectType}-integration.js`);
 
