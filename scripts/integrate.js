@@ -2,7 +2,7 @@
 
 /**
  * Forge Patterns Integration CLI
- * 
+ *
  * A practical CLI tool for integrating Forge Patterns into projects
  * without manual copy-paste operations.
  */
@@ -27,7 +27,7 @@ const PROJECT_CONFIGS = {
     description: 'Core MCP gateway with routing, security, and performance',
     patterns: [
       'mcp-gateway/routing',
-      'mcp-gateway/security', 
+      'mcp-gateway/security',
       'mcp-gateway/performance',
       'mcp-gateway/authentication',
       'shared-infrastructure/sleep-architecture'
@@ -104,17 +104,17 @@ function logWarning(message) {
 
 async function copyPatterns(targetDir, patterns) {
   const spinner = ora('Copying patterns...').start();
-  
+
   try {
     for (const pattern of patterns) {
       const sourcePath = path.join(rootDir, 'patterns', pattern);
       const targetPath = path.join(targetDir, 'patterns', pattern);
-      
+
       if (await fs.pathExists(sourcePath)) {
         await fs.copy(sourcePath, targetPath, { overwrite: true });
       }
     }
-    
+
     spinner.succeed('Patterns copied successfully');
   } catch (error) {
     spinner.fail('Failed to copy patterns');
@@ -124,12 +124,12 @@ async function copyPatterns(targetDir, patterns) {
 
 async function copyConfigFiles(targetDir, configFiles) {
   const spinner = ora('Copying configuration files...').start();
-  
+
   try {
     for (const configFile of configFiles) {
       const sourcePath = path.join(rootDir, configFile);
       const targetPath = path.join(targetDir, configFile);
-      
+
       if (await fs.pathExists(sourcePath)) {
         // Backup existing file
         if (await fs.pathExists(targetPath)) {
@@ -137,11 +137,11 @@ async function copyConfigFiles(targetDir, configFiles) {
           await fs.copy(targetPath, backupPath);
           logWarning(`Backed up existing ${configFile}`);
         }
-        
+
         await fs.copy(sourcePath, targetPath, { overwrite: true });
       }
     }
-    
+
     spinner.succeed('Configuration files copied successfully');
   } catch (error) {
     spinner.fail('Failed to copy configuration files');
@@ -151,16 +151,16 @@ async function copyConfigFiles(targetDir, configFiles) {
 
 async function updatePackageJson(targetDir, dependencies, scripts) {
   const spinner = ora('Updating package.json...').start();
-  
+
   try {
     const packageJsonPath = path.join(targetDir, 'package.json');
-    
+
     if (!await fs.pathExists(packageJsonPath)) {
       throw new Error('package.json not found in target directory');
     }
-    
+
     const packageJson = await fs.readJson(packageJsonPath);
-    
+
     // Add dependencies
     packageJson.devDependencies = {
       ...packageJson.devDependencies,
@@ -169,15 +169,15 @@ async function updatePackageJson(targetDir, dependencies, scripts) {
         return acc;
       }, {})
     };
-    
+
     // Add scripts
     packageJson.scripts = {
       ...packageJson.scripts,
       ...scripts
     };
-    
+
     await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
-    
+
     spinner.succeed('package.json updated successfully');
   } catch (error) {
     spinner.fail('Failed to update package.json');
@@ -187,17 +187,17 @@ async function updatePackageJson(targetDir, dependencies, scripts) {
 
 async function createIntegrationExample(targetDir, projectType) {
   const spinner = ora('Creating integration example...').start();
-  
+
   try {
     const config = PROJECT_CONFIGS[projectType];
     const examplesDir = path.join(targetDir, 'examples');
     const exampleFile = path.join(examplesDir, `${projectType}-integration.js`);
-    
+
     await fs.ensureDir(examplesDir);
-    
+
     // Create example based on project type
     let exampleContent = '';
-    
+
     if (projectType === 'mcp-gateway') {
       exampleContent = `// MCP Gateway Integration Example
 // This file demonstrates how to use Forge Patterns in your MCP Gateway project
@@ -498,9 +498,9 @@ const AdvancedAnalytics = () => {
 export { NewDashboard, AdvancedAnalytics, useFeatureToggle, featureToggleManager };
 `;
     }
-    
+
     await fs.writeFile(exampleFile, exampleContent);
-    
+
     spinner.succeed('Integration example created');
   } catch (error) {
     spinner.fail('Failed to create integration example');
@@ -510,14 +510,14 @@ export { NewDashboard, AdvancedAnalytics, useFeatureToggle, featureToggleManager
 
 async function createIntegrationDocs(targetDir, projectType) {
   const spinner = ora('Creating integration documentation...').start();
-  
+
   try {
     const config = PROJECT_CONFIGS[projectType];
     const docsDir = path.join(targetDir, 'docs');
     const docFile = path.join(docsDir, 'forge-patterns-integration.md');
-    
+
     await fs.ensureDir(docsDir);
-    
+
     const docContent = `# Forge Patterns Integration
 
 This document describes how Forge Patterns v1.0.0 is integrated into the ${config.name} project.
@@ -526,13 +526,13 @@ This document describes how Forge Patterns v1.0.0 is integrated into the ${confi
 
 ${config.patterns.map(pattern => {
   const patternName = pattern.split('/').pop();
-  const patternPath = \`../patterns/\${pattern}\`;
-  return \`- **\${patternName}**: \${patternPath}\`;
-}).join('\\n')}
+  const patternPath = `../patterns/${pattern}`;
+  return `- **${patternName}**: ${patternPath}`;
+}).join('\n')}
 
 ## 🔧 Usage Examples
 
-See \`examples/\${projectType}-integration.js\` for complete integration example.
+See \`examples/${projectType}-integration.js\` for complete integration example.
 
 ## 🚀 Getting Started
 
@@ -566,12 +566,12 @@ See \`examples/\${projectType}-integration.js\` for complete integration example
 ## 🔧 Configuration
 
 The following configuration files have been added:
-${config.configFiles.map(file => \`- \${file}\`).join('\\n')}
+${config.configFiles.map(file => `- ${file}`).join('\n')}
 
 ## 📦 Dependencies
 
 The following dependencies have been added to package.json:
-${config.dependencies.map(dep => \`- \${dep}\`).join('\\n')}
+${config.dependencies.map(dep => `- ${dep}`).join('\n')}
 
 ## 🎯 Next Steps
 
@@ -591,9 +591,9 @@ If you encounter issues:
 
 For more help, see the [Forge Patterns Documentation](https://github.com/LucasSantana-Dev/forge-patterns).
 `;
-    
+
     await fs.writeFile(docFile, docContent);
-    
+
     spinner.succeed('Integration documentation created');
   } catch (error) {
     spinner.fail('Failed to create integration documentation');
@@ -616,7 +616,7 @@ program
   .action(async (options) => {
     const projectType = options.project;
     const targetDir = options.dir || process.cwd();
-    
+
     if (!projectType) {
       logError('Please specify a project type with --project');
       console.log('Available project types:');
@@ -625,7 +625,7 @@ program
       });
       process.exit(1);
     }
-    
+
     if (!PROJECT_CONFIGS[projectType]) {
       logError(`Unknown project type: ${projectType}`);
       console.log('Available project types:');
@@ -634,31 +634,31 @@ program
       });
       process.exit(1);
     }
-    
+
     const config = PROJECT_CONFIGS[projectType];
-    
+
     console.log(chalk.bold.blue(`\\n🚀 Integrating Forge Patterns into ${config.name}...`));
     console.log(chalk.gray(`Target directory: ${targetDir}\\n`));
-    
+
     try {
       // Check if target directory exists
       if (!await fs.pathExists(targetDir)) {
         logError(`Target directory does not exist: ${targetDir}`);
         process.exit(1);
       }
-      
+
       // Check if it's a valid project (has package.json)
       const packageJsonPath = path.join(targetDir, 'package.json');
       if (!await fs.pathExists(packageJsonPath)) {
         logWarning('No package.json found - this might not be a Node.js project');
       }
-      
+
       // Copy patterns
       await copyPatterns(targetDir, config.patterns);
-      
+
       // Copy configuration files
       await copyConfigFiles(targetDir, config.configFiles);
-      
+
       // Update package.json
       const scripts = {
         'lint': 'eslint . --ext .js,.ts --fix',
@@ -667,15 +667,15 @@ program
         'format:check': 'prettier --check .',
         'validate': 'npm run lint:check && npm run format:check',
       };
-      
+
       await updatePackageJson(targetDir, config.dependencies, scripts);
-      
+
       // Create integration example
       await createIntegrationExample(targetDir, projectType);
-      
+
       // Create integration documentation
       await createIntegrationDocs(targetDir, projectType);
-      
+
       console.log(chalk.bold.green('\\n🎉 Integration completed successfully!\\n'));
       console.log(chalk.blue('📋 Next steps:'));
       console.log(`  1. cd ${targetDir}`);
@@ -685,7 +685,7 @@ program
       console.log('  5. Update your application code to use the patterns');
       console.log('  6. npm run dev');
       console.log(chalk.gray('\\n📚 Documentation: docs/forge-patterns-integration.md'));
-      
+
     } catch (error) {
       logError(`Integration failed: ${error.message}`);
       process.exit(1);
@@ -695,7 +695,7 @@ program
 // Convenience commands for specific projects
 Object.keys(PROJECT_CONFIGS).forEach(projectType => {
   const config = PROJECT_CONFIGS[projectType];
-  
+
   program
     .command(`integrate:${projectType}`)
     .description(`Integrate Forge Patterns into ${config.name}`)
@@ -725,14 +725,14 @@ program
   .action(async (dir) => {
     const targetDir = dir || process.cwd();
     const spinner = ora('Validating integration...').start();
-    
+
     try {
       // Check for patterns directory
       const patternsDir = path.join(targetDir, 'patterns');
       if (!await fs.pathExists(patternsDir)) {
         throw new Error('patterns directory not found');
       }
-      
+
       // Check for configuration files
       const configFiles = ['.eslintrc.js', '.prettierrc.json'];
       for (const configFile of configFiles) {
@@ -741,24 +741,24 @@ program
           throw new Error(`${configFile} not found`);
         }
       }
-      
+
       // Check package.json
       const packageJsonPath = path.join(targetDir, 'package.json');
       if (!await fs.pathExists(packageJsonPath)) {
         throw new Error('package.json not found');
       }
-      
+
       const packageJson = await fs.readJson(packageJsonPath);
       const requiredDeps = ['eslint', 'prettier', 'typescript'];
       const missingDeps = requiredDeps.filter(dep => !packageJson.devDependencies?.[dep]);
-      
+
       if (missingDeps.length > 0) {
         throw new Error(`Missing dependencies: ${missingDeps.join(', ')}`);
       }
-      
+
       spinner.succeed('Integration validation passed');
       logSuccess('Forge Patterns integration is valid');
-      
+
     } catch (error) {
       spinner.fail('Integration validation failed');
       logError(error.message);
