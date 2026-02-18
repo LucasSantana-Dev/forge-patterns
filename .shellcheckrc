@@ -1,0 +1,13 @@
+# .shellcheckrc — root-level shellcheck configuration
+# Overrides patterns/shell/linting/.shellcheckrc for CI scanning.
+
+shell=bash
+
+# Disabled rules — false positives or overly strict for this codebase:
+#   SC1091 — not following source: sourced files not on PATH at lint time
+#   SC2034 — variable appears unused: false positive in sourced helper files
+#   SC2312 — consider invoking command separately to avoid masking return value
+#             (enable=all adds this; too noisy for existing scripts)
+#   SC2250 — prefer "${var}" over "$var": cosmetic, not a bug
+#   SC2248 — prefer double-quoting even simple variable expansions: cosmetic
+disable=SC1091,SC2034,SC2312,SC2250,SC2248
