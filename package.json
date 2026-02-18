@@ -1,6 +1,6 @@
 {
   "name": "@uiforge/forge-patterns",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Shared configuration, workflows, and architectural patterns for the UIForge ecosystem",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

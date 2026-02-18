@@ -9,9 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-02-18
+
 ### Security
 
 - **Path Traversal fix (CWE-23)**: Added explicit `validateProjectSlug()` calls at entry points in `src/mcp-context-server/tools.ts` and `src/mcp-context-server/resources.ts` — sanitization is now visible to static analysis at the boundary where untrusted input enters, before it reaches `readFileSync`/`writeFileSync`. Resolves 4 High-severity findings (score 900) reported by Snyk Code Analysis.
+
+### Fixed
+
+- **`.github/dependabot.yml`**: Removed invalid `reviewers` property from all 3 ecosystem blocks (`npm`, `pip`, `github-actions`) — not supported in Dependabot v2 schema.
+- **`.github/workflows/ci.yml`**: Restored `workflow-summary` job to correct 2-space indentation inside the `jobs:` block.
+- **`.github/workflows/security-scan.yml`**: Fixed invalid Gitleaks action inputs, added `continue-on-error` to Snyk step, upgraded CodeQL from v3 to v4.
+- **`scripts/security/validate-no-secrets.sh`**: Excluded `dist/`, `package-lock.json`, `node_modules`; added false-positive filters for `author`, `authentication`, `Object.entries`, and `private` keyword patterns.
+- **`scripts/security/validate-placeholders.sh`**: Added `--exclude-dir` for `node_modules`, `.git`, `dist`, `docs/`, `patterns/`, `.windsurf/`; prevents false positives from example code and vendored packages.
+- **`patterns/feature-toggles/README.md`**: Fixed MD022/MD025/MD031/MD032/MD040 markdownlint violations — blank lines around headings/fences/lists, removed duplicate H1, added language tag to bare fence block.
+- **`CHANGELOG.md`**: Added `<!-- markdownlint-disable MD024 -->` to suppress intentional duplicate section headings across version entries.
 
 ## [1.1.0] - 2026-02-18
 
