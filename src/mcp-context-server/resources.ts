@@ -1,4 +1,4 @@
-import { listProjects, readContext, readMeta, projectExists } from './store.js';
+import { listProjects, readContext, readMeta, projectExists, validateProjectSlug } from './store.js';
 
 export interface ProjectResource {
   uri: string;
@@ -19,6 +19,7 @@ export function getProjectResources(): ProjectResource[] {
 }
 
 export function readResourceContent(project: string): string {
+  validateProjectSlug(project);
   return readContext(project);
 }
 
@@ -26,6 +27,11 @@ export function findResourceByUri(uri: string): ProjectResource | undefined {
   const prefix = 'uiforge://context/';
   if (!uri.startsWith(prefix)) return undefined;
   const project = uri.slice(prefix.length);
+  try {
+    validateProjectSlug(project);
+  } catch {
+    return undefined;
+  }
   if (!projectExists(project)) return undefined;
   const meta = readMeta(project);
   return {

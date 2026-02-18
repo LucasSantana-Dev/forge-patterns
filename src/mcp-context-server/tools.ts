@@ -1,4 +1,4 @@
-import { listProjects, readContext, writeContext, projectExists } from './store.js';
+import { listProjects, readContext, writeContext, projectExists, validateProjectSlug } from './store.js';
 
 export const TOOLS = [
   {
@@ -65,6 +65,7 @@ export const TOOLS = [
 export function handleGetProjectContext(args: Record<string, unknown>): string {
   const project = args['project'] as string;
   if (!project) throw new Error('Missing required argument: project');
+  validateProjectSlug(project);
 
   if (!projectExists(project)) {
     const available = listProjects()
@@ -89,6 +90,7 @@ export function handleUpdateProjectContext(args: Record<string, unknown>): strin
   if (!title) throw new Error('Missing required argument: title');
   if (!description) throw new Error('Missing required argument: description');
   if (!content) throw new Error('Missing required argument: content');
+  validateProjectSlug(project);
 
   const isNew = !projectExists(project);
   const meta = writeContext(project, content, title, description);
