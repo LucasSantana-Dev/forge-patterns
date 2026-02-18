@@ -10,6 +10,11 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { performance } = require('perf_hooks');
 
+// Constants
+const PERFORMANCE_THRESHOLD = 5000;
+const SLOW_OPERATION_THRESHOLD = 1000;
+const MEMORY_MB_DIVISOR = 1024 * 1024;
+
 class PerformanceBenchmark {
   constructor() {
     this.results = {
@@ -26,6 +31,7 @@ class PerformanceBenchmark {
   log(message, type = 'info') {
     const timestamp = new Date().toISOString();
     const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+    // eslint-disable-next-line no-console
     console.log(`${timestamp} ${prefix} ${message}`);
   }
 
@@ -58,7 +64,7 @@ class PerformanceBenchmark {
       this.results.summary.totalTests++;
       this.results.summary.passed++;
 
-      this.log(`✅ ${testName}: ${duration.toFixed(2)}ms, Memory: ${(memoryDelta.heapUsed / 1024 / 1024).toFixed(2)}MB`, 'success');
+      this.log(`✅ ${testName}: ${duration.toFixed(2)}ms, Memory: ${(memoryDelta.heapUsed / MEMORY_MB_DIVISOR).toFixed(2)}MB`, 'success');
 
       return { duration, memoryDelta, result };
     } catch (error) {
@@ -256,12 +262,12 @@ class PerformanceBenchmark {
       .filter(b => b.status === 'passed')
       .reduce((sum, b) => sum + b.duration, 0) / this.results.summary.passed;
 
-    if (avgDuration > 5000) {
+    if (avgDuration > PERFORMANCE_THRESHOLD) {
       report.recommendations.push('Consider optimizing integration scripts for better performance');
     }
 
     const slowBenchmarks = this.results.benchmarks
-      .filter(b => b.status === 'passed' && b.duration > 1000);
+      .filter(b => b.status === 'passed' && b.duration > SLOW_OPERATION_THRESHOLD);
 
     if (slowBenchmarks.length > 0) {
       report.recommendations.push(`Slow operations detected: ${slowBenchmarks.map(b => b.name).join(', ')}`);
@@ -278,7 +284,7 @@ class PerformanceBenchmark {
 
   async runAllBenchmarks() {
     this.log('🚀 Starting Performance Benchmarking');
-    this.log('=' .repeat(60));
+    this.log('='.repeat(60));
 
     try {
       await this.benchmarkIntegrationSpeed();
@@ -289,7 +295,7 @@ class PerformanceBenchmark {
 
       const report = await this.generateReport();
 
-      this.log('=' .repeat(60));
+      this.log('='.repeat(60));
       this.log('📊 Benchmark Summary:');
       this.log(`  Total Tests: ${report.summary.totalTests}`);
       this.log(`  Passed: ${report.summary.passed}`);
@@ -309,7 +315,7 @@ class PerformanceBenchmark {
         if (benchmark.status === 'passed') {
           this.log(`  ✅ ${benchmark.name}: ${benchmark.duration.toFixed(2)}ms`);
           if (benchmark.memoryDelta) {
-            this.log(`     Memory: ${(benchmark.memoryDelta.heapUsed / 1024 / 1024).toFixed(2)}MB`);
+            this.log(`     Memory: ${(benchmark.memoryDelta.heapUsed / MEMORY_MB_DIVISOR).toFixed(2)}MB`);
           }
         } else {
           this.log(`  ❌ ${benchmark.name}: Failed`);
@@ -333,6 +339,7 @@ class PerformanceBenchmark {
 if (require.main === module) {
   const benchmark = new PerformanceBenchmark();
   benchmark.runAllBenchmarks().catch(error => {
+    // eslint-disable-next-line no-console
     console.error('Benchmarking failed:', error);
     process.exit(1);
   });

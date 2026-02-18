@@ -5,6 +5,15 @@
 
 const { initialize } = require('unleash-client-node');
 
+// Constants
+const DEFAULT_REFRESH_INTERVAL = 15000;
+const DEFAULT_METRICS_INTERVAL = 60000;
+const DEFAULT_TIME_SERIES_LIMIT = 1000;
+const DEFAULT_PERFORMANCE_LIMIT = 100;
+const PERFORMANCE_THRESHOLD = 100;
+const STATISTICAL_SIGNIFICANCE_THRESHOLD = 0.05;
+const MAX_CONFIDENCE = 0.95;
+
 class AdvancedFeatureToggles {
   constructor(options = {}) {
     this.options = {
@@ -12,8 +21,8 @@ class AdvancedFeatureToggles {
       projectNamespace: options.projectNamespace || 'default',
       unleashUrl: options.unleashUrl || process.env.UNLEASH_URL || 'http://localhost:4242',
       clientKey: options.clientKey || process.env.UNLEASH_CLIENT_KEY || 'default:development',
-      refreshInterval: options.refreshInterval || 15000,
-      metricsInterval: options.metricsInterval || 60000,
+      refreshInterval: options.refreshInterval || DEFAULT_REFRESH_INTERVAL,
+      metricsInterval: options.metricsInterval || DEFAULT_METRICS_INTERVAL,
       enableAnalytics: options.enableAnalytics !== false,
       enableABTesting: options.enableABTesting !== false,
       ...options
@@ -26,11 +35,11 @@ class AdvancedFeatureToggles {
       performanceMetrics: new Map(),
       userSessions: new Map()
     };
-    
+
     this.abTests = new Map();
     this.rolloutStrategies = new Map();
     this.analyticsCallbacks = [];
-    
+
     this.initialize();
   }
 
@@ -55,8 +64,10 @@ class AdvancedFeatureToggles {
         await this.loadABTestConfigurations();
       }
 
+      // eslint-disable-next-line no-console
       console.log(`Advanced Feature Toggles initialized for ${this.options.appName}`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to initialize Advanced Feature Toggles:', error);
       throw error;
     }
@@ -67,16 +78,16 @@ class AdvancedFeatureToggles {
    */
   isEnabled(featureName, context = {}) {
     const result = this.unleash.isEnabled(featureName, context);
-    
+
     // Record metrics
     this.recordFeatureUsage(featureName, result, context);
-    
+
     // Check if this feature is part of an A/B test
     const abTest = this.abTests.get(featureName);
     if (abTest && abTest.isActive) {
       return this.handleABTest(featureName, context, abTest);
     }
-    
+
     return result;
   }
 
@@ -85,16 +96,16 @@ class AdvancedFeatureToggles {
    */
   getVariant(featureName, context = {}) {
     const variant = this.unleash.getVariant(featureName, context);
-    
+
     // Record metrics
     this.recordFeatureUsage(featureName, variant, context);
-    
+
     // Check if this feature is part of an A/B test
     const abTest = this.abTests.get(featureName);
     if (abTest && abTest.isActive) {
       return this.handleABTestVariant(featureName, context, variant, abTest);
     }
-    
+
     return variant;
   }
 
@@ -145,7 +156,8 @@ class AdvancedFeatureToggles {
 
     abTest.isActive = true;
     abTest.startDate = new Date();
-    
+
+    // eslint-disable-next-line no-console
     console.log(`A/B test started for feature: ${featureName}`);
     return abTest;
   }
@@ -161,13 +173,15 @@ class AdvancedFeatureToggles {
 
     abTest.isActive = false;
     abTest.endDate = new Date();
-    
+
     const results = this.generateABTestResults(abTest);
     abTest.results = results;
-    
+
+    // eslint-disable-next-line no-console
     console.log(`A/B test stopped for feature: ${featureName}`);
+    // eslint-disable-next-line no-console
     console.log('Results:', results);
-    
+
     return results;
   }
 
@@ -182,17 +196,17 @@ class AdvancedFeatureToggles {
 
     const variant = this.getVariant(featureName, context);
     const variantName = variant.name;
-    
+
     if (!abTest.results.conversions[variantName]) {
       abTest.results.conversions[variantName] = {
         total: 0,
         [conversionType]: 0
       };
     }
-    
+
     abTest.results.conversions[variantName].total++;
     abTest.results.conversions[variantName][conversionType] += value;
-    
+
     return true;
   }
 
@@ -232,7 +246,8 @@ class AdvancedFeatureToggles {
 
     strategy.isActive = true;
     strategy.currentPhase = 0;
-    
+
+    // eslint-disable-next-line no-console
     console.log(`Rollout strategy started for feature: ${featureName}`);
     return this.executeRolloutPhase(strategy);
   }
@@ -286,11 +301,11 @@ class AdvancedFeatureToggles {
    */
   getFeatureRecommendations() {
     const recommendations = [];
-    
+
     // Analyze feature usage patterns
     for (const [feature, data] of this.metrics.featureUsage) {
       const usage = this.aggregateTimeSeriesData(data, '7d');
-      
+
       // Low usage features
       if (usage.enabledCount < usage.totalCount * 0.1) {
         recommendations.push({
@@ -300,7 +315,7 @@ class AdvancedFeatureToggles {
           suggestion: 'Consider improving documentation or removing the feature'
         });
       }
-      
+
       // High error rate features
       if (usage.errorCount > usage.totalCount * 0.05) {
         recommendations.push({
@@ -310,10 +325,10 @@ class AdvancedFeatureToggles {
           suggestion: 'Review implementation and add error handling'
         });
       }
-      
+
       // Performance issues
       const avgResponseTime = usage.totalResponseTime / usage.enabledCount;
-      if (avgResponseTime > 100) {
+      if (avgResponseTime > PERFORMANCE_THRESHOLD) {
         recommendations.push({
           type: 'performance_issue',
           feature,
@@ -333,18 +348,18 @@ class AdvancedFeatureToggles {
   handleABTest(featureName, context, abTest) {
     const userId = context.userId || 'anonymous';
     const userGroup = this.assignUserToGroup(userId, abTest.variants);
-    
+
     // Record A/B test participation
     abTest.results.participants++;
-    
+
     // Store user group assignment
     if (!this.metrics.userSessions.has(userId)) {
       this.metrics.userSessions.set(userId, {});
     }
     this.metrics.userSessions.get(userId)[featureName] = userGroup;
-    
+
     // Return result based on user group
-    return userGroup === 'control' 
+    return userGroup === 'control'
       ? this.unleash.isEnabled(featureName, context)
       : this.unleash.isEnabled(`${featureName}-${userGroup}`, context);
   }
@@ -352,21 +367,21 @@ class AdvancedFeatureToggles {
   handleABTestVariant(featureName, context, variant, abTest) {
     const userId = context.userId || 'anonymous';
     const userGroup = this.assignUserToGroup(userId, abTest.variants);
-    
+
     // Record A/B test participation
     abTest.results.participants++;
-    
+
     // Store user group assignment
     if (!this.metrics.userSessions.has(userId)) {
       this.metrics.userSessions.set(userId, {});
     }
     this.metrics.userSessions.get(userId)[featureName] = userGroup;
-    
+
     // Return variant based on user group
     if (userGroup === variant.name) {
       return variant;
     }
-    
+
     // Find variant for user's group
     return abTest.variants.find(v => v.name === userGroup) || variant;
   }
@@ -376,7 +391,7 @@ class AdvancedFeatureToggles {
     const hash = this.hashCode(userId);
     const totalWeight = variants.reduce((sum, v) => sum + v.weight, 0);
     const normalizedHash = Math.abs(hash) % totalWeight;
-    
+
     let currentWeight = 0;
     for (const variant of variants) {
       currentWeight += variant.weight;
@@ -384,7 +399,7 @@ class AdvancedFeatureToggles {
         return variant.name;
       }
     }
-    
+
     return variants[0].name;
   }
 
@@ -413,10 +428,10 @@ class AdvancedFeatureToggles {
 
     const metrics = this.metrics.featureUsage.get(featureName);
     const timestamp = Date.now();
-    
+
     metrics.totalCount++;
     metrics.lastAccess = new Date();
-    
+
     if (result === true || (result && result.enabled)) {
       metrics.enabledCount++;
     } else if (result === false || (result && !result.enabled)) {
@@ -424,19 +439,19 @@ class AdvancedFeatureToggles {
     } else {
       metrics.errorCount++;
     }
-    
+
     // Record time series data
     metrics.timeSeries.push({
       timestamp,
       result: typeof result === 'object' ? result.enabled : result,
       context: context.userId || 'anonymous'
     });
-    
+
     // Keep only last 1000 data points
-    if (metrics.timeSeries.length > 1000) {
-      metrics.timeSeries = metrics.timeSeries.slice(-1000);
+    if (metrics.timeSeries.length > DEFAULT_TIME_SERIES_LIMIT) {
+      metrics.timeSeries = metrics.timeSeries.slice(-DEFAULT_TIME_SERIES_LIMIT);
     }
-    
+
     // Trigger analytics callbacks
     this.analyticsCallbacks.forEach(callback => {
       try {
@@ -448,6 +463,7 @@ class AdvancedFeatureToggles {
           timestamp
         });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Analytics callback error:', error);
       }
     });
@@ -505,13 +521,13 @@ class AdvancedFeatureToggles {
   executeGradualRollout(strategy, phase) {
     const progress = phase.percentage || 0;
     strategy.results.rolloutProgress = progress;
-    
+
     // Update user impact based on progress
     strategy.results.userImpact = {
       affectedUsers: Math.floor(progress * 1000), // Estimate
       rolloutPercentage: progress
     };
-    
+
     // Check if phase is complete
     if (progress >= 100) {
       strategy.currentPhase++;
@@ -520,7 +536,7 @@ class AdvancedFeatureToggles {
         return { completed: true };
       }
     }
-    
+
     return { completed: false, nextPhase: strategy.currentPhase };
   }
 
@@ -530,24 +546,24 @@ class AdvancedFeatureToggles {
       affectedUsers: 'all',
       rolloutPercentage: 100
     };
-    
+
     strategy.currentPhase++;
     if (strategy.currentPhase >= strategy.phases.length) {
       strategy.isActive = false;
       return { completed: true };
     }
-    
+
     return { completed: false, nextPhase: strategy.currentPhase };
   }
 
   executeScheduledRollout(strategy, phase) {
     const now = new Date();
     const scheduledTime = new Date(phase.scheduledTime);
-    
+
     if (now >= scheduledTime) {
       return this.executeGradualRollout(strategy, phase);
     }
-    
+
     return { completed: false, scheduledTime };
   }
 
@@ -566,13 +582,13 @@ class AdvancedFeatureToggles {
       activeABTests: Array.from(this.abTests.values()).filter(test => test.isActive).length,
       activeRollouts: Array.from(this.rolloutStrategies.values()).filter(strategy => strategy.isActive).length
     };
-    
+
     this.metrics.performanceMetrics.set(Date.now(), metrics);
-    
+
     // Keep only last 100 data points
-    if (this.metrics.performanceMetrics.size > 100) {
+    if (this.metrics.performanceMetrics.size > DEFAULT_PERFORMANCE_LIMIT) {
       const keys = Array.from(this.metrics.performanceMetrics.keys()).sort((a, b) => b - a);
-      keys.slice(100).forEach(key => this.metrics.performanceMetrics.delete(key));
+      keys.slice(DEFAULT_PERFORMANCE_LIMIT).forEach(key => this.metrics.performanceMetrics.delete(key));
     }
   }
 
@@ -580,9 +596,9 @@ class AdvancedFeatureToggles {
     const now = Date.now();
     const timeRangeMs = this.parseTimeRange(timeRange);
     const cutoff = now - timeRangeMs;
-    
+
     const filtered = data.timeSeries.filter(point => point.timestamp >= cutoff);
-    
+
     return {
       totalCount: filtered.length,
       enabledCount: filtered.filter(p => p.result === true).length,
@@ -600,13 +616,13 @@ class AdvancedFeatureToggles {
       'w': 7 * 24 * 60 * 60 * 1000,
       'm': 60 * 1000
     };
-    
+
     const match = timeRange.match(/^(\d+)([hdwm])$/);
     if (match) {
       const [, number, unit] = match;
       return parseInt(number) * units[unit];
     }
-    
+
     return 24 * 60 * 60 * 1000; // Default to 24 hours
   }
 
@@ -634,19 +650,19 @@ class AdvancedFeatureToggles {
     // In a real implementation, you'd use proper statistical tests
     const {conversions} = abTest.results;
     const variants = Object.keys(conversions);
-    
+
     if (variants.length < 2) {
       return { significant: false, confidence: 0 };
     }
-    
+
     const rates = variants.map(v => conversions[v].total / conversions[v].total);
     const maxRate = Math.max(...rates);
     const minRate = Math.min(...rates);
     const difference = maxRate - minRate;
-    
+
     return {
-      significant: difference > 0.05, // 5% difference threshold
-      confidence: Math.min(difference * 20, 0.95) // Simple confidence calculation
+      significant: difference > STATISTICAL_SIGNIFICANCE_THRESHOLD, // 5% difference threshold
+      confidence: Math.min(difference * 20, MAX_CONFIDENCE) // Simple confidence calculation
     };
   }
 
@@ -665,17 +681,18 @@ class AdvancedFeatureToggles {
       // Example: Load from configuration file
       const fs = require('fs').promises;
       const path = require('path');
-      
+
       const configPath = path.join(__dirname, '../config/ab-tests.json');
       if (await fs.access(configPath).then(() => true).catch(() => false)) {
         const config = await fs.readFile(configPath, 'utf8');
         const tests = JSON.parse(config);
-        
+
         for (const test of tests) {
           this.abTests.set(test.featureName, test);
         }
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log('No A/B test configurations found, using defaults');
     }
   }
