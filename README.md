@@ -34,26 +34,17 @@ For complete documentation, see our **[Documentation Hub](docs/README.md)** whic
 
 ## �🚀 Quick Start
 
-### Bootstrap a New Project
+### 1. Install Forge Patterns
 
 ```bash
-# Clone the patterns repository
-git clone https://github.com/LucasSantana-Dev/uiforge-patterns.git
-cd uiforge-patterns
-
-# Bootstrap a new project with Docker support
-./scripts/bootstrap/project.sh my-new-project node
-
-# Or for Python projects
-./scripts/bootstrap/project.sh my-python-project python
-
-# Or for Next.js projects
-./scripts/bootstrap/project.sh my-nextjs-app nextjs
+npm install @uiforge/forge-patterns
 ```
 
-### Apply Patterns to Existing Project
+### 2. Integrate into Your Project
 
 ```bash
+# Navigate to your project directory
+cd /path/to/your-project
 # Copy patterns to your project
 cp -r patterns/code-quality/eslint/base.config.js .eslintrc.js
 cp -r patterns/code-quality/prettier/base.config.json .prettierrc.json
