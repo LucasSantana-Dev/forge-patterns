@@ -1,11 +1,9 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { resolve, dirname } from 'path';
+import { resolve, sep } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const STORE_DIR = resolve(__dirname, '..', '..', 'src', 'mcp-context-server', 'context-store');
+export const STORE_DIR = process.env.MCP_CONTEXT_STORE_PATH
+  ? resolve(process.env.MCP_CONTEXT_STORE_PATH)
+  : resolve(process.cwd(), 'src', 'mcp-context-server', 'context-store');
 
 export interface ProjectEntry {
   project: string;
@@ -35,7 +33,7 @@ export function validateProjectSlug(project: string): void {
 
 function safeResolve(base: string, filename: string): string {
   const resolved = resolve(base, filename);
-  if (!resolved.startsWith(base + '/') && resolved !== base) {
+  if (resolved !== base && !resolved.startsWith(base + sep)) {
     throw new Error(`Path traversal detected: "${filename}" escapes the store directory.`);
   }
   return resolved;
