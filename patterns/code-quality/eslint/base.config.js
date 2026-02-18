@@ -1,16 +1,12 @@
 // patterns/code-quality/eslint/base.config.js
 module.exports = {
   root: true,
-  extends: [
-    'eslint:recommended',
-    '@typescript-eslint/recommended',
-    'prettier'
-  ],
+  extends: ['eslint:recommended', '@typescript-eslint/recommended', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './tsconfig.json'
   },
   plugins: ['@typescript-eslint'],
   rules: {
@@ -21,16 +17,19 @@ module.exports = {
     'prefer-template': 'warn',
     'no-duplicate-imports': 'error',
     'require-await': 'error',
-    
+
     // TypeScript rules
-    '@typescript-eslint/no-unused-vars': ['warn', { 
-      argsIgnorePattern: '^_', 
-      varsIgnorePattern: '^_' 
-    }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
+      }
+    ],
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
-    '@typescript-eslint/prefer-optional-chain': 'warn',
+    '@typescript-eslint/prefer-optional-chain': 'warn'
   },
   overrides: [
     {
@@ -39,16 +38,16 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
         'no-console': 'off',
-        '@typescript-eslint/no-floating-promises': 'off',
-      },
+        '@typescript-eslint/no-floating-promises': 'off'
+      }
     },
     {
       // Configuration files - more relaxed
       files: ['*.config.js', '*.config.ts', '*.json'],
       rules: {
         'no-console': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-      },
-    },
-  ],
+        '@typescript-eslint/no-explicit-any': 'off'
+      }
+    }
+  ]
 };

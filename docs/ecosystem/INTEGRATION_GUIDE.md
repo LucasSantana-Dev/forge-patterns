@@ -2,19 +2,23 @@
 
 ## 🎯 **Overview**
 
-This guide provides step-by-step instructions for setting up and integrating the complete UIForge ecosystem. It covers everything from initial setup to advanced configuration and troubleshooting.
+This guide provides step-by-step instructions for setting up and integrating the
+complete UIForge ecosystem. It covers everything from initial setup to advanced
+configuration and troubleshooting.
 
 ## 📋 **Prerequisites**
 
 ### **System Requirements**
+
 - **Node.js**: Version 18 or higher
-- **Python**: Version 3.9 or higher  
+- **Python**: Version 3.9 or higher
 - **Docker**: Version 20.10 or higher
 - **Git**: Version 2.30 or higher
 - **Memory**: Minimum 8GB RAM (16GB recommended)
 - **Storage**: Minimum 10GB free disk space
 
 ### **Development Tools**
+
 - **IDE**: VS Code, Cursor, or Windsurf with MCP support
 - **Database**: PostgreSQL (for production) or SQLite (for development)
 - **Container Runtime**: Docker Desktop or Docker Engine
@@ -23,6 +27,7 @@ This guide provides step-by-step instructions for setting up and integrating the
 ## 🚀 **Quick Start (5-Minute Setup)**
 
 ### **1. Clone and Start Gateway**
+
 ```bash
 # Clone the gateway repository
 git clone https://github.com/LucasSantana-Dev/forge-mcp-gateway.git
@@ -36,6 +41,7 @@ make register
 ```
 
 ### **2. Start UI Generation Server**
+
 ```bash
 # Clone the MCP server repository
 git clone https://github.com/LucasSantana-Dev/uiforge-mcp.git
@@ -49,6 +55,7 @@ npm run dev
 ```
 
 ### **3. Launch Management Interface**
+
 ```bash
 # Clone the webapp repository
 git clone https://github.com/LucasSantana-Dev/uiforge-webapp.git
@@ -62,6 +69,7 @@ npm run dev
 ```
 
 ### **4. Verify Integration**
+
 ```bash
 # Test gateway health
 curl http://localhost:8080/health
@@ -78,6 +86,7 @@ open http://localhost:3000
 ### **Phase 1: Environment Preparation**
 
 #### **1.1 Directory Structure Setup**
+
 ```bash
 # Create workspace directory
 mkdir uiforge-ecosystem
@@ -93,6 +102,7 @@ tree -L 2
 ```
 
 #### **1.2 Environment Configuration**
+
 ```bash
 # Create shared environment file
 cat > .env.shared << EOF
@@ -125,6 +135,7 @@ source .env.shared
 ### **Phase 2: Gateway Setup**
 
 #### **2.1 Gateway Installation**
+
 ```bash
 cd forge-mcp-gateway
 
@@ -145,6 +156,7 @@ make start
 ```
 
 #### **2.2 Gateway Configuration**
+
 ```bash
 # Create gateway environment file
 cat > .env << EOF
@@ -173,6 +185,7 @@ curl http://localhost:8080/health
 ```
 
 #### **2.3 IDE Integration**
+
 ```bash
 # Register gateway with IDE
 make register
@@ -187,6 +200,7 @@ npx @modelcontextprotocol/cli list-tools
 ### **Phase 3: MCP Server Setup**
 
 #### **3.1 UI Generation Server Installation**
+
 ```bash
 cd ../uiforge-mcp
 
@@ -221,6 +235,7 @@ npm run dev
 ```
 
 #### **3.2 Template Setup**
+
 ```bash
 # Create template directories
 mkdir -p templates/{react,vue,angular}
@@ -236,6 +251,7 @@ curl http://localhost:3001/api/templates
 ### **Phase 4: Web Application Setup**
 
 #### **4.1 WebApp Installation**
+
 ```bash
 cd ../uiforge-webapp
 
@@ -269,6 +285,7 @@ npm run db:seed
 ```
 
 #### **4.2 WebApp Configuration**
+
 ```bash
 # Start development server
 npm run dev
@@ -282,15 +299,16 @@ curl http://localhost:3000/api/gateway/status
 
 ## ⚙️ **Configuration Matrix**
 
-| Component | Config File | Key Settings | Dependencies |
-|-----------|------------|--------------|-------------|
-| **Gateway** | `.env` | `PORT`, `JWT_SECRET`, `DATABASE_URL` | None |
-| **MCP Server** | `.env` | `GATEWAY_URL`, `AI_MODEL_PROVIDER` | Gateway |
-| **WebApp** | `.env.local` | `NEXT_PUBLIC_GATEWAY_URL`, `SUPABASE_URL` | Gateway, Supabase |
+| Component      | Config File  | Key Settings                              | Dependencies      |
+| -------------- | ------------ | ----------------------------------------- | ----------------- |
+| **Gateway**    | `.env`       | `PORT`, `JWT_SECRET`, `DATABASE_URL`      | None              |
+| **MCP Server** | `.env`       | `GATEWAY_URL`, `AI_MODEL_PROVIDER`        | Gateway           |
+| **WebApp**     | `.env.local` | `NEXT_PUBLIC_GATEWAY_URL`, `SUPABASE_URL` | Gateway, Supabase |
 
 ### **Environment Variables Reference**
 
 #### **Gateway Environment Variables**
+
 ```bash
 # Server Configuration
 PORT=8080                    # Gateway port
@@ -318,6 +336,7 @@ LOG_FILE=logs/gateway.log    # Log file path
 ```
 
 #### **MCP Server Environment Variables**
+
 ```bash
 # Server Configuration
 PORT=3001                    # MCP server port
@@ -347,6 +366,7 @@ REQUEST_TIMEOUT=120          # Request timeout (seconds)
 ```
 
 #### **WebApp Environment Variables**
+
 ```bash
 # Next.js Configuration
 NEXT_PUBLIC_APP_URL=http://localhost:3000  # Application URL
@@ -370,6 +390,7 @@ DEV_MODE=true               # Development mode
 ## 🔗 **Integration Testing**
 
 ### **Health Check Script**
+
 ```bash
 #!/bin/bash
 # health-check.sh
@@ -423,6 +444,7 @@ echo "🎉 All systems are operational!"
 ```
 
 ### **End-to-End Test**
+
 ```bash
 #!/bin/bash
 # e2e-test.sh
@@ -475,6 +497,7 @@ echo "🎉 All end-to-end tests passed!"
 ## 🛠️ **Advanced Configuration**
 
 ### **Production Deployment Setup**
+
 ```bash
 # Production environment variables
 cat > .env.production << EOF
@@ -502,6 +525,7 @@ EOF
 ```
 
 ### **Docker Compose Setup**
+
 ```yaml
 # docker-compose.yml
 version: '3.8'
@@ -510,7 +534,7 @@ services:
   gateway:
     build: ./forge-mcp-gateway
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/uiforge
       - JWT_SECRET=${JWT_SECRET}
@@ -522,7 +546,7 @@ services:
   mcp-server:
     build: ./uiforge-mcp
     ports:
-      - "3001:3001"
+      - '3001:3001'
     environment:
       - GATEWAY_URL=http://gateway:8080
       - AI_MODEL_PROVIDER=ollama
@@ -533,7 +557,7 @@ services:
   webapp:
     build: ./uiforge-webapp
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NEXT_PUBLIC_GATEWAY_URL=http://gateway:8080
       - SUPABASE_URL=http://supabase:54321
@@ -553,14 +577,14 @@ services:
   supabase:
     image: supabase/local:latest
     ports:
-      - "54321:54321"
+      - '54321:54321'
     environment:
       - POSTGRES_PASSWORD=password
 
   ollama:
     image: ollama/ollama:latest
     ports:
-      - "11434:11434"
+      - '11434:11434'
     volumes:
       - ollama_data:/root/.ollama
 
@@ -574,6 +598,7 @@ volumes:
 ### **Common Issues**
 
 #### **Gateway Not Starting**
+
 ```bash
 # Check port availability
 lsof -i :8080
@@ -589,6 +614,7 @@ rm -rf data/cache/*
 ```
 
 #### **MCP Server Connection Issues**
+
 ```bash
 # Test gateway connectivity
 curl http://localhost:8080/api/servers/status
@@ -604,6 +630,7 @@ cat uiforge-mcp/.env
 ```
 
 #### **WebApp Integration Problems**
+
 ```bash
 # Check environment variables
 cat uiforge-webapp/.env.local
@@ -619,6 +646,7 @@ npm run dev
 ```
 
 ### **Debug Mode**
+
 ```bash
 # Enable debug logging
 export LOG_LEVEL=debug
@@ -642,4 +670,6 @@ ps aux | grep -E "(gateway|mcp|webapp)"
 
 ---
 
-*This integration guide should help you get the complete UIForge ecosystem running. For additional support, please refer to the troubleshooting section or create an issue in the respective repositories.*
+_This integration guide should help you get the complete UIForge ecosystem
+running. For additional support, please refer to the troubleshooting section or
+create an issue in the respective repositories._

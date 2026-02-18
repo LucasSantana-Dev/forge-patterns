@@ -23,25 +23,25 @@ aws:
   profile: default
 
 kubernetes:
-  provider: minikube  # Options: minikube, k3s, kind
+  provider: minikube # Options: minikube, k3s, kind
   cluster_name: uiforge-local
   node_count: 1
   memory: 4096
   cpus: 2
   version: "1.28"
-  
+
 terraform:
   backend: local
   state_file: terraform.tfstate
   lock_file: .terraform.lock.hcl
   workspace: default
-  
+
 feature_toggles:
   provider: unleash
   local_instance: true
   database: sqlite
   port: 4242
-  
+
 localstack:
   version: "latest"
   port: 4566
@@ -55,11 +55,11 @@ localstack:
     - iam
     - cloudwatch
   persistence:
-    type: volume  # Options: volume, tmpfs
+    type: volume # Options: volume, tmpfs
 
 learning:
   certification: aws-solutions-architect
-  current_level: 1  # 1-5 progressive complexity
+  current_level: 1 # 1-5 progressive complexity
   focus_areas:
     - resilient_architectures
     - high_performance

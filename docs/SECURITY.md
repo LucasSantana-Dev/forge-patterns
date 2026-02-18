@@ -2,15 +2,19 @@
 
 ## 🔒 Security First Policy
 
-UIForge Patterns maintains a **zero secrets** policy for all public repositories. This document outlines the security practices, validation procedures, and guidelines for maintaining a secure public repository.
+UIForge Patterns maintains a **zero secrets** policy for all public
+repositories. This document outlines the security practices, validation
+procedures, and guidelines for maintaining a secure public repository.
 
 ## 🛡️ Security Requirements
 
 ### Zero Secrets Policy
 
-**MANDATORY**: No actual secrets, API keys, tokens, passwords, or sensitive data may be committed to this repository.
+**MANDATORY**: No actual secrets, API keys, tokens, passwords, or sensitive data
+may be committed to this repository.
 
 #### What's Allowed ✅
+
 - Environment variable templates (`.env.example`, `.env.template`)
 - Configuration templates with placeholders
 - Documentation with examples
@@ -18,6 +22,7 @@ UIForge Patterns maintains a **zero secrets** policy for all public repositories
 - Placeholder values using `REPLACE_WITH_[TYPE]` format
 
 #### What's Forbidden ❌
+
 - Real API keys, tokens, or passwords
 - Actual environment variable values
 - Private certificates or keys
@@ -29,11 +34,13 @@ UIForge Patterns maintains a **zero secrets** policy for all public repositories
 ### Required Format
 
 All sensitive values must use this exact format:
+
 ```
 REPLACE_WITH_[TYPE]
 ```
 
 ### Valid Examples
+
 - `REPLACE_WITH_API_KEY`
 - `REPLACE_WITH_STRONG_SECRET`
 - `REPLACE_WITH_DATABASE_URL`
@@ -42,6 +49,7 @@ REPLACE_WITH_[TYPE]
 - `REPLACE_WITH_WEBHOOK_SECRET`
 
 ### Forbidden Formats
+
 - `REPLACE_WITH_API_KEY_HERE`
 - `REPLACE_WITH_TEST_PASSWORD`
 - `REPLACE_WITH_ADMIN_EMAIL`
@@ -54,6 +62,7 @@ REPLACE_WITH_[TYPE]
 This repository includes comprehensive security scanning:
 
 #### 1. Trufflehog Secret Detection
+
 ```yaml
 - name: Trufflehog Secret Scan
   uses: trufflesecurity/trufflehog@v3.93.3
@@ -62,6 +71,7 @@ This repository includes comprehensive security scanning:
 ```
 
 #### 2. Gitleaks Pattern Matching
+
 ```yaml
 - name: Gitleaks Secret Scan
   uses: gitleaks/gitleaks-action@v2
@@ -70,6 +80,7 @@ This repository includes comprehensive security scanning:
 ```
 
 #### 3. Custom Validation Scripts
+
 ```bash
 # Validate no secrets
 ./scripts/security/validate-no-secrets.sh
@@ -84,12 +95,14 @@ This repository includes comprehensive security scanning:
 ### Security Validation Rules
 
 #### Secret Detection Patterns
+
 - `password`, `secret`, `token`, `key`, `auth`, `credential`
 - `private`, `cert`, `pem`, `p12`, `jks`
 - GitHub tokens, API keys, JWT tokens
 - Database URLs, webhook secrets
 
 #### Placeholder Validation
+
 - Proper `REPLACE_WITH_[TYPE]` format
 - No forbidden placeholder formats
 - All sensitive values marked as placeholders
@@ -100,19 +113,19 @@ This repository includes comprehensive security scanning:
 
 ```yaml
 # .gitleaks.yml
-title: "UIForge Patterns Secret Detection"
+title: 'UIForge Patterns Secret Detection'
 
 allowlist:
-  - description: "GitHub token placeholder"
-    regex: "REPLACE_WITH_GITHUB_TOKEN"
-  - description: "API key placeholder"
-    regex: "REPLACE_WITH_API_KEY"
+  - description: 'GitHub token placeholder'
+    regex: 'REPLACE_WITH_GITHUB_TOKEN'
+  - description: 'API key placeholder'
+    regex: 'REPLACE_WITH_API_KEY'
 
 rules:
-  - description: "GitHub token"
-    regex: "(?i)(github|ghp_|gho_|ghu_|ghs_|ghr_)[a-zA-Z0-9_]{36}"
+  - description: 'GitHub token'
+    regex: '(?i)(github|ghp_|gho_|ghu_|ghs_|ghr_)[a-zA-Z0-9_]{36}'
     allowlist:
-      - "REPLACE_WITH_GITHUB_TOKEN"
+      - 'REPLACE_WITH_GITHUB_TOKEN'
 ```
 
 ### Environment Templates
@@ -139,21 +152,25 @@ If you discover a security issue:
 ### Security Issue Categories
 
 #### Critical (24 hours)
+
 - Actual secrets committed to repository
 - Vulnerabilities that compromise user data
 - Authentication bypass vulnerabilities
 
 #### High (72 hours)
+
 - Security configuration issues
 - Dependency vulnerabilities with known exploits
 - Information disclosure vulnerabilities
 
 #### Medium (7 days)
+
 - Best practice security improvements
 - Low-risk dependency updates
 - Documentation security issues
 
 #### Low (30 days)
+
 - Security tooling improvements
 - Code quality security suggestions
 - Educational security content
@@ -205,6 +222,7 @@ If you discover a security issue:
 ```
 
 Output:
+
 ```
 🔒 UIForge Patterns Security Dashboard
 ==================================
@@ -227,17 +245,20 @@ Security Score: A+
 ### Tool Configuration
 
 #### Trufflehog
+
 ```yaml
 extra_args: --only-verified --debug
 ```
 
 #### Gitleaks
+
 ```yaml
 version: latest
 config: .gitleaks.yml
 ```
 
 #### Custom Validation
+
 ```bash
 #!/bin/bash
 # Comprehensive security validation
@@ -250,12 +271,14 @@ config: .gitleaks.yml
 ### Team Training
 
 #### Security Awareness
+
 - Zero secrets policy importance
 - Placeholder format standards
 - Security incident procedures
 - Best practices for public repositories
 
 #### Technical Training
+
 - Security tool usage
 - Validation script operation
 - Security review procedures
@@ -264,12 +287,14 @@ config: .gitleaks.yml
 ### Documentation
 
 #### Security Guidelines
+
 - This document (comprehensive guide)
 - Quick reference cards
 - Security checklist templates
 - Incident response procedures
 
 #### Examples and Templates
+
 - Secure configuration examples
 - Insecure configuration examples (what to avoid)
 - Security validation examples
@@ -350,4 +375,5 @@ config: .gitleaks.yml
 
 ---
 
-**Remember**: Security is everyone's responsibility. Follow these guidelines to maintain a secure, trustworthy repository for the entire UIForge community.
+**Remember**: Security is everyone's responsibility. Follow these guidelines to
+maintain a secure, trustworthy repository for the entire UIForge community.

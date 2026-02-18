@@ -6,7 +6,8 @@ Accepted
 
 ## Context
 
-We needed to design the uiforge-mcp server that specializes in AI-powered UI generation. The key requirements were:
+We needed to design the uiforge-mcp server that specializes in AI-powered UI
+generation. The key requirements were:
 
 - Integration with the Model Context Protocol (MCP) standard
 - Support for multiple AI models and providers
@@ -22,15 +23,18 @@ We designed a modular MCP server architecture with the following key components:
 ### Core Architecture
 
 - **MCP Server Layer**: Handles MCP protocol communication and tool registration
-- **AI Provider Layer**: Abstract interface for multiple AI providers (OpenAI, Anthropic, etc.)
+- **AI Provider Layer**: Abstract interface for multiple AI providers (OpenAI,
+  Anthropic, etc.)
 - **UI Generation Engine**: Core logic for generating UI components
 - **Template Manager**: Handles template storage, versioning, and retrieval
 - **Component Library**: Manages reusable UI components
 
 ### Key Design Choices
 
-1. **Provider Abstraction**: Created a common interface for AI providers to enable easy switching
-2. **Template System**: Used a flexible template system supporting multiple UI frameworks
+1. **Provider Abstraction**: Created a common interface for AI providers to
+   enable easy switching
+2. **Template System**: Used a flexible template system supporting multiple UI
+   frameworks
 3. **Caching Layer**: Implemented intelligent caching for generated components
 4. **Streaming Support**: Added real-time streaming for large UI generations
 
@@ -71,12 +75,12 @@ class UIForgeMCPServer {
   private aiProvider: AIProvider;
   private templateManager: TemplateManager;
   private componentLibrary: ComponentLibrary;
-  
+
   async initialize(): Promise<void> {
     await this.registerTools();
     await this.setupProviders();
   }
-  
+
   private async registerTools(): Promise<void> {
     // Register UI generation tools
   }
@@ -113,12 +117,15 @@ interface UITemplate {
 
 class TemplateManager {
   private templates: Map<string, UITemplate> = new Map();
-  
+
   async getTemplate(id: string): Promise<UITemplate> {
     return this.templates.get(id);
   }
-  
-  async renderTemplate(template: UITemplate, variables: Record<string, unknown>): Promise<string> {
+
+  async renderTemplate(
+    template: UITemplate,
+    variables: Record<string, unknown>
+  ): Promise<string> {
     // Template rendering logic
   }
 }

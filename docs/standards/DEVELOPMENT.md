@@ -2,7 +2,10 @@
 
 ## 🎯 **Overview**
 
-This document establishes the development standards and best practices for the UIForge ecosystem. These standards ensure consistency, quality, and maintainability across all projects while enabling efficient collaboration and development workflows.
+This document establishes the development standards and best practices for the
+UIForge ecosystem. These standards ensure consistency, quality, and
+maintainability across all projects while enabling efficient collaboration and
+development workflows.
 
 ## 📋 **Table of Contents**
 
@@ -21,6 +24,7 @@ This document establishes the development standards and best practices for the U
 ### **TypeScript/JavaScript Standards**
 
 #### **TypeScript Configuration**
+
 ```json
 // tsconfig.json
 {
@@ -47,6 +51,7 @@ This document establishes the development standards and best practices for the U
 ```
 
 #### **Naming Conventions**
+
 ```typescript
 // Interfaces: I{Name}
 interface IUserProfile {
@@ -82,6 +87,7 @@ const API_BASE_URL = 'https://api.uiforge.com';
 ```
 
 #### **Code Style Guidelines**
+
 ```typescript
 // Use arrow functions for methods
 const handleSubmit = async (event: React.FormEvent) => {
@@ -112,6 +118,7 @@ const isActive = (status: string): boolean => {
 ### **Python Standards**
 
 #### **Code Style (PEP 8)**
+
 ```python
 # Import organization
 import os
@@ -125,7 +132,7 @@ from pydantic import BaseModel
 class UserService:
     def __init__(self, db: Database):
         self.db = db
-    
+
     async def get_user(self, user_id: str) -> Optional[User]:
         """Get user by ID."""
         return await self.db.get_user(user_id)
@@ -150,6 +157,7 @@ component_list = get_components()
 ```
 
 #### **Type Hints**
+
 ```python
 from typing import List, Dict, Optional, Union, Callable
 from dataclasses import dataclass
@@ -172,6 +180,7 @@ def process_request(
 ### **Shell Script Standards**
 
 #### **Bash Best Practices**
+
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
@@ -193,12 +202,12 @@ log_error() {
 # Main function
 main() {
     log_info "Starting deployment..."
-    
+
     if [[ -z "${DEPLOYMENT_ENV:-}" ]]; then
         log_error "DEPLOYMENT_ENV environment variable is required"
         exit 1
     fi
-    
+
     # Implementation
     log_info "Deployment completed successfully"
 }
@@ -212,6 +221,7 @@ main "$@"
 ### **Directory Structure Standards**
 
 #### **TypeScript/JavaScript Projects**
+
 ```
 src/
 ├── app/                    # Next.js app router pages
@@ -236,6 +246,7 @@ src/
 ```
 
 #### **Python Projects**
+
 ```
 src/
 ├── app/                   # Application entry point
@@ -272,6 +283,7 @@ src/
 ## 🌿 **Git Workflow**
 
 ### **Branch Naming Convention**
+
 ```bash
 # Feature branches
 feature/component-generator
@@ -292,6 +304,7 @@ hotfix/critical-bug-fix
 ```
 
 ### **Commit Message Standards**
+
 ```bash
 # Format: <type>(<scope>): <subject>
 
@@ -321,34 +334,41 @@ build(docker): optimize Docker image size
 ```
 
 ### **Pull Request Template**
+
 ```markdown
 ## 🎯 Description
+
 Brief description of changes made.
 
 ## 🔄 Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## 🧪 Testing
+
 - [ ] Unit tests pass
 - [ ] Integration tests pass
 - [ ] Manual testing completed
 - [ ] Added new tests for new functionality
 
 ## 📝 Documentation
+
 - [ ] API documentation updated
 - [ ] README updated
 - [ ] CHANGELOG.md updated
 - [ ] Code comments added/updated
 
 ## 🔒 Security
+
 - [ ] No new security vulnerabilities
 - [ ] Sensitive data properly handled
 - [ ] Input validation implemented
 
 ## 📋 Checklist
+
 - [ ] Code follows project standards
 - [ ] All tests pass
 - [ ] No linting errors
@@ -361,6 +381,7 @@ Brief description of changes made.
 ### **Testing Pyramid**
 
 #### **Unit Tests (70%)**
+
 ```typescript
 // Component unit test
 import { render, screen } from '@testing-library/react';
@@ -369,7 +390,7 @@ import { ComponentGenerator } from './ComponentGenerator';
 describe('ComponentGenerator', () => {
   it('should render form with all required fields', () => {
     render(<ComponentGenerator onGenerate={jest.fn()} />);
-    
+
     expect(screen.getByLabelText('Component Description')).toBeInTheDocument();
     expect(screen.getByLabelText('Framework')).toBeInTheDocument();
     expect(screen.getByLabelText('Style')).toBeInTheDocument();
@@ -378,11 +399,11 @@ describe('ComponentGenerator', () => {
   it('should call onGenerate when form is submitted', async () => {
     const onGenerate = jest.fn();
     render(<ComponentGenerator onGenerate={onGenerate} />);
-    
+
     await userEvent.type(screen.getByLabelText('Component Description'), 'Create a button');
     await userEvent.selectOptions(screen.getByLabelText('Framework'), 'react');
     await userEvent.click(screen.getByRole('button', { name: 'Generate Component' }));
-    
+
     expect(onGenerate).toHaveBeenCalledWith({
       description: 'Create a button',
       framework: 'react',
@@ -393,6 +414,7 @@ describe('ComponentGenerator', () => {
 ```
 
 #### **Integration Tests (20%)**
+
 ```typescript
 // API integration test
 import { createTestClient } from '@/test/utils/api-client';
@@ -416,14 +438,14 @@ describe('Component Generation API', () => {
       component: {
         name: 'Button',
         code: 'export const Button = () => <button>Click me</button>',
-        framework: 'react',
-      },
+        framework: 'react'
+      }
     });
 
     const result = await client.generateComponent({
       description: 'Create a button',
       framework: 'react',
-      style: 'modern',
+      style: 'modern'
     });
 
     expect(result.name).toBe('Button');
@@ -434,6 +456,7 @@ describe('Component Generation API', () => {
 ```
 
 #### **End-to-End Tests (10%)**
+
 ```typescript
 // E2E test with Playwright
 import { test, expect } from '@playwright/test';
@@ -441,26 +464,28 @@ import { test, expect } from '@playwright/test';
 test.describe('Component Generation Flow', () => {
   test('should generate and preview component', async ({ page }) => {
     await page.goto('/dashboard');
-    
+
     // Login
     await page.fill('[data-testid=email]', 'test@example.com');
     await page.fill('[data-testid=password]', 'password');
     await page.click('[data-testid=login-button]');
-    
+
     // Navigate to component generator
     await page.click('[data-testid=generate-component]');
-    
+
     // Fill form
     await page.fill('[data-testid=description]', 'Create a modern login form');
     await page.selectOption('[data-testid=framework]', 'react');
     await page.selectOption('[data-testid=style]', 'modern');
-    
+
     // Generate component
     await page.click('[data-testid=generate-button]');
-    
+
     // Verify result
     await expect(page.locator('[data-testid=component-preview]')).toBeVisible();
-    await expect(page.locator('[data-testid=component-code]')).toContainText('export const');
+    await expect(page.locator('[data-testid=component-code]')).toContainText(
+      'export const'
+    );
   });
 });
 ```
@@ -468,12 +493,14 @@ test.describe('Component Generation Flow', () => {
 ### **Testing Standards**
 
 #### **Coverage Requirements**
+
 - **Unit Tests**: Minimum 80% line coverage
 - **Integration Tests**: Critical paths covered
 - **E2E Tests**: Main user journeys covered
 - **Performance Tests**: Key operations benchmarked
 
 #### **Test Organization**
+
 ```typescript
 // Test file organization
 src/
@@ -495,17 +522,18 @@ src/
 ### **Code Documentation**
 
 #### **JSDoc Comments**
-```typescript
+
+````typescript
 /**
  * Generates a UI component from natural language description.
- * 
+ *
  * @param request - The component generation request
  * @param request.description - Natural language description of the component
  * @param request.framework - Target UI framework
  * @param request.style - Desired styling approach
  * @param options - Additional generation options
  * @returns Promise resolving to generated component
- * 
+ *
  * @example
  * ```typescript
  * const component = await generateComponent({
@@ -521,9 +549,10 @@ export async function generateComponent(
 ): Promise<GeneratedComponent> {
   // Implementation
 }
-```
+````
 
 #### **Python Docstrings**
+
 ```python
 def generate_component(
     description: str,
@@ -533,20 +562,20 @@ def generate_component(
 ) -> Component:
     """
     Generate a UI component from natural language description.
-    
+
     Args:
         description: Natural language description of the component
         framework: Target UI framework (react, vue, angular, svelte)
         style: Desired styling approach (modern, classic, minimal, material)
         options: Additional generation options
-        
+
     Returns:
         Generated component with code and metadata
-        
+
     Raises:
         ValueError: If framework is not supported
         GenerationError: If generation fails
-        
+
     Example:
         >>> component = generate_component(
         ...     "Create a login form",
@@ -562,7 +591,8 @@ def generate_component(
 ### **README Standards**
 
 #### **Project README Structure**
-```markdown
+
+````markdown
 # Project Name
 
 Brief description of the project.
@@ -579,6 +609,7 @@ npm run dev
 # Testing
 npm test
 ```
+````
 
 ## 📋 Features
 
@@ -609,7 +640,8 @@ Contribution guidelines.
 ## 📄 License
 
 License information.
-```
+
+````
 
 ## 🔍 **Code Quality**
 
@@ -650,9 +682,10 @@ module.exports = {
     },
   },
 };
-```
+````
 
 #### **Python Ruff Configuration**
+
 ```toml
 # pyproject.toml
 [tool.ruff]
@@ -673,6 +706,7 @@ indent-style = "space"
 ### **Code Review Standards**
 
 #### **Review Checklist**
+
 - [ ] Code follows project standards
 - [ ] Tests are comprehensive and passing
 - [ ] Documentation is updated
@@ -687,6 +721,7 @@ indent-style = "space"
 ### **Frontend Performance**
 
 #### **React Optimization**
+
 ```typescript
 // Use React.memo for expensive components
 export const ComponentPreview = React.memo<ComponentPreviewProps>(({ component }) => {
@@ -699,7 +734,7 @@ export const ComponentPreview = React.memo<ComponentPreviewProps>(({ component }
 
 // Use useMemo for expensive calculations
 const filteredTemplates = useMemo(() => {
-  return templates.filter(template => 
+  return templates.filter(template =>
     template.category === selectedCategory &&
     template.framework === selectedFramework
   );
@@ -718,6 +753,7 @@ const handleGenerate = useCallback(async () => {
 ```
 
 #### **Bundle Optimization**
+
 ```typescript
 // Dynamic imports for code splitting
 const ComponentGenerator = lazy(() => import('./ComponentGenerator'));
@@ -731,6 +767,7 @@ const Settings = lazy(() => import('../pages/Settings'));
 ### **Backend Performance**
 
 #### **Database Optimization**
+
 ```python
 # Use efficient queries
 async def get_user_components(user_id: str, limit: int = 50) -> List[Component]:
@@ -750,34 +787,35 @@ class DatabaseManager:
             min_connections=5,
             max_connections=20,
         )
-    
+
     async def execute_query(self, query: str, params: tuple = ()):
         async with self.pool.connection() as conn:
             return await conn.execute(query, params)
 ```
 
 #### **Caching Strategy**
+
 ```python
 # Multi-level caching
 class ComponentCache:
     def __init__(self):
         self.memory_cache = MemoryCache(max_size=1000)
         self.redis_cache = RedisCache()
-    
+
     async def get(self, key: str) -> Optional[Component]:
         # L1: Memory cache
         component = self.memory_cache.get(key)
         if component:
             return component
-        
+
         # L2: Redis cache
         component = await self.redis_cache.get(key)
         if component:
             self.memory_cache.set(key, component)
             return component
-        
+
         return None
-    
+
     async def set(self, key: str, component: Component, ttl: int = 3600):
         self.memory_cache.set(key, component)
         await self.redis_cache.set(key, component, ttl)
@@ -786,6 +824,7 @@ class ComponentCache:
 ## 🔒 **Security Practices**
 
 ### **Input Validation**
+
 ```typescript
 // Validate all inputs
 import { z } from 'zod';
@@ -794,10 +833,12 @@ const GenerateComponentSchema = z.object({
   description: z.string().min(1).max(1000),
   framework: z.enum(['react', 'vue', 'angular', 'svelte']),
   style: z.enum(['modern', 'classic', 'minimal', 'material']),
-  options: z.object({
-    include_typescript: z.boolean().optional(),
-    include_tests: z.boolean().optional(),
-  }).optional(),
+  options: z
+    .object({
+      include_typescript: z.boolean().optional(),
+      include_tests: z.boolean().optional()
+    })
+    .optional()
 });
 
 export const validateGenerateRequest = (data: unknown) => {
@@ -814,12 +855,12 @@ class ComponentRequest(BaseModel):
     description: str
     framework: str
     style: str
-    
+
     @validator('description')
     def sanitize_description(cls, v):
         # Remove HTML tags and sanitize input
         return bleach.clean(v, tags=[], strip=True)
-    
+
     @validator('framework')
     def validate_framework(cls, v):
         allowed = ['react', 'vue', 'angular', 'svelte']
@@ -829,35 +870,40 @@ class ComponentRequest(BaseModel):
 ```
 
 ### **Secure Communication**
+
 ```typescript
 // Use HTTPS and secure headers
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
   // Enable HTTPS in production
-  httpsAgent: process.env.NODE_ENV === 'production' 
-    ? new https.Agent({ rejectUnauthorized: true })
-    : undefined,
+  httpsAgent:
+    process.env.NODE_ENV === 'production'
+      ? new https.Agent({ rejectUnauthorized: true })
+      : undefined
 });
 
 // Add security headers middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:']
+      }
+    }
+  })
+);
 ```
 
 ## 🛠️ **Tool Configuration**
 
 ### **Package.json Scripts**
+
 ```json
 {
   "scripts": {
@@ -878,6 +924,7 @@ app.use(helmet({
 ```
 
 ### **Pre-commit Configuration**
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -907,10 +954,11 @@ repos:
       - id: eslint
         additional_dependencies:
           - eslint@8.52.0
-          - "@typescript-eslint/eslint-plugin@6.7.0"
-          - "@typescript-eslint/parser@6.7.0"
+          - '@typescript-eslint/eslint-plugin@6.7.0'
+          - '@typescript-eslint/parser@6.7.0'
 ```
 
 ---
 
-*These development standards should be followed across all UIForge ecosystem projects to ensure consistency, quality, and maintainability.*
+_These development standards should be followed across all UIForge ecosystem
+projects to ensure consistency, quality, and maintainability._

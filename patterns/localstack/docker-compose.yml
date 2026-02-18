@@ -1,13 +1,13 @@
-version: '3.8'
+version: "3.8"
 
 services:
   localstack:
     image: localstack/localstack:latest
     container_name: uiforge-localstack
     ports:
-      - "4566:4566"      # Main API endpoint
-      - "4510-4559:4510-4559"  # External service ports
-      - "8080:8080"      # Web UI
+      - "4566:4566" # Main API endpoint
+      - "4510-4559:4510-4559" # External service ports
+      - "8080:8080" # Web UI
     environment:
       - SERVICES=s3,dynamodb,lambda,apigateway,sqs,sns,iam,cloudwatch,logs
       - DEBUG=1

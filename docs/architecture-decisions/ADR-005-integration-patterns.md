@@ -1,10 +1,14 @@
 # ADR-005: Integration Patterns and API Contracts
 
 ## Status
+
 Accepted
 
 ## Context
-With the hub-and-spoke architecture established (ADR-001), we needed to define the integration patterns and API contracts between the three main components: webapp, gateway, and MCP servers. The key challenges were:
+
+With the hub-and-spoke architecture established (ADR-001), we needed to define
+the integration patterns and API contracts between the three main components:
+webapp, gateway, and MCP servers. The key challenges were:
 
 - Standardizing communication protocols between components
 - Defining clear API contracts and versioning strategies
@@ -14,7 +18,9 @@ With the hub-and-spoke architecture established (ADR-001), we needed to define t
 - Ensuring backward compatibility during evolution
 
 ## Decision
-We established **standardized integration patterns** with the following key decisions:
+
+We established **standardized integration patterns** with the following key
+decisions:
 
 - **RESTful API Contracts**: HTTP/JSON APIs with OpenAPI documentation
 - **MCP Protocol Compliance**: Standard MCP protocol for server communication
@@ -26,6 +32,7 @@ We established **standardized integration patterns** with the following key deci
 ## Consequences
 
 ### Positive Consequences
+
 - **Interoperability**: Standardized protocols enable easy integration
 - **Reliability**: Circuit breakers prevent cascading failures
 - **Maintainability**: Clear contracts reduce integration complexity
@@ -34,6 +41,7 @@ We established **standardized integration patterns** with the following key deci
 - **Future-Proofing**: Versioning strategy supports evolution
 
 ### Negative Consequences
+
 - **Overhead**: Additional layers add latency and complexity
 - **Documentation Burden**: Requires continuous API documentation maintenance
 - **Version Management**: Multiple API versions increase maintenance overhead
@@ -42,18 +50,22 @@ We established **standardized integration patterns** with the following key deci
 ## Alternatives Considered
 
 ### Alternative 1: Direct Database Sharing
+
 - Services share database access directly
 - **Rejected**: Tight coupling, security concerns, scaling issues
 
 ### Alternative 2: gRPC Communication
+
 - Use gRPC for internal service communication
 - **Rejected**: Added complexity without clear benefits for current scale
 
 ### Alternative 3: Message Queue Only
+
 - All communication through message queues
 - **Rejected**: Too complex for synchronous operations, added latency
 
 ## Rationale
+
 The standardized integration patterns were chosen because they provide:
 
 - **Industry Standards**: REST and MCP are widely adopted and understood
@@ -63,11 +75,13 @@ The standardized integration patterns were chosen because they provide:
 - **Evolution**: Versioning strategy allows for gradual upgrades
 - **Reliability**: Proven patterns for fault tolerance and recovery
 
-This approach balances simplicity with robustness while providing a solid foundation for ecosystem growth.
+This approach balances simplicity with robustness while providing a solid
+foundation for ecosystem growth.
 
 ## Implementation
 
 ### API Contract Definition
+
 ```typescript
 // contracts/api-contracts.ts
 
@@ -149,6 +163,7 @@ export interface ServerInfo {
 ```
 
 ### Gateway API Implementation
+
 ```typescript
 // gateway/api/routes.ts
 import { Router } from 'express';
@@ -159,7 +174,8 @@ import { rateLimit } from '../middleware/rate-limit';
 const router = Router();
 
 // Authentication Routes
-router.post('/api/auth/login', 
+router.post(
+  '/api/auth/login',
   rateLimit({ max: 5, windowMs: 15 * 60 * 1000 }), // 5 attempts per 15 minutes
   validateRequest(AuthRequestSchema),
   async (req, res) => {
@@ -173,7 +189,8 @@ router.post('/api/auth/login',
 );
 
 // Component Generation Routes
-router.post('/api/generate/component',
+router.post(
+  '/api/generate/component',
   authenticateToken,
   requirePermission('component', 'generate'),
   validateRequest(GenerateComponentSchema),
@@ -181,14 +198,17 @@ router.post('/api/generate/component',
     try {
       const user = req.user;
       const request = req.body;
-      
+
       // Route to appropriate MCP server
-      const server = await routingService.routeRequest('generate_component', user);
+      const server = await routingService.routeRequest(
+        'generate_component',
+        user
+      );
       const result = await server.callTool('generate_ui_component', {
         ...request,
         user_context: { user_id: user.id, permissions: user.permissions }
       });
-      
+
       res.json(result);
     } catch (error) {
       res.status(500).json({ error: 'Generation failed' });
@@ -197,13 +217,17 @@ router.post('/api/generate/component',
 );
 
 // Template Management Routes
-router.get('/api/templates',
+router.get(
+  '/api/templates',
   authenticateToken,
   requirePermission('template', 'read'),
   async (req, res) => {
     try {
       const filters = req.query as TemplateFilters;
-      const server = await routingService.routeRequest('list_templates', req.user);
+      const server = await routingService.routeRequest(
+        'list_templates',
+        req.user
+      );
       const result = await server.callTool('list_templates', { filters });
       res.json(result);
     } catch (error) {
@@ -213,7 +237,8 @@ router.get('/api/templates',
 );
 
 // Server Status Routes
-router.get('/api/servers/status',
+router.get(
+  '/api/servers/status',
   authenticateToken,
   requirePermission('system', 'read'),
   async (req, res) => {
@@ -228,6 +253,7 @@ router.get('/api/servers/status',
 ```
 
 ### MCP Server Integration
+
 ```typescript
 // gateway/services/mcp-client.ts
 class MCPClient {
@@ -240,12 +266,12 @@ class MCPClient {
     this.circuitBreaker = new CircuitBreaker({
       failureThreshold: 5,
       recoveryTimeout: 30000,
-      monitoringEnabled: true,
+      monitoringEnabled: true
     });
     this.retryPolicy = new RetryPolicy({
       maxRetries: 3,
       baseDelay: 1000,
-      maxDelay: 10000,
+      maxDelay: 10000
     });
   }
 
@@ -283,6 +309,7 @@ class MCPClient {
 ```
 
 ### WebApp API Client
+
 ```typescript
 // webapp/lib/api/api-client.ts
 class APIClient {
@@ -301,7 +328,7 @@ class APIClient {
       if (this.authToken) {
         config.headers = {
           ...config.headers,
-          Authorization: `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`
         };
       }
       return config;
@@ -324,9 +351,9 @@ class APIClient {
       url: `${this.baseURL}${endpoint}`,
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      ...options,
+      ...options
     };
 
     // Apply request interceptors
@@ -339,7 +366,7 @@ class APIClient {
       const response = await fetch(processedConfig.url, {
         method: processedConfig.method,
         headers: processedConfig.headers,
-        body: processedConfig.body,
+        body: processedConfig.body
       });
 
       // Apply response interceptors
@@ -352,7 +379,7 @@ class APIClient {
       return {
         data,
         status: processedResponse.status,
-        headers: processedResponse.headers,
+        headers: processedResponse.headers
       };
     } catch (error) {
       throw new APIError('Request failed', error);
@@ -360,11 +387,16 @@ class APIClient {
   }
 
   // Typed API methods
-  async generateComponent(request: GenerateComponentRequest): Promise<GeneratedComponent> {
-    const response = await this.request<GeneratedComponent>('/api/generate/component', {
-      method: 'POST',
-      body: JSON.stringify(request),
-    });
+  async generateComponent(
+    request: GenerateComponentRequest
+  ): Promise<GeneratedComponent> {
+    const response = await this.request<GeneratedComponent>(
+      '/api/generate/component',
+      {
+        method: 'POST',
+        body: JSON.stringify(request)
+      }
+    );
     return response.data;
   }
 
@@ -409,6 +441,7 @@ class APIClient {
 ```
 
 ### Event-Driven Communication
+
 ```typescript
 // shared/events/event-bus.ts
 interface EventBus {
@@ -421,7 +454,7 @@ class InMemoryEventBus implements EventBus {
 
   publish(event: DomainEvent): void {
     const handlers = this.handlers.get(event.type) || [];
-    
+
     // Execute handlers asynchronously
     handlers.forEach(handler => {
       setTimeout(() => {
@@ -475,6 +508,7 @@ export interface ServerStatusChangedEvent extends DomainEvent {
 ```
 
 ### API Versioning Strategy
+
 ```typescript
 // gateway/api/versioning.ts
 class APIVersionManager {
@@ -492,7 +526,7 @@ class APIVersionManager {
       basePath: '/api/v1',
       deprecated: false,
       sunsetDate: null,
-      migrations: new Map(),
+      migrations: new Map()
     });
 
     // v2 API (future)
@@ -502,21 +536,28 @@ class APIVersionManager {
       deprecated: false,
       sunsetDate: null,
       migrations: new Map([
-        ['generate_component', this.migrateGenerateComponentV1ToV2],
-      ]),
+        ['generate_component', this.migrateGenerateComponentV1ToV2]
+      ])
     });
   }
 
   getVersion(request: Request): APIVersion {
-    const version = request.headers['api-version'] || 
-                   request.query.version || 
-                   this.extractVersionFromPath(request.path) ||
-                   this.defaultVersion;
+    const version =
+      request.headers['api-version'] ||
+      request.query.version ||
+      this.extractVersionFromPath(request.path) ||
+      this.defaultVersion;
 
-    return this.versions.get(version) || this.versions.get(this.defaultVersion)!;
+    return (
+      this.versions.get(version) || this.versions.get(this.defaultVersion)!
+    );
   }
 
-  migrateRequest(request: Request, fromVersion: string, toVersion: string): Request {
+  migrateRequest(
+    request: Request,
+    fromVersion: string,
+    toVersion: string
+  ): Request {
     const version = this.versions.get(toVersion);
     if (!version) return request;
 
@@ -537,16 +578,17 @@ class APIVersionManager {
     const body = JSON.parse(request.body);
     body.options = body.options || {};
     body.options.include_typescript = body.options.include_typescript ?? true;
-    
+
     return {
       ...request,
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     };
   }
 }
 ```
 
 ### Error Handling and Retry Logic
+
 ```typescript
 // shared/resilience/circuit-breaker.ts
 class CircuitBreaker {
@@ -633,7 +675,11 @@ class RetryPolicy {
     }
 
     // Don't retry on client errors (4xx)
-    if (error instanceof APIError && error.status >= 400 && error.status < 500) {
+    if (
+      error instanceof APIError &&
+      error.status >= 400 &&
+      error.status < 500
+    ) {
       return false;
     }
 
@@ -652,12 +698,14 @@ class RetryPolicy {
 ```
 
 ## Related Decisions
+
 - [ADR-001: Hub-and-Spoke Ecosystem Architecture](./ADR-001-ecosystem-design.md)
 - [ADR-002: Gateway as Central Authentication Authority](./ADR-002-gateway-central-hub.md)
 - [ADR-003: MCP Server Design for UI Generation](./ADR-003-mcp-server-design.md)
 - [ADR-004: WebApp Architecture for Management Interface](./ADR-004-webapp-architecture.md)
 
 ## Notes
+
 - Implement comprehensive API documentation with OpenAPI/Swagger
 - Use API versioning to support backward compatibility
 - Monitor circuit breaker states and retry patterns
@@ -666,4 +714,4 @@ class RetryPolicy {
 
 ---
 
-*Decision made on 2025-02-17 by the UIForge architecture team.*
+_Decision made on 2025-02-17 by the UIForge architecture team._

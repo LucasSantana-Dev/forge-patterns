@@ -2,9 +2,11 @@
 
 ## 🎨 Visual Enhancement Overview
 
-All cost monitoring scripts have been enhanced with professional terminal output formatting, including:
+All cost monitoring scripts have been enhanced with professional terminal output
+formatting, including:
 
 ### **✨ Key Improvements**
+
 - **Fixed ASCII Headers** - Professional box-drawn headers for each script type
 - **Rich Color Scheme** - Consistent color coding for different message types
 - **Structured Sections** - Clear section separators and organization
@@ -15,9 +17,11 @@ All cost monitoring scripts have been enhanced with professional terminal output
 ## 🛠️ Technical Implementation
 
 ### **Output Formatter Utility**
+
 Created `utils/output-formatter.sh` with:
 
 #### **Color Definitions**
+
 ```bash
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
@@ -33,6 +37,7 @@ export NC='\033[0m' # No Color
 ```
 
 #### **ASCII Headers**
+
 ```
 ╔══════════════════════════════════════════════════════════════╗
 ║                    💰 COST MONITORING                       ║
@@ -41,6 +46,7 @@ export NC='\033[0m' # No Color
 ```
 
 #### **Enhanced Functions**
+
 - `log_info()`, `log_success()`, `log_warning()`, `log_error()`
 - `log_section()`, `log_subsection()`, `log_highlight()`
 - `draw_box()`, `print_banner()`, `print_footer()`
@@ -49,32 +55,38 @@ export NC='\033[0m' # No Color
 ## 📋 Enhanced Scripts
 
 ### **1. Cost Analysis Script**
+
 - **Header**: 💰 COST MONITORING
 - **Sections**: Analyzing Cost Patterns, Free Tier Check, Cost Report
 - **Features**: Box-drawn reports, progress indicators, structured output
 
 ### **2. Terraform Cost Monitor**
+
 - **Header**: 🏗️ TERRAFORM COST MONITOR
 - **Sections**: Environment Check, File Analysis, Optimization Patterns
 - **Features**: Resource summary boxes, cost recommendations
 
 ### **3. Kubernetes Cost Monitor**
+
 - **Header**: ☸️ KUBERNETES COST MONITOR
 - **Sections**: Cluster Analysis, Resource Costs, Optimization
 - **Features**: Container resource analysis, scaling recommendations
 
 ### **4. Development Workflow Validator**
+
 - **Header**: 🔍 DEVELOPMENT WORKFLOW VALIDATOR
 - **Sections**: Configuration, YAML, Branch, Commit, Version, Cost Monitoring
 - **Features**: Comprehensive validation status boxes
 
 ### **5. Free Tier Check & Budget Alerts**
+
 - **Headers**: 🆓 FREE TIER MONITOR, 💰 BUDGET ALERTS MONITOR
 - **Features**: Optimization status boxes, budget analysis
 
 ## 🎯 Visual Examples
 
 ### **Before (Plain Text)**
+
 ```
 💰 Cost Analysis for Forge Patterns
 ==================================
@@ -83,6 +95,7 @@ export NC='\033[0m' # No Color
 ```
 
 ### **After (Enhanced Formatting)**
+
 ```
 ╔══════════════════════════════════════════════════════════════╗
 ║                    💰 COST MONITORING                       ║
@@ -100,16 +113,19 @@ export NC='\033[0m' # No Color
 ## 🚀 Benefits Achieved
 
 ### **Professional Appearance**
+
 - **Consistent Branding**: All scripts have unified visual identity
 - **Better Readability**: Clear sections and color coding
 - **Status Clarity**: Immediate visual feedback on operations
 
 ### **Enhanced User Experience**
+
 - **Progress Tracking**: Clear indication of script progress
 - **Error Highlighting**: Immediate visual identification of issues
 - **Success Confirmation**: Professional completion messaging
 
 ### **Maintainability**
+
 - **Centralized Formatting**: Single utility for all formatting needs
 - **Consistent Patterns**: Reusable formatting functions
 - **Easy Updates**: Changes to formatting affect all scripts
@@ -117,6 +133,7 @@ export NC='\033[0m' # No Color
 ## 🔧 Usage Examples
 
 ### **Run Enhanced Scripts**
+
 ```bash
 # Enhanced cost analysis with beautiful output
 ./patterns/cost/scripts/cost-analysis.sh
@@ -132,6 +149,7 @@ export NC='\033[0m' # No Color
 ```
 
 ### **Sample Output Structure**
+
 ```
 ╔══════════════════════════════════════════════════════════════╗
 ║                  🏗️ TERRAFORM COST MONITOR                   ║
@@ -154,32 +172,34 @@ export NC='\033[0m' # No Color
 
 ═══════════════════════════════════════════════════════════════
 
-           🏗️ Terraform Cost Analysis Completed!           
+           🏗️ Terraform Cost Analysis Completed!
 
 ═══════════════════════════════════════════════════════════════
 ```
 
 ## 🎨 Color Scheme Guide
 
-| Color | Usage | Meaning |
-|-------|--------|---------|
-| 🔵 Blue | Information messages | General info, progress |
-| 🟢 Green | Success messages | Completed tasks, valid status |
-| 🟡 Yellow | Warning messages | Potential issues, cautions |
-| 🔴 Red | Error messages | Failed validations, errors |
-| 🟣 Purple | Section headers | Major sections |
-| 🟦 Cyan | Headers/titles | Script titles |
-| ⚪ White | Subsections | Secondary information |
+| Color     | Usage                | Meaning                       |
+| --------- | -------------------- | ----------------------------- |
+| 🔵 Blue   | Information messages | General info, progress        |
+| 🟢 Green  | Success messages     | Completed tasks, valid status |
+| 🟡 Yellow | Warning messages     | Potential issues, cautions    |
+| 🔴 Red    | Error messages       | Failed validations, errors    |
+| 🟣 Purple | Section headers      | Major sections                |
+| 🟦 Cyan   | Headers/titles       | Script titles                 |
+| ⚪ White  | Subsections          | Secondary information         |
 
 ## 📊 Impact on User Experience
 
 ### **Before Enhancement**
+
 - Plain text output
 - Limited visual feedback
 - Inconsistent formatting
 - Hard to scan for important information
 
 ### **After Enhancement**
+
 - Professional ASCII headers
 - Rich color-coded feedback
 - Consistent section structure
@@ -187,4 +207,5 @@ export NC='\033[0m' # No Color
 - Clear status indicators
 - Professional completion messaging
 
-The enhanced formatting transforms the cost monitoring scripts from basic utilities into professional-grade tools with excellent user experience! 🎉
+The enhanced formatting transforms the cost monitoring scripts from basic
+utilities into professional-grade tools with excellent user experience! 🎉

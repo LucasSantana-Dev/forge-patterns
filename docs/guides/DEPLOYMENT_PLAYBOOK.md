@@ -2,7 +2,10 @@
 
 ## Overview
 
-This playbook provides comprehensive guidance for deploying the UIForge ecosystem across different environments, from development to production. It covers infrastructure requirements, deployment strategies, configuration management, and operational procedures.
+This playbook provides comprehensive guidance for deploying the UIForge
+ecosystem across different environments, from development to production. It
+covers infrastructure requirements, deployment strategies, configuration
+management, and operational procedures.
 
 ## Table of Contents
 
@@ -23,12 +26,14 @@ This playbook provides comprehensive guidance for deploying the UIForge ecosyste
 ### System Requirements
 
 **Minimum Hardware Requirements:**
+
 - CPU: 4 cores (8 cores recommended for production)
 - RAM: 8GB (16GB recommended for production)
 - Storage: 50GB SSD (100GB recommended)
 - Network: 1Gbps (10Gbps recommended for production)
 
 **Software Requirements:**
+
 - Docker Engine 20.10+
 - Docker Compose 2.0+
 - Node.js 22.x LTS
@@ -36,6 +41,7 @@ This playbook provides comprehensive guidance for deploying the UIForge ecosyste
 - Git 2.30+
 
 **Network Requirements:**
+
 - Outbound HTTPS access (port 443)
 - Inbound ports: 80, 443, 3000, 8000, 8080
 - DNS resolution for external services
@@ -43,12 +49,14 @@ This playbook provides comprehensive guidance for deploying the UIForge ecosyste
 ### Access Requirements
 
 **Required Permissions:**
+
 - Docker daemon access
 - Port binding privileges (< 1024)
 - File system write access for deployment directory
 - Network configuration for firewall rules
 
 **External Services:**
+
 - Container registry access (Docker Hub, GitHub Container Registry)
 - AI model access (Ollama, OpenAI, or similar)
 - Database access (Supabase or PostgreSQL)
@@ -58,12 +66,11 @@ This playbook provides comprehensive guidance for deploying the UIForge ecosyste
 
 ### Development Environment
 
-**Purpose:** Local development and testing
-**Scale:** Single developer
-**Data:** Sample/test data only
-**Monitoring:** Basic logging
+**Purpose:** Local development and testing **Scale:** Single developer **Data:**
+Sample/test data only **Monitoring:** Basic logging
 
 **Configuration:**
+
 ```yaml
 environment: development
 debug: true
@@ -74,12 +81,11 @@ auto_restart: true
 
 ### Staging Environment
 
-**Purpose:** Pre-production testing
-**Scale:** Production-like
-**Data:** Anonymized production data
-**Monitoring:** Full observability stack
+**Purpose:** Pre-production testing **Scale:** Production-like **Data:**
+Anonymized production data **Monitoring:** Full observability stack
 
 **Configuration:**
+
 ```yaml
 environment: staging
 debug: false
@@ -90,12 +96,11 @@ auto_restart: true
 
 ### Production Environment
 
-**Purpose:** Live user traffic
-**Scale:** High availability
-**Data:** Real production data
-**Monitoring:** Full observability + alerts
+**Purpose:** Live user traffic **Scale:** High availability **Data:** Real
+production data **Monitoring:** Full observability + alerts
 
 **Configuration:**
+
 ```yaml
 environment: production
 debug: false
@@ -109,18 +114,20 @@ auto_restart: false
 ### Container Orchestration
 
 **Docker Compose (Small Scale):**
+
 ```yaml
 version: '3.8'
 services:
   gateway:
     image: uiforge/gateway:latest
-    ports: ["8080:8080"]
+    ports: ['8080:8080']
     environment:
       - NODE_ENV=production
       - LOG_LEVEL=info
 ```
 
 **Kubernetes (Large Scale):**
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -137,21 +144,23 @@ spec:
         app: uiforge-gateway
     spec:
       containers:
-      - name: gateway
-        image: uiforge/gateway:latest
-        ports:
-        - containerPort: 8080
+        - name: gateway
+          image: uiforge/gateway:latest
+          ports:
+            - containerPort: 8080
 ```
 
 ### Database Requirements
 
 **PostgreSQL (Self-hosted):**
+
 - Version: 14+
 - Storage: 100GB minimum
 - Backup: Daily automated
 - Replication: Optional for HA
 
 **Supabase (Managed):**
+
 - Plan: Pro or Enterprise
 - Region: Closest to users
 - Extensions: pg_stat_statements, uuid-ossp
@@ -160,12 +169,14 @@ spec:
 ### Storage Requirements
 
 **Local Storage:**
+
 - Templates: 10GB
 - Generated components: 50GB
 - Logs: 20GB (rotating)
 - Backups: 100GB
 
 **Cloud Storage:**
+
 - S3/MinIO for templates
 - CDN for static assets
 - Backup storage with lifecycle policies
@@ -173,12 +184,14 @@ spec:
 ### Network Configuration
 
 **Load Balancer:**
+
 - HTTPS termination
 - Health checks
 - Session affinity (if needed)
 - Rate limiting
 
 **Firewall Rules:**
+
 ```bash
 # Allow inbound
 ufw allow 80/tcp    # HTTP
@@ -198,11 +211,13 @@ ufw allow out 53/tcp   # DNS
 **Overview:** Maintain two identical environments, switch traffic between them.
 
 **Benefits:**
+
 - Zero downtime deployments
 - Instant rollback capability
 - Full testing before go-live
 
 **Implementation:**
+
 ```bash
 # Deploy to green environment
 docker-compose -f docker-compose.green.yml up -d
@@ -222,11 +237,13 @@ docker-compose -f docker-compose.blue.yml stop
 **Overview:** Update instances gradually while maintaining service availability.
 
 **Benefits:**
+
 - Resource efficient
 - Gradual rollout
 - Easy to implement
 
 **Implementation:**
+
 ```bash
 # Update one instance at a time
 for i in {1..3}; do
@@ -241,11 +258,13 @@ done
 **Overview:** Deploy new version to small subset of users first.
 
 **Benefits:**
+
 - Risk mitigation
 - Real-world testing
 - Gradual user exposure
 
 **Implementation:**
+
 ```yaml
 # 10% traffic to new version
 version: '3.8'
@@ -265,6 +284,7 @@ services:
 ### Environment Variables
 
 **Core Configuration:**
+
 ```bash
 # Application
 NODE_ENV=production
@@ -293,6 +313,7 @@ REDIS_URL=redis://redis:6379
 ```
 
 **Secret Management:**
+
 ```bash
 # Use Docker secrets
 echo "${JWT_SECRET}" | docker secret create jwt_secret -
@@ -304,6 +325,7 @@ docker-compose --env-file .env.production up -d
 ### Configuration Files
 
 **Docker Compose Production:**
+
 ```yaml
 version: '3.8'
 services:
@@ -338,6 +360,7 @@ volumes:
 ```
 
 **Nginx Configuration:**
+
 ```nginx
 upstream uiforge_gateway {
     server gateway:8080;
@@ -365,11 +388,12 @@ server {
 ### Phase 1: Preparation
 
 1. **Verify Prerequisites**
+
    ```bash
    # Check Docker
    docker --version
    docker-compose --version
-   
+
    # Check resources
    docker system df
    free -h
@@ -377,26 +401,28 @@ server {
    ```
 
 2. **Prepare Environment**
+
    ```bash
    # Create deployment directory
    mkdir -p /opt/uiforge
    cd /opt/uiforge
-   
+
    # Clone configuration
    git clone https://github.com/uiforge/deployment.git .
-   
+
    # Setup environment files
    cp .env.example .env.production
    ```
 
 3. **Configure Secrets**
+
    ```bash
    # Generate secrets
    openssl rand -base64 32 > jwt_secret.txt
-   
+
    # Configure database
    ./scripts/setup-database.sh
-   
+
    # Test connectivity
    ./scripts/test-connections.sh
    ```
@@ -404,37 +430,40 @@ server {
 ### Phase 2: Infrastructure Setup
 
 1. **Deploy Database**
+
    ```bash
    # Start PostgreSQL
    docker-compose up -d postgres
-   
+
    # Run migrations
    ./scripts/run-migrations.sh
-   
+
    # Verify connectivity
    ./scripts/verify-database.sh
    ```
 
 2. **Deploy Supporting Services**
+
    ```bash
    # Start Redis
    docker-compose up -d redis
-   
+
    # Start Ollama (if self-hosted)
    docker-compose up -d ollama
-   
+
    # Download models
    ./scripts/download-models.sh
    ```
 
 3. **Configure Load Balancer**
+
    ```bash
    # Setup Nginx
    docker-compose up -d nginx
-   
+
    # Test SSL certificates
    ./scripts/test-ssl.sh
-   
+
    # Verify health endpoints
    curl -f https://api.uiforge.com/health
    ```
@@ -442,40 +471,43 @@ server {
 ### Phase 3: Application Deployment
 
 1. **Deploy Gateway**
+
    ```bash
    # Pull latest images
    docker-compose pull gateway
-   
+
    # Deploy with zero downtime
    docker-compose up -d --no-deps gateway
-   
+
    # Wait for health check
    ./scripts/wait-for-health.sh gateway
-   
+
    # Verify functionality
    ./scripts/smoke-tests.sh
    ```
 
 2. **Deploy MCP Server**
+
    ```bash
    # Deploy MCP server
    docker-compose up -d mcp-server
-   
+
    # Register with gateway
    ./scripts/register-mcp.sh
-   
+
    # Test integration
    ./scripts/test-mcp-integration.sh
    ```
 
 3. **Deploy Web Application**
+
    ```bash
    # Build and deploy webapp
    docker-compose up -d webapp
-   
+
    # Configure CDN
    ./scripts/setup-cdn.sh
-   
+
    # Test user interface
    ./scripts/ui-smoke-tests.sh
    ```
@@ -483,37 +515,40 @@ server {
 ### Phase 4: Verification
 
 1. **Health Checks**
+
    ```bash
    # Check all services
    ./scripts/health-check.sh --all
-   
+
    # Check metrics
    ./scripts/verify-metrics.sh
-   
+
    # Check logs for errors
    ./scripts/check-logs.sh --errors-only
    ```
 
 2. **Integration Tests**
+
    ```bash
    # Run full test suite
    ./scripts/integration-tests.sh
-   
+
    # Load testing
    ./scripts/load-test.sh
-   
+
    # Security scan
    ./scripts/security-scan.sh
    ```
 
 3. **Performance Validation**
+
    ```bash
    # Benchmark performance
    ./scripts/performance-test.sh
-   
+
    # Compare with baseline
    ./scripts/compare-performance.sh
-   
+
    # Generate report
    ./scripts/performance-report.sh
    ```
@@ -523,6 +558,7 @@ server {
 ### Metrics Collection
 
 **Application Metrics:**
+
 ```yaml
 # Prometheus configuration
 global:
@@ -542,19 +578,21 @@ scrape_configs:
 ```
 
 **System Metrics:**
-```yaml
-  - job_name: 'node-exporter'
-    static_configs:
-      - targets: ['node-exporter:9100']
 
-  - job_name: 'postgres-exporter'
-    static_configs:
-      - targets: ['postgres-exporter:9187']
+```yaml
+- job_name: 'node-exporter'
+  static_configs:
+    - targets: ['node-exporter:9100']
+
+- job_name: 'postgres-exporter'
+  static_configs:
+    - targets: ['postgres-exporter:9187']
 ```
 
 ### Logging Strategy
 
 **Structured Logging:**
+
 ```javascript
 // Example log entry
 {
@@ -570,6 +608,7 @@ scrape_configs:
 ```
 
 **Log Aggregation:**
+
 ```yaml
 # ELK Stack configuration
 version: '3.8'
@@ -578,7 +617,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
     environment:
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.11.0
@@ -588,12 +627,13 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.0
     ports:
-      - "5601:5601"
+      - '5601:5601'
 ```
 
 ### Alerting Rules
 
 **Critical Alerts:**
+
 ```yaml
 # Prometheus alert rules
 groups:
@@ -605,8 +645,9 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Service {{ $labels.job }} is down"
-          description: "Service {{ $labels.job }} has been down for more than 1 minute"
+          summary: 'Service {{ $labels.job }} is down'
+          description:
+            'Service {{ $labels.job }} has been down for more than 1 minute'
 
       - alert: HighErrorRate
         expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
@@ -614,13 +655,14 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High error rate detected"
-          description: "Error rate is {{ $value }} errors per second"
+          summary: 'High error rate detected'
+          description: 'Error rate is {{ $value }} errors per second'
 ```
 
 ### Dashboard Configuration
 
 **Grafana Dashboards:**
+
 - System Overview (CPU, Memory, Disk)
 - Application Metrics (Requests, Latency, Errors)
 - Business Metrics (Component Generation, User Activity)
@@ -631,6 +673,7 @@ groups:
 ### Database Backup Strategy
 
 **Automated Backups:**
+
 ```bash
 #!/bin/bash
 # backup-database.sh
@@ -650,6 +693,7 @@ aws s3 cp $BACKUP_DIR/uiforge_$DATE.sql.gz s3://uiforge-backups/database/
 ```
 
 **Point-in-Time Recovery:**
+
 ```bash
 #!/bin/bash
 # restore-database.sh
@@ -670,6 +714,7 @@ gunzip -c $BACKUP_FILE | psql -h postgres -U postgres $RESTORE_DB
 ### Application Data Backup
 
 **Template Backup:**
+
 ```bash
 #!/bin/bash
 # backup-templates.sh
@@ -685,6 +730,7 @@ rclone copy $BACKUP_DIR/templates_$DATE.tar.gz remote:uiforge-backups/templates/
 ```
 
 **User Data Backup:**
+
 ```bash
 #!/bin/bash
 # backup-user-data.sh
@@ -724,6 +770,7 @@ rsync -av /opt/uiforge/generated/ $BACKUP_DIR/generated_$DATE/
    - Document lessons learned
 
 **Recovery Scripts:**
+
 ```bash
 #!/bin/bash
 # disaster-recovery.sh
@@ -753,6 +800,7 @@ echo "Disaster recovery completed"
 ### Network Security
 
 **Firewall Configuration:**
+
 ```bash
 # Production firewall rules
 ufw default deny incoming
@@ -764,6 +812,7 @@ ufw enable
 ```
 
 **TLS Configuration:**
+
 ```nginx
 # Strong TLS configuration
 ssl_protocols TLSv1.2 TLSv1.3;
@@ -777,6 +826,7 @@ ssl_stapling_verify on;
 ### Application Security
 
 **Environment Security:**
+
 ```bash
 # Secure environment variables
 chmod 600 .env.production
@@ -787,6 +837,7 @@ echo "$JWT_SECRET" | docker secret create jwt_secret -
 ```
 
 **Container Security:**
+
 ```dockerfile
 # Security-hardened Dockerfile
 FROM node:22-alpine AS builder
@@ -810,24 +861,26 @@ CMD ["node", "server.js"]
 ### Access Control
 
 **RBAC Configuration:**
+
 ```yaml
 # Role-based access control
 roles:
   admin:
     permissions:
-      - "*"
+      - '*'
   developer:
     permissions:
-      - "components:*"
-      - "templates:read"
-      - "templates:create"
+      - 'components:*'
+      - 'templates:read'
+      - 'templates:create'
   user:
     permissions:
-      - "components:create"
-      - "templates:read"
+      - 'components:create'
+      - 'templates:read'
 ```
 
 **API Security:**
+
 ```javascript
 // Rate limiting middleware
 const rateLimit = require('express-rate-limit');
@@ -844,6 +897,7 @@ app.use('/api/', limiter);
 ### Security Monitoring
 
 **Intrusion Detection:**
+
 ```bash
 # Fail2ban configuration
 [sshd]
@@ -856,6 +910,7 @@ bantime = 3600
 ```
 
 **Security Scanning:**
+
 ```bash
 # Daily security scan
 #!/bin/bash
@@ -877,6 +932,7 @@ git-secrets --scan
 ### Common Issues
 
 **Service Won't Start:**
+
 ```bash
 # Check logs
 docker-compose logs gateway
@@ -892,6 +948,7 @@ docker-compose restart gateway
 ```
 
 **Database Connection Issues:**
+
 ```bash
 # Test database connectivity
 docker exec postgres psql -U postgres -d uiforge -c "SELECT 1"
@@ -904,6 +961,7 @@ docker-compose restart postgres
 ```
 
 **Performance Issues:**
+
 ```bash
 # Check system resources
 top
@@ -920,6 +978,7 @@ docker exec gateway npm run profile
 ### Debugging Procedures
 
 **Enable Debug Mode:**
+
 ```bash
 # Set debug environment
 export DEBUG=true
@@ -930,6 +989,7 @@ docker-compose up -d --force-recreate gateway
 ```
 
 **Capture Debug Information:**
+
 ```bash
 #!/bin/bash
 # collect-debug-info.sh
@@ -958,6 +1018,7 @@ tar -czf debug_$DATE.tar.gz $DEBUG_DIR
 ### Health Check Scripts
 
 **Comprehensive Health Check:**
+
 ```bash
 #!/bin/bash
 # health-check.sh
@@ -984,6 +1045,7 @@ fi
 ```
 
 **Application Health Check:**
+
 ```bash
 #!/bin/bash
 # app-health-check.sh
@@ -1021,6 +1083,7 @@ fi
 ### Daily Maintenance
 
 **Automated Tasks:**
+
 ```bash
 #!/bin/bash
 # daily-maintenance.sh
@@ -1042,6 +1105,7 @@ docker image prune -f
 ```
 
 **Health Monitoring:**
+
 ```bash
 #!/bin/bash
 # daily-health-check.sh
@@ -1055,6 +1119,7 @@ docker image prune -f
 ### Weekly Maintenance
 
 **Security Updates:**
+
 ```bash
 #!/bin/bash
 # weekly-security-updates.sh
@@ -1075,6 +1140,7 @@ docker-compose up -d
 ```
 
 **Performance Optimization:**
+
 ```bash
 #!/bin/bash
 # weekly-performance-optimization.sh
@@ -1093,6 +1159,7 @@ curl -X POST http://localhost:8080/admin/cache/clear
 ### Monthly Maintenance
 
 **Capacity Planning:**
+
 ```bash
 #!/bin/bash
 # monthly-capacity-planning.sh
@@ -1111,6 +1178,7 @@ du -sh /opt/uiforge/* | sort -hr
 ```
 
 **Backup Verification:**
+
 ```bash
 #!/bin/bash
 # monthly-backup-verification.sh
@@ -1128,6 +1196,7 @@ du -sh /opt/uiforge/* | sort -hr
 ### Quarterly Maintenance
 
 **Security Audit:**
+
 ```bash
 #!/bin/bash
 # quarterly-security-audit.sh
@@ -1146,6 +1215,7 @@ du -sh /opt/uiforge/* | sort -hr
 ```
 
 **Architecture Review:**
+
 ```bash
 #!/bin/bash
 # quarterly-architecture-review.sh
@@ -1168,12 +1238,14 @@ du -sh /opt/uiforge/* | sort -hr
 ### Incident Response
 
 **Severity Levels:**
+
 - **P0 - Critical:** System down, major impact on all users
 - **P1 - High:** Significant degradation, major feature broken
 - **P2 - Medium:** Partial degradation, some users affected
 - **P3 - Low:** Minor issue, limited user impact
 
 **Response Timeline:**
+
 - **P0:** 15 minutes initial response, 1 hour resolution
 - **P1:** 1 hour initial response, 4 hour resolution
 - **P2:** 4 hour initial response, 24 hour resolution
@@ -1182,6 +1254,7 @@ du -sh /opt/uiforge/* | sort -hr
 ### Escalation Procedures
 
 **On-Call Rotation:**
+
 ```bash
 #!/bin/bash
 # escalate-incident.sh
@@ -1205,6 +1278,7 @@ slack-post "#incidents" "🚨 $SEVERITY: $MESSAGE"
 ### Rollback Procedures
 
 **Automated Rollback:**
+
 ```bash
 #!/bin/bash
 # rollback-deployment.sh
@@ -1227,6 +1301,7 @@ echo "Rollback completed successfully"
 ```
 
 **Manual Rollback:**
+
 ```bash
 #!/bin/bash
 # manual-rollback.sh
@@ -1250,13 +1325,17 @@ echo "Manual rollback completed"
 
 ## Conclusion
 
-This deployment playbook provides comprehensive guidance for deploying and maintaining the UIForge ecosystem. Following these procedures ensures reliable, secure, and scalable deployments across all environments.
+This deployment playbook provides comprehensive guidance for deploying and
+maintaining the UIForge ecosystem. Following these procedures ensures reliable,
+secure, and scalable deployments across all environments.
 
 Key success factors:
+
 - Thorough preparation and testing
 - Automated monitoring and alerting
 - Regular maintenance and updates
 - Comprehensive backup and recovery procedures
 - Clear incident response processes
 
-Regular review and updates of this playbook ensure it remains current with evolving best practices and system requirements.
+Regular review and updates of this playbook ensure it remains current with
+evolving best practices and system requirements.

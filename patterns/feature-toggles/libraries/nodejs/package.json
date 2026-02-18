@@ -14,7 +14,14 @@
     "build": "tsc",
     "prepublishOnly": "npm run build && npm run test"
   },
-  "keywords": ["feature-flags", "feature-toggles", "unleash", "uiforge", "experiments", "a-b-testing"],
+  "keywords": [
+    "feature-flags",
+    "feature-toggles",
+    "unleash",
+    "uiforge",
+    "experiments",
+    "a-b-testing"
+  ],
   "author": "UIForge Team",
   "license": "MIT",
   "repository": {
@@ -38,7 +45,10 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "publishConfig": {
     "access": "public"
   }

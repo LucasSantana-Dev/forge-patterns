@@ -12,7 +12,8 @@ fish: Unknown command. './patterns/cost/scripts/validate-development-workflow.sh
 
 ### Solution Applied
 
-1. **Fixed executable permissions**: `chmod +x ./patterns/cost/scripts/validate-development-workflow.sh`
+1. **Fixed executable permissions**:
+   `chmod +x ./patterns/cost/scripts/validate-development-workflow.sh`
 2. **Fixed regex syntax error**: Replaced problematic bash regex with `grep -E`
 3. **Fixed YAML validation**: Updated to use corrected configuration file
 4. **Fixed branch validation logic**: Corrected conditional expressions
@@ -89,4 +90,5 @@ The development workflow validation is now fully functional:
 4. **Branch Logic**: Fixed conditional expressions for branch checking
 5. **Error Handling**: Improved error reporting and validation flow
 
-The development workflow is now fully integrated with the cost patterns and ready for production use!
+The development workflow is now fully integrated with the cost patterns and
+ready for production use!

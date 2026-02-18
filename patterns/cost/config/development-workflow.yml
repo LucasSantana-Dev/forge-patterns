@@ -50,15 +50,15 @@ environments:
 versioning:
   strategy: "semantic"
   format: "MAJOR.MINOR.PATCH"
-  
+
   files:
     - "package.json"
-    - "pyproject.toml" 
+    - "pyproject.toml"
     - "CHANGELOG.md"
-  
+
   consistency_check: true
   auto_tagging: true
-  
+
   pre_release_checklist:
     - "tests_passing"
     - "linting_passed"
@@ -70,10 +70,10 @@ versioning:
 
 commits:
   format: "angular_conventional"
-  
+
   allowed_types:
     - "feat"
-    - "fix" 
+    - "fix"
     - "docs"
     - "style"
     - "refactor"
@@ -83,7 +83,7 @@ commits:
     - "ci"
     - "build"
     - "revert"
-  
+
   scopes:
     - "cost"
     - "monitoring"
@@ -92,7 +92,7 @@ commits:
     - "analytics"
     - "free-tier"
     - "infrastructure"
-  
+
   rules:
     subject_imperative: true
     subject_lowercase: true
@@ -106,14 +106,14 @@ commits:
 pull_requests:
   branch_naming: "<type>/<scope>-short-desc"
   title_format: "same_as_commit_subject"
-  
+
   checklist:
     - "tests_added_updated"
     - "build_passes"
     - "tests_pass"
     - "changelog_updated"
     - "readme_updated_if_behavior_changed"
-  
+
   merge_strategy: "squash_or_rebase"
   no_direct_main_pushes: true
 
@@ -123,12 +123,12 @@ releases:
     type: "annotated"
     include_message: true
     protection: "signed"
-  
+
   automation:
     triggers:
       - "tag_push"
       - "main_merge"
-    
+
     changelog_generation: true
     github_release_creation: true
     version_consistency_check: true
@@ -138,12 +138,12 @@ cost_monitoring:
     version_updates: true
     deployment_tracking: true
     cost_impact_analysis: true
-    
+
   alerts:
     version_deployment_cost: true
     infrastructure_cost_changes: true
     free_tier_usage_alerts: true
-    
+
   reporting:
     include_development_costs: true
     track_version_deployment_costs: true

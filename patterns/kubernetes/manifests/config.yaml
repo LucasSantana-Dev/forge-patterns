@@ -18,26 +18,26 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: uiforge.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: uiforge-service
-            port:
-              number: 80
-  - host: api.uiforge.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: uiforge-service
-            port:
-              number: 80
+    - host: uiforge.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: uiforge-service
+                port:
+                  number: 80
+    - host: api.uiforge.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: uiforge-service
+                port:
+                  number: 80
 ---
 # ConfigMap for Application Configuration
 apiVersion: v1

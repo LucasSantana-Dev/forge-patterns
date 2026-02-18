@@ -1,10 +1,13 @@
 # ADR-004: WebApp Architecture for Management Interface
 
 ## Status
+
 Accepted
 
 ## Context
-We needed to design the uiforge-webapp as the management interface for the UIForge ecosystem. The key requirements were:
+
+We needed to design the uiforge-webapp as the management interface for the
+UIForge ecosystem. The key requirements were:
 
 - Modern, responsive user interface for ecosystem management
 - Real-time monitoring and status updates
@@ -14,7 +17,9 @@ We needed to design the uiforge-webapp as the management interface for the UIFor
 - Support for collaborative features and team management
 
 ## Decision
-We designed the uiforge-webapp using a **modern React-based architecture** with the following key decisions:
+
+We designed the uiforge-webapp using a **modern React-based architecture** with
+the following key decisions:
 
 - **Next.js Framework**: React-based framework with SSR/SSG capabilities
 - **Supabase Backend**: PostgreSQL database with real-time capabilities
@@ -26,6 +31,7 @@ We designed the uiforge-webapp using a **modern React-based architecture** with 
 ## Consequences
 
 ### Positive Consequences
+
 - **Developer Experience**: Modern tooling with excellent DX features
 - **Performance**: Optimized rendering and caching strategies
 - **Type Safety**: Comprehensive TypeScript coverage reduces bugs
@@ -34,6 +40,7 @@ We designed the uiforge-webapp using a **modern React-based architecture** with 
 - **Maintainability**: Clear separation of concerns and modular architecture
 
 ### Negative Consequences
+
 - **Learning Curve**: Complex stack requires developer expertise
 - **Bundle Size**: Rich feature set may impact initial load times
 - **Vendor Lock-in**: Heavy reliance on Supabase and Next.js ecosystems
@@ -42,18 +49,22 @@ We designed the uiforge-webapp using a **modern React-based architecture** with 
 ## Alternatives Considered
 
 ### Alternative 1: Vue.js + Nuxt.js
+
 - Vue.js framework with Nuxt.js for SSR
 - **Rejected**: Smaller ecosystem and fewer enterprise features
 
 ### Alternative 2: Angular + Universal
+
 - Angular framework with Angular Universal
 - **Rejected**: Heavier footprint and slower development cycle
 
 ### Alternative 3: Pure React + Custom Backend
+
 - React with custom Node.js/Express backend
 - **Rejected**: Increased development effort for backend features
 
 ## Rationale
+
 The Next.js + Supabase architecture was chosen because it provides:
 
 - **Productivity**: Rapid development with built-in features
@@ -63,11 +74,13 @@ The Next.js + Supabase architecture was chosen because it provides:
 - **Ecosystem**: Rich ecosystem of plugins and integrations
 - **Performance**: Optimized rendering and deployment strategies
 
-This architecture balances development speed with production readiness while providing a solid foundation for future growth.
+This architecture balances development speed with production readiness while
+providing a solid foundation for future growth.
 
 ## Implementation
 
 ### Application Structure
+
 ```
 src/
 ├── app/                    # Next.js App Router
@@ -95,6 +108,7 @@ src/
 ```
 
 ### API Client Architecture
+
 ```typescript
 // lib/api/gateway-client.ts
 class GatewayClient {
@@ -109,20 +123,17 @@ class GatewayClient {
     this.authToken = token;
   }
 
-  async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
+  async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const headers = {
       'Content-Type': 'application/json',
       ...(this.authToken && { Authorization: `Bearer ${this.authToken}` }),
-      ...options.headers,
+      ...options.headers
     };
 
     const response = await fetch(url, {
       ...options,
-      headers,
+      headers
     });
 
     if (!response.ok) {
@@ -133,10 +144,12 @@ class GatewayClient {
   }
 
   // Component Generation API
-  async generateComponent(request: GenerateComponentRequest): Promise<GeneratedComponent> {
+  async generateComponent(
+    request: GenerateComponentRequest
+  ): Promise<GeneratedComponent> {
     return this.request<GeneratedComponent>('/api/generate/component', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }
 
@@ -154,6 +167,7 @@ class GatewayClient {
 ```
 
 ### State Management with Redux Toolkit
+
 ```typescript
 // store/slices/generation-slice.ts
 interface GenerationState {
@@ -167,14 +181,17 @@ const generationSlice = createSlice({
   name: 'generation',
   initialState,
   reducers: {
-    startGeneration: (state, action: PayloadAction<GenerateComponentRequest>) => {
+    startGeneration: (
+      state,
+      action: PayloadAction<GenerateComponentRequest>
+    ) => {
       state.isGenerating = true;
       state.error = null;
       state.currentGeneration = {
         id: generateId(),
         request: action.payload,
         status: 'pending',
-        createdAt: new Date(),
+        createdAt: new Date()
       };
     },
     generationProgress: (state, action: PayloadAction<GenerationProgress>) => {
@@ -199,12 +216,13 @@ const generationSlice = createSlice({
         state.currentGeneration.error = action.payload;
         state.currentGeneration.completedAt = new Date();
       }
-    },
-  },
+    }
+  }
 });
 ```
 
 ### Component Architecture
+
 ```typescript
 // components/forms/ComponentGeneratorForm.tsx
 interface ComponentGeneratorFormProps {
@@ -306,6 +324,7 @@ export const ComponentGeneratorForm: React.FC<ComponentGeneratorFormProps> = ({
 ```
 
 ### Real-time Updates with Supabase
+
 ```typescript
 // lib/realtime/subscription-manager.ts
 class SubscriptionManager {
@@ -325,9 +344,9 @@ class SubscriptionManager {
           event: 'UPDATE',
           schema: 'public',
           table: 'generations',
-          filter: `id=eq.${generationId}`,
+          filter: `id=eq.${generationId}`
         },
-        (payload) => {
+        payload => {
           onUpdate(payload.new as Generation);
         }
       )
@@ -337,9 +356,7 @@ class SubscriptionManager {
     return channel;
   }
 
-  subscribeToServerStatus(
-    onUpdate: (status: ServerStatus) => void
-  ) {
+  subscribeToServerStatus(onUpdate: (status: ServerStatus) => void) {
     const channel = this.supabase
       .channel('server-status')
       .on(
@@ -347,9 +364,9 @@ class SubscriptionManager {
         {
           event: '*',
           schema: 'public',
-          table: 'server_status',
+          table: 'server_status'
         },
-        (payload) => {
+        payload => {
           onUpdate(payload.new as ServerStatus);
         }
       )
@@ -377,14 +394,15 @@ class SubscriptionManager {
 ```
 
 ### Authentication Integration
+
 ```typescript
 // lib/auth/auth-config.ts
 export const authConfig: NextAuthConfig = {
   providers: [
     SupabaseProvider({
       clientId: process.env.SUPABASE_CLIENT_ID!,
-      clientSecret: process.env.SUPABASE_CLIENT_SECRET!,
-    }),
+      clientSecret: process.env.SUPABASE_CLIENT_SECRET!
+    })
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -400,12 +418,12 @@ export const authConfig: NextAuthConfig = {
         session.user.email = token.email as string;
       }
       return session;
-    },
+    }
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
-  },
+    signUp: '/auth/signup'
+  }
 };
 
 // app/api/auth/[...nextauth]/route.ts
@@ -423,7 +441,7 @@ class GatewayAuth {
     try {
       const result = await this.client.request<AuthResult>('/api/auth/login', {
         method: 'POST',
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(credentials)
       });
 
       // Store token in client
@@ -438,18 +456,20 @@ class GatewayAuth {
   async refreshToken(refreshToken: string): Promise<AuthResult> {
     return this.client.request<AuthResult>('/api/auth/refresh', {
       method: 'POST',
-      body: JSON.stringify({ refresh_token: refreshToken }),
+      body: JSON.stringify({ refresh_token: refreshToken })
     });
   }
 }
 ```
 
 ## Related Decisions
+
 - [ADR-001: Hub-and-Spoke Ecosystem Architecture](./ADR-001-ecosystem-design.md)
 - [ADR-002: Gateway as Central Authentication Authority](./ADR-002-gateway-central-hub.md)
 - [ADR-005: Integration Patterns and API Contracts](./ADR-005-integration-patterns.md)
 
 ## Notes
+
 - Implement proper error boundaries for better user experience
 - Use React Query for server state management and caching
 - Consider implementing offline capabilities for better UX
@@ -458,4 +478,4 @@ class GatewayAuth {
 
 ---
 
-*Decision made on 2025-02-17 by the UIForge architecture team.*
+_Decision made on 2025-02-17 by the UIForge architecture team._

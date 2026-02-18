@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "npm run lint:check && npm run format:check && npm run test",
-    "test": "node patterns/cost/scripts/validate-development-workflow.sh",
+    "test": "bash patterns/cost/scripts/validate-development-workflow.sh",
     "prepare": "husky install",
     "pre-commit": "npm run lint && npm run format && npm run test"
   },
@@ -24,9 +24,16 @@
     "typescript": "^5.1.6"
   },
   "lint-staged": {
-    "*.{js,ts}": ["eslint --fix", "prettier --write"],
-    "*.{json,yml,yaml}": ["prettier --write"],
-    "*.md": ["prettier --write"]
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,yml,yaml}": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   },
   "husky": {
     "hooks": {

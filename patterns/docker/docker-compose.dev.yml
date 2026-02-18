@@ -1,7 +1,7 @@
 # Docker Compose Development Environment Template
 # For local development with hot reload and debugging
 
-version: '3.8'
+version: "3.8"
 
 services:
   # Main application service
@@ -9,16 +9,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: builder  # Use build stage for development
+      target: builder # Use build stage for development
     ports:
-      - "3000:3000"  # Adjust port based on your application
+      - "3000:3000" # Adjust port based on your application
     environment:
       - NODE_ENV=development
       - DEBUG=true
     volumes:
       - .:/app
-      - /app/node_modules  # Preserve node_modules
-    command: npm run dev  # Adjust based on your dev command
+      - /app/node_modules # Preserve node_modules
+    command: npm run dev # Adjust based on your dev command
     depends_on:
       - db
       - redis
@@ -61,7 +61,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    command: npm test  # Adjust based on your test command
+    command: npm test # Adjust based on your test command
     depends_on:
       - db
       - redis

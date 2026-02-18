@@ -11,13 +11,13 @@ class UIForgeFeatureToggles {
       url: config.unleashUrl || 'http://localhost:4242/api',
       clientKey: config.clientKey || 'uiforge-token',
       refreshInterval: 60000, // 1 minute
-      metricsInterval: 60000,  // 1 minute
+      metricsInterval: 60000 // 1 minute
     });
-    
+
     this.context = {
       userId: null,
       sessionId: null,
-      properties: {},
+      properties: {}
     };
   }
 
@@ -70,9 +70,9 @@ class UIForgeFeatureToggles {
    * @returns {Object} - API strategy variant
    */
   getAPIStrategy() {
-    return this.getVariant('api-strategy', { 
-      enabled: true, 
-      payload: { version: 'v1' } 
+    return this.getVariant('api-strategy', {
+      enabled: true,
+      payload: { version: 'v1' }
     });
   }
 
@@ -94,7 +94,7 @@ class UIForgeFeatureToggles {
     return {
       context: this.context,
       clientReady: this.client.isReady(),
-      lastUpdate: this.client.lastUpdate,
+      lastUpdate: this.client.lastUpdate
     };
   }
 
