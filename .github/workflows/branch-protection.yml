@@ -20,16 +20,16 @@ jobs:
           echo "Checking branch: $BRANCH_NAME"
 
           if [[ "$BRANCH_NAME" =~ ^(main|develop)$ ]]; then
-            echo "✅ Protected branch name: $BRANCH_NAME"
+            echo "Branch is a protected branch: $BRANCH_NAME"
             exit 0
           fi
 
           if [[ "$BRANCH_NAME" =~ ^(feature|fix|hotfix|chore|docs|refactor|test|perf)/.+ ]]; then
-            echo "✅ Branch follows naming convention: $BRANCH_NAME"
+            echo "Branch follows naming convention: $BRANCH_NAME"
             exit 0
           fi
 
-          echo "❌ Branch name doesn't follow conventions"
+          echo "Branch name does not follow conventions: $BRANCH_NAME"
           echo "Expected: feature/*, fix/*, hotfix/*, chore/*, docs/*, refactor/*, test/*, perf/*"
           exit 1
 
@@ -37,13 +37,14 @@ jobs:
         run: |
           echo "Checking commit messages..."
           FAILED=0
+          ANGULAR_TYPES="feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert"
 
           while IFS= read -r COMMIT; do
             echo "Checking: $COMMIT"
-            if [[ "$COMMIT" =~ ^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert)(\(.+\))?: .+ ]]; then
-              echo "✅ $COMMIT follows convention"
+            if echo "$COMMIT" | grep -qE "^($ANGULAR_TYPES)(\([^)]+\))?: .+"; then
+              echo "OK: $COMMIT"
             else
-              echo "❌ $COMMIT doesn't follow Angular convention"
+              echo "FAIL: $COMMIT does not follow Angular convention"
               echo "Expected: type(scope): description"
               FAILED=1
             fi
@@ -60,11 +61,11 @@ jobs:
           MERGE_COMMITS=$(git log --oneline --merges origin/main..HEAD | wc -l)
 
           if [ "$MERGE_COMMITS" -gt 0 ]; then
-            echo "❌ Found $MERGE_COMMITS merge commits in PR"
+            echo "Found $MERGE_COMMITS merge commits in PR"
             echo "Please rebase to avoid merge commits"
             exit 1
           else
-            echo "✅ No merge commits found"
+            echo "No merge commits found"
           fi
 
       - name: Check file size limits
@@ -74,12 +75,12 @@ jobs:
           LARGE_FILES=$(find . -type f -not -path "./.git/*" -not -path "./node_modules/*" -size +1M)
 
           if [ -n "$LARGE_FILES" ]; then
-            echo "❌ Found large files:"
+            echo "Found large files:"
             echo "$LARGE_FILES"
             echo "Please keep files under 1MB or use Git LFS"
             exit 1
           else
-            echo "✅ No large files found"
+            echo "No large files found"
           fi
 
   validate-tbd-workflow:
@@ -96,18 +97,18 @@ jobs:
           echo "Validating TBD workflow..."
 
           if [ "$GITHUB_BASE_REF" = "main" ]; then
-            echo "✅ Working against trunk (main)"
+            echo "Working against trunk (main)"
 
             BEHIND=$(git rev-list --count HEAD..origin/main)
             if [ "$BEHIND" -gt 0 ]; then
-              echo "❌ Branch is $BEHIND commits behind main"
+              echo "Branch is $BEHIND commits behind main"
               echo "Please sync with main before creating PR"
               exit 1
             else
-              echo "✅ Branch is up to date with main"
+              echo "Branch is up to date with main"
             fi
           else
-            echo "ℹ️ Not targeting main branch"
+            echo "Not targeting main branch"
           fi
 
       - name: Check for long-lived branches
@@ -117,8 +118,7 @@ jobs:
           BRANCH_AGE=$(git log --since="2 weeks ago" --pretty=format:"%h" | wc -l)
 
           if [ "$BRANCH_AGE" -eq 0 ]; then
-            echo "ℹ️ Branch is older than 2 weeks"
-            echo "Consider merging or updating the branch"
+            echo "Branch is older than 2 weeks - consider merging or updating"
           else
-            echo "✅ Branch is recent"
+            echo "Branch is recent"
           fi
