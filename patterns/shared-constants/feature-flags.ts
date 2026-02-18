@@ -60,12 +60,12 @@ export function createFeatureFlags<T extends string>(
  *
  * @param name - Flag name (e.g. `ENABLE_DARK_MODE`)
  * @param defaultValue - Fallback when the env var is absent
- * @param envPrefix - Prefix prepended to `name` when reading from `process.env` (default: `"NEXT_PUBLIC_"`)
+ * @param envPrefix - Prefix prepended to `name` when reading from `process.env` (default: `""`)
  */
 export function resolveFeatureFlag(
   name: string,
   defaultValue: boolean,
-  envPrefix = 'NEXT_PUBLIC_',
+  envPrefix = '',
 ): boolean {
   const envKey = `${envPrefix}${name}`;
   const envValue = process.env[envKey];
