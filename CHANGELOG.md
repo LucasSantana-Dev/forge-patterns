@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-02-18
+
+### Added
+- **Automated Release Pipeline**: Complete CI/CD workflow for automated releases when `release/*.*.*` branches are merged to main
+- **Branch Protection Rules**: Enhanced validation for release branches with semantic versioning enforcement
+- **Quality Gates**: Comprehensive pre-release validation including security scans, tests, and build verification
+- **Release Automation**: Automatic package version bumping, CHANGELOG updates, and npm publishing
+- **GitHub Releases**: Automatic creation of GitHub releases with proper tagging and descriptions
+
+### Changed
+- **MCP Integration**: Fixed forge-context MCP server integration issues with proper module resolution
+- **Build System**: Resolved TypeScript compilation errors and module format mismatches
+- **Dependencies**: Updated to use published `@forgespace/core@1.1.5` package across all projects
+
+### Fixed
+- **Forge-Context MCP**: Resolved missing native dependency issues preventing server startup
+- **Module Resolution**: Fixed CommonJS/ES module format conflicts in compiled JavaScript
+- **Tool Registration**: Fixed forge-context tools not being properly registered in UIForge MCP server
+
+### Documentation
+- **Release Process**: Added comprehensive documentation for automated release workflow
+- **Branch Strategy**: Updated guidelines for release branch creation and management
+
 ## [1.1.4] - 2026-02-18
 
 ### Changed
