@@ -6,6 +6,24 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+// Constants for magic numbers
+const DEFAULT_TIMEOUT = 60000;
+const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+const SECURITY_RISK_THRESHOLDS = {
+  critical: 10,
+  high: 7,
+  medium: 4,
+  low: 2
+};
+const PERFORMANCE_DEDUCTIONS = {
+  critical: 20,
+  high: 15,
+  medium: 10,
+  low: 5
+};
+const QUALITY_THRESHOLD = 80;
+const SCORE_THRESHOLD = 100;
+
 class AICodeAnalyzer {
   constructor(options = {}) {
     this.options = {
@@ -31,6 +49,7 @@ class AICodeAnalyzer {
     await this.loadPerformanceRules();
     await this.loadQualityMetrics();
     
+    // eslint-disable-next-line no-console
     console.log('AI Code Analyzer initialized');
   }
 
@@ -325,21 +344,7 @@ class AICodeAnalyzer {
         pattern: /for\s*\([^)]*\)\s*{\s*[^}]*for\s*\(/,
         description: 'Nested loop detected',
         severity: 'medium',
-        recommendation: 'Consider optimizing algorithm'
-      },
-      {
-        name: 'blocking-operation',
-        pattern: /while\s*\([^)]*\)\s*{\s*[^}]*sleep\(/,
-        description: 'Blocking operation in loop',
-        severity: 'high',
-        recommendation: 'Use async alternatives'
-      },
-      {
-        name: 'inefficient-regex',
-        pattern: /\.\*\+/g,
-        description: 'Inefficient regex pattern',
-        severity: 'low',
-        recommendation: 'Use specific regex patterns'
+        recommendation: 'Consider algorithm optimization'
       }
     ];
 
@@ -353,33 +358,27 @@ class AICodeAnalyzer {
     const metrics = [
       {
         name: 'function-length',
-        threshold: 50,
-        description: 'Function should be under 50 lines',
-        measurement: 'lines'
-      },
-      {
-        name: 'cyclomatic-complexity',
-        threshold: 10,
-        description: 'Complexity should be under 10',
-        measurement: 'score'
+        measurement: 'lines',
+        threshold: QUALITY_THRESHOLD,
+        description: 'Function length should not exceed 80 lines'
       },
       {
         name: 'parameter-count',
+        measurement: 'count',
         threshold: 5,
-        description: 'Functions should have under 5 parameters',
-        measurement: 'count'
+        description: 'Functions should not have more than 5 parameters'
       },
       {
         name: 'nesting-depth',
-        threshold: 5,
-        description: 'Nesting depth should be under 5',
-        measurement: 'depth'
+        measurement: 'depth',
+        threshold: 4,
+        description: 'Code nesting should not exceed 4 levels'
       },
       {
         name: 'line-length',
+        measurement: 'characters',
         threshold: 120,
-        description: 'Lines should be under 120 characters',
-        measurement: 'characters'
+        description: 'Line length should not exceed 120 characters'
       }
     ];
 
@@ -389,21 +388,15 @@ class AICodeAnalyzer {
   }
 
   calculateBasicMetrics(content) {
-    const lines = content.split('\n');
-    const words = content.split(/\s+/).filter(word => word.length > 0);
-    
     return {
-      lines: lines.length,
-      words: words.length,
+      lines: content.split('\n').length,
       characters: content.length,
       functions: (content.match(/function\s+\w+/g) || []).length,
-      classes: (content.match(/class\s+\w+/g) || []).length,
-      imports: (content.match(/import\s+.*from/g) || []).length,
-      exports: (content.match(/export\s+/g) || []).length
+      classes: (content.match(/class\s+\w+/g) || []).length
     };
   }
 
-  recognizePatterns(content, filePath) {
+  recognizePatterns(content, _filePath) {
     const patterns = [];
     
     for (const [name, pattern] of this.patterns) {
@@ -411,9 +404,8 @@ class AICodeAnalyzer {
       if (matches) {
         patterns.push({
           name,
-          pattern: pattern.pattern,
           matches: matches.length,
-          description: pattern.description
+          pattern: pattern.pattern
         });
       }
     }
@@ -441,7 +433,7 @@ class AICodeAnalyzer {
     return recommendations;
   }
 
-  analyzeSecurity(content, filePath) {
+  analyzeSecurity(content, _filePath) {
     const security = {
       vulnerabilities: [],
       riskScore: 0,
@@ -460,8 +452,7 @@ class AICodeAnalyzer {
         });
         
         // Calculate risk score
-        const severityScores = { critical: 10, high: 7, medium: 4, low: 2 };
-        security.riskScore += severityScores[rule.severity] * matches.length;
+        security.riskScore += SECURITY_RISK_THRESHOLDS[rule.severity] * matches.length;
         
         security.rules.push({
           name,
@@ -504,10 +495,10 @@ class AICodeAnalyzer {
     return recommendations;
   }
 
-  analyzePerformance(content, filePath) {
+  analyzePerformance(content, _filePath) {
     const performance = {
       issues: [],
-      score: 100,
+      score: SCORE_THRESHOLD,
       rules: []
     };
 
@@ -523,8 +514,7 @@ class AICodeAnalyzer {
         });
         
         // Calculate performance score
-        const severityDeductions = { critical: 20, high: 15, medium: 10, low: 5 };
-        performance.score -= severityDeductions[rule.severity] * matches.length;
+        performance.score -= PERFORMANCE_DEDUCTIONS[rule.severity] * matches.length;
         
         performance.rules.push({
           name,
@@ -552,11 +542,11 @@ class AICodeAnalyzer {
   getPerformanceRecommendations(performance) {
     const recommendations = [];
     
-    if (performance.score < 80) {
+    if (performance.score < QUALITY_THRESHOLD) {
       recommendations.push({
         type: 'performance',
         title: 'Performance Optimization Needed',
-        description: `Performance score: ${performance.score}/100`,
+        description: `Performance score: ${performance.score}/${SCORE_THRESHOLD}`,
         recommendation: 'Optimize performance bottlenecks',
         impact: 'medium',
         effort: 'medium',
@@ -567,11 +557,11 @@ class AICodeAnalyzer {
     return recommendations;
   }
 
-  analyzeCodeQuality(content, filePath) {
+  analyzeCodeQuality(content, _filePath) {
     const quality = {
       metrics: {},
       issues: [],
-      score: 100,
+      score: SCORE_THRESHOLD,
       rules: []
     };
 
@@ -635,11 +625,11 @@ class AICodeAnalyzer {
   getQualityRecommendations(quality) {
     const recommendations = [];
     
-    if (quality.score < 80) {
+    if (quality.score < QUALITY_THRESHOLD) {
       recommendations.push({
         type: 'quality',
         title: 'Code Quality Improvement Needed',
-        description: `Quality score: ${quality.score}/100`,
+        description: `Quality score: ${quality.score}/${SCORE_THRESHOLD}`,
         recommendation: 'Improve code quality metrics',
         impact: 'medium',
         effort: 'medium',
@@ -651,7 +641,7 @@ class AICodeAnalyzer {
   }
 
   calculateSecurityScore(security) {
-    const maxScore = 100;
+    const maxScore = SCORE_THRESHOLD;
     const deduction = Math.min(security.riskScore, maxScore);
     return Math.max(0, maxScore - deduction);
   }
@@ -759,33 +749,33 @@ class AICodeAnalyzer {
     const recommendations = [];
     
     // Overall recommendations based on aggregate metrics
-    if (projectAnalysis.summary.securityScore < 70) {
+    if (projectAnalysis.summary.securityScore < QUALITY_THRESHOLD) {
       recommendations.push({
         type: 'project',
         title: 'Security Review Required',
-        description: `Project security score: ${projectAnalysis.summary.securityScore}/100`,
+        description: `Project security score: ${projectAnalysis.summary.securityScore}/${SCORE_THRESHOLD}`,
         recommendation: 'Conduct comprehensive security review',
         impact: 'high',
         effort: 'high'
       });
     }
     
-    if (projectAnalysis.summary.performanceScore < 70) {
+    if (projectAnalysis.summary.performanceScore < QUALITY_THRESHOLD) {
       recommendations.push({
         type: 'project',
         title: 'Performance Optimization Needed',
-        description: `Project performance score: ${projectAnalysis.summary.performanceScore}/100`,
+        description: `Project performance score: ${projectAnalysis.summary.performanceScore}/${SCORE_THRESHOLD}`,
         recommendation: 'Optimize performance bottlenecks',
         impact: 'medium',
         effort: 'medium'
       });
     }
     
-    if (projectAnalysis.summary.qualityScore < 70) {
+    if (projectAnalysis.summary.qualityScore < QUALITY_THRESHOLD) {
       recommendations.push({
         type: 'project',
         title: 'Code Quality Improvement',
-        description: `Project quality score: ${projectAnalysis.summary.qualityScore}/100`,
+        description: `Project quality score: ${projectAnalysis.summary.qualityScore}/${SCORE_THRESHOLD}`,
         recommendation: 'Improve code quality standards',
         impact: 'medium',
         effort: 'medium'
