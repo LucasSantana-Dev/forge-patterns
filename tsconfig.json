@@ -33,7 +33,7 @@
       "@docs/*": ["./docs/*"]
     }
   },
-  "include": ["src/**/*.ts", "patterns/shared-constants/**/*.ts"],
+  "include": ["src/**/*.ts", "patterns/shared-constants/**/*.ts", "src/index.ts"],
   "exclude": ["node_modules", "dist", "build", "coverage", "**/*.test.ts", "**/*.spec.ts"],
   "ts-node": {
     "esm": true,
