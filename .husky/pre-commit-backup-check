@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check for backup files and prevent commit if found
+echo "🔍 Checking for backup files..."
+
+backup_files=$(git diff --cached --name-only | grep -E '\.(bak|backup|backup\.)$|~$|\.#.*|.*#.*$' || true)
+
+if [ -n "$backup_files" ]; then
+    echo "❌ Backup files found in staging area:"
+    echo "$backup_files"
+    echo ""
+    echo "Please remove backup files before committing:"
+    echo "  git rm --cached <file>"
+    echo "  rm <file>"
+    echo ""
+    echo "Or run: ./scripts/cleanup-backups.sh"
+    exit 1
+fi
+
+# Also check for any backup files in the working directory
+working_backup_files=$(find . -type f \( -name "*.bak" -o -name "*.backup" -o -name "*.backup.*" -o -name "*~" -o -name ".#*" -o -name "#*#" \) -not -path "./.git/*" | head -5)
+
+if [ -n "$working_backup_files" ]; then
+    echo "⚠️  Backup files found in working directory:"
+    echo "$working_backup_files"
+    echo ""
+    echo "Consider running: ./scripts/cleanup-backups.sh"
+    echo ""
+fi
+
+echo "✅ No backup files in staging area"
+exit 0

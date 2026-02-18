@@ -71,6 +71,14 @@ test.local.js
 # Backup and archive
 *.bak
 *.backup
+*.backup.*
+*~
+*.swp
+*.swo
+.#*
+\#*#
+.*.swp
+.*.swo
 *.tgz
 
 # Documentation builds
