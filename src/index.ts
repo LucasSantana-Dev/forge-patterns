@@ -1,7 +1,7 @@
 /**
- * Forge Patterns - Main entry point
+ * Forge AI Core - Main entry point
  *
- * This is the main entry point for the @uiforge/forge-patterns package.
+ * This is the main entry point for the @forge-ai/core package.
  * It provides easy access to all patterns and utilities.
  */
 

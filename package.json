@@ -1,5 +1,5 @@
 {
-  "name": "@uiforge/forge-patterns",
+  "name": "@forge-ai/core",
   "version": "1.1.1",
   "description": "Shared configuration, workflows, and architectural patterns for the UIForge ecosystem",
   "main": "dist/index.js",
@@ -97,7 +97,7 @@
     "patterns",
     "architecture",
     "mcp",
-    "uiforge",
+    "forge-ai",
     "development",
     "workflow",
     "typescript",
