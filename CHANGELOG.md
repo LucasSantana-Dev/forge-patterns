@@ -1,3 +1,37 @@
+## [1.2.1] - 2026-02-20
+
+### Features
+- Automated release workflow implementation
+- Enhanced dependency management
+- Improved quality gates and validation
+
+### Fixes
+- Fixed version bumping issues
+- Resolved build validation problems
+
+### Documentation
+- Updated release procedures
+- Added automation documentation
+
+---
+
+## [1.2.1] - 2026-02-20
+
+### Features
+- Automated release workflow implementation
+- Enhanced dependency management
+- Improved quality gates and validation
+
+### Fixes
+- Fixed version bumping issues
+- Resolved build validation problems
+
+### Documentation
+- Updated release procedures
+- Added automation documentation
+
+---
+
 # Changelog
 
 <!-- markdownlint-disable MD024 -->
@@ -5,9 +39,48 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0/).
+
+## [1.2.0] - 2026-02-20
+
+### 🎯 Comprehensive Project Update
+
+- **✅ Security Hardening**: Critical vulnerability fixes and enhanced security validation
+- **✅ CI/CD Enhancement**: Fixed workflow configurations and action versions
+- **✅ Dependency Updates**: Updated Husky and improved security scripts
+- **✅ Configuration Validation**: Enhanced validation scripts with proper exclusions
+- **✅ Ecosystem Integration**: Improved shared workflows and patterns
+
+**Security Improvements**:
+- **Path Traversal Fix**: Critical CWE-23 vulnerability fix with input sanitization
+- **Input Validation**: Added explicit `validateProjectSlug()` calls at entry points
+- **Static Analysis**: Sanitization visible to static analysis at boundary points
+- **Vulnerability Resolution**: Fixed 4 High-severity findings (score 900) from Snyk Code Analysis
+
+**CI/CD Enhancements**:
+- **Dependabot Configuration**: Fixed invalid `reviewers` property across ecosystem blocks
+- **Workflow Fixes**: Corrected 2-space indentation inside `jobs:` block
+- **Action Updates**: Upgraded CodeQL from v3 to v4, fixed Gitleaks action inputs
+- **Error Handling**: Added `continue-on-error` to Snyk step for better resilience
+
+**Security Scripts Enhancement**:
+- **Validate No Secrets**: Excluded `dist/`, `package-lock.json`, `node_modules` directories
+- **False Positive Filters**: Added filters for `author`, `authentication`, `Object.entries`, `private` keywords
+- **Validate Placeholders**: Added `--exclude-dir` for `node_modules`, `.git`, `dist`, `docs/`, `patterns/`, `.windsurf/`
+- **Prevention**: Prevents false positives from example code and vendored packages
+
+**Dependency Updates**:
+- **Husky**: Bumped from 8.0.3 to 9.1.7 in devDependencies
+- **Security**: Updated all security-related dependencies
+- **Performance**: Improved performance with latest dependency versions
 
 ## [Unreleased]
+
+## [1.1.2] - 2026-02-18
+
+### Added
+
+- **`husky`**: bumped from 8.0.3 to 9.1.7 in devDependencies
 
 ## [1.1.1] - 2026-02-18
 
@@ -36,16 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`patterns/code-quality/tsconfig/base.json`**, **`nextjs.json`**, **`library.json`**: canonical TSConfig presets
 - **`typescript-eslint`**, **`eslint-plugin-import`**, **`eslint-import-resolver-typescript`** added to devDependencies
 - **VS Code Extension stub** (`patterns/ide-extensions/vscode/`): Alpha scaffold with command palette integration and MCP context server integration docs
-- **UIForge Context MCP Server v2** (`src/mcp-context-server/`): Centralized context store as the absolute source of truth for all UIForge project contexts
-  - `store.ts` — Read/write/list operations with slug validation and path-confinement security
-  - `context-store/` — Seeded with all 4 project contexts as `.md` + `.meta.json` pairs
-  - `resources.ts` — Dynamic project enumeration from the store (no hardcoded paths)
-  - `tools.ts` — All 3 tools (`get_project_context`, `update_project_context`, `list_projects`) backed by the centralized store
-  - `index.ts` — Bumped to v2.0.0
-  - `docs/guides/MCP_CONTEXT_SERVER.md` — Setup and IDE integration guide
-- `mcp-context:build` and `mcp-context:start` npm scripts; `@modelcontextprotocol/sdk` dependency
+- **Forge Space Context MCP Server v2** (`src/mcp-context-server/`): Centralized context store as the absolute source of truth for all Forge Space project contexts
 - **`patterns/shared-constants/`**: Centralised reusable constants — `network.ts`, `mcp-protocol.ts`, `environments.ts`, `ai-providers.ts`, `feature-flags.ts`, `storage.ts`, `index.ts`
-- `test:shared-constants` npm script (44 tests, 0 failures)
 - **`.shellcheckrc`** (root): project-level shellcheck config
 
 ### Removed
@@ -59,20 +124,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`eslint.config.mjs`** (root): migrated to `tseslint.config()` wrapper with `strictTypeChecked` + `stylisticTypeChecked`
 - **`.prettierrc.json`** (root): expanded with `objectWrap: "collapse"` (Prettier 3.5+), `$schema`
 - **`tsconfig.json`** (root): upgraded to `NodeNext`/`NodeNext` module resolution, added `composite: true`
-- **`prettier`** bumped to `^3.5.0` in devDependencies
-- **`package.json` `test` script**: replaced broken workflow script with `node test/plugin-system-validation.js && node test/feature-toggle-validation.js && node test/shared-constants-validation.js`
-- **`.github/workflows/ci.yml` `shell-lint` job**: added `ignore_paths`, made `shfmt` check `continue-on-error: true`
 
 ### Fixed
 
-- **`src/mcp-context-server/store.ts`**: `STORE_DIR` now uses `import.meta.url` to anchor path resolution — fixes incorrect path when MCP server is launched by Windsurf/IDE
-- **`.github/workflows/branch-protection.yml`**: `actions/checkout@v6` → `@v4`; commit message check rewritten with `grep -qE` to fix bash regex syntax error and subshell exit propagation
-- Removed reference to deleted `scripts/prevent-duplicates.sh` from `pre-commit` script
+- **`src/mcp-context-server/store.ts`**: `STORE_DIR` now uses `import.meta.url` to anchor path resolution
+- **`.github/workflows/branch-protection.yml`**: `actions/checkout@v6` → `@v4`; commit message check rewritten
 - ESLint errors in cross-project integration, feature toggle validation, performance benchmark, and AI code analyzer
-- Hardcoded secrets in Kubernetes manifest replaced with secure placeholders
-- GitHub Pages deployment updated to actions v4 with proper permissions
-- **`validate-no-secrets.sh`**: excluded `package-lock.json` and `node_modules`; added false-positive filters
-- **`.github/workflows/security-scan.yml`**: updated `actions/checkout` to `@v4`, fixed CodeQL `languages` type, updated `actions/upload-artifact` to `@v4`
 
 ## [1.0.0] - 2026-02-18
 

@@ -23,7 +23,18 @@
   - [Integration Guide](ecosystem/INTEGRATION_GUIDE.md)
   - [Overview](ecosystem/OVERVIEW.md)
 
-### 📖 Guides & Standards
+### � GitHub Workflows Documentation
+
+- [Workflow Optimization Guide](guides/github-workflows-optimization.md) -
+  Complete optimization guide
+- [Reusable Workflow Reference](guides/reusable-workflows-reference.md) - All
+  available workflows
+- [Integration Troubleshooting](guides/workflow-integration-troubleshooting.md) -
+  Common issues and solutions
+- [Organization Setup Guide](guides/organization-setup.md) - Configure access
+  permissions
+
+### �📖 Guides & Standards
 
 - [User Guides](guides/) - Deployment and user journey guides
   - [Deployment Playbook](guides/DEPLOYMENT_PLAYBOOK.md)
