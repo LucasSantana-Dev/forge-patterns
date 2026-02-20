@@ -15,23 +15,6 @@
 
 ---
 
-## [1.2.1] - 2026-02-20
-
-### Features
-- Automated release workflow implementation
-- Enhanced dependency management
-- Improved quality gates and validation
-
-### Fixes
-- Fixed version bumping issues
-- Resolved build validation problems
-
-### Documentation
-- Updated release procedures
-- Added automation documentation
-
----
-
 # Changelog
 
 <!-- markdownlint-disable MD024 -->

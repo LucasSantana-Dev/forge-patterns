@@ -2,7 +2,7 @@
 
 Shared configuration, workflows, and architectural patterns for the Forge Space ecosystem with centralized feature management and comprehensive security.
 
-**Part of the [Forge Space Ecosystem](../../ECOSYSTEM_OVERVIEW.md)** - Complete AI-powered UI development platform
+**Part of the [Forge Space Ecosystem](../../ECOSYSTEM_OVERVIEW.md)** - Complete AI-powered development platform
 
 ## 🎯 Overview
 
@@ -17,7 +17,7 @@ Forge-Space Core provides a comprehensive set of shared configurations, workflow
 - 🛡️ **Security First**: Built-in security scanning and validation
 - 🐳 **Docker Patterns**: Containerization and deployment patterns
 - 🎛️ **Centralized Feature Toggles**: Cross-project feature management with CLI control
-- 📡 **MCP Context Server**: Local stdio MCP server exposing all UIForge project context documents as resources
+- 📡 **MCP Context Server**: Local stdio MCP server exposing all Forge Space project context documents as resources
 - 📝 **Logger Module**: Comprehensive logging with observability and distributed tracing
 - 🚀 **High Performance**: Sub-100ms integration times and optimized patterns
 - 🔄 **GitHub Workflows Optimization**: Organization-level reusable workflows eliminating duplication
@@ -25,8 +25,8 @@ Forge-Space Core provides a comprehensive set of shared configurations, workflow
 ## 📋 Projects Using These Patterns
 
 - **mcp-gateway**: Python/Node.js MCP gateway with comprehensive CI/CD
-- **uiforge-webapp**: Next.js web application with multi-environment deployment
-- **uiforge-mcp**: Node.js MCP server with security-focused workflows
+- **forge-space-ui**: Next.js web application with multi-environment deployment
+- **forge-space-mcp**: Node.js MCP server with security-focused workflows
 
 ## 🌐 Ecosystem Integration
 
