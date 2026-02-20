@@ -1,3 +1,37 @@
+## [1.2.1] - 2026-02-20
+
+### Features
+- Automated release workflow implementation
+- Enhanced dependency management
+- Improved quality gates and validation
+
+### Fixes
+- Fixed version bumping issues
+- Resolved build validation problems
+
+### Documentation
+- Updated release procedures
+- Added automation documentation
+
+---
+
+## [1.2.1] - 2026-02-20
+
+### Features
+- Automated release workflow implementation
+- Enhanced dependency management
+- Improved quality gates and validation
+
+### Fixes
+- Fixed version bumping issues
+- Resolved build validation problems
+
+### Documentation
+- Updated release procedures
+- Added automation documentation
+
+---
+
 # Changelog
 
 <!-- markdownlint-disable MD024 -->
@@ -5,7 +39,40 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0/).
+
+## [1.2.0] - 2026-02-20
+
+### 🎯 Comprehensive Project Update
+
+- **✅ Security Hardening**: Critical vulnerability fixes and enhanced security validation
+- **✅ CI/CD Enhancement**: Fixed workflow configurations and action versions
+- **✅ Dependency Updates**: Updated Husky and improved security scripts
+- **✅ Configuration Validation**: Enhanced validation scripts with proper exclusions
+- **✅ Ecosystem Integration**: Improved shared workflows and patterns
+
+**Security Improvements**:
+- **Path Traversal Fix**: Critical CWE-23 vulnerability fix with input sanitization
+- **Input Validation**: Added explicit `validateProjectSlug()` calls at entry points
+- **Static Analysis**: Sanitization visible to static analysis at boundary points
+- **Vulnerability Resolution**: Fixed 4 High-severity findings (score 900) from Snyk Code Analysis
+
+**CI/CD Enhancements**:
+- **Dependabot Configuration**: Fixed invalid `reviewers` property across ecosystem blocks
+- **Workflow Fixes**: Corrected 2-space indentation inside `jobs:` block
+- **Action Updates**: Upgraded CodeQL from v3 to v4, fixed Gitleaks action inputs
+- **Error Handling**: Added `continue-on-error` to Snyk step for better resilience
+
+**Security Scripts Enhancement**:
+- **Validate No Secrets**: Excluded `dist/`, `package-lock.json`, `node_modules` directories
+- **False Positive Filters**: Added filters for `author`, `authentication`, `Object.entries`, `private` keywords
+- **Validate Placeholders**: Added `--exclude-dir` for `node_modules`, `.git`, `dist`, `docs/`, `patterns/`, `.windsurf/`
+- **Prevention**: Prevents false positives from example code and vendored packages
+
+**Dependency Updates**:
+- **Husky**: Bumped from 8.0.3 to 9.1.7 in devDependencies
+- **Security**: Updated all security-related dependencies
+- **Performance**: Improved performance with latest dependency versions
 
 ## [Unreleased]
 
@@ -42,7 +109,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`patterns/code-quality/tsconfig/base.json`**, **`nextjs.json`**, **`library.json`**: canonical TSConfig presets
 - **`typescript-eslint`**, **`eslint-plugin-import`**, **`eslint-import-resolver-typescript`** added to devDependencies
 - **VS Code Extension stub** (`patterns/ide-extensions/vscode/`): Alpha scaffold with command palette integration and MCP context server integration docs
-- **UIForge Context MCP Server v2** (`src/mcp-context-server/`): Centralized context store as the absolute source of truth for all UIForge project contexts
+- **Forge Space Context MCP Server v2** (`src/mcp-context-server/`): Centralized context store as the absolute source of truth for all Forge Space project contexts
 - **`patterns/shared-constants/`**: Centralised reusable constants — `network.ts`, `mcp-protocol.ts`, `environments.ts`, `ai-providers.ts`, `feature-flags.ts`, `storage.ts`, `index.ts`
 - **`.shellcheckrc`** (root): project-level shellcheck config
 

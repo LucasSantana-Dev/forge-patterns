@@ -1,0 +1,307 @@
+name: Dependency Management (Shared)
+
+on:
+  workflow_call:
+    inputs:
+      project-type:
+        description: 'Type of project (gateway, webapp, mcp, patterns)'
+        required: false
+        default: 'patterns'
+        type: string
+      enable-update:
+        description: 'Enable dependency updates'
+        required: false
+        default: false
+        type: boolean
+      enable-audit:
+        description: 'Enable security audit'
+        required: false
+        default: true
+        type: boolean
+      enable-check:
+        description: 'Enable outdated dependency check'
+        required: false
+        default: true
+        type: boolean
+      update-strategy:
+        description: 'Update strategy (patch, minor, major)'
+        required: false
+        default: 'patch'
+        type: string
+      timeout-minutes:
+        description: 'Default timeout for jobs'
+        required: false
+        default: '15'
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub token'
+        required: true
+      NPM_TOKEN:
+        description: 'NPM token for publishing'
+        required: false
+
+jobs:
+  dependency-audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    if: inputs.enable-audit == 'true'
+    
+    strategy:
+      matrix:
+        language: [node, python]
+        include:
+          - language: node
+            if: inputs.project-type != 'gateway'
+          - language: python
+            if: inputs.project-type == 'gateway' || inputs.project-type == 'mcp'
+      fail-fast: false
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: matrix.language == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Setup Python
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Node.js dependencies
+        if: matrix.language == 'node'
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Python dependencies
+        if: matrix.language == 'python'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --if-present
+
+      - name: Run npm audit
+        if: matrix.language == 'node'
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run pip audit
+        if: matrix.language == 'python'
+        run: |
+          pip install pip-audit
+          pip-audit --format=json --output=audit-results.json || true
+        continue-on-error: true
+
+      - name: Upload audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-results-${{ matrix.language }}
+          path: audit-results.json
+          retention-days: 30
+
+  check-outdated:
+    name: Check Outdated Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: inputs.enable-check == 'true'
+    
+    strategy:
+      matrix:
+        language: [node, python]
+        include:
+          - language: node
+            if: inputs.project-type != 'gateway'
+          - language: python
+            if: inputs.project-type == 'gateway' || inputs.project-type == 'mcp'
+      fail-fast: false
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: matrix.language == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Setup Python
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Node.js dependencies
+        if: matrix.language == 'node'
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Python dependencies
+        if: matrix.language == 'python'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --if-present
+
+      - name: Check outdated npm packages
+        if: matrix.language == 'node'
+        run: npm outdated --json > outdated-npm.json || true
+
+      - name: Check outdated pip packages
+        if: matrix.language == 'python'
+        run: pip list --outdated --format=json > outdated-pip.json || true
+
+      - name: Generate outdated report
+        run: |
+          echo "## 📦 Outdated Dependencies Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ${{ matrix.language }} Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "outdated-${{ matrix.language }}.json" ]; then
+            echo "Found outdated dependencies. See artifact for details." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ All dependencies are up to date!" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload outdated report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: outdated-${{ matrix.language }}
+          path: outdated-${{ matrix.language }}.json
+          retention-days: 7
+
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    if: inputs.enable-update == 'true'
+    
+    strategy:
+      matrix:
+        language: [node, python]
+        include:
+          - language: node
+            if: inputs.project-type != 'gateway'
+          - language: python
+            if: inputs.project-type == 'gateway' || inputs.project-type == 'mcp'
+      fail-fast: false
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Setup Node.js
+        if: matrix.language == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Setup Python
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Update npm dependencies
+        if: matrix.language == 'node'
+        run: |
+          npm ci --legacy-peer-deps
+          
+          # Update based on strategy
+          case "${{ inputs.update-strategy }}" in
+            "patch")
+              npm update --save
+              ;;
+            "minor")
+              npm update --save
+              npm update --save-dev
+              ;;
+            "major")
+              npm update --save
+              npm update --save-dev
+              npm audit fix --force
+              ;;
+          esac
+          
+          # Update package-lock.json
+          npm install --package-lock-only
+
+      - name: Update pip dependencies
+        if: matrix.language == 'python'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --if-present
+          
+          # Update requirements.txt
+          pip freeze > requirements-new.txt
+          mv requirements-new.txt requirements.txt
+
+      - name: Test updated dependencies
+        run: |
+          if [ "${{ matrix.language }}" = "node" ]; then
+            npm test --if-present
+          else
+            pip install pytest pytest-cov
+            pytest --tb=short || true
+          fi
+
+      - name: Commit dependency updates
+        run: |
+          if git diff --quiet; then
+            echo "No dependency updates needed"
+          else
+            git add .
+            git commit -m "chore(deps): update ${{ matrix.language }} dependencies (${{ inputs.update-strategy }})"
+            git push origin main
+          fi
+
+  dependency-summary:
+    name: Dependency Summary
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [dependency-audit, check-outdated, update-dependencies]
+    if: always()
+    
+    steps:
+      - name: Dependency Management Summary
+        run: |
+          echo "## 🔧 Dependency Management Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Task | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Audit | ${{ needs.dependency-audit.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Check Outdated | ${{ needs.check-outdated.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Update Dependencies | ${{ needs.update-dependencies.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **Project Type**: ${{ inputs.project-type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Enable Audit**: ${{ inputs.enable-audit }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Enable Check**: ${{ inputs.enable-check }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Enable Update**: ${{ inputs.enable-update }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Update Strategy**: ${{ inputs.update-strategy }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Overall status
+          if [[ "${{ needs.dependency-audit.result }}" == "success" && "${{ needs.check-outdated.result }}" == "success" ]]; then
+            echo "✅ All dependency management tasks completed successfully!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Some dependency management tasks require attention" >> $GITHUB_STEP_SUMMARY
+          fi

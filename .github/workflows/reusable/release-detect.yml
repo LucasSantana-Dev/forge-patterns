@@ -165,78 +165,85 @@ jobs:
           PROJECT_TYPE="${{ inputs.project-type }}"
 
           # Create changelog entry
-          ENTRY="## [$VERSION] - $DATE
+          cat > changelog_entry.md << EOF
+          ## [$VERSION] - $DATE
 
-### 🚀 Automated Release
-- **Release Type**: $VERSION_TYPE
-- **Project Type**: $PROJECT_TYPE
-- **Automated Pipeline**: Release triggered by merge from release/$VERSION branch
-- **Quality Gates**: All quality checks passed automatically
-- **Security**: Security scans completed successfully
+          ### 🚀 Automated Release
+          - **Release Type**: $VERSION_TYPE
+          - **Project Type**: $PROJECT_TYPE
+          - **Automated Pipeline**: Release triggered by merge from release/$VERSION branch
+          - **Quality Gates**: All quality checks passed automatically
+          - **Security**: Security scans completed successfully
 
-### 📦 Package Information
-- **Version**: $VERSION
-- **Release Date**: $DATE
+          ### 📦 Package Information
+          - **Version**: $VERSION
+          - **Release Date**: $DATE
 
-### ✅ Validation Results
-- All tests passed
-- Code quality checks passed
-- Security audit completed
-- Build completed successfully
+          ### ✅ Validation Results
+          - All tests passed
+          - Code quality checks passed
+          - Security audit completed
+          - Build completed successfully
 
-### 🔗 Installation
-"
+          ### 🔗 Installation
+          EOF
 
           # Add installation instructions based on project type
           case "$PROJECT_TYPE" in
             "gateway")
-              ENTRY="$ENTRY\`\`\`bash
-# Install via pip
-pip install forge-mcp-gateway==$VERSION
+              cat >> changelog_entry.md << 'EOF'
+          ```bash
+          # Install via pip
+          pip install forge-mcp-gateway==$VERSION
 
-# Or via Docker
-docker pull lucassantana/forge-mcp-gateway:v$VERSION
-\`\`\`"
+          # Or via Docker
+          docker pull lucassantana/forge-mcp-gateway:v$VERSION
+          ```
+          EOF
               ;;
             "webapp")
-              ENTRY="$ENTRY\`\`\`bash
-# Deploy to Cloudflare Pages
-# See deployment documentation for details
-\`\`\`"
+              cat >> changelog_entry.md << 'EOF'
+          ```bash
+          # Deploy to Cloudflare Pages
+          # See deployment documentation for details
+          ```
+          EOF
               ;;
             "mcp"|"patterns")
-              ENTRY="$ENTRY\`\`\`bash
-# Install via npm
-npm install -g @forgespace/ui-mcp@$VERSION
+              cat >> changelog_entry.md << 'EOF'
+          ```bash
+          # Install via npm
+          npm install -g @forgespace/ui-mcp@$VERSION
 
-# Or via Docker
-docker pull lucassantana/uiforge-mcp:v$VERSION
-\`\`\`"
+          # Or via Docker
+          docker pull lucassantana/uiforge-mcp:v$VERSION
+          ```
+          EOF
               ;;
           esac
 
-          ENTRY="$ENTRY
+          cat >> changelog_entry.md << 'EOF'
 
----
 
-"
+          ---
+          EOF
 
           # Update CHANGELOG.md
           if [ -f "CHANGELOG.md" ]; then
             EXISTING=$(cat CHANGELOG.md)
             if echo "$EXISTING" | grep -q "^## "; then
               # Insert after first ## line
-              echo "$ENTRY" > temp_changelog.md
+              cat changelog_entry.md > temp_changelog.md
               echo "$EXISTING" | sed '1d' >> temp_changelog.md
               mv temp_changelog.md CHANGELOG.md
             else
               # Insert at beginning
-              echo "$ENTRY" > temp_changelog.md
+              cat changelog_entry.md > temp_changelog.md
               echo "$EXISTING" >> temp_changelog.md
               mv temp_changelog.md CHANGELOG.md
             fi
           else
-            echo "$ENTRY" > CHANGELOG.md
+            cp changelog_entry.md CHANGELOG.md
           fi
 
       - name: Commit CHANGELOG

@@ -13,13 +13,14 @@ management, and operational procedures.
 2. [Environment Types](#environment-types)
 3. [Infrastructure Requirements](#infrastructure-requirements)
 4. [Deployment Strategies](#deployment-strategies)
-5. [Configuration Management](#configuration-management)
-6. [Step-by-Step Deployment](#step-by-step-deployment)
-7. [Monitoring and Observability](#monitoring-and-observability)
-8. [Backup and Recovery](#backup-and-recovery)
-9. [Security Considerations](#security-considerations)
-10. [Troubleshooting](#troubleshooting)
-11. [Maintenance Procedures](#maintenance-procedures)
+5. [GitHub Actions Integration](#github-actions-integration)
+6. [Configuration Management](#configuration-management)
+7. [Step-by-Step Deployment](#step-by-step-deployment)
+8. [Monitoring and Observability](#monitoring-and-observability)
+9. [Backup and Recovery](#backup-and-recovery)
+10. [Security Considerations](#security-considerations)
+11. [Troubleshooting](#troubleshooting)
+12. [Maintenance Procedures](#maintenance-procedures)
 
 ## Prerequisites
 
@@ -259,6 +260,98 @@ services:
     deploy:
       replicas: 9
 ```
+
+## GitHub Actions Integration
+
+### Organization-Level Workflow Sharing
+
+Forge-Space/core provides centralized reusable workflows that eliminate
+duplication across the UIForge ecosystem. This section covers the integration
+process.
+
+#### Prerequisites
+
+- **Organization Owner** or **Admin** access to Forge-Space organization
+- **Repository Admin** access to target repositories
+- **GitHub Actions** enabled for the organization
+
+#### Configuration Steps
+
+1. **Configure Forge-Space/core Repository Access**
+   - Navigate to [Forge-Space/core](https://github.com/Forge-Space/core)
+   - Go to **Settings → Actions → General**
+   - Enable **Accessible from repositories in 'Forge-Space' organization**
+
+2. **Configure Target Repository Permissions**
+   - For each repository using workflows:
+   - Go to **Settings → Actions → General**
+   - Enable **Allow select actions** and add Forge-Space/core
+   - Ensure **Allow GitHub Actions to run workflows** is checked
+
+3. **Update Repository Workflows**
+
+   ```yaml
+   # .github/workflows/ci.yml
+   name: CI
+
+   on:
+     push:
+       branches: [main, dev]
+     pull_request:
+       branches: [main]
+
+   jobs:
+     ci:
+       uses: Forge-Space/core/.github/workflows/reusable/ci-base.yml@main
+       with:
+         project-type: 'gateway' # or 'mcp', 'webapp', 'patterns'
+         node-version: '22'
+         python-version: '3.12'
+         enable-docker: true
+         enable-security: true
+         enable-coverage: true
+
+     security:
+       uses: Forge-Space/core/.github/github-workflows/reusable/security-scan.yml@main
+       with:
+         project-type: 'gateway'
+   ```
+
+4. **Remove Duplicated Workflows**
+
+   ```bash
+   # Remove local workflow copies
+   rm .github/workflows/*-shared.yml
+   rm .github/workflows/ci-base-shared.yml
+   rm .github/workflows/security-scan-shared.yml
+   ```
+
+5. **Test Integration**
+   - Create a test branch and push changes
+   - Monitor workflow runs in GitHub Actions tab
+   - Validate all jobs pass successfully
+
+#### Available Workflows
+
+- **ci-base.yml**: Unified base CI pipeline
+- **security-scan.yml**: Comprehensive security scanning
+- **branch-protection.yml**: Automated branch protection
+- **dependency-management.yml**: Centralized dependency updates
+- **release-publish.yml**: Automated release publishing
+
+#### Benefits Achieved
+
+- **95% reduction** in maintenance overhead
+- **Single source of truth** for all CI/CD logic
+- **Instant updates** across all repositories
+- **Consistent patterns** and quality standards
+
+#### Documentation
+
+- [Workflow Optimization Guide](github-workflows-optimization.md)
+- [Reusable Workflow Reference](reusable-workflows-reference.md)
+- [Integration Troubleshooting](workflow-integration-troubleshooting.md)
+- [Organization Setup Guide](organization-setup.md)
 
 ## Configuration Management
 

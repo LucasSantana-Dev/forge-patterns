@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-release
     if: needs.detect-release.outputs.is-release == 'true'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-release
     if: needs.detect-release.outputs.is-release == 'true'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -112,7 +112,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [detect-release, quality-checks, security-scan]
     if: needs.detect-release.outputs.is-release == 'true' && needs.detect-release.outputs.should-publish == 'true'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -135,28 +135,29 @@ jobs:
         run: |
           VERSION="${{ needs.detect-release.outputs.version }}"
           DATE=$(date +%Y-%m-%d)
-          
+
           # Create changelog entry
           ENTRY="## [$VERSION] - $DATE
 
-### Features
-- Automated release pipeline integration
-- Forge-context MCP server integration
-- Updated shared constants and internal imports
+          ### Features
+          - Automated release pipeline integration
+          - Forge-context MCP server integration
+          - Updated shared constants and internal imports
 
-### Fixes
-- Fixed module resolution issues
-- Resolved TypeScript compilation errors
-- Fixed MCP server startup issues
+          ### Fixes
+          - Fixed module resolution issues
+          - Resolved TypeScript compilation errors
+          - Fixed MCP server startup issues
 
-### Documentation
-- Updated integration guides
-- Added deployment automation documentation
+          ### Documentation
+          - Updated integration guides
+          - Added deployment automation documentation
 
----
+          ---
 
-"
-          
+
+          "
+
           # Insert at the beginning of CHANGELOG.md (after any header) - fixed logic
           if [ -f "CHANGELOG.md" ]; then
             # Read existing content
@@ -201,7 +202,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -234,7 +235,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [detect-release, publish-npm]
     if: needs.detect-release.outputs.should-publish == 'true'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -252,18 +253,18 @@ jobs:
           prerelease: false
           body: |
             ## Release v${{ needs.detect-release.outputs.version }}
-            
+
             This release includes:
             - Forge-context MCP server integration
             - Updated shared constants and internal imports
             - Automated release pipeline
             - Various bug fixes and improvements
-            
+
             ### Installation
             ```bash
             npm install @forgespace/core@${{ needs.detect-release.outputs.version }}
             ```
-            
+
             ### Changes
             See the [CHANGELOG.md](https://github.com/Forge-Space/core/blob/main/CHANGELOG.md) for detailed changes.
 
@@ -272,7 +273,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [detect-release, publish-npm, create-github-release]
     if: always() && needs.detect-release.outputs.should-publish == 'true'
-    
+
     steps:
       - name: Notify Success
         if: needs.publish-npm.result == 'success' && needs.create-github-release.result == 'success'
