@@ -36,6 +36,11 @@ export function validateProjectSlug(project: string): void {
 }
 
 function safeResolve(base: string, filename: string): string {
+  // Explicit path traversal prevention for static analysis
+  if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+    throw new Error(`Path traversal detected: "${filename}" contains invalid characters.`);
+  }
+
   const resolved = resolve(base, filename);
   if (resolved !== base && !resolved.startsWith(base + sep)) {
     throw new Error(`Path traversal detected: "${filename}" escapes the store directory.`);
