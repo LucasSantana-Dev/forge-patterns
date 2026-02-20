@@ -2,6 +2,8 @@
 
 Shared configuration, workflows, and architectural patterns for the Forge Space ecosystem with centralized feature management and comprehensive security.
 
+**Version 1.2.0** - Security hardening and CI/CD enhancements
+
 **Part of the [Forge Space Ecosystem](../../ECOSYSTEM_OVERVIEW.md)** - Complete AI-powered development platform
 
 ## 🎯 Overview
