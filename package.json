@@ -31,7 +31,7 @@
     "test:integration": "node test/cross-project-integration.js",
     "test:shared-constants": "node test/shared-constants-validation.js",
     "test:all": "npm run test && npm run test:integration",
-    "prepare": "npm run build && husky install",
+    "prepare": "npm run build && husky",
     "pre-commit": "npm run lint && npm run format && npm run test && .husky/pre-commit-backup-check",
     "prepack": "npm run build",
     "publish:npm": "npm publish --access public",
@@ -58,16 +58,14 @@
     "semver": "^7.5.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^25.2.3",
     "@types/semver": "^7.5.0",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.56.0",
-    "eslint": "^9.0.0",
+    "eslint": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import": "^2.32.0",
     "globals": "^17.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
@@ -76,9 +74,16 @@
     "typescript-eslint": "^8.56.0"
   },
   "lint-staged": {
-    "*.{js,ts}": ["eslint --fix", "prettier --write"],
-    "*.{json,yml,yaml}": ["prettier --write"],
-    "*.md": ["prettier --write"]
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,yml,yaml}": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   },
   "husky": {
     "hooks": {
@@ -86,7 +91,17 @@
       "pre-push": "npm run validate"
     }
   },
-  "keywords": ["patterns", "architecture", "mcp", "forgespace", "development", "workflow", "typescript", "eslint", "prettier"],
+  "keywords": [
+    "patterns",
+    "architecture",
+    "mcp",
+    "forgespace",
+    "development",
+    "workflow",
+    "typescript",
+    "eslint",
+    "prettier"
+  ],
   "author": "Forgespace",
   "license": "MIT",
   "repository": {
