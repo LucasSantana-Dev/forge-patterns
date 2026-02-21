@@ -16,10 +16,10 @@ import { ConsoleTransport, JsonTransport, FileTransport } from './transports.js'
 class PerformanceTrackerImpl implements PerformanceTracker {
   private timers = new Map<
     string,
-    { startTime: number; operation: string; context?: Record<string, any> }
+    { startTime: number; operation: string; context?: Record<string, unknown> }
   >();
 
-  start(operation: string, context?: Record<string, any>): string {
+  start(operation: string, context?: Record<string, unknown>): string {
     const trackingId = this.generateTrackingId();
     this.timers.set(trackingId, {
       startTime: Date.now(),
@@ -29,7 +29,7 @@ class PerformanceTrackerImpl implements PerformanceTracker {
     return trackingId;
   }
 
-  end(trackingId: string, context?: Record<string, any>): void {
+  end(trackingId: string, context?: Record<string, unknown>): void {
     const timer = this.timers.get(trackingId);
     if (!timer) return;
 
@@ -47,7 +47,7 @@ class PerformanceTrackerImpl implements PerformanceTracker {
     });
   }
 
-  track<T>(operation: string, fn: () => T, context?: Record<string, any>): T {
+  track<T>(operation: string, fn: () => T, context?: Record<string, unknown>): T {
     const trackingId = this.start(operation, context);
     try {
       const result = fn();
@@ -65,7 +65,7 @@ class PerformanceTrackerImpl implements PerformanceTracker {
   async trackAsync<T>(
     operation: string,
     fn: () => Promise<T>,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<T> {
     const trackingId = this.start(operation, context);
     try {
@@ -85,10 +85,10 @@ class PerformanceTrackerImpl implements PerformanceTracker {
     return `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private emitPerformanceEvent(event: any): void {
+  private emitPerformanceEvent(event: Record<string, unknown>): void {
     // This would be handled by the logger instance
     // In a real implementation, we'd use an event emitter or callback
-    (globalThis as any).__performanceEvent = event;
+    (globalThis as Record<string, unknown>).__performanceEvent = event;
   }
 }
 
@@ -98,7 +98,7 @@ class PerformanceTrackerImpl implements PerformanceTracker {
 export class Logger implements ILogger {
   private config: LoggerConfig;
   private transports: LoggerTransport[];
-  private context: Record<string, any> = {};
+  private context: Record<string, unknown> = {};
   private correlation: CorrelationContext;
   private metrics: LoggerMetrics;
   private performanceTracker: PerformanceTrackerImpl;
@@ -113,47 +113,55 @@ export class Logger implements ILogger {
   }
 
   // Logging methods
-  trace(message: string, context?: Record<string, any>): void {
+  trace(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.TRACE, message, context);
   }
 
-  debug(message: string, context?: Record<string, any>): void {
+  debug(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.DEBUG, message, context);
   }
 
-  info(message: string, context?: Record<string, any>): void {
+  info(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.INFO, message, context);
   }
 
-  warn(message: string, context?: Record<string, any>): void {
+  warn(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.WARN, message, context);
   }
 
-  error(message: string, error?: Error | Record<string, any>, context?: Record<string, any>): void {
+  error(
+    message: string,
+    error?: Error | Record<string, unknown>,
+    context?: Record<string, unknown>
+  ): void {
     const errorContext = this.processError(error);
     this.log(LogLevel.ERROR, message, { ...context, ...errorContext });
   }
 
-  fatal(message: string, error?: Error | Record<string, any>, context?: Record<string, any>): void {
+  fatal(
+    message: string,
+    error?: Error | Record<string, unknown>,
+    context?: Record<string, unknown>
+  ): void {
     const errorContext = this.processError(error);
     this.log(LogLevel.FATAL, message, { ...context, ...errorContext });
   }
 
   // Performance tracking
-  startTimer(operation: string, context?: Record<string, any>): string {
+  startTimer(operation: string, context?: Record<string, unknown>): string {
     return this.performanceTracker.start(operation, context);
   }
 
-  endTimer(trackingId: string, context?: Record<string, any>): void {
+  endTimer(trackingId: string, context?: Record<string, unknown>): void {
     this.performanceTracker.end(trackingId, context);
   }
 
   // Context management
-  setContext(context: Record<string, any>): void {
+  setContext(context: Record<string, unknown>): void {
     this.context = { ...this.context, ...context };
   }
 
-  getContext(): Record<string, any> {
+  getContext(): Record<string, unknown> {
     return { ...this.context };
   }
 
@@ -175,7 +183,7 @@ export class Logger implements ILogger {
   }
 
   // Child logger
-  child(context: Record<string, any>): ILogger {
+  child(context: Record<string, unknown>): ILogger {
     const childConfig = { ...this.config };
     const childLogger = new Logger(childConfig);
     childLogger.setContext({ ...this.context, ...context });
@@ -193,7 +201,7 @@ export class Logger implements ILogger {
       // Check if transports are healthy
       for (const transport of this.transports) {
         if ('health' in transport) {
-          const isHealthy = await (transport as any).health();
+          const isHealthy = await (transport as unknown as { health(): Promise<boolean> }).health();
           if (!isHealthy) return false;
         }
       }
@@ -210,11 +218,15 @@ export class Logger implements ILogger {
     this.isClosed = true;
 
     // Close transports that support closing
-    await Promise.all(this.transports.filter(t => 'close' in t).map(t => (t as any).close()));
+    await Promise.all(
+      this.transports
+        .filter(t => 'close' in t)
+        .map(t => (t as unknown as { close(): Promise<void> }).close())
+    );
   }
 
   // Private methods
-  private log(level: LogLevel, message: string, context?: Record<string, any>): void {
+  private log(level: LogLevel, message: string, context?: Record<string, unknown>): void {
     if (this.isClosed || level < this.config.level) return;
 
     const entry = this.createLogEntry(level, message, context);
@@ -225,7 +237,7 @@ export class Logger implements ILogger {
   private createLogEntry(
     level: LogLevel,
     message: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): LogEntry {
     const entry: LogEntry = {
       timestamp: new Date().toISOString(),
@@ -300,7 +312,7 @@ export class Logger implements ILogger {
     }
   }
 
-  private processError(error?: Error | Record<string, any>): Record<string, any> {
+  private processError(error?: Error | Record<string, unknown>): Record<string, unknown> {
     if (!error) return {};
 
     if (error instanceof Error) {

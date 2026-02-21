@@ -139,7 +139,7 @@ module.exports = {
   /**
    * Enhance a feature toggle
    */
-  async enhanceFeatureToggle(featureName, enabled, api) {
+  async enhanceFeatureToggle(featureName, enabled, _api) {
     const enhancement = this.enhancements.get(featureName) || {
       abTest: false,
       analytics: false,

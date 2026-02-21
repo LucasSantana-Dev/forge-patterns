@@ -63,7 +63,10 @@ export class MetricsCollector {
       { count: number; min: number; max: number; avg: number; p95: number; p99: number }
     >;
   } {
-    const histograms: Record<string, any> = {};
+    const histograms: Record<
+      string,
+      { count: number; min: number; max: number; avg: number; p95: number; p99: number }
+    > = {};
 
     for (const [key, values] of this.histograms.entries()) {
       if (values.length === 0) continue;
@@ -135,7 +138,7 @@ export class DistributedTracer {
   private activeSpans = new Map<string, TracingSpan>();
   private rootSpan?: TracingSpan;
 
-  startSpan(name: string, context?: Record<string, any>): TracingSpan {
+  startSpan(name: string, context?: Record<string, unknown>): TracingSpan {
     const span: TracingSpan = {
       traceId: this.generateTraceId(),
       spanId: this.generateSpanId(),
@@ -189,11 +192,11 @@ export class DistributedTracer {
   setActiveSpan(span: TracingSpan): void {
     // In a real implementation, this would set the active span in context
     // For now, we'll just store it
-    (globalThis as any).__activeSpan = span;
+    (globalThis as Record<string, unknown>).__activeSpan = span;
   }
 
   getActiveSpan(): TracingSpan | undefined {
-    return (globalThis as any).__activeSpan;
+    return (globalThis as Record<string, unknown>).__activeSpan;
   }
 
   getCurrentTraceId(): string | undefined {
@@ -201,14 +204,14 @@ export class DistributedTracer {
     return activeSpan?.traceId;
   }
 
-  addTags(spanId: string, tags: Record<string, any>): void {
+  addTags(spanId: string, tags: Record<string, unknown>): void {
     const span = this.activeSpans.get(spanId);
     if (span) {
       span.tags = { ...span.tags, ...tags };
     }
   }
 
-  addEvent(spanId: string, name: string, attributes?: Record<string, any>): void {
+  addEvent(spanId: string, name: string, attributes?: Record<string, unknown>): void {
     const span = this.activeSpans.get(spanId);
     if (span) {
       span.events.push({
@@ -243,7 +246,7 @@ export interface TracingSpan {
   startTime: number;
   endTime?: number;
   duration?: number;
-  tags: Record<string, any>;
+  tags: Record<string, unknown>;
   events: TracingEvent[];
   status: 'ok' | 'error';
 }
@@ -251,7 +254,7 @@ export interface TracingSpan {
 export interface TracingEvent {
   timestamp: number;
   name: string;
-  attributes: Record<string, any>;
+  attributes: Record<string, unknown>;
 }
 
 /**
@@ -324,7 +327,7 @@ export interface HealthCheck {
 export interface HealthCheckResultData {
   healthy: boolean;
   message?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface HealthCheckResult {
@@ -333,7 +336,7 @@ export interface HealthCheckResult {
   message: string;
   duration: number;
   timestamp: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
 }
 
 export interface HealthReport {
@@ -437,13 +440,13 @@ export interface AlertRule {
   conditions: {
     level?: LogLevel;
     messagePattern?: string;
-    context?: Record<string, any>;
+    context?: Record<string, unknown>;
     rateLimit?: {
       maxAlerts: number;
       windowMs: number;
     };
   };
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export interface Alert {
@@ -453,5 +456,5 @@ export interface Alert {
   message: string;
   timestamp: string;
   logEntry: LogEntry;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
 }

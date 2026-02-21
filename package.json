@@ -85,12 +85,6 @@
       "prettier --write"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run validate"
-    }
-  },
   "keywords": [
     "patterns",
     "architecture",

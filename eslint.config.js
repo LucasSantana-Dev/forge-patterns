@@ -83,6 +83,9 @@ module.exports = [
       '@typescript-eslint': tsPlugin
     },
     rules: {
+      // Disable base rule for .ts files; @typescript-eslint/no-unused-vars handles it
+      // and understands enums, interfaces, type-only imports, etc.
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-require-imports': 'error'
     }
   },
@@ -95,7 +98,8 @@ module.exports = [
   {
     files: ['scripts/**/*.js'],
     rules: {
-      'no-console': 'off'
+      'no-console': 'off',
+      'no-magic-numbers': 'off'
     }
   },
   {
@@ -110,6 +114,13 @@ module.exports = [
       'no-magic-numbers': 'off',
       'no-else-return': 'warn',
       'no-empty-function': 'off'
+    }
+  },
+  {
+    files: ['patterns/**/*.ts'],
+    rules: {
+      // Keep base rule off for .ts - @typescript-eslint/no-unused-vars handles it
+      'no-unused-vars': 'off'
     }
   }
 ];
