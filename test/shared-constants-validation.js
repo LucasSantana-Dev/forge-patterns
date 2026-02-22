@@ -41,7 +41,9 @@ class SharedConstantsValidator {
     const base = path.join(__dirname, '../patterns/shared-constants');
     const required = [
       'index.ts', 'network.ts', 'mcp-protocol.ts', 'environments.ts',
-      'ai-providers.ts', 'feature-flags.ts', 'storage.ts', 'README.md'
+      'ai-providers.ts', 'feature-flags.ts', 'storage.ts',
+      'ports.ts', 'performance.ts', 'error-handling.ts', 'docker.ts', 'security.ts',
+      'README.md'
     ];
     for (const file of required) {
       await this.test(`File exists: ${file}`, async () => {
@@ -180,12 +182,133 @@ class SharedConstantsValidator {
     });
   }
 
+  async validatePortsConstants() {
+    const content = fs.readFileSync(
+      path.join(__dirname, '../patterns/shared-constants/ports.ts'), 'utf8'
+    );
+    await this.test('ports.ts: PORTS object with standard service ports', async () => {
+      this.assert(content.includes('PORTS'), 'Missing PORTS');
+      for (const p of ['APP_DEFAULT', 'GATEWAY', 'POSTGRES', 'REDIS', 'UNLEASH', 'PROMETHEUS']) {
+        this.assert(content.includes(p), `Missing port: ${p}`);
+      }
+    });
+    await this.test('ports.ts: localUrl helper function', async () => {
+      this.assert(content.includes('localUrl'), 'Missing localUrl helper');
+    });
+    await this.test('ports.ts: UNLEASH_URLS derived constants', async () => {
+      this.assert(content.includes('UNLEASH_URLS'), 'Missing UNLEASH_URLS');
+    });
+  }
+
+  async validatePerformanceConstants() {
+    const content = fs.readFileSync(
+      path.join(__dirname, '../patterns/shared-constants/performance.ts'), 'utf8'
+    );
+    await this.test('performance.ts: CACHE_DEFAULTS', async () => {
+      this.assert(content.includes('CACHE_DEFAULTS'), 'Missing CACHE_DEFAULTS');
+      this.assert(content.includes('MAX_SIZE') && content.includes('DEFAULT_TTL_MS'), 'Missing cache fields');
+    });
+    await this.test('performance.ts: POOL_DEFAULTS', async () => {
+      this.assert(content.includes('POOL_DEFAULTS'), 'Missing POOL_DEFAULTS');
+    });
+    await this.test('performance.ts: BATCH_DEFAULTS', async () => {
+      this.assert(content.includes('BATCH_DEFAULTS'), 'Missing BATCH_DEFAULTS');
+    });
+    await this.test('performance.ts: ALERT_THRESHOLDS', async () => {
+      this.assert(content.includes('ALERT_THRESHOLDS'), 'Missing ALERT_THRESHOLDS');
+    });
+    await this.test('performance.ts: FILE_SIZE_LIMITS', async () => {
+      this.assert(content.includes('FILE_SIZE_LIMITS'), 'Missing FILE_SIZE_LIMITS');
+    });
+  }
+
+  async validateErrorHandlingConstants() {
+    const content = fs.readFileSync(
+      path.join(__dirname, '../patterns/shared-constants/error-handling.ts'), 'utf8'
+    );
+    await this.test('error-handling.ts: RETRYABLE_STATUS_CODES', async () => {
+      this.assert(content.includes('RETRYABLE_STATUS_CODES'), 'Missing RETRYABLE_STATUS_CODES');
+      for (const c of ['429', '500', '502', '503', '504']) {
+        this.assert(content.includes(c), `Missing status code: ${c}`);
+      }
+    });
+    await this.test('error-handling.ts: RETRY_DEFAULTS', async () => {
+      this.assert(content.includes('RETRY_DEFAULTS'), 'Missing RETRY_DEFAULTS');
+      this.assert(content.includes('MAX_ATTEMPTS') && content.includes('BACKOFF_FACTOR'), 'Missing retry fields');
+    });
+    await this.test('error-handling.ts: CIRCUIT_BREAKER_DEFAULTS', async () => {
+      this.assert(content.includes('CIRCUIT_BREAKER_DEFAULTS'), 'Missing CIRCUIT_BREAKER_DEFAULTS');
+    });
+    await this.test('error-handling.ts: ERROR_CATEGORIES', async () => {
+      this.assert(content.includes('ERROR_CATEGORIES'), 'Missing ERROR_CATEGORIES');
+    });
+  }
+
+  async validateDockerConstants() {
+    const content = fs.readFileSync(
+      path.join(__dirname, '../patterns/shared-constants/docker.ts'), 'utf8'
+    );
+    await this.test('docker.ts: HEALTH_CHECK_DEFAULTS', async () => {
+      this.assert(content.includes('HEALTH_CHECK_DEFAULTS'), 'Missing HEALTH_CHECK_DEFAULTS');
+      this.assert(content.includes('INTERVAL_S') && content.includes('RETRIES'), 'Missing fields');
+    });
+    await this.test('docker.ts: RESTART_POLICIES', async () => {
+      this.assert(content.includes('RESTART_POLICIES'), 'Missing RESTART_POLICIES');
+    });
+    await this.test('docker.ts: DEV_DATABASE uses placeholder password', async () => {
+      this.assert(content.includes('DEV_DATABASE'), 'Missing DEV_DATABASE');
+      this.assert(content.includes('REPLACE_WITH'), 'Must use REPLACE_WITH placeholder');
+    });
+  }
+
+  async validateSecurityConstants() {
+    const content = fs.readFileSync(
+      path.join(__dirname, '../patterns/shared-constants/security.ts'), 'utf8'
+    );
+    await this.test('security.ts: RATE_LIMIT_DEFAULTS', async () => {
+      this.assert(content.includes('RATE_LIMIT_DEFAULTS'), 'Missing RATE_LIMIT_DEFAULTS');
+    });
+    await this.test('security.ts: HSTS_DEFAULTS', async () => {
+      this.assert(content.includes('HSTS_DEFAULTS'), 'Missing HSTS_DEFAULTS');
+    });
+    await this.test('security.ts: REDACTED_FIELDS', async () => {
+      this.assert(content.includes('REDACTED_FIELDS'), 'Missing REDACTED_FIELDS');
+      for (const f of ['password', 'token', 'secret', 'apiKey']) {
+        this.assert(content.includes(`'${f}'`), `Missing redacted field: ${f}`);
+      }
+    });
+    await this.test('security.ts: DEV_CORS_ORIGINS', async () => {
+      this.assert(content.includes('DEV_CORS_ORIGINS'), 'Missing DEV_CORS_ORIGINS');
+    });
+  }
+
+  async validateNetworkExtensions() {
+    const content = fs.readFileSync(
+      path.join(__dirname, '../patterns/shared-constants/network.ts'), 'utf8'
+    );
+    await this.test('network.ts: HEALTH_CHECK_INTERVAL_MS', async () => {
+      this.assert(content.includes('HEALTH_CHECK_INTERVAL_MS') && content.includes('30_000'), 'Wrong value');
+    });
+    await this.test('network.ts: METRICS_INTERVAL_MS', async () => {
+      this.assert(content.includes('METRICS_INTERVAL_MS') && content.includes('60_000'), 'Wrong value');
+    });
+    await this.test('network.ts: CLIENT_INIT_TIMEOUT_MS', async () => {
+      this.assert(content.includes('CLIENT_INIT_TIMEOUT_MS') && content.includes('10_000'), 'Wrong value');
+    });
+    await this.test('network.ts: CONNECTION_TIMEOUT_MS', async () => {
+      this.assert(content.includes('CONNECTION_TIMEOUT_MS') && content.includes('30_000'), 'Wrong value');
+    });
+  }
+
   async validateBarrelIndex() {
     const content = fs.readFileSync(
       path.join(__dirname, '../patterns/shared-constants/index.ts'), 'utf8'
     );
     await this.test('index.ts: re-exports all modules', async () => {
-      for (const m of ['network','mcp-protocol','environments','ai-providers','feature-flags','storage']) {
+      for (const m of [
+        'network','mcp-protocol','environments','ai-providers','feature-flags','storage',
+        'ports','performance','error-handling','docker','security'
+      ]) {
         this.assert(content.includes(`./${m}`), `Missing re-export: ${m}`);
       }
     });
@@ -220,6 +343,12 @@ class SharedConstantsValidator {
     await this.validateAiProvidersConstants();
     await this.validateFeatureFlagsPattern();
     await this.validateStoragePattern();
+    await this.validatePortsConstants();
+    await this.validatePerformanceConstants();
+    await this.validateErrorHandlingConstants();
+    await this.validateDockerConstants();
+    await this.validateSecurityConstants();
+    await this.validateNetworkExtensions();
     await this.validateBarrelIndex();
     await this.validateNoSecrets();
     this.log('='.repeat(60));
