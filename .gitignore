@@ -93,3 +93,22 @@ site/
 # Security tools
 .snyk/
 bandit-report.json
+
+# Claude-related files
+CLAUDE.md
+CLAUDE-SETUP.md
+CLAUDE-CODE*.md
+CLAUDE-*.md
+SuperClaude_Framework/
+awesome-claude-code/
+awesome-claude-code-subagents/
+claude-code-hooks-mastery/
+claudecodeui/
+start-claude-code-ui.sh
+install-claude-code-global.sh
+setup-claude-code-phase2.sh
+verify-claude-code-phase2.sh
+
+# Claude Code configuration (user-specific)
+.claude/
+~/.claude/
