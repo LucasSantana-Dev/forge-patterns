@@ -16,3 +16,8 @@ export * from './environments.js';
 export * from './ai-providers.js';
 export * from './feature-flags.js';
 export * from './storage.js';
+export * from './ports.js';
+export * from './performance.js';
+export * from './error-handling.js';
+export * from './docker.js';
+export * from './security.js';

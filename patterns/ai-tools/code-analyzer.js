@@ -102,7 +102,7 @@ class AICodeAnalyzer {
 
       return analysis;
     } catch (error) {
-      throw new Error(`Failed to analyze file ${filePath}: ${error.message}`);
+      throw new Error(`Failed to analyze file ${filePath}: ${error.message}`, { cause: error });
     }
   }
 
@@ -166,7 +166,9 @@ class AICodeAnalyzer {
 
       return projectAnalysis;
     } catch (error) {
-      throw new Error(`Failed to analyze project ${projectPath}: ${error.message}`);
+      throw new Error(`Failed to analyze project ${projectPath}: ${error.message}`, {
+        cause: error
+      });
     }
   }
 
@@ -226,7 +228,7 @@ class AICodeAnalyzer {
 
       return { fixed: false, modifications: 0 };
     } catch (error) {
-      throw new Error(`Failed to auto-fix file ${filePath}: ${error.message}`);
+      throw new Error(`Failed to auto-fix file ${filePath}: ${error.message}`, { cause: error });
     }
   }
 
@@ -573,7 +575,7 @@ class AICodeAnalyzer {
     };
 
     for (const [name, metric] of this.qualityMetrics) {
-      let value = 0;
+      let value;
 
       switch (metric.measurement) {
         case 'lines':

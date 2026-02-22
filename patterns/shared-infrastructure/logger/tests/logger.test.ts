@@ -1,30 +1,28 @@
 import {
   LoggerFactory,
   LogLevel,
-  ConsoleTransport,
-  JsonTransport,
   ConfigBuilder,
   MetricsCollector,
   DistributedTracer,
   HealthChecker
 } from '../src/index.js';
-import type { LoggerTransport } from '../src/types.js';
+import type { LoggerTransport, LogEntry } from '../src/types.js';
 
 // Mock transport for testing
 class MockTransport implements LoggerTransport {
   name = 'mock';
   level: LogLevel;
-  public logs: any[] = [];
+  public logs: LogEntry[] = [];
 
   constructor(level: LogLevel = LogLevel.TRACE) {
     this.level = level;
   }
 
-  format(entry: any): string {
+  format(entry: LogEntry): string {
     return JSON.stringify(entry);
   }
 
-  write(entry: any): void {
+  write(entry: LogEntry): void {
     if (entry.level >= this.level) {
       this.logs.push(entry);
     }

@@ -19,7 +19,7 @@ export interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   correlationId?: string;
   service?: string;
   version?: string;
@@ -62,7 +62,7 @@ export interface LoggerConfig {
   enableTracing: boolean;
   transports?: LoggerTransport[];
   redactFields?: string[];
-  defaultContext?: Record<string, any>;
+  defaultContext?: Record<string, unknown>;
 }
 
 /**
@@ -80,10 +80,14 @@ export interface LoggerMetrics {
  * Performance Tracking Interface
  */
 export interface PerformanceTracker {
-  start(operation: string, context?: Record<string, any>): string;
-  end(trackingId: string, context?: Record<string, any>): void;
-  track<T>(operation: string, fn: () => T, context?: Record<string, any>): T;
-  trackAsync<T>(operation: string, fn: () => Promise<T>, context?: Record<string, any>): Promise<T>;
+  start(operation: string, context?: Record<string, unknown>): string;
+  end(trackingId: string, context?: Record<string, unknown>): void;
+  track<T>(operation: string, fn: () => T, context?: Record<string, unknown>): T;
+  trackAsync<T>(
+    operation: string,
+    fn: () => Promise<T>,
+    context?: Record<string, unknown>
+  ): Promise<T>;
 }
 
 /**
@@ -103,20 +107,28 @@ export interface CorrelationContext {
  * Main logger contract
  */
 export interface ILogger {
-  trace(message: string, context?: Record<string, any>): void;
-  debug(message: string, context?: Record<string, any>): void;
-  info(message: string, context?: Record<string, any>): void;
-  warn(message: string, context?: Record<string, any>): void;
-  error(message: string, error?: Error | Record<string, any>, context?: Record<string, any>): void;
-  fatal(message: string, error?: Error | Record<string, any>, context?: Record<string, any>): void;
+  trace(message: string, context?: Record<string, unknown>): void;
+  debug(message: string, context?: Record<string, unknown>): void;
+  info(message: string, context?: Record<string, unknown>): void;
+  warn(message: string, context?: Record<string, unknown>): void;
+  error(
+    message: string,
+    error?: Error | Record<string, unknown>,
+    context?: Record<string, unknown>
+  ): void;
+  fatal(
+    message: string,
+    error?: Error | Record<string, unknown>,
+    context?: Record<string, unknown>
+  ): void;
 
   // Performance tracking
-  startTimer(operation: string, context?: Record<string, any>): string;
-  endTimer(trackingId: string, context?: Record<string, any>): void;
+  startTimer(operation: string, context?: Record<string, unknown>): string;
+  endTimer(trackingId: string, context?: Record<string, unknown>): void;
 
   // Context management
-  setContext(context: Record<string, any>): void;
-  getContext(): Record<string, any>;
+  setContext(context: Record<string, unknown>): void;
+  getContext(): Record<string, unknown>;
   clearContext(): void;
 
   // Correlation management
@@ -125,7 +137,7 @@ export interface ILogger {
   clearCorrelation(): void;
 
   // Child logger with context
-  child(context: Record<string, any>): ILogger;
+  child(context: Record<string, unknown>): ILogger;
 
   // Metrics and health
   getMetrics(): LoggerMetrics;

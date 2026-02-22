@@ -38,6 +38,11 @@ mkdir -p "$PROJECT_ROOT/patterns/feature-toggles"
 cp -r "$FORGE_PATTERNS_DIR/patterns/code-quality/"* "$PROJECT_ROOT/patterns/code-quality/"
 cp -r "$FORGE_PATTERNS_DIR/patterns/feature-toggles/"* "$PROJECT_ROOT/patterns/feature-toggles/"
 
+# Copy shared constants
+echo "📋 Copying shared constants..."
+mkdir -p "$PROJECT_ROOT/patterns/shared-constants"
+cp -r "$FORGE_PATTERNS_DIR/patterns/shared-constants/"* "$PROJECT_ROOT/patterns/shared-constants/"
+
 # Copy configuration files
 echo "⚙️ Copying configuration files..."
 cp "$FORGE_PATTERNS_DIR/.eslintrc.js" "$PROJECT_ROOT/"
@@ -75,8 +80,13 @@ fi
 echo "📄 Creating integration example..."
 cat > "$PROJECT_ROOT/examples/uiforge-webapp-integration.js" << 'EOF'
 // UIForge WebApp Integration Example
+// Uses centralized shared-constants from @forgespace/core
 import { FeatureToggleManager } from '../patterns/feature-toggles/libraries/nodejs';
 import { ESLintConfig } from '../patterns/code-quality/eslint/base.config';
+import {
+  PORTS,
+  FEATURE_REFRESH_INTERVAL_MS,
+} from '../patterns/shared-constants/index.js';
 
 // Initialize Forge Patterns in Next.js app
 const featureToggleManager = new FeatureToggleManager({

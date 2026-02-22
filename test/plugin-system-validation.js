@@ -44,7 +44,7 @@ class PluginSystemValidator {
       await fs.access(pluginManagerPath);
       
       this.addTestResult(testName, true, 'Plugin manager file exists');
-    } catch (error) {
+    } catch (_error) {
       this.addTestResult(testName, false, 'Plugin manager file not found');
     }
   }

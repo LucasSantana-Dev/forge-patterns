@@ -63,6 +63,11 @@ mkdir -p "$PROJECT_ROOT/patterns/shared-infrastructure"
 cp -r "$FORGE_PATTERNS_DIR/patterns/mcp-gateway/"* "$PROJECT_ROOT/patterns/mcp-gateway/"
 cp -r "$FORGE_PATTERNS_DIR/patterns/shared-infrastructure/"* "$PROJECT_ROOT/patterns/shared-infrastructure/"
 
+# Copy shared constants
+echo "📋 Copying shared constants..."
+mkdir -p "$PROJECT_ROOT/patterns/shared-constants"
+cp -r "$FORGE_PATTERNS_DIR/patterns/shared-constants/"* "$PROJECT_ROOT/patterns/shared-constants/"
+
 # Copy configuration files
 echo "⚙️ Copying configuration files..."
 cp "$FORGE_PATTERNS_DIR/.eslintrc.js" "$PROJECT_ROOT/"
@@ -102,10 +107,22 @@ fi
 echo "📄 Creating integration example..."
 cat > "$PROJECT_ROOT/examples/mcp-gateway-integration.js" << 'EOF'
 // MCP Gateway Integration Example
+// Uses centralized shared-constants from @forgespace/core
 import { CoreRouter } from '../patterns/mcp-gateway/routing/core-router';
 import { SecurityHeaders } from '../patterns/mcp-gateway/security/security-headers';
 import { ResponseCache } from '../patterns/mcp-gateway/performance/response-cache';
 import { APIKeyManager } from '../patterns/mcp-gateway/security/api-key-manager';
+import {
+  PORTS,
+  HEALTH_CHECK_INTERVAL_MS,
+  HEALTH_CHECK_TIMEOUT_MS,
+  MAX_RETRIES,
+  RETRY_DELAY_MS,
+  RETRYABLE_STATUS_CODES,
+  CONNECTION_TIMEOUT_MS,
+  DEFAULT_TIMEOUT_MS,
+  CACHE_DEFAULTS,
+} from '../patterns/shared-constants/index.js';
 
 // Initialize MCP Gateway with Forge Patterns
 const router = new CoreRouter({
@@ -116,7 +133,7 @@ const router = new CoreRouter({
       method: 'POST',
       target: {
         serviceId: 'ui-generation-service',
-        endpoint: 'http://ui-generation-service:3000',
+        endpoint: `http://ui-generation-service:${PORTS.APP_DEFAULT}`,
         weight: 1,
         healthy: true,
         lastHealthCheck: new Date(),
@@ -130,29 +147,29 @@ const router = new CoreRouter({
   loadBalancer: 'response_time_based',
   healthCheck: {
     enabled: true,
-    interval: 30000,
-    timeout: 5000,
+    interval: HEALTH_CHECK_INTERVAL_MS,
+    timeout: HEALTH_CHECK_TIMEOUT_MS,
     path: '/health',
     expectedStatus: 200,
-    retries: 3,
+    retries: MAX_RETRIES,
   },
   retryPolicy: {
     enabled: true,
-    maxRetries: 3,
-    backoffMs: 1000,
-    retryableStatusCodes: [500, 502, 503, 504],
+    maxRetries: MAX_RETRIES,
+    backoffMs: RETRY_DELAY_MS,
+    retryableStatusCodes: [...RETRYABLE_STATUS_CODES],
   },
   timeoutPolicy: {
-    connect: 5000,
-    request: 30000,
-    response: 60000,
+    connect: CONNECTION_TIMEOUT_MS,
+    request: DEFAULT_TIMEOUT_MS,
+    response: DEFAULT_TIMEOUT_MS,
   },
 });
 
 const cache = new ResponseCache({
-  maxSize: 1000,
-  defaultTTL: 300000,
-  cleanupInterval: 60000,
+  maxSize: CACHE_DEFAULTS.MAX_SIZE,
+  defaultTTL: CACHE_DEFAULTS.DEFAULT_TTL_MS,
+  cleanupInterval: CACHE_DEFAULTS.CLEANUP_INTERVAL_MS,
   compressionEnabled: true,
   metricsEnabled: true,
 });

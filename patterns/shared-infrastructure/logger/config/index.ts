@@ -278,7 +278,7 @@ export class ConfigBuilder {
     return this;
   }
 
-  defaultContext(context: Record<string, any>): ConfigBuilder {
+  defaultContext(context: Record<string, unknown>): ConfigBuilder {
     this.config.defaultContext = context;
     return this;
   }

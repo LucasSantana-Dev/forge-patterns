@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-02-22
+
+### Added
+
+- **`patterns/shared-constants/ports.ts`**: Centralized service port registry — `PORTS` object with APP, GATEWAY, POSTGRES, REDIS, UNLEASH, PROMETHEUS defaults; `localUrl()` helper; `UNLEASH_URLS` derived constants
+- **`patterns/shared-constants/performance.ts`**: Cache, connection pool, batch processing, alert thresholds, and file size limit constants (`CACHE_DEFAULTS`, `POOL_DEFAULTS`, `BATCH_DEFAULTS`, `ALERT_THRESHOLDS`, `FILE_SIZE_LIMITS`)
+- **`patterns/shared-constants/error-handling.ts`**: Retryable HTTP status codes, retry policy defaults with exponential backoff, and circuit breaker configuration (`RETRYABLE_STATUS_CODES`, `RETRY_DEFAULTS`, `CIRCUIT_BREAKER_DEFAULTS`, `ERROR_CATEGORIES`)
+- **`patterns/shared-constants/docker.ts`**: Docker health-check timings, restart policies, and dev database configuration (`HEALTH_CHECK_DEFAULTS`, `RESTART_POLICIES`, `DEV_DATABASE`)
+- **`patterns/shared-constants/security.ts`**: Rate-limit windows, HSTS headers, CORS origins, and log field redaction lists (`RATE_LIMIT_DEFAULTS`, `HSTS_DEFAULTS`, `REDACTED_FIELDS`, `DEV_CORS_ORIGINS`)
+- **`patterns/shared-constants/network.ts`**: Extended with health-check intervals, feature-toggle refresh, metrics collection, client initialization timeout, and connection timeout constants
+
+### Changed
+
+- **`patterns/shared-constants/index.ts`**: Barrel export updated to re-export all 11 modules (6 existing + 5 new)
+- **`scripts/integrate-mcp-gateway.sh`**: Now copies `shared-constants/` directory and updates integration example to import centralized constants
+- **`scripts/integrate-uiforge-mcp.sh`**: Now copies `shared-constants/` directory and updates integration example to import centralized constants
+- **`scripts/integrate-uiforge-webapp.sh`**: Now copies `shared-constants/` directory and updates integration example to import centralized constants
+- **`.github/workflows/publish.yml`**: Configured npm trusted publishing with OIDC provenance via `npm` environment
+
 ## [1.1.2] - 2026-02-18
 
 ### Added

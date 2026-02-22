@@ -27,3 +27,25 @@ export const AI_ROUTER_DEFAULT_WEIGHT = 0.7;
 export const MAX_TOOLS_SEARCH = 10;
 
 export const DEFAULT_TOP_N = 1;
+
+// ---------------------------------------------------------------------------
+// Health-check & polling intervals
+// ---------------------------------------------------------------------------
+
+/** Health-check probe interval in milliseconds (30 seconds). */
+export const HEALTH_CHECK_INTERVAL_MS = 30_000;
+
+/** Health-check probe timeout in milliseconds (5 seconds). */
+export const HEALTH_CHECK_TIMEOUT_MS = 5_000;
+
+/** Feature-toggle refresh interval in milliseconds (30 seconds). */
+export const FEATURE_REFRESH_INTERVAL_MS = 30_000;
+
+/** Feature-toggle / analytics metrics flush interval in milliseconds (1 minute). */
+export const METRICS_INTERVAL_MS = 60_000;
+
+/** Client initialization timeout in milliseconds (10 seconds). */
+export const CLIENT_INIT_TIMEOUT_MS = 10_000;
+
+/** Default connection timeout in milliseconds (30 seconds). */
+export const CONNECTION_TIMEOUT_MS = 30_000;

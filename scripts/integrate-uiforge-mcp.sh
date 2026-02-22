@@ -63,6 +63,11 @@ mkdir -p "$PROJECT_ROOT/patterns/shared-infrastructure"
 cp -r "$FORGE_PATTERNS_DIR/patterns/mcp-servers/"* "$PROJECT_ROOT/patterns/mcp-servers/"
 cp -r "$FORGE_PATTERNS_DIR/patterns/shared-infrastructure/"* "$PROJECT_ROOT/patterns/shared-infrastructure/"
 
+# Copy shared constants
+echo "📋 Copying shared constants..."
+mkdir -p "$PROJECT_ROOT/patterns/shared-constants"
+cp -r "$FORGE_PATTERNS_DIR/patterns/shared-constants/"* "$PROJECT_ROOT/patterns/shared-constants/"
+
 # Copy configuration files
 echo "⚙️ Copying configuration files..."
 cp "$FORGE_PATTERNS_DIR/.eslintrc.js" "$PROJECT_ROOT/"
@@ -101,19 +106,28 @@ fi
 echo "📄 Creating integration example..."
 cat > "$PROJECT_ROOT/examples/uiforge-mcp-integration.js" << 'EOF'
 // UIForge MCP Integration Example
+// Uses centralized shared-constants from @forgespace/core
 import { AIProviderManager } from '../patterns/mcp-servers/ai-providers/ai-provider-manager';
 import { TemplateManager } from '../patterns/mcp-servers/templates/template-manager';
 import { PerformanceMonitor } from '../patterns/mcp-gateway/performance/performance-monitor';
+import {
+  METRICS_INTERVAL_MS,
+  HEALTH_CHECK_INTERVAL_MS,
+  HEALTH_CHECK_TIMEOUT_MS,
+  ALERT_THRESHOLDS,
+  DEFAULT_MAX_TOKENS,
+  DEFAULT_TEMPERATURE,
+} from '../patterns/shared-constants/index.js';
 
 // Initialize MCP Server with Forge Patterns
 const providerManager = new AIProviderManager();
 const templateManager = new TemplateManager();
 const monitor = new PerformanceMonitor({
-  metricsInterval: 10000,
+  metricsInterval: METRICS_INTERVAL_MS,
   latencyHistorySize: 1000,
   alertThresholds: {
-    latency: 1000,
-    errorRate: 5,
+    latency: ALERT_THRESHOLDS.LATENCY_WARNING_MS,
+    errorRate: ALERT_THRESHOLDS.ERROR_RATE_PERCENT,
     throughput: 10,
     memoryUsage: 80,
     cpuUsage: 70,
@@ -151,8 +165,8 @@ await providerManager.registerProvider({
   ],
   healthCheck: {
     enabled: true,
-    interval: 30000,
-    timeout: 5000,
+    interval: HEALTH_CHECK_INTERVAL_MS,
+    timeout: HEALTH_CHECK_TIMEOUT_MS,
     endpoint: '/models',
   },
 });
@@ -285,8 +299,8 @@ export class MCPUIGenerationServer {
         request.prompt,
         {
           model: request.model || 'gpt-4',
-          temperature: 0.7,
-          maxTokens: request.maxTokens || 2000,
+          temperature: DEFAULT_TEMPERATURE,
+          maxTokens: request.maxTokens || DEFAULT_MAX_TOKENS,
         },
         request.preferredProvider
       );

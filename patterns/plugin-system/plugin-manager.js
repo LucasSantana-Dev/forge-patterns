@@ -368,7 +368,7 @@ class PluginManager extends EventEmitter {
       await fs.writeFile(configPath, JSON.stringify(config, null, 2));
       return config;
     } catch (error) {
-      throw new Error(`Failed to set plugin config: ${error.message}`);
+      throw new Error(`Failed to set plugin config: ${error.message}`, { cause: error });
     }
   }
 

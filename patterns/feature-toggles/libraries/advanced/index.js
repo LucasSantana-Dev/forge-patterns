@@ -534,7 +534,7 @@ class AdvancedFeatureToggles {
     return { completed: false, nextPhase: strategy.currentPhase };
   }
 
-  executeInstantRollout(strategy, phase) {
+  executeInstantRollout(strategy, _phase) {
     strategy.results.rolloutProgress = 100;
     strategy.results.userImpact = {
       affectedUsers: 'all',
@@ -696,7 +696,7 @@ class AdvancedFeatureToggles {
           this.abTests.set(test.featureName, test);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.log('No A/B test configurations found, using defaults');
     }
   }
