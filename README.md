@@ -595,21 +595,34 @@ This repository is designed to be **completely public** with zero secrets:
 
 We welcome contributions to Forge Space Patterns! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
 
+### Branch Flow (Enforced)
+
+The following flow is **mandatory** and enforced by CI/CD:
+
+```
+feature/* or fix/*  →  PR to release/X.Y.Z
+        ↓
+release/X.Y.Z       →  PR to main
+        ↓
+main                →  Automated npm publish + GitHub release
+```
+
 ### Contribution Process
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run all validation scripts
-5. Submit a pull request
+1. Create a branch: `git checkout -b feature/my-feature` (or `fix/`, `chore/`, `docs/`)
+2. Make your changes following conventional commits
+3. Run validation: `npm run lint:check && npm test && npm run build`
+4. Open a PR targeting the appropriate `release/X.Y.Z` branch
+5. After CodeRabbit review and CI pass, merge to release branch
+6. Open a PR from `release/X.Y.Z` to `main` — merge triggers automated npm publish
 
 ### Requirements for Contributions
 
-- ✅ Follow security guidelines (no secrets)
-- ✅ Pass all automated tests
-- ✅ Maintain 80% test coverage
-- ✅ Follow conventional commit format
-- ✅ Update documentation as needed
+- ✅ Branch naming: `feature/*`, `fix/*`, `chore/*`, `docs/*`, `refactor/*`, `test/*`
+- ✅ Follow security guidelines (no secrets, no credentials)
+- ✅ Pass all automated tests (80% coverage minimum)
+- ✅ Follow conventional commit format (`feat:`, `fix:`, `chore:`, etc.)
+- ✅ Update CHANGELOG.md and README.md with changes
 
 ## 📄 License
 

@@ -104,8 +104,111 @@ jobs:
             fi
           fi
 
-  pre-release-validation:
-    name: Pre-Release Validation
+  pre-commit:
+    name: Pre-commit Checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run type checking
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm test
+
+      - name: Security audit
+        run: npm audit --audit-level high
+
+  docs-validation:
+    name: Documentation Validation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check README exists
+        run: |
+          if [[ ! -f README.md ]]; then
+            echo "❌ README.md is required"
+            exit 1
+          fi
+
+      - name: Validate README structure
+        run: |
+          # Check for basic README sections
+          README_CONTENT=$(cat README.md)
+          REQUIRED_SECTIONS=("Installation" "Usage" "Contributing")
+
+          for SECTION in "${REQUIRED_SECTIONS[@]}"; do
+            if ! echo "$README_CONTENT" | grep -q "$SECTION"; then
+              echo "❌ README.md missing $SECTION section"
+              exit 1
+            fi
+          done
+
+      - name: Check API documentation
+        run: |
+          # Check if there are API docs
+          if [[ -d docs ]]; then
+            echo "✅ Documentation directory found"
+
+            # Check for index file
+            if [[ ! -f docs/index.md && ! -f docs/README.md ]]; then
+              echo "⚠️ Consider adding docs/index.md or docs/README.md"
+            fi
+          else
+            echo "⚠️ Consider adding docs/ directory for API documentation"
+          fi
+
+      - name: Validate CHANGELOG
+        run: |
+          if [[ -f CHANGELOG.md ]]; then
+            # Check CHANGELOG format
+            if ! head -10 CHANGELOG.md | grep -q "^## "; then
+              echo "❌ CHANGELOG.md should start with version headers (## [version])"
+              exit 1
+            fi
+          else
+            echo "⚠️ Consider adding CHANGELOG.md for version history"
+          fi
+
+  enforce-main-merge-policy:
+    name: Enforce Main Merge Policy
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+
+    steps:
+      - name: Only release branches may merge to main
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if [[ ! "$BRANCH" =~ ^release/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ Only release/X.Y.Z branches may merge directly to main"
+            echo "Current branch: $BRANCH"
+            echo ""
+            echo "Required flow: feature/* or fix/* → release/X.Y.Z → main"
+            exit 1
+          fi
+          echo "✅ Release branch confirmed: $BRANCH"
+
+  release-validation:
+    name: Release Validation
     runs-on: ubuntu-latest
     if: startsWith(github.head_ref, 'release/')
 

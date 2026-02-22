@@ -14,7 +14,7 @@ jobs:
     name: Daily Security Monitoring
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Comprehensive Security Scan
         run: |
@@ -39,7 +39,7 @@ jobs:
           echo "=================================" >> security-dashboard.txt
 
       - name: Upload Security Dashboard
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: security-dashboard
           path: security-dashboard.txt
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.schedule == '0 6 * * 1' # Only on Mondays
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Generate Weekly Security Report
         run: |
@@ -68,7 +68,7 @@ jobs:
           echo "- Update security tools as needed" >> weekly-security-report.md
 
       - name: Upload Weekly Report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: weekly-security-report
           path: weekly-security-report.md

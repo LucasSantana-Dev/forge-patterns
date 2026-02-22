@@ -1,21 +1,26 @@
-## [1.2.1] - 2026-02-20
+## [1.2.1] - 2026-02-22
 
-### Features
+### Added
+- CodeRabbit AI code review configuration (`.coderabbit.yaml`) with TypeScript, shell, and workflow-specific review rules
+- Branch protection enforcement: only `release/X.Y.Z` branches may merge directly to `main`
 - Automated release workflow implementation
-- Enhanced dependency management
-- Improved quality gates and validation
 - **Trunk-Based Development Workflow**: Standardized CI/CD workflow across all Forge projects
 
-### Fixes
-- Fixed version bumping issues
-- Resolved build validation problems
-- Fixed package.json JSON syntax errors
-- Resolved merge conflicts during release process
+### Fixed
+- **Critical**: Typo in `release.yml` that prevented npm publish automation (`$ITHUB_OUTPUT` → `$GITHUB_OUTPUT`)
+- Missing `install` keyword in `ci.yml` apt-get command for shfmt
+- Invalid `actions/checkout@v6` and `actions/upload-artifact@v6` in `continuous-security.yml` (updated to v4)
+- Replaced deprecated `actions/create-release@v1` with `softprops/action-gh-release@v1`
+- Removed `release-automation.yml` that published to npm on every push to main
+- Fixed version bumping and build validation issues
+
+### Changed
+- `publish.yml` converted to manual `workflow_dispatch` trigger (emergency use only) with version verification
+- Node.js engines requirement updated to `>=24.0.0`, npm to `>=10.0.0`
 
 ### Documentation
-- Updated release procedures
-- Added automation documentation
-- **Development Workflow Rule**: Established Feature → Release → Main → Deploy pattern as mandatory across ecosystem
+- Updated release flow documentation: `feature/*` or `fix/*` → `release/X.Y.Z` → `main` → npm publish
+- Established Feature → Release → Main → Deploy pattern as mandatory across ecosystem
 
 ---
 

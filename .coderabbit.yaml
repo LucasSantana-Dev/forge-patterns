@@ -1,0 +1,66 @@
+language: en-US
+tone_instructions: "Professional, security-conscious, and focused on ecosystem consistency"
+
+early_access: true
+
+reviews:
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+      - "DRAFT"
+    drafts: false
+    base_branches:
+      - main
+      - "release/**"
+
+  tools:
+    github_checks:
+      enabled: true
+      timeout_ms: 90000
+    ast-grep:
+      enabled: true
+    shellcheck:
+      enabled: true
+    yamllint:
+      enabled: true
+    markdownlint:
+      enabled: true
+    gitleaks:
+      enabled: true
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  learnings:
+    scope: repository
+  opt_in: true
+
+path_instructions:
+  - path: ".github/workflows/**"
+    instructions: "Validate workflow syntax. Check for secret handling, deprecated actions (max checkout@v4, upload-artifact@v4), and missing permissions blocks."
+  - path: "src/**/*.ts"
+    instructions: "Enforce strict TypeScript typing. Flag path traversal risks, injection vulnerabilities, and unsafe use of user-controlled input."
+  - path: "scripts/**/*.sh"
+    instructions: "Verify shellcheck compliance. Ensure set -euo pipefail, proper quoting, and no exposed secrets."
+  - path: "patterns/**"
+    instructions: "Verify patterns follow ecosystem conventions and include complete documentation."
+  - path: "test/**"
+    instructions: "Ensure tests cover business logic, edge cases, and error conditions. Flag trivial getter/setter tests."
+
+exclude:
+  - "dist/**"
+  - "node_modules/**"
+  - "coverage/**"
+  - "*.lock"
+  - "package-lock.json"
+  - ".claude/**"
+  - ".git/**"

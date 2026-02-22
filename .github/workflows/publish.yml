@@ -1,9 +1,12 @@
-name: Publish to npm
+name: Publish to npm (Manual)
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 1.2.1) — must match package.json"
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -27,6 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify version matches input
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if [[ "$PACKAGE_VERSION" != "${{ inputs.version }}" ]]; then
+            echo "❌ package.json version ($PACKAGE_VERSION) does not match input (${{ inputs.version }})"
+            exit 1
+          fi
+          echo "✅ Version $PACKAGE_VERSION confirmed"
+
       - name: Build
         run: npm run build
 
@@ -35,3 +47,5 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
