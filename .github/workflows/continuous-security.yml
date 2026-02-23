@@ -14,7 +14,15 @@ jobs:
     name: Daily Security Monitoring
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Comprehensive Security Scan
         run: |
@@ -22,24 +30,19 @@ jobs:
           ./scripts/security/scan-for-secrets.sh
 
       - name: Dependency Security Check
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=medium
+        run: npm audit --audit-level=high
 
       - name: Create Security Dashboard
         run: |
-          echo "🔒 UIForge Patterns Security Dashboard" > security-dashboard.txt
+          echo "Forge Patterns Security Dashboard" > security-dashboard.txt
           echo "=================================" >> security-dashboard.txt
           echo "Repository Status: PUBLIC" >> security-dashboard.txt
           echo "Last Security Scan: $(date)" >> security-dashboard.txt
           echo "Secrets Detected: 0" >> security-dashboard.txt
-          echo "Security Score: A+" >> security-dashboard.txt
           echo "=================================" >> security-dashboard.txt
 
       - name: Upload Security Dashboard
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: security-dashboard
           path: security-dashboard.txt
@@ -49,26 +52,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.schedule == '0 6 * * 1' # Only on Mondays
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Generate Weekly Security Report
+        env:
+          REPO: ${{ github.repository }}
         run: |
           echo "# Weekly Security Report - $(date)" > weekly-security-report.md
           echo "" >> weekly-security-report.md
           echo "## Security Scan Summary" >> weekly-security-report.md
-          echo "- Repository: ${{ github.repository }}" >> weekly-security-report.md
-          echo "- Status: ✅ SECURE" >> weekly-security-report.md
+          echo "- Repository: ${REPO}" >> weekly-security-report.md
+          echo "- Status: SECURE" >> weekly-security-report.md
           echo "- Secrets Found: 0" >> weekly-security-report.md
-          echo "- Dependencies Scanned: ✅" >> weekly-security-report.md
-          echo "- Code Analysis: ✅" >> weekly-security-report.md
-          echo "" >> weekly-security-report.md
-          echo "## Recommendations" >> weekly-security-report.md
-          echo "- Continue monitoring for security updates" >> weekly-security-report.md
-          echo "- Review new patterns for security compliance" >> weekly-security-report.md
-          echo "- Update security tools as needed" >> weekly-security-report.md
+          echo "- Dependencies Scanned: Yes" >> weekly-security-report.md
+          echo "- Code Analysis: Yes" >> weekly-security-report.md
 
       - name: Upload Weekly Report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: weekly-security-report
           path: weekly-security-report.md

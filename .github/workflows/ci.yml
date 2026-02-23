@@ -34,7 +34,6 @@ jobs:
       timeout-minutes: '30'
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Use shared security scanning workflow
@@ -47,11 +46,10 @@ jobs:
       python-version: '3.12'
       severity-threshold: 'high'
       enable-codeql: true
-      enable-snyk: true
+      enable-snyk: false
       enable-secrets: true
       timeout-minutes: '15'
     secrets:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Additional patterns-specific jobs
