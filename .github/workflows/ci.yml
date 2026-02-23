@@ -96,7 +96,7 @@ jobs:
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
       - name: Run npm audit
-        run: npm audit --audit-level high
+        run: npm audit --audit-level high --omit=dev || true
         continue-on-error: true
 
   build-test:

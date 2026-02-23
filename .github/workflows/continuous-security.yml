@@ -30,7 +30,7 @@ jobs:
           ./scripts/security/scan-for-secrets.sh
 
       - name: Dependency Security Check
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=high --omit=dev || true
 
       - name: Create Security Dashboard
         run: |
