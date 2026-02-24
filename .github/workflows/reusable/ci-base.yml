@@ -52,9 +52,6 @@ on:
       CODECOV_TOKEN:
         description: "Codecov token"
         required: false
-      SNYK_TOKEN:
-        description: "Snyk token"
-        required: false
       GITHUB_TOKEN:
         description: "GitHub token"
         required: false
@@ -296,27 +293,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Snyk (Node.js)
+      - name: Setup Node.js
         if: inputs.project-type != 'gateway'
-        uses: snyk/actions/node@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        uses: actions/setup-node@v4
         with:
-          args: --severity-threshold=high
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
 
-      - name: Run Snyk (Python)
+      - name: Setup Python
         if: inputs.project-type == 'gateway' || inputs.project-type == 'mcp'
-        uses: snyk/actions/python@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        uses: actions/setup-python@v5
         with:
-          args: --severity-threshold=high
+          python-version: ${{ inputs.python-version }}
+          cache: "pip"
+
+      - name: Install Node.js dependencies
+        if: inputs.project-type != 'gateway'
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Python dependencies
+        if: inputs.project-type == 'gateway' || inputs.project-type == 'mcp'
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+          pip install -r requirements.txt --if-present
 
       - name: Run npm audit
         if: inputs.project-type != 'gateway'
         run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run pip-audit
+        if: inputs.project-type == 'gateway' || inputs.project-type == 'mcp'
+        run: pip-audit --strict
         continue-on-error: true
 
   # Quality Gates
