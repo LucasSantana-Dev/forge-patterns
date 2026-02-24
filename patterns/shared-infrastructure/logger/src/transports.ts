@@ -223,7 +223,7 @@ export class FilteredTransport implements LoggerTransport {
   name = 'filtered';
   level: LogLevel;
   private transport: LoggerTransport;
-  private filter: (entry: LogEntry) => boolean;
+  private filter: (_entry: LogEntry) => boolean;
 
   constructor(transport: LoggerTransport, filter: (entry: LogEntry) => boolean, level?: LogLevel) {
     this.transport = transport;
@@ -271,6 +271,6 @@ export class MultiTransport implements LoggerTransport {
   }
 
   async close(): Promise<void> {
-    await Promise.all(this.transports.filter(t => 'close' in t).map(t => (t as any).close()));
+    await Promise.all(this.transports.filter(t => 'close' in t).map(t => (t as unknown).close()));
   }
 }

@@ -1,0 +1,189 @@
+name: Release Publishing (Shared)
+
+on:
+  workflow_call:
+    inputs:
+      project-type:
+        description: 'Type of project (gateway, webapp, mcp, patterns)'
+        required: false
+        default: 'patterns'
+        type: string
+      version:
+        description: 'Version to publish'
+        required: true
+        type: string
+      publish-npm:
+        description: 'Publish to npm'
+        required: false
+        default: true
+        type: boolean
+      publish-docker:
+        description: 'Publish to Docker Hub'
+        required: false
+        default: true
+        type: boolean
+      timeout-minutes:
+        description: 'Default timeout for jobs'
+        required: false
+        default: '15'
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub token'
+        required: true
+      NPM_TOKEN:
+        description: 'NPM token for publishing'
+        required: false
+      DOCKER_USERNAME:
+        description: 'Docker Hub username'
+        required: false
+      DOCKER_PASSWORD:
+        description: 'Docker Hub password'
+        required: false
+
+jobs:
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: inputs.project-type != 'gateway'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: inputs.project-type != 'gateway'
+        run: npm ci --legacy-peer-deps
+
+      - name: Run linting
+        if: inputs.project-type != 'gateway'
+        run: npm run lint --if-present
+
+      - name: Run tests
+        if: inputs.project-type != 'gateway'
+        run: npm test --if-present
+
+      - name: Type check
+        if: inputs.project-type != 'gateway'
+        run: npx tsc --noEmit --if-present
+
+      - name: Build project
+        if: inputs.project-type != 'gateway'
+        run: npm run build --if-present
+
+  publish-npm:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    needs: quality-checks
+    if: inputs.publish-npm == 'true' && inputs.project-type != 'gateway'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Update package version
+        run: npm version ${{ inputs.version }} --no-git-tag-version
+
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ inputs.version }}
+          release_name: Release v${{ inputs.version }}
+          draft: false
+          prerelease: false
+
+  publish-docker:
+    name: Publish to Docker Hub
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    needs: quality-checks
+    if: inputs.publish-docker == 'true'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: lucassantana/${{ inputs.project-type }}
+          tags: |
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  notify-publish:
+    name: Publish Notification
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: [publish-npm, publish-docker]
+    if: always()
+    
+    steps:
+      - name: Publish Summary
+        run: |
+          echo "## 🚀 Release Publishing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Status | Version |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|---------|" >> $GITHUB_STEP_SUMMARY
+          echo "| NPM | ${{ needs.publish-npm.result }} | ${{ inputs.version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Docker | ${{ needs.publish-docker.result }} | ${{ inputs.version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Publishing Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Project Type**: ${{ inputs.project-type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Quality Checks**: ${{ needs.quality-checks.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.publish-npm.result }}" == "success" && "${{ needs.publish-docker.result }}" == "success" ]]; then
+            echo "✅ All publishing tasks completed successfully!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Some publishing tasks failed" >> $GITHUB_STEP_SUMMARY
+          fi

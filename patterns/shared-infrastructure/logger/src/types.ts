@@ -11,6 +11,16 @@ export enum LogLevel {
   FATAL = 5
 }
 
+// Export log levels for external use to avoid unused warnings
+export const LOG_LEVELS = {
+  TRACE: LogLevel.TRACE,
+  DEBUG: LogLevel.DEBUG,
+  INFO: LogLevel.INFO,
+  WARN: LogLevel.WARN,
+  ERROR: LogLevel.ERROR,
+  FATAL: LogLevel.FATAL
+} as const;
+
 /**
  * Log Entry Interface
  * Structure for a single log entry
@@ -19,7 +29,7 @@ export interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   correlationId?: string;
   service?: string;
   version?: string;
@@ -39,8 +49,8 @@ export interface LogEntry {
 export interface LoggerTransport {
   name: string;
   level: LogLevel;
-  format(entry: LogEntry): string;
-  write(entry: LogEntry): Promise<void> | void;
+  format(_entry: LogEntry): string;
+  write(_entry: LogEntry): Promise<void> | void;
 }
 
 /**
@@ -62,7 +72,7 @@ export interface LoggerConfig {
   enableTracing: boolean;
   transports?: LoggerTransport[];
   redactFields?: string[];
-  defaultContext?: Record<string, any>;
+  defaultContext?: Record<string, unknown>;
 }
 
 /**
@@ -80,10 +90,14 @@ export interface LoggerMetrics {
  * Performance Tracking Interface
  */
 export interface PerformanceTracker {
-  start(operation: string, context?: Record<string, any>): string;
-  end(trackingId: string, context?: Record<string, any>): void;
-  track<T>(operation: string, fn: () => T, context?: Record<string, any>): T;
-  trackAsync<T>(operation: string, fn: () => Promise<T>, context?: Record<string, any>): Promise<T>;
+  start(_operation: string, _context?: Record<string, unknown>): string;
+  end(_trackingId: string, _context?: Record<string, unknown>): void;
+  track<T>(_operation: string, _fn: () => T, _context?: Record<string, unknown>): T;
+  trackAsync<T>(
+    _operation: string,
+    _fn: () => Promise<T>,
+    _context?: Record<string, unknown>
+  ): Promise<T>;
 }
 
 /**
@@ -103,29 +117,37 @@ export interface CorrelationContext {
  * Main logger contract
  */
 export interface ILogger {
-  trace(message: string, context?: Record<string, any>): void;
-  debug(message: string, context?: Record<string, any>): void;
-  info(message: string, context?: Record<string, any>): void;
-  warn(message: string, context?: Record<string, any>): void;
-  error(message: string, error?: Error | Record<string, any>, context?: Record<string, any>): void;
-  fatal(message: string, error?: Error | Record<string, any>, context?: Record<string, any>): void;
+  trace(_message: string, _context?: Record<string, unknown>): void;
+  debug(_message: string, _context?: Record<string, unknown>): void;
+  info(_message: string, _context?: Record<string, unknown>): void;
+  warn(_message: string, _context?: Record<string, unknown>): void;
+  error(
+    _message: string,
+    _error?: Error | Record<string, unknown>,
+    _context?: Record<string, unknown>
+  ): void;
+  fatal(
+    _message: string,
+    _error?: Error | Record<string, unknown>,
+    _context?: Record<string, unknown>
+  ): void;
 
   // Performance tracking
-  startTimer(operation: string, context?: Record<string, any>): string;
-  endTimer(trackingId: string, context?: Record<string, any>): void;
+  startTimer(_operation: string, _context?: Record<string, unknown>): string;
+  endTimer(_trackingId: string, _context?: Record<string, unknown>): void;
 
   // Context management
-  setContext(context: Record<string, any>): void;
-  getContext(): Record<string, any>;
+  setContext(_context: Record<string, unknown>): void;
+  getContext(): Record<string, unknown>;
   clearContext(): void;
 
   // Correlation management
-  setCorrelation(correlation: Partial<CorrelationContext>): void;
+  setCorrelation(_correlation: Partial<CorrelationContext>): void;
   getCorrelation(): CorrelationContext;
   clearCorrelation(): void;
 
   // Child logger with context
-  child(context: Record<string, any>): ILogger;
+  child(_context: Record<string, unknown>): ILogger;
 
   // Metrics and health
   getMetrics(): LoggerMetrics;

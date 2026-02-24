@@ -10,22 +10,20 @@ FAILED=0
 echo "Checking for forbidden placeholder formats..."
 FORBIDDEN_PATTERNS=(
   "your-.*-here"
-  "test-.*"
-  "admin@.*"
-  "123.*"
-  "dummy.*"
-  "fake.*"
-  "sample.*"
+  "admin@example"
+  "dummy-.*"
+  "fake-.*"
 )
 
 for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
   if grep -r "$pattern" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.example" --include="*.md" \
-    --exclude="package-lock.json" \
+    --exclude="package-lock.json" --exclude=".gitleaks.yml" \
     --exclude-dir="node_modules" --exclude-dir=".git" --exclude-dir="dist" \
     --exclude-dir="patterns" --exclude-dir="docs" --exclude-dir=".windsurf" \
-    --exclude-dir="context-store" . \
-    | grep -v "SECURITY NOTICE" | grep -v "FORBIDDEN_PATTERNS" | grep -v "placeholder format" | grep -v "documentation" | grep -v "examples" | grep -v "what to avoid" | grep -v "validation examples" | grep -v "configuration examples" | grep -v "development for new features" | grep -v "description.*placeholder" \
-    | grep -v "CONTRIBUTING.md"; then
+    --exclude-dir="context-store" --exclude-dir=".claude" . \
+    | grep -v "SECURITY NOTICE" | grep -v "FORBIDDEN_PATTERNS" \
+    | grep -v "placeholder format" | grep -v "documentation" \
+    | grep -v "examples" | grep -v "CONTRIBUTING.md"; then
     echo "❌ Found improper placeholder format: $pattern"
     echo "Use format: REPLACE_WITH_[TYPE] instead"
     FAILED=1

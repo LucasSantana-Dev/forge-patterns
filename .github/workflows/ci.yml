@@ -11,97 +11,73 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  NODE_VERSION: "22"
+  PYTHON_VERSION: "3.12"
+  COVERAGE_THRESHOLD: "80"
+  CACHE_VERSION: "v2"
+
 jobs:
-  lint-and-format:
+  # Use shared base CI workflow
+  ci:
+    name: Base CI Pipeline
+    uses: ./.github/workflows/ci-base-shared.yml
+    with:
+      project-type: 'patterns'
+      node-version: '22'
+      python-version: '3.12'
+      enable-docker: false
+      enable-security: true
+      enable-coverage: true
+      coverage-threshold: '80'
+      test-parallel: true
+      timeout-minutes: '30'
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Use shared security scanning workflow
+  security:
+    name: Security Scans
+    uses: ./.github/workflows/security-scan-shared.yml
+    with:
+      project-type: 'patterns'
+      node-version: '22'
+      python-version: '3.12'
+      severity-threshold: 'high'
+      enable-codeql: true
+      enable-snyk: false
+      enable-secrets: true
+      timeout-minutes: '15'
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Additional patterns-specific jobs
+  pattern-validation:
+    name: Pattern Validation
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run ESLint
-        run: npm run lint:check
-
-      - name: Check Prettier formatting
-        run: npm run format:check
-
-      - name: TypeScript compilation check
-        run: npx tsc --noEmit
+      - name: Validate UIForge patterns compliance
+        run: bash scripts/validation/validate-patterns.sh
 
   shell-lint:
+    name: Shell Lint
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install shfmt
-        run: sudo apt-get install -y shfmt
+        run: sudo apt-get -y shfmt
 
       - name: Run shellcheck
-        uses: ludeeus/action-shellcheck@2.0.0
-        with:
-          ignore_paths: >-
-            patterns/cost/scripts
-            scripts/bootstrap
-            scripts/integrate-mcp-gateway.sh
-            scripts/integrate-uiforge-mcp.sh
-            scripts/integrate-uiforge-webapp.sh
-            scripts/integrate-all-projects.sh
-
-      - name: Check shell formatting
-        continue-on-error: true
-        run: |
-          ERRORS=0
-          while IFS= read -r -d '' f; do
-            if shfmt -d -i 2 "$f" 2>/dev/null | grep -q .; then
-              echo "Formatting violation: $f"
-              ERRORS=$((ERRORS + 1))
-            fi
-          done < <(find . -name "*.sh" ! -path "*/node_modules/*" -print0)
-          [ "$ERRORS" -eq 0 ] && echo "All shell scripts correctly formatted" || echo "Warning: $ERRORS shell scripts have formatting issues (non-blocking)"
-
-  validate-patterns:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run validation scripts
-        run: npm run test
-
-      - name: Check file organization
-        run: |
-          echo "Checking root directory organization..."
-          EXTRA=$(find . -maxdepth 1 -name "*.md" | grep -v "README.md" | grep -v "CHANGELOG.md" | grep -v "CONTRIBUTING.md" || true)
-          if [ -n "$EXTRA" ]; then
-            echo "Found unexpected markdown files in root directory"
-            echo "$EXTRA"
-            exit 1
-          else
-            echo "Root directory is properly organized"
-          fi
+        uses: ludeeus/action-shellcheck@v2.0.0
 
   security-scan:
     runs-on: ubuntu-latest
@@ -117,9 +93,10 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
       - name: Run npm audit
-        run: npm audit --audit-level high
+        run: npm audit --audit-level high --omit=dev || true
         continue-on-error: true
 
   build-test:

@@ -1,0 +1,217 @@
+name: Branch Protection (Shared)
+
+on:
+  workflow_call:
+    inputs:
+      branch-name:
+        description: 'Branch to protect'
+        required: false
+        default: 'main'
+        type: string
+      action:
+        description: 'Action to perform (enable, disable, validate)'
+        required: false
+        default: 'validate'
+        type: string
+      require-reviews:
+        description: 'Require pull request reviews'
+        required: false
+        default: true
+        type: boolean
+      required-reviewers:
+        description: 'Number of required reviewers'
+        required: false
+        default: 1
+        type: number
+      require-up-to-date:
+        description: 'Require branches to be up to date before merging'
+        required: false
+        default: true
+        type: boolean
+      require-status-checks:
+        description: 'Require status checks to pass before merging'
+        required: false
+        default: true
+        type: boolean
+      enforce-admins:
+        description: 'Enforce rules for administrators'
+        required: false
+        default: true
+        type: boolean
+      dismiss-stale-reviews:
+        description: 'Dismiss stale PR approvals when new commits are pushed'
+        required: false
+        default: true
+        type: boolean
+      require-code-owner-reviews:
+        description: 'Require review from CODEOWNERS'
+        required: false
+        default: false
+        type: boolean
+      timeout-minutes:
+        description: 'Default timeout for jobs'
+        required: false
+        default: '10'
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub token'
+        required: true
+
+jobs:
+  branch-protection:
+    name: Branch Protection
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ${{ inputs.action }} branch protection
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = '${{ inputs.branch-name }}';
+            const action = '${{ inputs.action }}';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            
+            console.log(`🔧 Branch protection action: ${action} for ${owner}/${repo}/${branch}`);
+            
+            // Define protection rules
+            const protectionRules = {
+              required_status_checks: {
+                strict: ${{ inputs.require-up-to-date }},
+                contexts: [
+                  'ci',
+                  'lint',
+                  'test',
+                  'build',
+                  'security-scan'
+                ]
+              },
+              enforce_admins: ${{ inputs.enforce-admins }},
+              required_pull_request_reviews: {
+                required_approving_review_count: ${{ inputs.required-reviewers }},
+                dismiss_stale_reviews: ${{ inputs.dismiss-stale-reviews }},
+                require_code_owner_reviews: ${{ inputs.require-code-owner-reviews }}
+              },
+              restrictions: null, // No user restrictions
+              allow_force_pushes: false,
+              allow_deletions: false
+            };
+            
+            try {
+              if (action === 'enable') {
+                // Enable branch protection
+                await github.rest.repos.updateBranchProtection({
+                  owner,
+                  repo,
+                  branch,
+                  headers: {
+                    'Accept': 'application/vnd.github.v3+json'
+                  },
+                  ...protectionRules
+                });
+                
+                console.log('✅ Branch protection enabled successfully');
+                console.log(`📋 Protection rules applied to ${branch}:`);
+                console.log(`  - Required reviewers: ${{ inputs.required-reviewers }}`);
+                console.log(`  - Require up-to-date: ${{ inputs.require-up-to-date }}`);
+                console.log(`  - Require status checks: ${{ inputs.require-status-checks }}`);
+                console.log(`  - Enforce admins: ${{ inputs.enforce-admins }}`);
+                console.log(`  - Dismiss stale reviews: ${{ inputs.dismiss-stale-reviews }}`);
+                
+              } else if (action === 'disable') {
+                // Disable branch protection
+                await github.rest.repos.deleteBranchProtection({
+                  owner,
+                  repo,
+                  branch
+                });
+                
+                console.log('✅ Branch protection disabled successfully');
+                
+              } else if (action === 'validate') {
+                // Validate current branch protection
+                const protection = await github.rest.repos.getBranchProtection({
+                  owner,
+                  repo,
+                  branch
+                });
+                
+                console.log('🔍 Current branch protection settings:');
+                console.log(JSON.stringify(protection.data, null, 2));
+                
+                // Check if protection meets requirements
+                const rules = protection.data;
+                const issues = [];
+                
+                if (!rules.required_status_checks) {
+                  issues.push('Missing required status checks');
+                }
+                
+                if (!rules.required_pull_request_reviews) {
+                  issues.push('Missing PR review requirements');
+                }
+                
+                if (issues.length > 0) {
+                  console.log('⚠️ Branch protection issues found:');
+                  issues.forEach(issue => console.log(`  - ${issue}`));
+                  throw new Error('Branch protection validation failed');
+                } else {
+                  console.log('✅ Branch protection validation passed');
+                }
+              }
+              
+            } catch (error) {
+              console.error('❌ Branch protection operation failed:', error.message);
+              
+              // Provide helpful error messages
+              if (error.message.includes('Branch not found')) {
+                console.log('💡 Make sure the branch exists and try again');
+              } else if (error.message.includes('Not Found')) {
+                console.log('💡 Check if the repository has sufficient permissions');
+              } else if (error.message.includes('Validation failed')) {
+                console.log('💡 Review the branch protection requirements');
+              }
+              
+              throw error;
+            }
+
+  protection-summary:
+    name: Protection Summary
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: branch-protection
+    if: always()
+    
+    steps:
+      - name: Branch Protection Summary
+        run: |
+          echo "## 🔒 Branch Protection Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | ${{ inputs.branch-name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Action | ${{ inputs.action }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Require Reviews | ${{ inputs.require-reviews }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Required Reviewers | ${{ inputs.required-reviewers }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Require Up-to-Date | ${{ inputs.require-up-to-date }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Require Status Checks | ${{ inputs.require-status-checks }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Enforce Admins | ${{ inputs.enforce-admins }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dismiss Stale Reviews | ${{ inputs.dismiss-stale-reviews }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Require Code Owner Reviews | ${{ inputs.require-code-owner-reviews }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Operation Status" >> $GITHUB_STEP_SUMMARY
+          echo "**Result**: ${{ needs.branch-protection.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.branch-protection.result }}" == "success" ]]; then
+            echo "✅ Branch protection operation completed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Branch protection operation failed" >> $GITHUB_STEP_SUMMARY
+            echo "🔍 Check the job logs for detailed error information" >> $GITHUB_STEP_SUMMARY
+          fi

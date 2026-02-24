@@ -1,6 +1,6 @@
-# Contributing to UIForge Patterns
+# Contributing to Forge Space Patterns
 
-Thank you for contributing to the UIForge Patterns library. This guide covers everything you need to know to submit high-quality patterns.
+Thank you for contributing to the Forge Space Patterns library. This guide covers everything you need to know to submit high-quality patterns.
 
 ## 📋 Table of Contents
 

@@ -282,13 +282,58 @@ src/
 
 ## 🌿 **Git Workflow**
 
+### **Trunk-Based Development Workflow**
+
+**MANDATORY WORKFLOW**: Feature → Release → Main → Deploy
+
+#### **Phase 1: Feature Development**
+```bash
+# Create feature/fix branch from main
+git checkout main
+git pull origin main
+git checkout -b feat/feature-name
+# or
+git checkout -b fix/issue-description
+```
+
+#### **Phase 2: Integration Testing**
+```bash
+# Pull Request to release branch
+git checkout release
+git pull origin release
+git checkout feat/feature-name
+git merge release
+git push origin feat/feature-name
+# Create PR: feat/feature-name → release
+```
+
+#### **Phase 3: Production Readiness**
+```bash
+# Pull Request to main branch
+git checkout main
+git pull origin main
+git checkout feat/feature-name
+git merge main
+git push origin feat/feature-name
+# Create PR: feat/feature-name → main
+```
+
+#### **Phase 4: Automated Deployment**
+```bash
+# CI/CD triggers on main branch merge
+# - Automatic version bump
+# - Package publishing (npm, PyPI, Docker)
+# - Production deployment
+# - Release notes generation
+```
+
 ### **Branch Naming Convention**
 
 ```bash
 # Feature branches
-feature/component-generator
-feature/user-authentication
-feature/template-management
+feat/component-generator
+feat/user-authentication
+feat/template-management
 
 # Bug fix branches
 fix/auth-token-validation
@@ -302,6 +347,34 @@ release/v2.0.0
 hotfix/security-patch
 hotfix/critical-bug-fix
 ```
+
+### **Branch Protection Rules**
+
+#### **Main Branch**
+- **Protected**: Direct pushes disabled
+- **Required**: Pull requests only
+- **Required**: CI/CD status checks passing
+- **Required**: Code review approval
+- **Required**: All quality gates passing
+
+#### **Release Branch**
+- **Integration testing environment**
+- **Quality gate enforcement**
+- **Staging deployment**
+- **Automated testing pipeline**
+
+### **Workflow Enforcement**
+
+**ALWAYS follow this sequence**:
+1. **Feature branch** → isolated development
+2. **Release branch PR** → integration testing
+3. **Main branch PR** → production deployment
+4. **Automated deployment** → triggered on main merge
+
+**NEVER push directly to main** except for:
+- Documentation updates
+- Emergency hotfixes (with post-mortem)
+- Infrastructure changes (additional review required)
 
 ### **Commit Message Standards**
 
