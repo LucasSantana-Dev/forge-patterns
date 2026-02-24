@@ -92,14 +92,14 @@ describe('MCP Protocol Constants', () => {
     it('should have valid method names', () => {
       Object.values(MCP_PROTOCOL_METHODS).forEach(method => {
         expect(typeof method).toBe('string');
-        expect(method).toMatch(/^[a-z_\/]+$/);
+        expect(method).toMatch(/^[a-z_/]+$/);
         expect(method.length).toBeGreaterThan(0);
       });
     });
 
     it('should follow naming convention', () => {
       Object.values(MCP_PROTOCOL_METHODS).forEach(method => {
-        expect(method).toMatch(/^[a-z_\/]+$/);
+        expect(method).toMatch(/^[a-z_/]+$/);
         expect(method.includes('/')).toBe(true);
       });
     });
