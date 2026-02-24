@@ -16,7 +16,7 @@ export interface ProjectResource {
 
 export function getProjectResources(): ProjectResource[] {
   return listProjects().map(meta => ({
-    uri: `uiforge://context/${meta.project}`,
+    uri: `forge-space://context/${meta.project}`,
     name: meta.title,
     description: meta.description,
     mimeType: 'text/markdown',
@@ -37,7 +37,7 @@ export function readResourceContent(project: string): string {
 }
 
 export function findResourceByUri(uri: string): ProjectResource | undefined {
-  const prefix = 'uiforge://context/';
+  const prefix = 'forge-space://context/';
   if (!uri.startsWith(prefix)) return undefined;
   const project = uri.slice(prefix.length);
 
@@ -65,5 +65,5 @@ export function findResourceByUri(uri: string): ProjectResource | undefined {
 }
 
 export function findResourceByProject(project: string): ProjectResource | undefined {
-  return findResourceByUri(`uiforge://context/${project}`);
+  return findResourceByUri(`forge-space://context/${project}`);
 }
