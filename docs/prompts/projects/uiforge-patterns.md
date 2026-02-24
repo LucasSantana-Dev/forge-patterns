@@ -1,16 +1,22 @@
 # Forge Patterns Enhanced Prompts with Cross-Project Standardization
 
-Comprehensive, MCP-enhanced prompt library specifically designed for forge-patterns development, combining cross-project expertise, standardization mastery, ecosystem coordination, and intelligent pattern management.
+Comprehensive, MCP-enhanced prompt library specifically designed for
+forge-patterns development, combining cross-project expertise, standardization
+mastery, ecosystem coordination, and intelligent pattern management.
 
 ## 🎯 Purpose
 
-Provide specialized, context-aware prompts for forge-patterns development that leverage MCP tools for intelligent analysis, cross-project standardization, pattern development, and ecosystem-wide coordination.
+Provide specialized, context-aware prompts for forge-patterns development that
+leverage MCP tools for intelligent analysis, cross-project standardization,
+pattern development, and ecosystem-wide coordination.
 
 ## 🔄 MCP Integration
 
-- **@[/get-context]**: Real-time pattern usage analysis and ecosystem state monitoring
+- **@[/get-context]**: Real-time pattern usage analysis and ecosystem state
+  monitoring
 - **@[/mcp-docs-and-tools]**: Pattern development best practices and validation
-- **@[/skill-mcp-docs-search]**: Cross-project documentation research and standardization
+- **@[/skill-mcp-docs-search]**: Cross-project documentation research and
+  standardization
 - **@[/update-docs]**: Automated pattern documentation and standard updates
 - **@[/update-plan]**: Ecosystem roadmap synchronization and strategic alignment
 
@@ -320,25 +326,35 @@ COMMUNITY GOVERNANCE WORKFLOW:
 ## 📊 Success Metrics and KPIs
 
 ### Pattern Effectiveness
+
 - **Pattern Adoption**: > 80% adoption rate across Forge projects
 - **Pattern Quality**: > 95% satisfaction with pattern effectiveness
 - **Standardization Compliance**: > 90% adherence to ecosystem standards
 - **Documentation Quality**: > 95% completeness and accuracy
 
 ### MCP Integration Benefits
+
 - **Context Awareness**: 95% relevance in pattern development recommendations
 - **Documentation Automation**: 90% reduction in manual pattern documentation
-- **Best Practice Compliance**: 98% adherence to pattern development best practices
-- **Ecosystem Productivity**: 40% improvement in cross-project development efficiency
+- **Best Practice Compliance**: 98% adherence to pattern development best
+  practices
+- **Ecosystem Productivity**: 40% improvement in cross-project development
+  efficiency
 
 ## 🔄 Continuous Improvement
 
 ### Learning and Adaptation
-- **Pattern Analytics**: Continuous monitoring of pattern usage and effectiveness
+
+- **Pattern Analytics**: Continuous monitoring of pattern usage and
+  effectiveness
 - **Community Feedback**: Ongoing community input and contribution integration
 - **Standard Evolution**: Continuous standard improvement and adaptation
-- **Technology Advancement**: Regular evaluation and adoption of new pattern methodologies
+- **Technology Advancement**: Regular evaluation and adoption of new pattern
+  methodologies
 
 ---
 
-This Forge Patterns prompt library provides comprehensive, intelligent, and context-aware development guidance that leverages MCP tools to deliver high-quality, standardized, and ecosystem-coordinated patterns and solutions across the entire Forge ecosystem.
+This Forge Patterns prompt library provides comprehensive, intelligent, and
+context-aware development guidance that leverages MCP tools to deliver
+high-quality, standardized, and ecosystem-coordinated patterns and solutions
+across the entire Forge ecosystem.

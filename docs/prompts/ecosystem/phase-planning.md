@@ -1,16 +1,22 @@
 # Strategic Phase Planning with MCP Intelligence
 
-Comprehensive planning frameworks that leverage MCP tools for intelligent roadmap development, resource allocation, and strategic alignment across the Forge ecosystem.
+Comprehensive planning frameworks that leverage MCP tools for intelligent
+roadmap development, resource allocation, and strategic alignment across the
+Forge ecosystem.
 
 ## 🎯 Purpose
 
-Provide structured, MCP-enhanced planning methodologies that enable strategic phase development, resource optimization, and ecosystem-wide coordination for all Forge projects.
+Provide structured, MCP-enhanced planning methodologies that enable strategic
+phase development, resource optimization, and ecosystem-wide coordination for
+all Forge projects.
 
 ## 🔄 MCP Integration
 
 - **@[/get-context]**: Current project state analysis and capability assessment
-- **@[/mcp-docs-and-tools]**: Best practice verification and architectural guidance
-- **@[/skill-mcp-docs-search]**: Strategic planning research and methodology discovery
+- **@[/mcp-docs-and-tools]**: Best practice verification and architectural
+  guidance
+- **@[/skill-mcp-docs-search]**: Strategic planning research and methodology
+  discovery
 - **@[/update-plan]**: Dynamic roadmap synchronization and milestone tracking
 - **@[/update-docs]**: Automated planning documentation and knowledge capture
 
@@ -353,12 +359,14 @@ RESOURCE-OPTIMIZED PLANNING:
 ## 📊 Success Metrics and KPIs
 
 ### Planning Effectiveness
+
 - **Strategic Alignment**: > 90% alignment with ecosystem objectives
 - **Planning Accuracy**: > 85% accuracy in timeline and resource estimates
 - **Adaptation Speed**: < 2 weeks to adjust to major changes
 - **Stakeholder Satisfaction**: > 4.5/5 satisfaction with planning process
 
 ### MCP Integration Benefits
+
 - **Context Accuracy**: 95% relevance in context-aware recommendations
 - **Planning Automation**: 80% reduction in manual planning effort
 - **Documentation Quality**: 90% improvement in planning documentation
@@ -367,12 +375,14 @@ RESOURCE-OPTIMIZED PLANNING:
 ## 🔄 Continuous Planning Improvement
 
 ### Learning and Adaptation
+
 - **Planning Retrospectives**: Regular analysis of planning effectiveness
 - **Best Practice Evolution**: Continuous improvement of planning methodologies
 - **Tool Enhancement**: Ongoing improvement of MCP planning tools
 - **Capability Development**: Team skill development and knowledge sharing
 
 ### Strategic Intelligence
+
 - **Environmental Scanning**: Continuous monitoring of external factors
 - **Competitive Analysis**: Ongoing assessment of competitive landscape
 - **Technology Trending**: Regular evaluation of emerging technologies
@@ -380,4 +390,7 @@ RESOURCE-OPTIMIZED PLANNING:
 
 ---
 
-This strategic phase planning framework provides intelligent, adaptive, and comprehensive planning methodologies that leverage MCP tools to ensure strategic alignment, resource optimization, and successful execution across the entire Forge ecosystem.
+This strategic phase planning framework provides intelligent, adaptive, and
+comprehensive planning methodologies that leverage MCP tools to ensure strategic
+alignment, resource optimization, and successful execution across the entire
+Forge ecosystem.

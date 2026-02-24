@@ -1,17 +1,24 @@
 # Dynamic Planning Synchronization with @[/update-plan]
 
-Comprehensive planning management framework that leverages MCP tools for intelligent roadmap synchronization, strategic alignment, and dynamic planning adaptation across the Forge ecosystem.
+Comprehensive planning management framework that leverages MCP tools for
+intelligent roadmap synchronization, strategic alignment, and dynamic planning
+adaptation across the Forge ecosystem.
 
 ## 🎯 Purpose
 
-Provide intelligent, automated planning workflows that ensure comprehensive, synchronized, and context-aware planning management for all Forge ecosystem projects and strategic initiatives.
+Provide intelligent, automated planning workflows that ensure comprehensive,
+synchronized, and context-aware planning management for all Forge ecosystem
+projects and strategic initiatives.
 
 ## 🔄 MCP Integration
 
 - **@[/update-plan]**: Automated planning synchronization and roadmap updates
-- **@[/get-context]**: Context-aware planning analysis and requirement assessment
-- **@[/mcp-docs-and-tools]**: Planning best practices validation and strategic alignment
-- **@[/skill-mcp-docs-search]**: Strategic planning research and methodology discovery
+- **@[/get-context]**: Context-aware planning analysis and requirement
+  assessment
+- **@[/mcp-docs-and-tools]**: Planning best practices validation and strategic
+  alignment
+- **@[/skill-mcp-docs-search]**: Strategic planning research and methodology
+  discovery
 - **@[/update-docs]**: Planning documentation and knowledge capture updates
 
 ## 📋 Dynamic Planning Framework
@@ -320,12 +327,14 @@ RESOURCE PLANNING WORKFLOW:
 ## 📊 Success Metrics and KPIs
 
 ### Planning Effectiveness
+
 - **Planning Accuracy**: > 90% accuracy in planning forecasts and timelines
 - **Strategic Alignment**: > 95% alignment with ecosystem strategic objectives
 - **Resource Optimization**: > 85% improvement in resource utilization
 - **Adaptation Speed**: < 1 week for planning updates and adjustments
 
 ### MCP Integration Benefits
+
 - **Planning Intelligence**: 95% relevance in planning recommendations
 - **Automation Efficiency**: 90% reduction in manual planning effort
 - **Decision Quality**: 85% improvement in planning decision quality
@@ -334,17 +343,29 @@ RESOURCE PLANNING WORKFLOW:
 ## 🔄 Continuous Planning Improvement
 
 ### Learning and Adaptation
-- **Planning Analytics**: Continuous monitoring of planning effectiveness and outcomes
-- **Feedback Integration**: Ongoing stakeholder feedback incorporation and improvement
-- **Methodology Evolution**: Continuous planning methodology enhancement and optimization
-- **Technology Advancement**: Regular evaluation and adoption of new planning technologies
+
+- **Planning Analytics**: Continuous monitoring of planning effectiveness and
+  outcomes
+- **Feedback Integration**: Ongoing stakeholder feedback incorporation and
+  improvement
+- **Methodology Evolution**: Continuous planning methodology enhancement and
+  optimization
+- **Technology Advancement**: Regular evaluation and adoption of new planning
+  technologies
 
 ### Strategic Intelligence
+
 - **Market Analysis**: Continuous market monitoring and strategic adaptation
-- **Competitive Intelligence**: Ongoing competitive analysis and strategic positioning
-- **Technology Trending**: Regular evaluation of emerging technologies and planning implications
-- **Ecosystem Evolution**: Continuous ecosystem assessment and strategic alignment
+- **Competitive Intelligence**: Ongoing competitive analysis and strategic
+  positioning
+- **Technology Trending**: Regular evaluation of emerging technologies and
+  planning implications
+- **Ecosystem Evolution**: Continuous ecosystem assessment and strategic
+  alignment
 
 ---
 
-This dynamic planning framework provides intelligent, comprehensive, and continuously updated planning management that leverages @[/update-plan] and MCP tools to ensure strategic alignment, resource optimization, and adaptive planning across the entire Forge ecosystem.
+This dynamic planning framework provides intelligent, comprehensive, and
+continuously updated planning management that leverages @[/update-plan] and MCP
+tools to ensure strategic alignment, resource optimization, and adaptive
+planning across the entire Forge ecosystem.

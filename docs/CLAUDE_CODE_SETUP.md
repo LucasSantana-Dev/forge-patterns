@@ -7,11 +7,13 @@
 
 ## 📋 **Overview**
 
-This document explains the Claude Code setup for Forge Space development, including security considerations and git tracking policies.
+This document explains the Claude Code setup for Forge Space development,
+including security considerations and git tracking policies.
 
 ## 🎯 **What's Included**
 
 ### **Claude Code Configuration**
+
 - **Subagents**: 5 specialized agents for Forge Space ecosystem
 - **Hooks**: Security validation and quality automation
 - **Skills**: Domain expertise for security and MCP integration
@@ -19,6 +21,7 @@ This document explains the Claude Code setup for Forge Space development, includ
 - **MCP Integration**: Optimized resource usage
 
 ### **Security Features**
+
 - **Zero-Secrets Policy**: Automated enforcement
 - **Destructive Command Blocking**: Prevents dangerous operations
 - **Input Validation**: Comprehensive security scanning
@@ -27,7 +30,9 @@ This document explains the Claude Code setup for Forge Space development, includ
 ## 🛡️ **Security Policy**
 
 ### **Git Tracking Exclusion**
-Claude Code configuration files are **intentionally excluded** from git tracking:
+
+Claude Code configuration files are **intentionally excluded** from git
+tracking:
 
 ```gitignore
 # Claude Code configuration (user-specific)
@@ -36,12 +41,14 @@ Claude Code configuration files are **intentionally excluded** from git tracking
 ```
 
 ### **Why Excluded?**
+
 1. **User-Specific**: Claude configuration is personal to each developer
 2. **Security**: May contain personal preferences and local paths
 3. **Flexibility**: Allows customization without affecting team
 4. **Zero-Secrets**: Prevents accidental secret commits
 
 ### **What This Means**
+
 - ✅ **Configuration is local** to each developer's machine
 - ✅ **No Claude files** are committed to the repository
 - ✅ **Each developer** can customize their setup
@@ -50,13 +57,16 @@ Claude Code configuration files are **intentionally excluded** from git tracking
 ## 🚀 **Setup Instructions**
 
 ### **1. Clone Repository**
+
 ```bash
 git clone https://github.com/Forge-Space/core
 cd forge-patterns
 ```
 
 ### **2. Claude Code Setup**
-The Claude Code configuration is **not** in the repository. Each developer should:
+
+The Claude Code configuration is **not** in the repository. Each developer
+should:
 
 1. **Create their own** Claude Code setup
 2. **Follow the patterns** documented here
@@ -64,7 +74,9 @@ The Claude Code configuration is **not** in the repository. Each developer shoul
 4. **Never commit** Claude configuration files
 
 ### **3. Recommended Setup**
+
 See the comprehensive setup guide in your local Claude configuration:
+
 ```bash
 # View your Claude setup
 cat ~/.claude/README.md
@@ -73,6 +85,7 @@ cat ~/.claude/README.md
 ## 📁 **Configuration Structure**
 
 ### **User-Level Configuration** (`~/.claude/`)
+
 ```
 ~/.claude/
 ├── agents/forge-space/          # Specialized subagents
@@ -84,7 +97,9 @@ cat ~/.claude/README.md
 ```
 
 ### **Project-Level Configuration** (Optional)
+
 If needed, create `.claude/` in project root for team-specific settings:
+
 ```bash
 # Team-specific Claude settings
 .claude/
@@ -95,6 +110,7 @@ If needed, create `.claude/` in project root for team-specific settings:
 ## 🔧 **Configuration Details**
 
 ### **Security Hooks**
+
 ```bash
 ~/.claude/hooks/security/
 ├── block-destructive.sh        # Block dangerous commands
@@ -102,6 +118,7 @@ If needed, create `.claude/` in project root for team-specific settings:
 ```
 
 ### **Quality Hooks**
+
 ```bash
 ~/.claude/hooks/quality/
 ├── auto-format.sh              # Auto-format code
@@ -109,6 +126,7 @@ If needed, create `.claude/` in project root for team-specific settings:
 ```
 
 ### **MCP Integration**
+
 ```json
 {
   "mcpServers": {
@@ -125,18 +143,21 @@ If needed, create `.claude/` in project root for team-specific settings:
 ## 🎯 **Usage Guidelines**
 
 ### **Security Best Practices**
+
 - **Never commit** `.claude/` directory
 - **Use placeholders** for all sensitive values
 - **Validate secrets** before any commit
 - **Review security hooks** regularly
 
 ### **Productivity Tips**
+
 - **Use agents** for domain-specific tasks
 - **Leverage MCP resources** for external information
 - **Automate quality** with hooks and commands
 - **Monitor token usage** with analytics
 
 ### **Team Collaboration**
+
 - **Share patterns** not configuration files
 - **Document workflows** in README files
 - **Use issue templates** for Claude-related issues
@@ -145,18 +166,21 @@ If needed, create `.claude/` in project root for team-specific settings:
 ## 📊 **Benefits**
 
 ### **Security Benefits**
+
 - **Zero Secrets**: 100% compliance with zero-secrets policy
 - **Local Configuration**: No risk of committing sensitive data
 - **Personalization**: Each developer controls their setup
 - **Audit Trail**: Security events logged locally
 
 ### **Productivity Benefits**
+
 - **Automated Quality**: Consistent formatting and validation
 - **Specialized Agents**: Domain expertise on demand
 - **MCP Integration**: Optimized resource usage
 - **Token Optimization**: Reduced costs and better performance
 
 ### **Team Benefits**
+
 - **Flexibility**: Customizable setups per developer
 - **Consistency**: Shared patterns and documentation
 - **Onboarding**: Easy setup for new team members
@@ -165,6 +189,7 @@ If needed, create `.claude/` in project root for team-specific settings:
 ## 🔍 **Troubleshooting**
 
 ### **Configuration Not Working**
+
 ```bash
 # Check Claude configuration
 cat ~/.claude/settings.json
@@ -177,6 +202,7 @@ chmod +x ~/.claude/hooks/**/*.sh
 ```
 
 ### **Git Issues**
+
 ```bash
 # Check if Claude files are ignored
 git check-ignore .claude/
@@ -189,6 +215,7 @@ echo ".claude/" >> .gitignore
 ```
 
 ### **Security Validation**
+
 ```bash
 # Run security scan
 /security-scan
@@ -203,12 +230,14 @@ find . -name "*.env" -o -name "*.key" | grep -v node_modules
 ## 📋 **Maintenance**
 
 ### **Regular Tasks**
+
 - **Monthly**: Review and update hooks and skills
 - **Quarterly**: Analyze usage patterns and optimize
 - **Semi-Annually**: Major configuration updates
 - **Annually**: Complete setup review and refactoring
 
 ### **Security Maintenance**
+
 - **Weekly**: Run security scans
 - **Monthly**: Review security logs
 - **Quarterly**: Update security patterns
@@ -217,6 +246,7 @@ find . -name "*.env" -o -name "*.key" | grep -v node_modules
 ## 🔄 **Backup and Restore**
 
 ### **Backup Configuration**
+
 ```bash
 # Backup Claude configuration
 cp -r ~/.claude ~/.claude.backup.$(date +%Y%m%d)
@@ -228,6 +258,7 @@ cp ~/.claude/settings.json ~/claude-settings.backup.json
 ```
 
 ### **Restore Configuration**
+
 ```bash
 # Restore from backup
 cp -r ~/.claude.backup.20260222 ~/.claude
@@ -241,12 +272,14 @@ cp ~/claude-settings.backup.json ~/.claude/settings.json
 ## 📞 **Support**
 
 ### **Getting Help**
+
 - **Documentation**: `~/.claude/README.md`
 - **Commands**: `/help` in Claude Code
 - **Community**: Forge Space Discord and GitHub
 - **Issues**: Create GitHub issue with `claude-code` label
 
 ### **Contributing**
+
 - **Patterns**: Share useful hooks and skills
 - **Documentation**: Improve setup guides
 - **Security**: Report security issues privately
@@ -264,4 +297,6 @@ The Claude Code setup for Forge Space is designed to be:
 - **💰 Efficient**: Token optimization and cost control
 - **👥 Team-Friendly**: Consistent patterns with personal customization
 
-**Remember**: Claude configuration files are **intentionally excluded** from git tracking to maintain security and flexibility. Each developer should set up their own configuration following the patterns documented here.
+**Remember**: Claude configuration files are **intentionally excluded** from git
+tracking to maintain security and flexibility. Each developer should set up
+their own configuration following the patterns documented here.

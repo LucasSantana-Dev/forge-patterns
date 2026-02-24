@@ -1,15 +1,21 @@
 # UIForge MCP Ultimate Enhanced Prompts
 
-Complete integration of all 13 skills for UIForge MCP development, including AI SDK integration, theme-driven component generation, and systematic debugging excellence.
+Complete integration of all 13 skills for UIForge MCP development, including AI
+SDK integration, theme-driven component generation, and systematic debugging
+excellence.
 
 ## 🚀 Service Layer Architecture with Complete Skills
 
 ### **AI-Enhanced MCP Server with All Skills**
-```markdown
+
+````markdown
 # MCP Server with Complete Skill Integration
-You are enhancing the UIForge MCP server with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are enhancing the UIForge MCP server with complete skill integration
+including AI capabilities, professional theming, and systematic debugging.
 
 COMPLETE MCP SERVER STACK:
+
 - @[/ai-sdk]: Intelligent agent systems and tool generation
 - @[/api-design-principles]: MCP tool API design excellence
 - @[/systematic-debugging]: Service troubleshooting and monitoring
@@ -25,6 +31,7 @@ COMPLETE MCP SERVER STACK:
 - @[/supabase-postgres-best-practices]: Database integration
 
 MCP SERVER ENHANCEMENT WORKFLOW:
+
 1. Design tool APIs with @[/api-design-principles]
 2. Create AI agents with @[/ai-sdk] for tool generation
 3. Apply professional themes with @[/theme-factory]
@@ -34,61 +41,65 @@ MCP SERVER ENHANCEMENT WORKFLOW:
 7. Apply composition patterns with @[/vercel-composition-patterns]
 
 ULTIMATE MCP SERVER ARCHITECTURE:
+
 ```typescript
 // src/server/ultimate-mcp-server.ts
-import { Server } from '@modelcontextprotocol/sdk/server/index.js'
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
-import { ThemeFactory } from './theme-factory.js'
-import { SystematicDebugger } from './systematic-debugger.js'
-import { CreativeToolGenerator } from './creative-tool-generator.js'
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+import { ThemeFactory } from './theme-factory.js';
+import { SystematicDebugger } from './systematic-debugger.js';
+import { CreativeToolGenerator } from './creative-tool-generator.js';
 
 class UltimateMCPServer extends Server {
-  private themeFactory: ThemeFactory
-  private debugger: SystematicDebugger
-  private creativeGenerator: CreativeToolGenerator
+  private themeFactory: ThemeFactory;
+  private debugger: SystematicDebugger;
+  private creativeGenerator: CreativeToolGenerator;
 
   constructor() {
-    super({
-      name: 'ui-forge-mcp-ultimate',
-      version: '2.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    super(
+      {
+        name: 'ui-forge-mcp-ultimate',
+        version: '2.0.0'
       },
-    })
+      {
+        capabilities: {
+          tools: {}
+        }
+      }
+    );
 
-    this.themeFactory = new ThemeFactory()
-    this.debugger = new SystematicDebugger()
-    this.creativeGenerator = new CreativeToolGenerator()
-    
-    this.setupUltimateTools()
+    this.themeFactory = new ThemeFactory();
+    this.debugger = new SystematicDebugger();
+    this.creativeGenerator = new CreativeToolGenerator();
+
+    this.setupUltimateTools();
   }
 
   private setupUltimateTools() {
     // AI-powered component generation tool
-    this.setRequestHandler('tools/call', async (request) => {
-      const { name, arguments: args } = request.params
+    this.setRequestHandler('tools/call', async request => {
+      const { name, arguments: args } = request.params;
 
       if (name === 'generate_component') {
-        return await this.generateComponentWithAI(args)
+        return await this.generateComponentWithAI(args);
       }
 
       if (name === 'generate_ui_with_theme') {
-        return await this.generateUITheme(args)
+        return await this.generateUITheme(args);
       }
 
       if (name === 'debug_service') {
-        return await this.debugService(args)
+        return await this.debugService(args);
       }
 
       if (name === 'create_custom_tool') {
-        return await this.createCustomTool(args)
+        return await this.createCustomTool(args);
       }
 
-      throw new Error(`Unknown tool: ${name}`)
-    })
+      throw new Error(`Unknown tool: ${name}`);
+    });
 
     // Theme application tool
     this.addTool({
@@ -103,12 +114,13 @@ class UltimateMCPServer extends Server {
         },
         required: ['componentCode', 'themeName', 'componentType']
       }
-    })
+    });
 
     // AI-enhanced tool generation
     this.addTool({
       name: 'generate_ai_enhanced_tool',
-      description: 'Generate MCP tool with AI capabilities and professional theming',
+      description:
+        'Generate MCP tool with AI capabilities and professional theming',
       inputSchema: {
         type: 'object',
         properties: {
@@ -119,7 +131,7 @@ class UltimateMCPServer extends Server {
         },
         required: ['toolDescription', 'features']
       }
-    })
+    });
 
     // Systematic debugging tool
     this.addTool({
@@ -134,11 +146,11 @@ class UltimateMCPServer extends Server {
         },
         required: ['issueDescription', 'component']
       }
-    })
+    });
   }
 
   private async generateComponentWithAI(args: any) {
-    const { description, framework, theme, features } = args
+    const { description, framework, theme, features } = args;
 
     try {
       const { text } = await generateText({
@@ -170,7 +182,7 @@ class UltimateMCPServer extends Server {
         system: `You are an expert ${framework} developer with access to professional theming, 
                 design principles, and accessibility standards. Use all available tools to create 
                 comprehensive, production-ready components.`
-      })
+      });
 
       return {
         success: true,
@@ -178,65 +190,68 @@ class UltimateMCPServer extends Server {
         theme: theme || 'Modern Minimalist',
         framework,
         features
-      }
+      };
     } catch (error) {
-      const debugging = await this.debugger.analyzeError(error, 'component_generation')
+      const debugging = await this.debugger.analyzeError(
+        error,
+        'component_generation'
+      );
       return {
         success: false,
         error: error.message,
         debugging: debugging
-      }
+      };
     }
   }
 
   private async generateUITheme(args: any) {
-    const { componentType, aesthetic, userPreferences } = args
+    const { componentType, aesthetic, userPreferences } = args;
 
-    const theme = this.themeFactory.selectTheme(aesthetic, userPreferences)
-    const designDirection = this.themeFactory.getDesignDirection(theme.name)
-    
+    const theme = this.themeFactory.selectTheme(aesthetic, userPreferences);
+    const designDirection = this.themeFactory.getDesignDirection(theme.name);
+
     const themedComponent = await this.applyThemeToComponent(
       componentType,
       theme,
       designDirection
-    )
+    );
 
     return {
       theme: theme,
       designDirection,
       component: themedComponent,
       accessibility: await this.ensureAccessibility(themedComponent)
-    }
+    };
   }
 
   private async debugService(args: any) {
-    const { issueDescription, component, context } = args
+    const { issueDescription, component, context } = args;
 
     return await this.debugger.debugMCPService(
       issueDescription,
       component,
       context
-    )
+    );
   }
 
   private async createCustomTool(args: any) {
-    const { toolName, description, capabilities, theme } = args
+    const { toolName, description, capabilities, theme } = args;
 
     return await this.creativeGenerator.createCustomTool(
       toolName,
       description,
       capabilities,
       theme
-    )
+    );
   }
 }
 
 // Theme factory for MCP
 class ThemeFactory {
-  private themes: Map<string, ProfessionalTheme> = new Map()
+  private themes: Map<string, ProfessionalTheme> = new Map();
 
   constructor() {
-    this.initializeThemes()
+    this.initializeThemes();
   }
 
   private initializeThemes() {
@@ -262,14 +277,15 @@ class ThemeFactory {
       gradients: {
         primary: 'linear-gradient(135deg, #0066CC, #004080)',
         subtle: 'linear-gradient(135deg, #F8FAFC, #E2E8F0)',
-        glass: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))'
+        glass:
+          'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))'
       },
       shadows: {
         small: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         medium: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         large: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
       }
-    })
+    });
 
     this.themes.set('Tech Innovation', {
       name: 'Tech Innovation',
@@ -293,26 +309,27 @@ class ThemeFactory {
       gradients: {
         primary: 'linear-gradient(135deg, #6366F1, #4F46E5)',
         subtle: 'linear-gradient(135deg, #1E293B, #334155)',
-        glass: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.05))'
+        glass:
+          'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.05))'
       },
       shadows: {
         small: '0 1px 2px 0 rgba(99, 102, 241, 0.05)',
         medium: '0 4px 6px -1px rgba(99, 102, 241, 0.1)',
         large: '0 10px 15px -3px rgba(99, 102, 241, 0.1)'
       }
-    })
+    });
   }
 
   selectTheme(aesthetic: string, userPreferences?: any): ProfessionalTheme {
     const themeMap = {
-      'professional': 'Modern Minimalist',
-      'tech': 'Tech Innovation',
-      'modern': 'Modern Minimalist',
-      'minimalist': 'Modern Minimalist'
-    }
+      professional: 'Modern Minimalist',
+      tech: 'Tech Innovation',
+      modern: 'Modern Minimalist',
+      minimalist: 'Modern Minimalist'
+    };
 
-    const themeName = themeMap[aesthetic] || 'Modern Minimalist'
-    return this.themes.get(themeName) || this.themes.get('Modern Minimalist')
+    const themeName = themeMap[aesthetic] || 'Modern Minimalist';
+    return this.themes.get(themeName) || this.themes.get('Modern Minimalist');
   }
 
   getDesignDirection(themeName: string): DesignDirection {
@@ -329,45 +346,58 @@ class ThemeFactory {
         typography: 'technical',
         colors: 'vibrant'
       }
-    }
+    };
 
-    return directions[themeName] || directions['Modern Minimalist']
+    return directions[themeName] || directions['Modern Minimalist'];
   }
 }
 
 // Creative tool generator
 class CreativeToolGenerator {
-  private aiSDK: any
-  private themeFactory: ThemeFactory
+  private aiSDK: any;
+  private themeFactory: ThemeFactory;
 
   constructor() {
-    this.aiSDK = new AISDKIntegration()
-    this.themeFactory = new ThemeFactory()
+    this.aiSDK = new AISDKIntegration();
+    this.themeFactory = new ThemeFactory();
   }
 
-  async createCustomTool(toolName: string, description: string, capabilities: string[], theme: string) {
+  async createCustomTool(
+    toolName: string,
+    description: string,
+    capabilities: string[],
+    theme: string
+  ) {
     const creativeApproaches = await this.aiSDK.brainstorm({
       prompt: `Create innovative MCP tool: ${toolName} with capabilities: ${capabilities.join(', ')}`,
       context: 'tool_development'
-    })
+    });
 
-    const selectedTheme = this.themeFactory.selectTheme(theme)
+    const selectedTheme = this.themeFactory.selectTheme(theme);
     const toolDefinition = await this.generateToolDefinition(
       toolName,
       description,
       creativeApproaches,
       selectedTheme
-    )
+    );
 
     return {
       tool: toolDefinition,
       theme: selectedTheme,
       creativity: creativeApproaches,
-      implementation: await this.generateImplementation(toolDefinition, selectedTheme)
-    }
+      implementation: await this.generateImplementation(
+        toolDefinition,
+        selectedTheme
+      )
+    };
   }
 
-  private async generateToolDefinition(name: string, description: string, approaches: any, theme: ProfessionalTheme) {
+  private async generateToolDefinition(
+    name: string,
+    description: string,
+    approaches: any,
+    theme: ProfessionalTheme
+  ) {
     return {
       name,
       description,
@@ -375,16 +405,18 @@ class CreativeToolGenerator {
       inputSchema: this.generateInputSchema(approaches),
       theme: theme.name,
       features: approaches.features
-    }
+    };
   }
 }
 
 // Initialize and run the server
-const server = new UltimateMCPServer()
-const transport = new StdioServerTransport()
-server.connect(transport)
+const server = new UltimateMCPServer();
+const transport = new StdioServerTransport();
+server.connect(transport);
 ```
-```
+````
+
+````
 
 ## 🔧 Generator Factory Enhancement with Complete Skills
 
@@ -437,10 +469,10 @@ export class UltimateGeneratorFactory {
     try {
       // Apply creative design thinking
       const creativeApproach = await this.creativeDesigner.designComponent(spec)
-      
+
       // Select professional theme
       const theme = this.themeFactory.selectTheme(spec.aesthetic, spec.userPreferences)
-      
+
       // Generate component with AI
       const { text } = await generateText({
         model: openai('gpt-4-turbo'),
@@ -538,10 +570,10 @@ export class UltimateGeneratorFactory {
   async generateCompleteUIPage(pageSpec: PageSpecification): Promise<GeneratedPage> {
     // Apply brainstorming for page structure
     const pageStructure = await this.creativeDesigner.designPage(pageSpec)
-    
+
     // Select theme for the page
     const theme = this.themeFactory.selectTheme(pageSpec.aesthetic)
-    
+
     // Generate page with AI
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
@@ -673,8 +705,9 @@ class CreativeComponentDesigner {
       accessibility: await this.extractAccessibility(text)
     }
   }
-```
-```
+````
+
+````
 
 ## 🤖 AI SDK Integration with Complete Skills
 
@@ -918,13 +951,13 @@ export class AIToolGenerator {
   async generateCompleteTool(spec: CompleteToolSpecification): Promise<CompleteTool> {
     // Generate tool with AI
     const aiTool = await this.aiSDK.generateToolWithAI(spec)
-    
+
     // Apply professional theme
     const theme = this.themeFactory.selectTheme(spec.theme || 'Tech Innovation')
-    
+
     // Generate implementation
     const implementation = await this.generateImplementation(aiTool, theme)
-    
+
     return {
       tool: aiTool,
       theme,
@@ -948,7 +981,7 @@ export const ${aiTool.name.toLowerCase().replace(/\s+/g, '_')} = tool({
   execute: async (params) => {
     // AI-enhanced execution
     const result = await this.executeWithAI(params)
-    
+
     return {
       success: true,
       result,
@@ -1002,7 +1035,7 @@ describe('${aiTool.name}', () => {
     const result = await ${aiTool.name.toLowerCase().replace(/\s+/g, '_')}({
       // test parameters
     })
-    
+
     expect(result.success).toBe(true)
     expect(result.aiEnhanced).toBe(true)
   })
@@ -1010,6 +1043,8 @@ describe('${aiTool.name}', () => {
     `.trim()
   }
 }
-```
+````
 
-This ultimate enhanced prompts system for UIForge MCP integrates all 13 available skills to create comprehensive, intelligent, and professionally themed MCP tools with AI-powered capabilities and systematic debugging excellence.
+This ultimate enhanced prompts system for UIForge MCP integrates all 13
+available skills to create comprehensive, intelligent, and professionally themed
+MCP tools with AI-powered capabilities and systematic debugging excellence.

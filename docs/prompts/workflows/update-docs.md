@@ -1,18 +1,26 @@
 # Automated Documentation Updates with @[/update-docs]
 
-Comprehensive documentation management framework that leverages MCP tools for automated synchronization, intelligent content generation, and continuous documentation maintenance across the Forge ecosystem.
+Comprehensive documentation management framework that leverages MCP tools for
+automated synchronization, intelligent content generation, and continuous
+documentation maintenance across the Forge ecosystem.
 
 ## 🎯 Purpose
 
-Provide intelligent, automated documentation workflows that ensure comprehensive, up-to-date, and context-aware documentation maintenance for all Forge ecosystem projects.
+Provide intelligent, automated documentation workflows that ensure
+comprehensive, up-to-date, and context-aware documentation maintenance for all
+Forge ecosystem projects.
 
 ## 🔄 MCP Integration
 
-- **@[/update-docs]**: Automated documentation synchronization and content generation
-- **@[/get-context]**: Context-aware documentation analysis and relevance determination
-- **@[/mcp-docs-and-tools]**: Documentation accuracy verification and best practices
+- **@[/update-docs]**: Automated documentation synchronization and content
+  generation
+- **@[/get-context]**: Context-aware documentation analysis and relevance
+  determination
+- **@[/mcp-docs-and-tools]**: Documentation accuracy verification and best
+  practices
 - **@[/skill-mcp-docs-search]**: Documentation research and content enhancement
-- **@[/update-plan]**: Documentation-roadmap alignment and strategic synchronization
+- **@[/update-plan]**: Documentation-roadmap alignment and strategic
+  synchronization
 
 ## 📋 Automated Documentation Framework
 
@@ -320,12 +328,14 @@ DOCUMENTATION ANALYTICS FRAMEWORK:
 ## 📊 Success Metrics and KPIs
 
 ### Documentation Quality and Effectiveness
+
 - **Documentation Completeness**: > 95% coverage of all project components
 - **Content Accuracy**: > 98% accuracy in technical documentation
 - **Update Timeliness**: < 1 hour delay for documentation synchronization
 - **User Satisfaction**: > 4.5/5 satisfaction with documentation quality
 
 ### MCP Integration Benefits
+
 - **Automation Efficiency**: > 90% reduction in manual documentation effort
 - **Content Quality**: 85% improvement in documentation quality and consistency
 - **Maintenance Cost**: 80% reduction in documentation maintenance overhead
@@ -334,17 +344,29 @@ DOCUMENTATION ANALYTICS FRAMEWORK:
 ## 🔄 Continuous Documentation Improvement
 
 ### Learning and Adaptation
-- **Usage Pattern Learning**: Learn from documentation usage patterns for optimization
+
+- **Usage Pattern Learning**: Learn from documentation usage patterns for
+  optimization
 - **Content Effectiveness Tracking**: Monitor and optimize content effectiveness
-- **User Feedback Integration**: Incorporate user feedback for continuous improvement
-- **Algorithm Enhancement**: Continuously improve documentation generation algorithms
+- **User Feedback Integration**: Incorporate user feedback for continuous
+  improvement
+- **Algorithm Enhancement**: Continuously improve documentation generation
+  algorithms
 
 ### Ecosystem Documentation Integration
-- **Cross-Project Documentation**: Establish unified documentation across Forge projects
-- **Standardized Documentation Frameworks**: Create consistent documentation standards
-- **Documentation API Development**: Develop APIs for documentation access and integration
-- **Community Contribution**: Enable community documentation contributions and improvements
+
+- **Cross-Project Documentation**: Establish unified documentation across Forge
+  projects
+- **Standardized Documentation Frameworks**: Create consistent documentation
+  standards
+- **Documentation API Development**: Develop APIs for documentation access and
+  integration
+- **Community Contribution**: Enable community documentation contributions and
+  improvements
 
 ---
 
-This automated documentation framework provides intelligent, comprehensive, and continuously maintained documentation that leverages @[/update-docs] and MCP tools to ensure high-quality, up-to-date, and context-aware documentation across the entire Forge ecosystem.
+This automated documentation framework provides intelligent, comprehensive, and
+continuously maintained documentation that leverages @[/update-docs] and MCP
+tools to ensure high-quality, up-to-date, and context-aware documentation across
+the entire Forge ecosystem.

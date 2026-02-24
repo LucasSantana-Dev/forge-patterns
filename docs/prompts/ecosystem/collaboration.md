@@ -1,17 +1,22 @@
 # Team Collaboration Prompts with MCP Intelligence
 
-Comprehensive collaboration frameworks that leverage MCP tools for enhanced team coordination, communication, and productivity across the Forge ecosystem.
+Comprehensive collaboration frameworks that leverage MCP tools for enhanced team
+coordination, communication, and productivity across the Forge ecosystem.
 
 ## 🎯 Purpose
 
-Provide intelligent, MCP-enhanced collaboration strategies that improve team coordination, knowledge sharing, and productivity for all Forge ecosystem projects and cross-project initiatives.
+Provide intelligent, MCP-enhanced collaboration strategies that improve team
+coordination, knowledge sharing, and productivity for all Forge ecosystem
+projects and cross-project initiatives.
 
 ## 🔄 MCP Integration
 
 - **@[/get-context]**: Team capability analysis and collaboration context
 - **@[/mcp-docs-and-tools]**: Collaboration best practices and tool verification
-- **@[/skill-mcp-docs-search]**: Team workflow research and methodology discovery
-- **@[/update-docs]**: Automated collaboration documentation and knowledge capture
+- **@[/skill-mcp-docs-search]**: Team workflow research and methodology
+  discovery
+- **@[/update-docs]**: Automated collaboration documentation and knowledge
+  capture
 - **@[/update-plan]**: Dynamic team planning and resource coordination
 
 ## 📋 Universal Collaboration Framework
@@ -320,31 +325,46 @@ CROSS-FUNCTIONAL COLLABORATION ENHANCEMENT:
 ## 📊 Success Metrics and KPIs
 
 ### Collaboration Effectiveness
+
 - **Team Productivity**: > 30% improvement in team velocity and output
 - **Communication Quality**: > 90% reduction in communication misunderstandings
 - **Knowledge Sharing**: > 80% improvement in knowledge accessibility and reuse
-- **Stakeholder Satisfaction**: > 4.5/5 satisfaction with collaboration processes
+- **Stakeholder Satisfaction**: > 4.5/5 satisfaction with collaboration
+  processes
 
 ### MCP Integration Benefits
+
 - **Context Awareness**: 95% relevance in collaboration recommendations
 - **Tool Optimization**: 85% improvement in collaboration tool effectiveness
-- **Documentation Automation**: 90% reduction in manual collaboration documentation
+- **Documentation Automation**: 90% reduction in manual collaboration
+  documentation
 - **Process Intelligence**: 80% improvement in collaboration process efficiency
 
 ## 🔄 Continuous Collaboration Improvement
 
 ### Learning and Adaptation
-- **Collaboration Retrospectives**: Regular analysis of collaboration effectiveness
-- **Best Practice Evolution**: Continuous improvement of collaboration methodologies
-- **Tool Enhancement**: Ongoing optimization of collaboration tools and workflows
+
+- **Collaboration Retrospectives**: Regular analysis of collaboration
+  effectiveness
+- **Best Practice Evolution**: Continuous improvement of collaboration
+  methodologies
+- **Tool Enhancement**: Ongoing optimization of collaboration tools and
+  workflows
 - **Capability Development**: Team skill development and collaboration training
 
 ### Innovation and Experimentation
-- **Collaboration Innovation**: Experimentation with new collaboration approaches
-- **Tool Innovation**: Adoption and evaluation of emerging collaboration technologies
-- **Process Innovation**: Continuous improvement of collaboration processes and frameworks
+
+- **Collaboration Innovation**: Experimentation with new collaboration
+  approaches
+- **Tool Innovation**: Adoption and evaluation of emerging collaboration
+  technologies
+- **Process Innovation**: Continuous improvement of collaboration processes and
+  frameworks
 - **Cultural Innovation**: Evolution of team culture and collaboration norms
 
 ---
 
-This comprehensive collaboration framework provides intelligent, adaptive, and effective team coordination strategies that leverage MCP tools to enhance communication, knowledge sharing, and productivity across the entire Forge ecosystem.
+This comprehensive collaboration framework provides intelligent, adaptive, and
+effective team coordination strategies that leverage MCP tools to enhance
+communication, knowledge sharing, and productivity across the entire Forge
+ecosystem.

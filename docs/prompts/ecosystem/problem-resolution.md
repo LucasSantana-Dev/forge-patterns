@@ -1,17 +1,22 @@
 # Unified Problem Resolution Prompts
 
-Cross-project troubleshooting approaches with MCP-enhanced intelligent analysis and context-aware solutions.
+Cross-project troubleshooting approaches with MCP-enhanced intelligent analysis
+and context-aware solutions.
 
 ## 🎯 Purpose
 
-Provide standardized, intelligent problem resolution strategies that leverage MCP tools for context analysis, documentation search, and automated verification across all Forge ecosystem projects.
+Provide standardized, intelligent problem resolution strategies that leverage
+MCP tools for context analysis, documentation search, and automated verification
+across all Forge ecosystem projects.
 
 ## 🔄 MCP Integration
 
 - **@[/get-context]**: Real-time project state analysis and issue identification
 - **@[/mcp-docs-and-tools]**: API verification and best practice validation
-- **@[/skill-mcp-docs-search]**: Intelligent documentation and troubleshooting guide search
-- **@[/update-docs]**: Automated solution documentation and knowledge base updates
+- **@[/skill-mcp-docs-search]**: Intelligent documentation and troubleshooting
+  guide search
+- **@[/update-docs]**: Automated solution documentation and knowledge base
+  updates
 
 ## 📋 Universal Problem Resolution Framework
 
@@ -275,12 +280,14 @@ MCP-SECURITY ENHANCEMENT:
 ## 📊 Success Metrics and KPIs
 
 ### Problem Resolution Effectiveness
+
 - **Mean Time to Resolution (MTTR)**: < 4 hours for critical issues
 - **First Contact Resolution**: > 80% of issues resolved on first attempt
 - **Customer Satisfaction**: > 4.5/5 for resolution quality
 - **Knowledge Base Growth**: +50 new solutions documented monthly
 
 ### MCP Integration Benefits
+
 - **Context Accuracy**: 95% relevance in prompt recommendations
 - **Documentation Utilization**: 90% effective search and retrieval
 - **Automation Level**: 80% of resolutions include automated components
@@ -289,17 +296,24 @@ MCP-SECURITY ENHANCEMENT:
 ## 🔄 Continuous Improvement
 
 ### Learning and Adaptation
+
 - **Solution Analytics**: Track effectiveness of different resolution approaches
 - **Pattern Recognition**: Identify common issues and preventive measures
 - **Knowledge Evolution**: Update troubleshooting guides based on new insights
 - **Skill Development**: Enhance team capabilities through documented solutions
 
 ### Automation Enhancement
-- **Intelligent Routing**: Automatically categorize and route issues to specialists
+
+- **Intelligent Routing**: Automatically categorize and route issues to
+  specialists
 - **Predictive Analysis**: Identify potential issues before they impact users
 - **Self-Healing**: Implement automated resolution for common problems
-- **Knowledge Integration**: Continuously update prompt repository with new solutions
+- **Knowledge Integration**: Continuously update prompt repository with new
+  solutions
 
 ---
 
-This unified problem resolution framework provides intelligent, context-aware troubleshooting strategies that leverage MCP tools to deliver effective, documented, and continuously improving solutions across the entire Forge ecosystem.
+This unified problem resolution framework provides intelligent, context-aware
+troubleshooting strategies that leverage MCP tools to deliver effective,
+documented, and continuously improving solutions across the entire Forge
+ecosystem.

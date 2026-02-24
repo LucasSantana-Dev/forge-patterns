@@ -1,30 +1,35 @@
 # Ultimate Skills Integration Guide
 
-Complete implementation examples of how to combine all available skills for maximum impact across the Forge ecosystem.
+Complete implementation examples of how to combine all available skills for
+maximum impact across the Forge ecosystem.
 
 ---
 
 ## 🚀 Enhanced Development Workflow with New Rules & Skills
 
 ### **Phase 1: Planning & Design**
+
 - Use @[/brainstorming] for initial concept exploration
 - Apply @[/pattern] for SOLID/modular architecture design
 - Use @[/api-design-principles] for API contract design
 - Apply @[/systematic-debugging] methodology for risk assessment
 
 ### **Phase 2: Development**
+
 - Use @[/code-patterns] to avoid boilerplate and maintain quality
 - Apply @[/testing-quality] rules (85% coverage threshold)
 - Use @[/trunk-based-development] workflow for branch management
 - Apply @[/pattern-compliance] validation before merging
 
 ### **Phase 3: Quality Assurance**
+
 - Run @[/quality-checks] workflow (lint → build → test → security scan)
 - Use @[/improve-coverage] for test enhancement
 - Apply @[/test-ui-ux] for interface validation
 - Use @[/pattern-compliance] for final validation
 
 ### **Phase 4: Documentation & Deployment**
+
 - Use @[/generate-docs] for comprehensive documentation
 - Apply @[/generate-prompts] for agent interaction patterns
 - Use @[/train-ai] for model optimization
@@ -313,24 +318,28 @@ DOCUMENTATION:
 ### **Enhanced Development Workflow with New Rules & Skills**
 
 **Phase 1: Planning & Design**
+
 - Use @[/brainstorming] for initial concept exploration
 - Apply @[/pattern] for SOLID/modular architecture design
 - Use @[/api-design-principles] for API contract design
 - Apply @[/systematic-debugging] methodology for risk assessment
 
 **Phase 2: Development**
+
 - Use @[/code-patterns] to avoid boilerplate and maintain quality
 - Apply @[/testing-quality] rules (85% coverage threshold)
 - Use @[/trunk-based-development] workflow for branch management
 - Apply @[/pattern-compliance] validation before merging
 
 **Phase 3: Quality Assurance**
+
 - Run @[/quality-checks]: lint → build → test → security scan
 - Use @[/improve-coverage] for test enhancement
 - Apply @[/test-ui-ux] for interface validation
 - Use @[/pattern-compliance] for final validation
 
 **Phase 4: Documentation & Deployment**
+
 - Use @[/generate-docs] for comprehensive documentation
 - Apply @[/generate-prompts] for agent interaction patterns
 - Use @[/train-ai] for model optimization
@@ -341,18 +350,21 @@ DOCUMENTATION:
 ## 📊 Success Metrics
 
 ### **Quality Metrics**
+
 - **85%+ test coverage** across all projects
 - **Zero pattern compliance violations**
 - **100% trunk-based development adherence**
 - **Systematic debugging applied** to all issues
 
 ### **Productivity Metrics**
+
 - **50% reduction** in boilerplate code
 - **30% faster issue resolution** with systematic debugging
 - **40% improvement** in code review quality
 - **25% reduction** in technical debt
 
 ### **Ecosystem Metrics**
+
 - **100% workflow standardization**
 - **Zero breaking changes** between projects
 - **Complete documentation coverage**
@@ -360,4 +372,7 @@ DOCUMENTATION:
 
 ---
 
-This enhanced guide provides a comprehensive framework for developing high-quality, maintainable, and scalable solutions across the entire Forge ecosystem by integrating advanced skills and systematic quality assurance methodologies.
+This enhanced guide provides a comprehensive framework for developing
+high-quality, maintainable, and scalable solutions across the entire Forge
+ecosystem by integrating advanced skills and systematic quality assurance
+methodologies.

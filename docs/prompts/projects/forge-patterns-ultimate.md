@@ -1,15 +1,21 @@
 # Forge Patterns Ultimate Enhanced Prompts
 
-Complete integration of all 13 skills for Forge Patterns development, including AI-powered pattern generation, professional theming, and systematic debugging excellence.
+Complete integration of all 13 skills for Forge Patterns development, including
+AI-powered pattern generation, professional theming, and systematic debugging
+excellence.
 
 ## 🚀 Pattern Library with Complete Skills
 
 ### **AI-Enhanced Pattern Generation**
-```markdown
+
+````markdown
 # Pattern Library with Complete Skill Integration
-You are enhancing the Forge Patterns library with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are enhancing the Forge Patterns library with complete skill integration
+including AI capabilities, professional theming, and systematic debugging.
 
 COMPLETE PATTERN LIBRARY STACK:
+
 - @[/ai-sdk]: Intelligent pattern generation and validation
 - @[/api-design-principles]: Pattern API design excellence
 - @[/systematic-debugging]: Pattern troubleshooting and validation
@@ -25,6 +31,7 @@ COMPLETE PATTERN LIBRARY STACK:
 - @[/supabase-postgres-best-practices]: Database patterns
 
 PATTERN LIBRARY WORKFLOW:
+
 1. Design patterns with @[/api-design-principles]
 2. Create AI agents with @[/ai-sdk] for pattern generation
 3. Apply professional themes with @[/theme-factory]
@@ -34,44 +41,50 @@ PATTERN LIBRARY WORKFLOW:
 7. Apply composition patterns with @[/vercel-composition-patterns]
 
 ULTIMATE PATTERN LIBRARY ARCHITECTURE:
+
 ```typescript
 // patterns/ultimate-pattern-library.ts
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
-import { ThemeFactory } from './theme-factory.js'
-import { SystematicDebugger } from './systematic-debugger.js'
-import { CreativePatternDesigner } from './creative-pattern-designer.js'
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+import { ThemeFactory } from './theme-factory.js';
+import { SystematicDebugger } from './systematic-debugger.js';
+import { CreativePatternDesigner } from './creative-pattern-designer.js';
 
 export class UltimatePatternLibrary {
-  private themeFactory: ThemeFactory
-  private debugger: SystematicDebugger
-  private creativeDesigner: CreativePatternDesigner
+  private themeFactory: ThemeFactory;
+  private debugger: SystematicDebugger;
+  private creativeDesigner: CreativePatternDesigner;
 
   constructor() {
-    this.themeFactory = new ThemeFactory()
-    this.debugger = new SystematicDebugger()
-    this.creativeDesigner = new CreativePatternDesigner()
-    
-    this.initializePatterns()
+    this.themeFactory = new ThemeFactory();
+    this.debugger = new SystematicDebugger();
+    this.creativeDesigner = new CreativePatternDesigner();
+
+    this.initializePatterns();
   }
 
   private initializePatterns() {
     // Initialize all pattern categories with AI enhancement
-    this.patterns.set('architecture', new ArchitecturePatternSet())
-    this.patterns.set('code-quality', new CodeQualityPatternSet())
-    this.patterns.set('docker', new DockerPatternSet())
-    this.patterns.set('cost', new CostPatternSet())
-    this.patterns.set('config', new ConfigurationPatternSet())
-    this.patterns.set('ai-tools', new AIToolsPatternSet())
-    this.patterns.set('cloud-native', new CloudNativePatternSet())
-    this.patterns.set('shared-infrastructure', new SharedInfrastructurePatternSet())
-    this.patterns.set('mcp-gateway', new MCPGatewayPatternSet())
-    this.patterns.set('mcp-servers', new MCPServersPatternSet())
-    this.patterns.set('streaming', new StreamingPatternSet())
-    this.patterns.set('templates', new TemplatePatternSet())
+    this.patterns.set('architecture', new ArchitecturePatternSet());
+    this.patterns.set('code-quality', new CodeQualityPatternSet());
+    this.patterns.set('docker', new DockerPatternSet());
+    this.patterns.set('cost', new CostPatternSet());
+    this.patterns.set('config', new ConfigurationPatternSet());
+    this.patterns.set('ai-tools', new AIToolsPatternSet());
+    this.patterns.set('cloud-native', new CloudNativePatternSet());
+    this.patterns.set(
+      'shared-infrastructure',
+      new SharedInfrastructurePatternSet()
+    );
+    this.patterns.set('mcp-gateway', new MCPGatewayPatternSet());
+    this.patterns.set('mcp-servers', new MCPServersPatternSet());
+    this.patterns.set('streaming', new StreamingPatternSet());
+    this.patterns.set('templates', new TemplatePatternSet());
   }
 
-  async generatePatternWithAI(patternSpec: PatternSpecification): Promise<GeneratedPattern> {
+  async generatePatternWithAI(
+    patternSpec: PatternSpecification
+  ): Promise<GeneratedPattern> {
     try {
       const { text } = await generateText({
         model: openai('gpt-4-turbo'),
@@ -103,27 +116,35 @@ export class UltimatePatternLibrary {
         system: `You are an expert pattern designer with access to pattern architecture, professional theming,
                 and accessibility standards. Create comprehensive, well-documented patterns that are
                 both technically sound and easy to understand.`
-      })
+      });
 
       return {
         success: true,
         pattern: text,
         category: patternSpec.category,
-        theme: await this.themeFactory.selectTheme(patternSpec.theme || 'Modern Minimalist'),
+        theme: await this.themeFactory.selectTheme(
+          patternSpec.theme || 'Modern Minimalist'
+        ),
         accessibility: await this.ensurePatternAccessibility(text),
         validation: await this.validatePattern(text, patternSpec.category)
-      }
+      };
     } catch (error) {
-      const debugging = await this.debugger.analyzeError(error, 'pattern_generation')
+      const debugging = await this.debugger.analyzeError(
+        error,
+        'pattern_generation'
+      );
       return {
         success: false,
         error: error.message,
         debugging
-      }
+      };
     }
   }
 
-  async validatePatternWithAI(pattern: string, category: string): Promise<PatternValidation> {
+  async validatePatternWithAI(
+    pattern: string,
+    category: string
+  ): Promise<PatternValidation> {
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Validate ${category} pattern: ${pattern}`,
@@ -154,19 +175,22 @@ export class UltimatePatternLibrary {
       },
       system: `You are an expert pattern validator with access to structure validation, best practices,
                 and accessibility standards. Provide comprehensive validation reports.`
-    })
+    });
 
     return {
       valid: await this.extractValidationStatus(text),
       issues: await this.extractIssues(text),
       recommendations: await this.extractRecommendations(text),
       accessibility: await this.extractAccessibility(text)
-    }
+    };
   }
 
-  async generatePatternDocumentation(pattern: string, theme: string): Promise<PatternDocumentation> {
-    const selectedTheme = this.themeFactory.selectTheme(theme)
-    
+  async generatePatternDocumentation(
+    pattern: string,
+    theme: string
+  ): Promise<PatternDocumentation> {
+    const selectedTheme = this.themeFactory.selectTheme(theme);
+
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Generate documentation for pattern: ${pattern}`,
@@ -196,20 +220,22 @@ export class UltimatePatternLibrary {
       },
       system: `You are an expert documentation writer with access to structure creation, professional theming,
                 and accessibility standards. Create comprehensive, accessible documentation.`
-    })
+    });
 
     return {
       documentation: text,
       theme: selectedTheme,
       structure: await this.extractDocumentationStructure(text),
       accessibility: await this.ensureDocumentationAccessibility(text)
-    }
+    };
   }
 }
 
 // AI-enhanced pattern designer
 class CreativePatternDesigner {
-  async designPattern(spec: PatternSpecification): Promise<CreativePatternDesign> {
+  async designPattern(
+    spec: PatternSpecification
+  ): Promise<CreativePatternDesign> {
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Design creative pattern for: ${spec.description}`,
@@ -240,26 +266,32 @@ class CreativePatternDesigner {
       },
       system: `You are a creative pattern designer with expertise in innovative thinking and systematic design.
               Use brainstorming techniques to explore creative approaches and design comprehensive patterns.`
-    })
+    });
 
     return {
       design: text,
       approaches: await this.extractApproaches(text),
       structure: await this.extractStructure(text),
       recommendations: await this.extractRecommendations(text)
-    }
+    };
   }
 }
 ```
+````
 
 ## 🔧 Configuration Management with Complete Skills
 
 ### **AI-Enhanced Configuration Patterns**
-```markdown
+
+````markdown
 # Configuration Management with Complete Skill Integration
-You are enhancing Forge Patterns configuration management with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are enhancing Forge Patterns configuration management with complete skill
+integration including AI capabilities, professional theming, and systematic
+debugging.
 
 COMPLETE CONFIGURATION STACK:
+
 - @[/ai-sdk]: Intelligent configuration generation and validation
 - @[/api-design-principles]: Configuration API design excellence
 - @[/systematic-debugging]: Configuration troubleshooting
@@ -272,6 +304,7 @@ COMPLETE CONFIGURATION STACK:
 - @[/brainstorming]: Creative configuration solutions
 
 CONFIGURATION WORKFLOW:
+
 1. Design configuration with @[/api-design-principles]
 2. Create AI agents with @[/ai-sdk] for configuration management
 3. Apply professional themes with @[/theme-factory]
@@ -281,26 +314,29 @@ CONFIGURATION WORKFLOW:
 7. Apply composition patterns with @[/vercel-composition-patterns]
 
 ULTIMATE CONFIGURATION SYSTEM:
+
 ```typescript
 // patterns/config/ultimate-configuration-manager.ts
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
-import { ThemeFactory } from '../theme-factory.js'
-import { SystematicDebugger } from '../systematic-debugger.js'
-import { CreativeConfigDesigner } from '../creative-config-designer.js'
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+import { ThemeFactory } from '../theme-factory.js';
+import { SystematicDebugger } from '../systematic-debugger.js';
+import { CreativeConfigDesigner } from '../creative-config-designer.js';
 
 export class UltimateConfigurationManager {
-  private themeFactory: ThemeFactory
-  private debugger: SystematicDebugger
-  private creativeDesigner: CreativeConfigDesigner
+  private themeFactory: ThemeFactory;
+  private debugger: SystematicDebugger;
+  private creativeDesigner: CreativeConfigDesigner;
 
   constructor() {
-    this.themeFactory = new ThemeFactory()
-    this.debugger = new SystematicDebugger()
-    this.creativeDesigner = new CreativeConfigDesigner()
+    this.themeFactory = new ThemeFactory();
+    this.debugger = new SystematicDebugger();
+    this.creativeDesigner = new CreativeConfigDesigner();
   }
 
-  async generateConfigurationWithAI(configSpec: ConfigurationSpecification): Promise<GeneratedConfiguration> {
+  async generateConfigurationWithAI(
+    configSpec: ConfigurationSpecification
+  ): Promise<GeneratedConfiguration> {
     try {
       const { text } = await generateText({
         model: openai('gpt-4-turbo'),
@@ -331,27 +367,35 @@ export class UltimateConfigurationManager {
         },
         system: `You are an expert configuration designer with access to schema design, professional theming,
                 and accessibility standards. Create comprehensive, accessible configurations.`
-      })
+      });
 
       return {
         success: true,
         configuration: text,
         schema: await this.extractConfigurationSchema(text),
-        theme: await this.themeFactory.selectTheme(configSpec.theme || 'Modern Minimalist'),
+        theme: await this.themeFactory.selectTheme(
+          configSpec.theme || 'Modern Minimalist'
+        ),
         accessibility: await this.ensureConfigurationAccessibility(text),
         validation: await this.validateConfiguration(text, configSpec.type)
-      }
+      };
     } catch (error) {
-      const debugging = await this.debugger.analyzeError(error, 'configuration_generation')
+      const debugging = await this.debugger.analyzeError(
+        error,
+        'configuration_generation'
+      );
       return {
         success: false,
         error: error.message,
         debugging
-      }
+      };
     }
   }
 
-  async validateConfigurationWithAI(config: string, type: string): Promise<ConfigurationValidation> {
+  async validateConfigurationWithAI(
+    config: string,
+    type: string
+  ): Promise<ConfigurationValidation> {
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Validate ${type} configuration: ${config}`,
@@ -382,19 +426,22 @@ export class UltimateConfigurationManager {
       },
       system: `You are an expert configuration validator with access to schema validation, rule checking,
                 and accessibility standards. Provide comprehensive validation reports.`
-    })
+    });
 
     return {
       valid: await this.extractValidationStatus(text),
       errors: await this.extractErrors(text),
       warnings: await this.extractWarnings(text),
       accessibility: await this.extractAccessibility(text)
-    }
+    };
   }
 
-  async generateConfigurationUI(config: string, theme: string): Promise<ConfigurationUI> {
-    const selectedTheme = this.themeFactory.selectTheme(theme)
-    
+  async generateConfigurationUI(
+    config: string,
+    theme: string
+  ): Promise<ConfigurationUI> {
+    const selectedTheme = this.themeFactory.selectTheme(theme);
+
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Generate UI for configuration: ${config}`,
@@ -424,26 +471,32 @@ export class UltimateConfigurationManager {
       },
       system: `You are an expert UI designer with access to interface creation, professional theming,
                 and accessibility standards. Create comprehensive, accessible configuration interfaces.`
-    })
+    });
 
     return {
       interface: text,
       theme: selectedTheme,
       components: await this.extractComponents(text),
       accessibility: await this.ensureInterfaceAccessibility(text)
-    }
+    };
   }
 }
 ```
+````
 
 ## 🎨 Theme-Driven Pattern Documentation
 
 ### **Professional Pattern Documentation**
-```markdown
+
+````markdown
 # Theme-Driven Pattern Documentation with Complete Skills
-You are creating theme-driven pattern documentation with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are creating theme-driven pattern documentation with complete skill
+integration including AI capabilities, professional theming, and systematic
+debugging.
 
 COMPLETE DOCUMENTATION STACK:
+
 - @[/ai-sdk]: Intelligent documentation generation
 - @[/theme-factory]: Professional documentation theming
 - @[/frontend-design]: Distinctive documentation presentation
@@ -454,6 +507,7 @@ COMPLETE DOCUMENTATION STACK:
 - @[/skill-creator]: Custom documentation frameworks
 
 DOCUMENTATION WORKFLOW:
+
 1. Generate documentation with @[/ai-sdk]
 2. Apply professional themes with @[/theme-factory]
 3. Apply design principles with @[/frontend-design]
@@ -463,29 +517,33 @@ DOCUMENTATION WORKFLOW:
 7. Apply creative approaches with @[/brainstorming]
 
 ULTIMATE DOCUMENTATION SYSTEM:
+
 ```typescript
 // patterns/documentation/ultimate-documentation-generator.ts
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
-import { ThemeFactory } from '../theme-factory.js'
-import { SystematicDebugger } from '../systematic-debugger.js'
-import { CreativeDocumentationDesigner } from '../creative-documentation-designer.js'
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+import { ThemeFactory } from '../theme-factory.js';
+import { SystematicDebugger } from '../systematic-debugger.js';
+import { CreativeDocumentationDesigner } from '../creative-documentation-designer.js';
 
 export class UltimateDocumentationGenerator {
-  private themeFactory: ThemeFactory
-  private debugger: SystematicDebugger
-  private creativeDesigner: CreativeDocumentationDesigner
+  private themeFactory: ThemeFactory;
+  private debugger: SystematicDebugger;
+  private creativeDesigner: CreativeDocumentationDesigner;
 
   constructor() {
-    this.themeFactory = new ThemeFactory()
-    this.debugger = new SystematicDebugger()
-    this.creativeDesigner = new CreativeDocumentationDesigner()
+    this.themeFactory = new ThemeFactory();
+    this.debugger = new SystematicDebugger();
+    this.creativeDesigner = new CreativeDocumentationDesigner();
   }
 
-  async generatePatternDocumentation(pattern: string, theme: string): Promise<PatternDocumentation> {
+  async generatePatternDocumentation(
+    pattern: string,
+    theme: string
+  ): Promise<PatternDocumentation> {
     try {
-      const selectedTheme = this.themeFactory.selectTheme(theme)
-      
+      const selectedTheme = this.themeFactory.selectTheme(theme);
+
       const { text } = await generateText({
         model: openai('gpt-4-turbo'),
         prompt: `Generate comprehensive documentation for pattern: ${pattern}`,
@@ -515,7 +573,7 @@ export class UltimateDocumentationGenerator {
         },
         system: `You are an expert documentation writer with access to structure creation, professional theming,
                 and accessibility standards. Create comprehensive, accessible documentation.`
-      })
+      });
 
       return {
         success: true,
@@ -524,20 +582,26 @@ export class UltimateDocumentationGenerator {
         structure: await this.extractDocumentationStructure(text),
         accessibility: await this.ensureDocumentationAccessibility(text),
         examples: await this.generateExamples(pattern, selectedTheme)
-      }
+      };
     } catch (error) {
-      const debugging = await this.debugger.analyzeError(error, 'documentation_generation')
+      const debugging = await this.debugger.analyzeError(
+        error,
+        'documentation_generation'
+      );
       return {
         success: false,
         error: error.message,
         debugging
-      }
+      };
     }
   }
 
-  async generateInteractiveDocumentation(pattern: string, theme: string): Promise<InteractiveDocumentation> {
-    const selectedTheme = this.themeFactory.selectTheme(theme)
-    
+  async generateInteractiveDocumentation(
+    pattern: string,
+    theme: string
+  ): Promise<InteractiveDocumentation> {
+    const selectedTheme = this.themeFactory.selectTheme(theme);
+
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Generate interactive documentation for pattern: ${pattern}`,
@@ -567,7 +631,7 @@ export class UltimateDocumentationGenerator {
       },
       system: `You are an expert interactive documentation designer with access to component creation,
                 professional theming, and accessibility standards. Create engaging, accessible documentation.`
-    })
+    });
 
     return {
       documentation: text,
@@ -575,19 +639,25 @@ export class UltimateDocumentationGenerator {
       interactions: await this.extractInteractions(text),
       demos: await this.generateDemos(pattern, selectedTheme),
       accessibility: await this.ensureInteractiveAccessibility(text)
-    }
+    };
   }
 }
 ```
+````
 
 ## 🔍 Systematic Pattern Validation
 
 ### **AI-Enhanced Pattern Validation**
-```markdown
+
+````markdown
 # Systematic Pattern Validation with Complete Skills
-You are implementing systematic pattern validation with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are implementing systematic pattern validation with complete skill
+integration including AI capabilities, professional theming, and systematic
+debugging.
 
 COMPLETE VALIDATION STACK:
+
 - @[/ai-sdk]: Intelligent pattern validation and analysis
 - @[/api-design-principles]: Validation API design excellence
 - @[/systematic-debugging]: Validation troubleshooting
@@ -597,6 +667,7 @@ COMPLETE VALIDATION STACK:
 - @[/brainstorming]: Creative validation approaches
 
 VALIDATION WORKFLOW:
+
 1. Design validation with @[/api-design-principles]
 2. Create AI agents with @[/ai-sdk] for validation
 3. Apply professional themes with @[/theme-factory]
@@ -606,26 +677,30 @@ VALIDATION WORKFLOW:
 7. Create custom validation with @[/skill-creator]
 
 ULTIMATE VALIDATION SYSTEM:
+
 ```typescript
 // patterns/validation/ultimate-pattern-validator.ts
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
-import { ThemeFactory } from '../theme-factory.js'
-import { SystematicDebugger } from '../systematic-debugger.js'
-import { CreativeValidationDesigner } from '../creative-validation-designer.js'
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+import { ThemeFactory } from '../theme-factory.js';
+import { SystematicDebugger } from '../systematic-debugger.js';
+import { CreativeValidationDesigner } from '../creative-validation-designer.js';
 
 export class UltimatePatternValidator {
-  private themeFactory: ThemeFactory
-  private debugger: SystematicDebugger
-  private creativeDesigner: CreativeValidationDesigner
+  private themeFactory: ThemeFactory;
+  private debugger: SystematicDebugger;
+  private creativeDesigner: CreativeValidationDesigner;
 
   constructor() {
-    this.themeFactory = new ThemeFactory()
-    this.debugger = new SystematicDebugger()
-    this.creativeDesigner = new CreativeValidationDesigner()
+    this.themeFactory = new ThemeFactory();
+    this.debugger = new SystematicDebugger();
+    this.creativeDesigner = new CreativeValidationDesigner();
   }
 
-  async validatePatternWithAI(pattern: string, category: string): Promise<PatternValidation> {
+  async validatePatternWithAI(
+    pattern: string,
+    category: string
+  ): Promise<PatternValidation> {
     try {
       const { text } = await generateText({
         model: openai('gpt-4-turbo'),
@@ -657,7 +732,7 @@ export class UltimatePatternValidator {
         },
         system: `You are an expert pattern validator with access to structure validation, best practices,
                 and accessibility standards. Provide comprehensive validation reports.`
-      })
+      });
 
       return {
         success: true,
@@ -666,20 +741,26 @@ export class UltimatePatternValidator {
         recommendations: await this.extractRecommendations(text),
         accessibility: await this.extractAccessibility(text),
         theme: await this.themeFactory.selectTheme('Modern Minimalist')
-      }
+      };
     } catch (error) {
-      const debugging = await this.debugger.analyzeError(error, 'pattern_validation')
+      const debugging = await this.debugger.analyzeError(
+        error,
+        'pattern_validation'
+      );
       return {
         success: false,
         error: error.message,
         debugging
-      }
+      };
     }
   }
 
-  async generateValidationReport(pattern: string, category: string): Promise<ValidationReport> {
-    const validation = await this.validatePatternWithAI(pattern, category)
-    
+  async generateValidationReport(
+    pattern: string,
+    category: string
+  ): Promise<ValidationReport> {
+    const validation = await this.validatePatternWithAI(pattern, category);
+
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Generate validation report for ${category} pattern: ${pattern}`,
@@ -709,26 +790,31 @@ export class UltimatePatternValidator {
       },
       system: `You are an expert report writer with access to report creation, professional theming,
                 and accessibility standards. Create comprehensive, accessible validation reports.`
-    })
+    });
 
     return {
       report: text,
       validation,
       theme: await this.themeFactory.selectTheme('Modern Minimalist'),
       accessibility: await this.ensureReportAccessibility(text)
-    }
+    };
   }
 }
 ```
+````
 
 ## 📊 Pattern Analytics and Insights
 
 ### **AI-Powered Pattern Analytics**
-```markdown
+
+````markdown
 # Pattern Analytics with Complete Skills
-You are implementing pattern analytics with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are implementing pattern analytics with complete skill integration including
+AI capabilities, professional theming, and systematic debugging.
 
 COMPLETE ANALYTICS STACK:
+
 - @[/ai-sdk]: Intelligent analytics and insights
 - @[/api-design-principles]: Analytics API design excellence
 - @[/systematic-debugging]: Analytics troubleshooting
@@ -740,6 +826,7 @@ COMPLETE ANALYTICS STACK:
 - @[/brainstorming]: Creative analytics approaches
 
 ANALYTICS WORKFLOW:
+
 1. Design analytics with @[/api-design-principles]
 2. Create AI agents with @[/ai-sdk] for analytics
 3. Apply professional themes with @[/theme-factory]
@@ -749,26 +836,30 @@ ANALYTICS WORKFLOW:
 7. Apply creative approaches with @[/brainstorming]
 
 ULTIMATE ANALYTICS SYSTEM:
+
 ```typescript
 // patterns/analytics/ultimate-pattern-analytics.ts
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
-import { ThemeFactory } from '../theme-factory.js'
-import { SystematicDebugger } from '../systematic-debugger.js'
-import { CreativeAnalyticsDesigner } from '../creative-analytics-designer.js'
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+import { ThemeFactory } from '../theme-factory.js';
+import { SystematicDebugger } from '../systematic-debugger.js';
+import { CreativeAnalyticsDesigner } from '../creative-analytics-designer.js';
 
 export class UltimatePatternAnalytics {
-  private themeFactory: ThemeFactory
-  private debugger: SystematicDebugger
-  private creativeDesigner: CreativeAnalyticsDesigner
+  private themeFactory: ThemeFactory;
+  private debugger: SystematicDebugger;
+  private creativeDesigner: CreativeAnalyticsDesigner;
 
   constructor() {
-    this.themeFactory = new ThemeFactory()
-    this.debugger = new SystematicDebugger()
-    this.creativeDesigner = new CreativeAnalyticsDesigner()
+    this.themeFactory = new ThemeFactory();
+    this.debugger = new SystematicDebugger();
+    this.creativeDesigner = new CreativeAnalyticsDesigner();
   }
 
-  async analyzePatternWithAI(pattern: string, category: string): Promise<PatternAnalytics> {
+  async analyzePatternWithAI(
+    pattern: string,
+    category: string
+  ): Promise<PatternAnalytics> {
     try {
       const { text } = await generateText({
         model: openai('gpt-4-turbo'),
@@ -800,7 +891,7 @@ export class UltimatePatternAnalytics {
         },
         system: `You are an expert pattern analyst with access to metrics analysis, insight generation,
                 and professional theming. Create comprehensive, actionable analytics.`
-      })
+      });
 
       return {
         success: true,
@@ -809,20 +900,26 @@ export class UltimatePatternAnalytics {
         insights: await this.extractInsights(text),
         theme: await this.themeFactory.selectTheme('Tech Innovation'),
         recommendations: await this.extractRecommendations(text)
-      }
+      };
     } catch (error) {
-      const debugging = await this.debugger.analyzeError(error, 'pattern_analytics')
+      const debugging = await this.debugger.analyzeError(
+        error,
+        'pattern_analytics'
+      );
       return {
         success: false,
         error: error.message,
         debugging
-      }
+      };
     }
   }
 
-  async generateAnalyticsDashboard(patterns: string[], theme: string): Promise<AnalyticsDashboard> {
-    const selectedTheme = this.themeFactory.selectTheme(theme)
-    
+  async generateAnalyticsDashboard(
+    patterns: string[],
+    theme: string
+  ): Promise<AnalyticsDashboard> {
+    const selectedTheme = this.themeFactory.selectTheme(theme);
+
     const { text } = await generateText({
       model: openai('gpt-4-turbo'),
       prompt: `Generate analytics dashboard for patterns: ${patterns.join(', ')}`,
@@ -852,16 +949,20 @@ export class UltimatePatternAnalytics {
       },
       system: `You are an expert dashboard designer with access to widget creation, professional theming,
                 and accessibility standards. Create comprehensive, accessible analytics dashboards.`
-    })
+    });
 
     return {
       dashboard: text,
       theme: selectedTheme,
       widgets: await this.extractWidgets(text),
       accessibility: await this.ensureDashboardAccessibility(text)
-    }
+    };
   }
 }
 ```
+````
 
-This ultimate enhanced prompts system for Forge Patterns integrates all 13 available skills to create comprehensive, intelligent, and professionally themed pattern libraries with AI-powered capabilities and systematic debugging excellence.
+This ultimate enhanced prompts system for Forge Patterns integrates all 13
+available skills to create comprehensive, intelligent, and professionally themed
+pattern libraries with AI-powered capabilities and systematic debugging
+excellence.

@@ -1,14 +1,25 @@
 # Dynamic Skill Selection System
 
-Intelligent skill selection and context-aware prompt recommendation system for the Forge ecosystem.
+Intelligent skill selection and context-aware prompt recommendation system for
+the Forge ecosystem.
 
 ## 🧠 Skill-Aware Prompt Selection Engine
 
 ### **Core Selection Algorithm**
+
 ```typescript
 interface SkillSelectionEngine {
-  selectOptimalSkills(project: ForgeProject, task: string, context: TaskContext): Skill[];
-  enhancePromptWithSkills(basePrompt: string, skills: Skill[], project: ForgeProject, task: string): string;
+  selectOptimalSkills(
+    project: ForgeProject,
+    task: string,
+    context: TaskContext
+  ): Skill[];
+  enhancePromptWithSkills(
+    basePrompt: string,
+    skills: Skill[],
+    project: ForgeProject,
+    task: string
+  ): string;
   validateSkillEffectiveness(skills: Skill[], outcome: TaskOutcome): void;
   learnFromUsage(skillUsage: SkillUsageData): void;
 }
@@ -25,22 +36,22 @@ class EnhancedPromptSystem implements SkillSelectionEngine {
   }
 
   async selectOptimalSkills(
-    project: ForgeProject, 
-    task: string, 
+    project: ForgeProject,
+    task: string,
     context: TaskContext
   ): Promise<Skill[]> {
     // Step 1: Analyze task requirements
     const taskAnalysis = await this.analyzeTaskRequirements(task);
-    
+
     // Step 2: Get project-specific base skills
     const baseSkills = this.getProjectBaseSkills(project);
-    
+
     // Step 3: Determine context-specific needs
     const contextSkills = this.analyzeContextNeeds(context);
-    
+
     // Step 4: Apply learning from usage patterns
     const learnedSkills = this.getLearnedSkillPreferences(project, task);
-    
+
     // Step 5: Prioritize and combine skills
     return this.prioritizeSkills([
       ...baseSkills,
@@ -121,14 +132,14 @@ class EnhancedPromptSystem implements SkillSelectionEngine {
   private prioritizeSkills(skills: Skill[]): Skill[] {
     // Remove duplicates while preserving order
     const uniqueSkills = Array.from(new Set(skills));
-    
+
     // Sort by priority and relevance
     return uniqueSkills.sort((a, b) => {
       // Higher priority first
       if (a.priority !== b.priority) {
         return b.priority - a.priority;
       }
-      
+
       // Then by relevance score
       return b.relevanceScore - a.relevanceScore;
     });
@@ -144,7 +155,12 @@ class EnhancedPromptSystem implements SkillSelectionEngine {
 
     // Add skill-specific sections
     for (const skill of skills) {
-      enhancedPrompt = this.addSkillSection(enhancedPrompt, skill, project, task);
+      enhancedPrompt = this.addSkillSection(
+        enhancedPrompt,
+        skill,
+        project,
+        task
+      );
     }
 
     // Add project-specific context
@@ -166,8 +182,12 @@ class EnhancedPromptSystem implements SkillSelectionEngine {
     task: string
   ): string {
     const skillTemplate = this.getSkillTemplate(skill, project);
-    const contextualizedTemplate = this.contextualizeTemplate(skillTemplate, project, task);
-    
+    const contextualizedTemplate = this.contextualizeTemplate(
+      skillTemplate,
+      project,
+      task
+    );
+
     return `${prompt}\n\n${contextualizedTemplate}`;
   }
 
@@ -202,7 +222,11 @@ ${mcpTools.map(tool => `- Use @${tool} for ${tool.purpose}`).join('\n')}
     return `${prompt}\n\n${integrationSection}`;
   }
 
-  private addContextAwareness(prompt: string, project: ForgeProject, task: string): string {
+  private addContextAwareness(
+    prompt: string,
+    project: ForgeProject,
+    task: string
+  ): string {
     const awarenessSection = `
 CONTEXT-AWARE ENHANCEMENT:
 - Current project state analyzed with @[/get-context]
@@ -217,6 +241,7 @@ CONTEXT-AWARE ENHANCEMENT:
 ```
 
 ### **Context Analysis Framework**
+
 ```typescript
 interface ProjectContext {
   architecture: string;
@@ -240,7 +265,7 @@ interface TaskContext {
 class ContextAnalyzer {
   async analyzeProjectContext(project: ForgeProject): Promise<ProjectContext> {
     const context = await this.gatherProjectData(project);
-    
+
     return {
       architecture: this.identifyArchitecture(context),
       technology: this.extractTechnologyStack(context),
@@ -251,7 +276,10 @@ class ContextAnalyzer {
     };
   }
 
-  async analyzeTaskContext(task: string, project: ForgeProject): Promise<TaskContext> {
+  async analyzeTaskContext(
+    task: string,
+    project: ForgeProject
+  ): Promise<TaskContext> {
     return {
       hasErrors: this.detectErrorKeywords(task),
       requiresDesign: this.detectDesignKeywords(task),
@@ -265,44 +293,76 @@ class ContextAnalyzer {
 
   private detectErrorKeywords(task: string): boolean {
     const errorKeywords = [
-      'error', 'bug', 'issue', 'problem', 'failure', 'crash',
-      'broken', 'not working', 'exception', 'debug', 'troubleshoot'
+      'error',
+      'bug',
+      'issue',
+      'problem',
+      'failure',
+      'crash',
+      'broken',
+      'not working',
+      'exception',
+      'debug',
+      'troubleshoot'
     ];
-    
-    return errorKeywords.some(keyword => 
-      task.toLowerCase().includes(keyword)
-    );
+
+    return errorKeywords.some(keyword => task.toLowerCase().includes(keyword));
   }
 
   private detectDesignKeywords(task: string): boolean {
     const designKeywords = [
-      'design', 'ui', 'ux', 'interface', 'component', 'layout',
-      'visual', 'aesthetic', 'style', 'theme', 'responsive'
+      'design',
+      'ui',
+      'ux',
+      'interface',
+      'component',
+      'layout',
+      'visual',
+      'aesthetic',
+      'style',
+      'theme',
+      'responsive'
     ];
-    
-    return designKeywords.some(keyword => 
-      task.toLowerCase().includes(keyword)
-    );
+
+    return designKeywords.some(keyword => task.toLowerCase().includes(keyword));
   }
 
   private detectOptimizationKeywords(task: string): boolean {
     const optimizationKeywords = [
-      'optimize', 'performance', 'speed', 'slow', 'fast', 'efficient',
-      'improve', 'enhance', 'refactor', 'cleanup', 'streamline'
+      'optimize',
+      'performance',
+      'speed',
+      'slow',
+      'fast',
+      'efficient',
+      'improve',
+      'enhance',
+      'refactor',
+      'cleanup',
+      'streamline'
     ];
-    
-    return optimizationKeywords.some(keyword => 
+
+    return optimizationKeywords.some(keyword =>
       task.toLowerCase().includes(keyword)
     );
   }
 
   private detectDatabaseKeywords(task: string): boolean {
     const databaseKeywords = [
-      'database', 'schema', 'query', 'sql', 'migration', 'data',
-      'model', 'repository', 'storage', 'supabase', 'postgres'
+      'database',
+      'schema',
+      'query',
+      'sql',
+      'migration',
+      'data',
+      'model',
+      'repository',
+      'storage',
+      'supabase',
+      'postgres'
     ];
-    
-    return databaseKeywords.some(keyword => 
+
+    return databaseKeywords.some(keyword =>
       task.toLowerCase().includes(keyword)
     );
   }
@@ -315,7 +375,9 @@ class ContextAnalyzer {
     };
 
     for (const [level, indicators] of Object.entries(complexityIndicators)) {
-      if (indicators.some(indicator => task.toLowerCase().includes(indicator))) {
+      if (
+        indicators.some(indicator => task.toLowerCase().includes(indicator))
+      ) {
         return level as 'low' | 'medium' | 'high';
       }
     }
@@ -331,7 +393,9 @@ class ContextAnalyzer {
     };
 
     for (const [level, indicators] of Object.entries(urgencyIndicators)) {
-      if (indicators.some(indicator => task.toLowerCase().includes(indicator))) {
+      if (
+        indicators.some(indicator => task.toLowerCase().includes(indicator))
+      ) {
         return level as 'low' | 'medium' | 'high';
       }
     }
@@ -344,6 +408,7 @@ class ContextAnalyzer {
 ## 🔄 Dynamic Recommendation Engine
 
 ### **Intelligent Prompt Recommendation**
+
 ```typescript
 class PromptRecommendationEngine {
   private skillAnalyzer: SkillAnalyzer;
@@ -362,12 +427,16 @@ class PromptRecommendationEngine {
     userPreferences?: UserPreferences
   ): Promise<PromptRecommendation[]> {
     // Analyze context and requirements
-    const projectContext = await this.contextAnalyzer.analyzeProjectContext(project);
-    const taskContext = await this.contextAnalyzer.analyzeTaskContext(task, project);
-    
+    const projectContext =
+      await this.contextAnalyzer.analyzeProjectContext(project);
+    const taskContext = await this.contextAnalyzer.analyzeTaskContext(
+      task,
+      project
+    );
+
     // Select optimal skills
     const skills = await this.selectOptimalSkills(project, task, taskContext);
-    
+
     // Generate prompt recommendations
     const recommendations = await this.generateRecommendations(
       project,
@@ -494,6 +563,7 @@ class PromptRecommendationEngine {
 ```
 
 ### **Learning and Adaptation System**
+
 ```typescript
 class SkillLearningSystem {
   private usageData: Map<string, SkillUsageData[]> = new Map();
@@ -529,7 +599,10 @@ class SkillLearningSystem {
     this.adaptSelectionRules(usageData);
   }
 
-  private calculateEffectiveness(skills: Skill[], outcome: TaskOutcome): number {
+  private calculateEffectiveness(
+    skills: Skill[],
+    outcome: TaskOutcome
+  ): number {
     let effectiveness = 0;
 
     // Base effectiveness from outcome
@@ -540,7 +613,7 @@ class SkillLearningSystem {
     }
 
     // Adjust based on skill relevance
-    const relevantSkills = skills.filter(skill => 
+    const relevantSkills = skills.filter(skill =>
       this.isSkillRelevant(skill, outcome)
     );
     effectiveness += (relevantSkills.length / skills.length) * 0.3;
@@ -548,10 +621,13 @@ class SkillLearningSystem {
     return Math.min(effectiveness, 1.0);
   }
 
-  private updateEffectivenessScores(skills: Skill[], effectiveness: number): void {
+  private updateEffectivenessScores(
+    skills: Skill[],
+    effectiveness: number
+  ): void {
     for (const skill of skills) {
       const currentScore = this.effectivenessScores.get(skill.name) || 0.5;
-      const newScore = (currentScore * 0.8) + (effectiveness * 0.2); // Weighted average
+      const newScore = currentScore * 0.8 + effectiveness * 0.2; // Weighted average
       this.effectivenessScores.set(skill.name, newScore);
     }
   }
@@ -559,7 +635,7 @@ class SkillLearningSystem {
   private adaptSelectionRules(usageData: SkillUsageData): void {
     // Analyze patterns in successful outcomes
     const successfulPatterns = this.analyzeSuccessfulPatterns(usageData);
-    
+
     // Create adaptation rules based on patterns
     for (const pattern of successfulPatterns) {
       const rule: AdaptationRule = {
@@ -659,7 +735,7 @@ class SkillLearningSystem {
 
   private getProjectUsage(): Map<string, number> {
     const projectUsage = new Map<string, number>();
-    
+
     for (const usageArray of this.usageData.values()) {
       for (const usage of usageArray) {
         const current = projectUsage.get(usage.project) || 0;
@@ -676,7 +752,9 @@ class SkillLearningSystem {
     // Analyze low-performing skills
     for (const [skill, score] of this.effectivenessScores) {
       if (score < 0.3) {
-        recommendations.push(`Consider reviewing or replacing ${skill} - low effectiveness score: ${score.toFixed(2)}`);
+        recommendations.push(
+          `Consider reviewing or replacing ${skill} - low effectiveness score: ${score.toFixed(2)}`
+        );
       }
     }
 
@@ -684,7 +762,9 @@ class SkillLearningSystem {
     const combinations = this.analyzeSkillCombinations();
     for (const combo of combinations) {
       if (combo.effectiveness > 0.8) {
-        recommendations.push(`Highly effective combination: ${combo.skills.join(' + ')} (${combo.effectiveness.toFixed(2)})`);
+        recommendations.push(
+          `Highly effective combination: ${combo.skills.join(' + ')} (${combo.effectiveness.toFixed(2)})`
+        );
       }
     }
 
@@ -696,6 +776,7 @@ class SkillLearningSystem {
 ## 📊 Usage Analytics and Feedback
 
 ### **Analytics Dashboard**
+
 ```typescript
 class SkillUsageAnalytics {
   private metrics: SkillMetrics;
@@ -739,7 +820,7 @@ class SkillUsageAnalytics {
 
   private generateOverviewMetrics(): OverviewMetrics {
     const events = this.metrics.getAllEvents();
-    
+
     return {
       totalPrompts: events.length,
       successRate: this.calculateSuccessRate(events),
@@ -768,11 +849,11 @@ class SkillUsageAnalytics {
         const stats = skillStats.get(skillName)!;
         stats.usageCount++;
         stats.projects.add(event.project);
-        
+
         if (event.outcome.success) {
           stats.successCount++;
         }
-        
+
         stats.totalDuration += event.duration;
       }
     }
@@ -785,7 +866,9 @@ class SkillUsageAnalytics {
     }
 
     return {
-      skills: skillArray.sort((a, b) => b.averageEffectiveness - a.averageEffectiveness),
+      skills: skillArray.sort(
+        (a, b) => b.averageEffectiveness - a.averageEffectiveness
+      ),
       insights: this.generateSkillInsights(skillArray)
     };
   }
@@ -807,21 +890,25 @@ class SkillUsageAnalytics {
 
       const stats = projectStats.get(event.project)!;
       stats.totalPrompts++;
-      
+
       // Update other metrics
       this.updateProjectStats(stats, event);
     }
 
     return {
       projects: Array.from(projectStats.values()),
-      comparisons: this.generateProjectComparisons(Array.from(projectStats.values())),
-      recommendations: this.generateProjectRecommendations(Array.from(projectStats.values()))
+      comparisons: this.generateProjectComparisons(
+        Array.from(projectStats.values())
+      ),
+      recommendations: this.generateProjectRecommendations(
+        Array.from(projectStats.values())
+      )
     };
   }
 
   private generateTrendAnalysis(): TrendAnalysis {
     const timeSeriesData = this.metrics.getTimeSeriesData();
-    
+
     return {
       skillUsage: this.analyzeSkillTrends(timeSeriesData),
       projectActivity: this.analyzeProjectTrends(timeSeriesData),
@@ -871,6 +958,7 @@ class SkillUsageAnalytics {
 ## 📝 Implementation Guide
 
 ### **System Integration**
+
 ```typescript
 // Main integration point
 class EnhancedPromptSystem {
@@ -922,10 +1010,7 @@ class EnhancedPromptSystem {
     };
   }
 
-  async recordOutcome(
-    requestId: string,
-    outcome: TaskOutcome
-  ): Promise<void> {
+  async recordOutcome(requestId: string, outcome: TaskOutcome): Promise<void> {
     // Record usage for learning
     await this.learningSystem.recordSkillUsage(
       this.getRequestProject(requestId),
@@ -954,11 +1039,16 @@ class EnhancedPromptSystem {
     return {
       usageInsights: usageReport,
       analyticsInsights: analyticsReport,
-      recommendations: this.generateSystemRecommendations(usageReport, analyticsReport),
+      recommendations: this.generateSystemRecommendations(
+        usageReport,
+        analyticsReport
+      ),
       nextSteps: this.planOptimizations(usageReport, analyticsReport)
     };
   }
 }
 ```
 
-This dynamic skill selection system provides intelligent, context-aware prompt enhancement that learns from usage patterns and continuously improves its recommendations based on real-world effectiveness data.
+This dynamic skill selection system provides intelligent, context-aware prompt
+enhancement that learns from usage patterns and continuously improves its
+recommendations based on real-world effectiveness data.

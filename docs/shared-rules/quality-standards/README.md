@@ -4,14 +4,15 @@
 >
 > **Coverage**: Code quality, testing, security, and performance standards
 >
-> **Last Updated**: 2026-02-20
-> **Version**: 1.0.0
+> **Last Updated**: 2026-02-20 **Version**: 1.0.0
 
 ---
 
 ## 🎯 Overview
 
-This directory contains all quality-related standards that apply across the Forge Space ecosystem. These standards ensure consistent code quality, security, and performance across all projects.
+This directory contains all quality-related standards that apply across the
+Forge Space ecosystem. These standards ensure consistent code quality, security,
+and performance across all projects.
 
 ## 📁 Directory Structure
 
@@ -28,6 +29,7 @@ quality-standards/
 ## 🚀 Quick Reference
 
 ### Universal Quality Gates
+
 All projects must pass these quality gates:
 
 ```bash
@@ -46,11 +48,13 @@ bandit -r .           # No high/critical issues
 ```
 
 ### Coverage Requirements
+
 - **Minimum**: ≥80% statements, functions, lines, branches
 - **Target**: ≥85% for production-critical code
 - **E2E**: 100% coverage for critical user flows
 
 ### Security Standards
+
 - **Zero high/critical vulnerabilities** in all scans
 - **Regular dependency updates** for security patches
 - **Secret scanning** for all code changes
@@ -59,28 +63,36 @@ bandit -r .           # No high/critical issues
 ## 📋 Quality Standards by Category
 
 ### Testing Standards
+
 **File**: [testing.md](testing.md)
+
 - Unified testing strategies for all project types
 - Test runner configurations (Jest, Vitest, pytest)
 - Coverage thresholds and reporting
 - Anti-patterns and best practices
 
 ### Code Style Standards
+
 **File**: [linting-formatting.md](linting-formatting.md)
+
 - ESLint configurations for JavaScript/TypeScript
 - Ruff configurations for Python
 - Prettier formatting standards
 - Pre-commit hook configurations
 
 ### Security Standards
+
 **File**: [security.md](security.md)
+
 - Snyk vulnerability scanning
 - Secret scanning practices
 - Dependency security management
 - Secure coding guidelines
 
 ### Performance Standards
+
 **File**: [performance.md](performance.md)
+
 - Performance testing requirements
 - Monitoring and observability
 - Resource usage limits
@@ -89,12 +101,14 @@ bandit -r .           # No high/critical issues
 ## 🔧 Implementation by Project Type
 
 ### JavaScript/TypeScript Projects
+
 - **ESLint**: Strict mode with comprehensive rules
 - **Prettier**: Consistent code formatting
 - **TypeScript**: Strict type checking
 - **Jest/Vitest**: Comprehensive testing with coverage
 
 ### Python Projects
+
 - **Ruff**: Fast linting and formatting
 - **MyPy**: Type checking (where applicable)
 - **pytest**: Testing with coverage reporting
@@ -103,7 +117,9 @@ bandit -r .           # No high/critical issues
 ## 🚨 Quality Enforcement
 
 ### CI/CD Integration
+
 All quality checks run in CI pipelines:
+
 1. **Lint checks** - Fail on any errors/warnings
 2. **Type checks** - Fail on any type errors
 3. **Format checks** - Fail on formatting issues
@@ -112,7 +128,9 @@ All quality checks run in CI pipelines:
 6. **Build checks** - Fail on build failures
 
 ### Pre-commit Hooks
+
 Local development enforces quality:
+
 - **Automatic formatting** on save
 - **Lint errors** block commits
 - **Test failures** block pushes
@@ -121,18 +139,21 @@ Local development enforces quality:
 ## 📊 Quality Metrics
 
 ### Coverage Tracking
+
 - **Statements**: ≥80% coverage required
 - **Branches**: ≥80% coverage required
 - **Functions**: ≥80% coverage required
 - **Lines**: ≥80% coverage required
 
 ### Performance Metrics
+
 - **Build time**: <5 minutes for full builds
 - **Test time**: <2 minutes for test suites
 - **Bundle size**: Optimized for production
 - **Memory usage**: Within defined limits
 
 ### Security Metrics
+
 - **Vulnerabilities**: Zero high/critical issues
 - **Dependencies**: Regular security updates
 - **Secrets**: Zero exposed secrets
@@ -141,12 +162,14 @@ Local development enforces quality:
 ## 🔄 Quality Improvement Process
 
 ### Regular Reviews
+
 - **Weekly**: Quality metrics review
 - **Monthly**: Standards update review
 - **Quarterly**: Tool and configuration updates
 - **Annually**: Comprehensive quality audit
 
 ### Issue Resolution
+
 1. **Identify quality issues** through automated scans
 2. **Prioritize by severity** (critical > high > medium > low)
 3. **Assign owners** for resolution
@@ -164,14 +187,21 @@ Local development enforces quality:
 ## 🔗 Related Documentation
 
 ### Shared Rules
+
 - **[Agent Rules](../agent-rules.md)** - Core development principles
-- **[Development Workflows](../development-workflows/README.md)** - Process standards
+- **[Development Workflows](../development-workflows/README.md)** - Process
+  standards
 
 ### Project Documentation
-- **[MCP Gateway Quality](../../../mcp-gateway/docs/QUALITY.md)** - Gateway-specific quality
-- **[UIForge WebApp Quality](../../../uiforge-webapp/docs/QUALITY.md)** - WebApp-specific quality
-- **[UIForge MCP Quality](../../../uiforge-mcp/docs/QUALITY.md)** - MCP-specific quality
+
+- **[MCP Gateway Quality](../../../mcp-gateway/docs/QUALITY.md)** -
+  Gateway-specific quality
+- **[UIForge WebApp Quality](../../../uiforge-webapp/docs/QUALITY.md)** -
+  WebApp-specific quality
+- **[UIForge MCP Quality](../../../uiforge-mcp/docs/QUALITY.md)** - MCP-specific
+  quality
 
 ---
 
-*These quality standards are maintained as part of the forge-patterns repository and serve as the canonical quality requirements for all Forge Space projects.*
+_These quality standards are maintained as part of the forge-patterns repository
+and serve as the canonical quality requirements for all Forge Space projects._

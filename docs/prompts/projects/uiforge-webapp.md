@@ -1,18 +1,27 @@
 # UIForge WebApp Enhanced Prompts with Next.js + Supabase Integration
 
-Comprehensive, MCP-enhanced prompt library specifically designed for UIForge WebApp development, combining Next.js expertise, Supabase mastery, React proficiency, and intelligent workflow integration.
+Comprehensive, MCP-enhanced prompt library specifically designed for UIForge
+WebApp development, combining Next.js expertise, Supabase mastery, React
+proficiency, and intelligent workflow integration.
 
 ## 🎯 Purpose
 
-Provide specialized, context-aware prompts for UIForge WebApp development that leverage MCP tools for intelligent analysis, Next.js optimization, Supabase integration, and full-stack development excellence.
+Provide specialized, context-aware prompts for UIForge WebApp development that
+leverage MCP tools for intelligent analysis, Next.js optimization, Supabase
+integration, and full-stack development excellence.
 
 ## 🔄 MCP Integration
 
-- **@[/get-context]**: Real-time application state analysis and component health monitoring
-- **@[/mcp-docs-and-tools]**: Next.js/Supabase API verification and best practices validation
-- **@[/skill-mcp-docs-search]**: React/Next.js documentation research and optimization techniques
-- **@[/update-docs]**: Automated component documentation and API integration updates
-- **@[/update-plan]**: Frontend roadmap synchronization and feature planning alignment
+- **@[/get-context]**: Real-time application state analysis and component health
+  monitoring
+- **@[/mcp-docs-and-tools]**: Next.js/Supabase API verification and best
+  practices validation
+- **@[/skill-mcp-docs-search]**: React/Next.js documentation research and
+  optimization techniques
+- **@[/update-docs]**: Automated component documentation and API integration
+  updates
+- **@[/update-plan]**: Frontend roadmap synchronization and feature planning
+  alignment
 
 ## 📋 UIForge WebApp Development Framework
 
@@ -353,25 +362,36 @@ ANALYTICS IMPLEMENTATION WORKFLOW:
 ## 📊 Success Metrics and KPIs
 
 ### Development Effectiveness
+
 - **Code Quality**: > 95% adherence to React/Next.js best practices
 - **Performance Score**: > 90 Lighthouse performance score
 - **Bundle Size**: < 1MB initial bundle size with optimization
 - **Accessibility Score**: 100% WCAG 2.1 AA compliance
 
 ### MCP Integration Benefits
+
 - **Context Awareness**: 95% relevance in frontend development recommendations
 - **Documentation Automation**: 90% reduction in manual component documentation
-- **Best Practice Compliance**: 98% adherence to React/Next.js/Supabase best practices
+- **Best Practice Compliance**: 98% adherence to React/Next.js/Supabase best
+  practices
 - **Development Productivity**: 45% improvement in frontend development velocity
 
 ## 🔄 Continuous Improvement
 
 ### Learning and Adaptation
-- **Performance Monitoring**: Continuous monitoring of Web Vitals and user experience
-- **Accessibility Enhancement**: Ongoing accessibility improvements and compliance
-- **User Experience Evolution**: Continuous UX optimization based on user feedback
-- **Technology Advancement**: Regular evaluation and adoption of new frontend technologies
+
+- **Performance Monitoring**: Continuous monitoring of Web Vitals and user
+  experience
+- **Accessibility Enhancement**: Ongoing accessibility improvements and
+  compliance
+- **User Experience Evolution**: Continuous UX optimization based on user
+  feedback
+- **Technology Advancement**: Regular evaluation and adoption of new frontend
+  technologies
 
 ---
 
-This UIForge WebApp prompt library provides comprehensive, intelligent, and context-aware development guidance that leverages MCP tools to deliver high-quality, performant, and user-friendly Next.js applications with Supabase integration in the Forge ecosystem.
+This UIForge WebApp prompt library provides comprehensive, intelligent, and
+context-aware development guidance that leverages MCP tools to deliver
+high-quality, performant, and user-friendly Next.js applications with Supabase
+integration in the Forge ecosystem.

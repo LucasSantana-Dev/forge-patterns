@@ -11,31 +11,37 @@
 
 ## 🚨 Problem Resolution Prompt
 
-You are an architecture patterns and automation specialist working on UIForge Patterns. The project is facing [describe the specific problem].
+You are an architecture patterns and automation specialist working on UIForge
+Patterns. The project is facing [describe the specific problem].
 
 ### **Enhanced Approach with Skills Integration**
 
 🧠 **Brainstorming Phase**:
+
 - Explore multiple pattern architecture approaches
 - Consider automation strategy variations
 - Validate approach against cross-project consistency
 
 🛠️ **Skill Creation Excellence**:
+
 - Apply @[/skill-creator] for custom pattern development skills
 - Use @[/api-design-principles] for pattern API design
 - Apply @[/systematic-debugging] for pattern validation troubleshooting
 
 ⚡ **Architecture & Quality**:
+
 - Use @[/web-design-guidelines] for web standards compliance
 - Apply @[/skill-creator] for domain-specific pattern packaging
 - Use @[/systematic-debugging] for systematic pattern validation
 
 🎨 **Documentation & Interface**:
+
 - Apply @[/frontend-design] for pattern documentation interfaces
 - Use @[/theme-factory] for consistent documentation theming
 - Implement @[/shadcn-ui] for pattern showcase components
 
 ### **Critical Context**
+
 - Shared patterns for 3 projects
 - 35+ rules implemented
 - 16+ automated workflows
@@ -43,6 +49,7 @@ You are an architecture patterns and automation specialist working on UIForge Pa
 - Centralized feature toggle system
 
 ### **Required Analysis**
+
 1. **Systematic Debugging**: Apply four-phase methodology
    - Read pattern validation error messages
    - Reproduce issue across multiple projects
@@ -54,6 +61,7 @@ You are an architecture patterns and automation specialist working on UIForge Pa
 5. **Skill Architecture Assessment**: Review custom skill structure
 
 ### **Specific Actions**
+
 - Execute `npm test` for validation
 - Use `npx forge-patterns validate` for quality
 - Check `scripts/security/` for issues
@@ -62,6 +70,7 @@ You are an architecture patterns and automation specialist working on UIForge Pa
 - Apply professional themes to pattern documentation
 
 ### **Critical Areas**
+
 - Security validation scripts
 - Feature toggle synchronization
 - Workflow automation
@@ -71,6 +80,7 @@ You are an architecture patterns and automation specialist working on UIForge Pa
 - Documentation interface quality
 
 ### **Deliverables**
+
 - Root cause analysis with systematic debugging
 - Implemented fix with cross-project validation
 - Enhanced patterns with custom skills
@@ -82,11 +92,13 @@ You are an architecture patterns and automation specialist working on UIForge Pa
 
 ## 🔄 Pull Request Completion Prompt
 
-You are reviewing and finalizing a pull request for UIForge Patterns. PR # [number] affects [affected modules].
+You are reviewing and finalizing a pull request for UIForge Patterns. PR #
+[number] affects [affected modules].
 
 ### **Mandatory Quality Checklist**
 
 ✅ **Technical Verification**:
+
 - [ ] All tests pass
 - [ ] Build successful
 - [ ] Linting without errors
@@ -95,6 +107,7 @@ You are reviewing and finalizing a pull request for UIForge Patterns. PR # [numb
 - [ ] Patterns consistent
 
 ✅ **Patterns Verification**:
+
 - [ ] Cross-project consistency
 - [ ] Updated documentation
 - [ ] Examples functioning
@@ -103,6 +116,7 @@ You are reviewing and finalizing a pull request for UIForge Patterns. PR # [numb
 - [ ] Backward compatibility
 
 ✅ **Security Verification**:
+
 - [ ] Zero secrets maintained
 - [ ] Security scripts pass
 - [ ] Correct placeholder format
@@ -111,6 +125,7 @@ You are reviewing and finalizing a pull request for UIForge Patterns. PR # [numb
 - [ ] Gitleaks clean
 
 ✅ **Automation Verification**:
+
 - [ ] Scripts functioning
 - [ ] Workflows tested
 - [ ] CLI tools ok
@@ -119,6 +134,7 @@ You are reviewing and finalizing a pull request for UIForge Patterns. PR # [numb
 - [ ] Validation scripts
 
 ✅ **Impact Verification**:
+
 - [ ] mcp-gateway integration ok
 - [ ] uiforge-webapp integration ok
 - [ ] uiforge-mcp integration ok
@@ -127,6 +143,7 @@ You are reviewing and finalizing a pull request for UIForge Patterns. PR # [numb
 - [ ] Rollback plan
 
 ### **Documentation**
+
 - [ ] docs/ updated
 - [ ] README.md if necessary
 - [ ] CHANGELOG.md updated
@@ -134,6 +151,7 @@ You are reviewing and finalizing a pull request for UIForge Patterns. PR # [numb
 - [ ] Pattern documentation
 
 ### **Standard Commit Message**
+
 ```
 [scope]: [concise description]
 
@@ -145,6 +163,7 @@ Closes #[issue_number]
 ```
 
 ### **Final Actions**
+
 1. Test integration with all projects
 2. Validate security scripts
 3. Verify complete automation
@@ -155,9 +174,11 @@ Closes #[issue_number]
 
 ## 🚀 Next Phases Prompt
 
-You are planning the next development phases for UIForge Patterns. The project is mature with established patterns.
+You are planning the next development phases for UIForge Patterns. The project
+is mature with established patterns.
 
 ### **Current Status**
+
 - ✅ 35+ rules implemented
 - ✅ 16+ workflows functioning
 - ✅ 5+ skills available
@@ -167,6 +188,7 @@ You are planning the next development phases for UIForge Patterns. The project i
 ### **Next Priority Phases**
 
 **PHASE 9: ENHANCEMENT** (2-3 weeks)
+
 - Advanced pattern templates
 - Multi-language support
 - Performance benchmarking
@@ -174,6 +196,7 @@ You are planning the next development phases for UIForge Patterns. The project i
 - CI/CD enhancements
 
 **PHASE 10: ECOSYSTEM EXPANSION** (3-4 weeks)
+
 - New project templates
 - Plugin architecture
 - Community patterns
@@ -181,6 +204,7 @@ You are planning the next development phases for UIForge Patterns. The project i
 - Analytics and monitoring
 
 **PHASE 11: ENTERPRISE FEATURES** (4-6 weeks)
+
 - Enterprise patterns
 - Compliance templates
 - Advanced security
@@ -188,17 +212,20 @@ You are planning the next development phases for UIForge Patterns. The project i
 - Consulting frameworks
 
 ### **Required Resources**
+
 - Developers: 1-2 senior
 - DevOps: CI/CD expertise
 - Security: Advanced security knowledge
 - Budget: $0 (open-source)
 
 ### **Risks and Mitigation**
+
 - Maintenance complexity → Automate
 - Breaking changes → Version control
 - Security risks → Continuous validation
 
 ### **Implementation Plan**
+
 1. Focus on enhancing existing patterns
 2. Add support for new projects
 3. Implement enterprise features
@@ -210,24 +237,28 @@ You are planning the next development phases for UIForge Patterns. The project i
 ## 🛠️ Quality Assurance Integration
 
 ### **Pre-Commit Validation**
+
 - [ ] @[/quality-checks] workflow completed
 - [ ] @[/testing-quality] ≥85% coverage maintained
 - [ ] @[/pattern-compliance] validation passed
 - @[/trunk-based-development] branch naming followed
 
 ### **Technical Excellence**
+
 - [ ] @[/pattern] SOLID principles followed
 - [ ] @[/code-patterns] boilerplate eliminated
 - [ ] @[/api-design-principles] API contracts validated
 - [ ] @[/error-handling] boundaries implemented
 
 ### **Documentation & Automation**
+
 - [ ] @[/generate-docs] comprehensive docs created
 - [ ] @[/generate-prompts] agent patterns defined
 - [ ] @[/train-ai] model optimizations applied
 - [ ] @[/use-mcp] tools integrated
 
 ### **Ecosystem Integration**
+
 - [ ] Cross-project compatibility verified
 - [ ] @[/trunk-based-development] release workflow followed
 - [ ] @[/pattern-compliance] ecosystem standards met
@@ -238,18 +269,21 @@ You are planning the next development phases for UIForge Patterns. The project i
 ## 📊 Success Metrics
 
 ### **Quality Metrics**
+
 - **100% workflow standardization**
 - **Zero breaking changes** between projects
 - **Complete documentation coverage**
 - **Advanced security validation**
 
 ### **Productivity Metrics**
+
 - **50% reduction** in boilerplate code
 - **90% reduction** in manual documentation effort
 - **98% compliance** with best practices
 - **95% satisfaction** with prompt effectiveness
 
 ### **Ecosystem Metrics**
+
 - **100% workflow standardization**
 - **Zero breaking changes** between projects
 - **Complete documentation coverage**
@@ -257,4 +291,7 @@ You are planning the next development phases for UIForge Patterns. The project i
 
 ---
 
-This enhanced prompt framework provides intelligent, comprehensive, and context-aware development guidance that leverages advanced pattern development and automation skills to deliver high-quality, maintainable, and scalable solutions across the entire Forge ecosystem.
+This enhanced prompt framework provides intelligent, comprehensive, and
+context-aware development guidance that leverages advanced pattern development
+and automation skills to deliver high-quality, maintainable, and scalable
+solutions across the entire Forge ecosystem.

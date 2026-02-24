@@ -1,17 +1,24 @@
 # Unified PR Completion with MCP Validation
 
-Standardized pull request workflows that leverage MCP tools for intelligent verification, quality assurance, and automated documentation across all Forge ecosystem projects.
+Standardized pull request workflows that leverage MCP tools for intelligent
+verification, quality assurance, and automated documentation across all Forge
+ecosystem projects.
 
 ## 🎯 Purpose
 
-Provide comprehensive, MCP-enhanced PR completion workflows that ensure code quality, cross-project compatibility, and automated documentation updates for all Forge ecosystem repositories.
+Provide comprehensive, MCP-enhanced PR completion workflows that ensure code
+quality, cross-project compatibility, and automated documentation updates for
+all Forge ecosystem repositories.
 
 ## 🔄 MCP Integration
 
-- **@[/get-context]**: Project-specific requirement verification and impact analysis
-- **@[/mcp-docs-and-tools]**: API compliance verification and best practice validation
+- **@[/get-context]**: Project-specific requirement verification and impact
+  analysis
+- **@[/mcp-docs-and-tools]**: API compliance verification and best practice
+  validation
 - **@[/skill-mcp-docs-search]**: Best practice research and documentation lookup
-- **@[/update-docs]**: Automated documentation synchronization and changelog generation
+- **@[/update-docs]**: Automated documentation synchronization and changelog
+  generation
 - **@[/update-plan]**: Roadmap impact assessment and planning alignment
 
 ## 📋 Universal PR Completion Framework
@@ -308,12 +315,14 @@ MCP-PERFORMANCE VERIFICATION:
 ## 📊 Success Metrics and KPIs
 
 ### PR Quality and Efficiency
+
 - **PR Merge Time**: < 24 hours from approval to merge
 - **Review Quality**: > 95% of PRs pass all quality gates
 - **Defect Rate**: < 2% of merged PRs require hotfixes
 - **Documentation Coverage**: 100% of PRs include documentation updates
 
 ### MCP Integration Benefits
+
 - **Verification Accuracy**: 98% accuracy in automated checks
 - **Context Relevance**: 95% relevance in project-specific recommendations
 - **Documentation Automation**: 90% reduction in manual documentation effort
@@ -322,17 +331,23 @@ MCP-PERFORMANCE VERIFICATION:
 ## 🔄 Continuous Improvement
 
 ### Process Enhancement
+
 - **Feedback Integration**: Collect and implement reviewer feedback
 - **Automation Expansion**: Increase automated verification coverage
 - **Quality Metrics**: Track and improve PR quality over time
 - **Knowledge Sharing**: Document and share best practices and lessons learned
 
 ### Tool and Workflow Evolution
+
 - **MCP Tool Enhancement**: Improve MCP tool integration and capabilities
 - **Template Refinement**: Update PR templates and checklists based on usage
 - **Standard Evolution**: Adapt standards based on project evolution and needs
-- **Training and Onboarding**: Enhance team capabilities through documented processes
+- **Training and Onboarding**: Enhance team capabilities through documented
+  processes
 
 ---
 
-This unified PR completion framework provides intelligent, comprehensive, and automated workflows that leverage MCP tools to ensure high-quality, well-documented, and ecosystem-compatible pull requests across all Forge projects.
+This unified PR completion framework provides intelligent, comprehensive, and
+automated workflows that leverage MCP tools to ensure high-quality,
+well-documented, and ecosystem-compatible pull requests across all Forge
+projects.
