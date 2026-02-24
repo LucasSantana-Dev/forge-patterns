@@ -44,7 +44,7 @@ class PluginSystemValidator {
       await fs.access(pluginManagerPath);
       
       this.addTestResult(testName, true, 'Plugin manager file exists');
-    } catch (error) {
+    } catch (_error) {
       this.addTestResult(testName, false, 'Plugin manager file not found');
     }
   }
@@ -74,7 +74,7 @@ class PluginSystemValidator {
         const missing = [...missingFiles, ...missingDirs].join(', ');
         this.addTestResult(testName, false, `Missing items: ${missing}`);
       }
-    } catch (error) {
+    } catch (_error) {
       this.addTestResult(testName, false, `Error checking structure: ${error.message}`);
     }
   }
@@ -102,7 +102,7 @@ class PluginSystemValidator {
       } else {
         this.addTestResult(testName, false, `Missing examples: ${missingExamples.join(', ')}`);
       }
-    } catch (error) {
+    } catch (_error) {
       this.addTestResult(testName, false, `Error checking examples: ${error.message}`);
     }
   }
@@ -137,7 +137,7 @@ class PluginSystemValidator {
       } else {
         this.addTestResult(testName, false, `Missing sections: ${missingSections.join(', ')}`);
       }
-    } catch (error) {
+    } catch (_error) {
       this.addTestResult(testName, false, `Error checking documentation: ${error.message}`);
     }
   }
@@ -170,7 +170,7 @@ class PluginSystemValidator {
       } else {
         this.addTestResult(testName, false, `Missing config fields: ${missingFields.join(', ')}`);
       }
-    } catch (error) {
+    } catch (_error) {
       this.addTestResult(testName, false, `Error checking configuration: ${error.message}`);
     }
   }

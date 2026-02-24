@@ -2,7 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  roots: ['<rootDir>/src', '<rootDir>/patterns'],
+  roots: ['<rootDir>/src', '<rootDir>/patterns', '<rootDir>/test'],
   testMatch: [
     '<rootDir>/src/**/*.test.ts',
     '<rootDir>/src/**/*.spec.ts',
@@ -11,15 +11,28 @@ module.exports = {
     '<rootDir>/patterns/**/*.test.ts',
     '<rootDir>/patterns/**/*.spec.ts',
     '<rootDir>/patterns/**/*.test.js',
-    '<rootDir>/patterns/**/*.spec.js'
+    '<rootDir>/patterns/**/*.spec.js',
+    '<rootDir>/test/**/*.test.ts',
+    '<rootDir>/test/**/*.spec.ts'
   ],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          module: 'commonjs',
+          isolatedModules: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
+      }
+    ]
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@patterns/(.*)$': '<rootDir>/patterns/$1',
-    '^@docs/(.*)$': '<rootDir>/docs/$1'
+    '^@docs/(.*)$': '<rootDir>/docs/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   collectCoverageFrom: [
     'src/**/*.ts',
@@ -39,27 +52,22 @@ module.exports = {
     '!coverage/**',
     '!patterns/ide-extensions/**',
     '!patterns/monitoring/**',
-    '!patterns/shared-infrastructure/logger/**'
+    '!patterns/shared-infrastructure/logger/**',
+    '!src/mcp-context-server/**'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
   coverageProvider: 'v8',
   coverageThreshold: {
     global: {
-      branches: 10,
-      functions: 10,
-      lines: 10,
-      statements: 10
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
     }
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testTimeout: 10000,
   verbose: true,
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        isolatedModules: true
-      }
-    }
-  }
+  transformIgnorePatterns: ['node_modules/(?!(@modelcontextprotocol)/)']
 };
