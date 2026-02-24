@@ -10,7 +10,7 @@ export const TOOLS = [
   {
     name: 'get_project_context',
     description:
-      'Returns the full context document for a UIForge project from the centralized store. ' +
+      'Returns the full context document for a Forge Space project from the centralized store. ' +
       'This is the absolute source of truth for project architecture, status, requirements, and roadmap. ' +
       'Pass the project slug (e.g. "forge-patterns"). Use list_projects to discover available projects.',
     inputSchema: {
@@ -19,7 +19,7 @@ export const TOOLS = [
         project: {
           type: 'string',
           description:
-            'Project slug to retrieve context for (e.g. forge-patterns, uiforge-webapp, uiforge-mcp, mcp-gateway)'
+            'Project slug to retrieve context for (e.g. forge-patterns, siza, siza-mcp, mcp-gateway)'
         }
       },
       required: ['project']
@@ -28,7 +28,7 @@ export const TOOLS = [
   {
     name: 'update_project_context',
     description:
-      'Writes or overwrites the context document for a UIForge project in the centralized store. ' +
+      'Writes or overwrites the context document for a Forge Space project in the centralized store. ' +
       'Use this to keep the source of truth up-to-date after architectural decisions, status changes, ' +
       'roadmap updates, or any significant project change. ' +
       'Provide the full markdown content — this completely replaces the existing context.',
@@ -38,7 +38,7 @@ export const TOOLS = [
         project: {
           type: 'string',
           description:
-            'Project slug (e.g. forge-patterns, uiforge-webapp, uiforge-mcp, mcp-gateway). Use a short kebab-case identifier for new projects.'
+            'Project slug (e.g. forge-patterns, siza, siza-mcp, mcp-gateway). Use a short kebab-case identifier for new projects.'
         },
         title: {
           type: 'string',
@@ -60,7 +60,7 @@ export const TOOLS = [
   {
     name: 'list_projects',
     description:
-      'Lists all projects registered in the centralized UIForge context store, with their slugs, titles, descriptions, and last-updated timestamps.',
+      'Lists all projects registered in the centralized Forge Space context store, with their slugs, titles, descriptions, and last-updated timestamps.',
     inputSchema: {
       type: 'object' as const,
       properties: {}
@@ -126,10 +126,10 @@ export function handleUpdateProjectContext(args: Record<string, unknown>): strin
 export function handleListProjects(): string {
   const projects = listProjects();
   if (projects.length === 0) {
-    return '# UIForge Context Store\n\nNo projects registered yet. Use `update_project_context` to add one.';
+    return '# Forge Space Context Store\n\nNo projects registered yet. Use `update_project_context` to add one.';
   }
   const lines = projects.map(
     p => `- **${p.project}** — ${p.description}\n  _Last updated: ${p.updatedAt}_`
   );
-  return `# UIForge Context Store\n\n${lines.join('\n')}`;
+  return `# Forge Space Context Store\n\n${lines.join('\n')}`;
 }

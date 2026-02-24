@@ -17,7 +17,7 @@ import {
 
 const server = new Server(
   {
-    name: 'uiforge-context-server',
+    name: 'forge-space-context-server',
     version: '2.0.0'
   },
   {
@@ -97,7 +97,7 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  process.stderr.write('UIForge Context MCP Server v2.0.0 running on stdio\n');
+  process.stderr.write('Forge Space Context MCP Server v2.0.0 running on stdio\n');
 }
 
 main().catch(err => {
