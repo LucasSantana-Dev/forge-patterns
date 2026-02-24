@@ -16,14 +16,17 @@ module.exports = {
     '<rootDir>/test/**/*.spec.ts'
   ],
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: {
-        module: 'commonjs',
-        isolatedModules: true,
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          module: 'commonjs',
+          isolatedModules: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
       }
-    }]
+    ]
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -66,7 +69,5 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testTimeout: 10000,
   verbose: true,
-  transformIgnorePatterns: [
-    'node_modules/(?!(@modelcontextprotocol)/)'
-  ]
+  transformIgnorePatterns: ['node_modules/(?!(@modelcontextprotocol)/)']
 };
