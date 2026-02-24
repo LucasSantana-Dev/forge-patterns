@@ -24,7 +24,7 @@ All contributors are expected to be respectful, constructive, and professional. 
 ### 1. Fork and clone
 
 ```bash
-git clone https://github.com/LucasSantana-Dev/forge-patterns.git
+git clone https://github.com/Forge-Space/core.git
 cd forge-patterns
 npm install
 ```
@@ -234,4 +234,4 @@ Typical review turnaround: 2–5 business days.
 
 ## Questions?
 
-Open a [GitHub Discussion](https://github.com/LucasSantana-Dev/forge-patterns/discussions) or file an [issue](https://github.com/LucasSantana-Dev/forge-patterns/issues).
+Open a [GitHub Discussion](https://github.com/Forge-Space/core/discussions) or file an [issue](https://github.com/Forge-Space/core/issues).

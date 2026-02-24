@@ -1,14 +1,14 @@
 # Forge-Space Core
 
-Shared configuration, workflows, and architectural patterns for the Forge Space ecosystem with centralized feature management and comprehensive security.
+> **Shared standards, patterns, and MCP context server for the Forge Space ecosystem.**
 
-**Version 1.2.0** - Security hardening and CI/CD enhancements
+Part of [Forge Space](https://github.com/Forge-Space) — the open full-stack AI workspace. This repo provides the foundation that all other Forge Space projects build on: code quality standards, security framework, CI/CD workflows, and a local MCP context server for IDE integration.
 
-**Part of the [Forge Space Ecosystem](../../ECOSYSTEM_OVERVIEW.md)** - Complete AI-powered development platform
+**Version 1.2.0**
 
-## 🎯 Overview
+## Overview
 
-Forge-Space Core provides a comprehensive set of shared configurations, workflows, and architectural patterns designed to ensure consistency, security, and high-quality code across all Forge Space projects. Our centralized feature toggle system enables unified control across the entire ecosystem, and our GitHub Actions optimization delivers **95% reduction** in maintenance overhead through organization-level reusable workflows.
+Forge-Space Core provides shared configurations, workflows, and architectural patterns for consistency across the ecosystem. Centralized feature toggles, reusable GitHub Actions workflows (95% reduction in maintenance overhead), and comprehensive security validation.
 
 ### Key Features
 
