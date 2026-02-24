@@ -287,6 +287,7 @@ src/
 **MANDATORY WORKFLOW**: Feature → Release → Main → Deploy
 
 #### **Phase 1: Feature Development**
+
 ```bash
 # Create feature/fix branch from main
 git checkout main
@@ -297,6 +298,7 @@ git checkout -b fix/issue-description
 ```
 
 #### **Phase 2: Integration Testing**
+
 ```bash
 # Pull Request to release branch
 git checkout release
@@ -308,6 +310,7 @@ git push origin feat/feature-name
 ```
 
 #### **Phase 3: Production Readiness**
+
 ```bash
 # Pull Request to main branch
 git checkout main
@@ -319,6 +322,7 @@ git push origin feat/feature-name
 ```
 
 #### **Phase 4: Automated Deployment**
+
 ```bash
 # CI/CD triggers on main branch merge
 # - Automatic version bump
@@ -351,6 +355,7 @@ hotfix/critical-bug-fix
 ### **Branch Protection Rules**
 
 #### **Main Branch**
+
 - **Protected**: Direct pushes disabled
 - **Required**: Pull requests only
 - **Required**: CI/CD status checks passing
@@ -358,6 +363,7 @@ hotfix/critical-bug-fix
 - **Required**: All quality gates passing
 
 #### **Release Branch**
+
 - **Integration testing environment**
 - **Quality gate enforcement**
 - **Staging deployment**
@@ -366,12 +372,14 @@ hotfix/critical-bug-fix
 ### **Workflow Enforcement**
 
 **ALWAYS follow this sequence**:
+
 1. **Feature branch** → isolated development
 2. **Release branch PR** → integration testing
 3. **Main branch PR** → production deployment
 4. **Automated deployment** → triggered on main merge
 
 **NEVER push directly to main** except for:
+
 - Documentation updates
 - Emergency hotfixes (with post-mortem)
 - Infrastructure changes (additional review required)
