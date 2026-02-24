@@ -1,10 +1,14 @@
 # Context-Aware Prompt Selection with @[/get-context]
 
-Intelligent prompt discovery and selection framework that leverages real-time project state analysis for optimal prompt recommendations and context-aware assistance.
+Intelligent prompt discovery and selection framework that leverages real-time
+project state analysis for optimal prompt recommendations and context-aware
+assistance.
 
 ## 🎯 Purpose
 
-Provide comprehensive guidance on using @[/get-context] for intelligent prompt discovery, context analysis, and project-aware assistance across the Forge ecosystem.
+Provide comprehensive guidance on using @[/get-context] for intelligent prompt
+discovery, context analysis, and project-aware assistance across the Forge
+ecosystem.
 
 ## 🔄 MCP Integration
 
@@ -287,12 +291,14 @@ CONTEXT-DRIVEN AUTOMATION:
 ## 📊 Success Metrics and KPIs
 
 ### Context Analysis Effectiveness
+
 - **Context Accuracy**: > 95% accuracy in project state assessment
 - **Prompt Relevance**: > 90% relevance in context-aware prompt recommendations
 - **Adaptation Speed**: < 5 minutes for context updates and prompt adjustments
 - **User Satisfaction**: > 4.5/5 satisfaction with context-aware assistance
 
 ### MCP Integration Benefits
+
 - **Intelligence Enhancement**: 85% improvement in prompt selection intelligence
 - **Automation Efficiency**: 80% reduction in manual context analysis effort
 - **Decision Quality**: 90% improvement in context-driven decision making
@@ -301,17 +307,27 @@ CONTEXT-DRIVEN AUTOMATION:
 ## 🔄 Continuous Context Improvement
 
 ### Learning and Optimization
-- **Context Pattern Recognition**: Identify and learn from recurring context patterns
-- **Prompt Effectiveness Tracking**: Monitor and optimize prompt effectiveness by context
-- **User Feedback Integration**: Incorporate user feedback for context improvement
+
+- **Context Pattern Recognition**: Identify and learn from recurring context
+  patterns
+- **Prompt Effectiveness Tracking**: Monitor and optimize prompt effectiveness
+  by context
+- **User Feedback Integration**: Incorporate user feedback for context
+  improvement
 - **Algorithm Enhancement**: Continuously improve context analysis algorithms
 
 ### Ecosystem Context Integration
-- **Cross-Project Context Sharing**: Establish context sharing across Forge projects
+
+- **Cross-Project Context Sharing**: Establish context sharing across Forge
+  projects
 - **Ecosystem-Wide Context Analysis**: Analyze context at ecosystem level
-- **Standardized Context Frameworks**: Create standardized context analysis frameworks
+- **Standardized Context Frameworks**: Create standardized context analysis
+  frameworks
 - **Context API Development**: Develop APIs for context access and integration
 
 ---
 
-This context-aware prompt selection framework provides intelligent, real-time project analysis and context-driven prompt recommendations that leverage @[/get-context] to deliver highly relevant, adaptive, and effective assistance across the entire Forge ecosystem.
+This context-aware prompt selection framework provides intelligent, real-time
+project analysis and context-driven prompt recommendations that leverage
+@[/get-context] to deliver highly relevant, adaptive, and effective assistance
+across the entire Forge ecosystem.

@@ -1,15 +1,24 @@
 # Technology-Specific Validation Frameworks
 
-Comprehensive validation frameworks for ensuring prompt effectiveness and code quality across different technology stacks in the Forge ecosystem.
+Comprehensive validation frameworks for ensuring prompt effectiveness and code
+quality across different technology stacks in the Forge ecosystem.
 
 ## 🔍 Validation Framework Architecture
 
 ### **Core Validation Engine**
+
 ```typescript
 interface ValidationFramework {
   validatePrompt(prompt: string, context: ValidationContext): ValidationResult;
-  validateCode(code: string, language: string, standards: CodeStandards): CodeValidationResult;
-  validateArchitecture(design: ArchitectureDesign, patterns: PatternLibrary): ArchitectureValidationResult;
+  validateCode(
+    code: string,
+    language: string,
+    standards: CodeStandards
+  ): CodeValidationResult;
+  validateArchitecture(
+    design: ArchitectureDesign,
+    patterns: PatternLibrary
+  ): ArchitectureValidationResult;
   generateReport(results: ValidationResult[]): ValidationReport;
 }
 
@@ -26,29 +35,36 @@ class TechnologyValidator implements ValidationFramework {
 
   validatePrompt(prompt: string, context: ValidationContext): ValidationResult {
     const validator = this.getValidator(context.technology);
-    const rules = this.ruleEngine.getRules(context.technology, context.category);
-    
+    const rules = this.ruleEngine.getRules(
+      context.technology,
+      context.category
+    );
+
     const result = validator.validate(prompt, rules, context);
     this.metrics.recordValidation(result);
-    
+
     return result;
   }
 
-  validateCode(code: string, language: string, standards: CodeStandards): CodeValidationResult {
+  validateCode(
+    code: string,
+    language: string,
+    standards: CodeStandards
+  ): CodeValidationResult {
     const validator = this.getValidator(language);
     const result = validator.validateCode(code, standards);
-    
+
     this.metrics.recordCodeValidation(result);
     return result;
   }
 
   validateArchitecture(
-    design: ArchitectureDesign, 
+    design: ArchitectureDesign,
     patterns: PatternLibrary
   ): ArchitectureValidationResult {
     const validator = this.getValidator('architecture');
     const result = validator.validateArchitecture(design, patterns);
-    
+
     this.metrics.recordArchitectureValidation(result);
     return result;
   }
@@ -76,6 +92,7 @@ class TechnologyValidator implements ValidationFramework {
 ## 🐳 MCP Gateway Validation Framework
 
 ### **Python/FastAPI Validation**
+
 ```typescript
 class MCPGatewayValidator implements TechnologySpecificValidator {
   private pythonRules: PythonValidationRules;
@@ -261,6 +278,7 @@ class MCPGatewayValidator implements TechnologySpecificValidator {
 ## 🚀 UIForge WebApp Validation Framework
 
 ### **Next.js/React Validation**
+
 ```typescript
 class UIForgeWebAppValidator implements TechnologySpecificValidator {
   private nextJSLRules: NextJSValidationRules;
@@ -275,7 +293,11 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
     this.uxRules = new UXValidationRules();
   }
 
-  validate(prompt: string, rules: ValidationRule[], context: ValidationContext): ValidationResult {
+  validate(
+    prompt: string,
+    rules: ValidationRule[],
+    context: ValidationContext
+  ): ValidationResult {
     const issues: ValidationIssue[] = [];
     let score = 100;
 
@@ -308,7 +330,10 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
     };
   }
 
-  private validateNextJSPatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateNextJSPatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check Next.js 16 App Router patterns
@@ -321,7 +346,10 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
       });
     }
 
-    if (!prompt.includes('parallel data fetching') && context.involvesPerformance) {
+    if (
+      !prompt.includes('parallel data fetching') &&
+      context.involvesPerformance
+    ) {
       issues.push({
         severity: 'medium',
         message: 'Missing parallel data fetching optimization',
@@ -351,7 +379,10 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
     return issues;
   }
 
-  private validateReactPatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateReactPatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check React best practices
@@ -385,7 +416,10 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
     return issues;
   }
 
-  private validateSupabasePatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateSupabasePatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check Supabase integration patterns
@@ -407,7 +441,10 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
       });
     }
 
-    if (!prompt.includes('optimistic update') && context.involvesUserExperience) {
+    if (
+      !prompt.includes('optimistic update') &&
+      context.involvesUserExperience
+    ) {
       issues.push({
         severity: 'medium',
         message: 'Missing optimistic update pattern',
@@ -419,7 +456,10 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
     return issues;
   }
 
-  private validateUXPrinciples(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateUXPrinciples(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check UI/UX principles
@@ -467,6 +507,7 @@ class UIForgeWebAppValidator implements TechnologySpecificValidator {
 ## 🔧 UIForge MCP Validation Framework
 
 ### **Node.js/TypeScript Validation**
+
 ```typescript
 class UIForgeMCPValidator implements TechnologySpecificValidator {
   private nodeJSLRules: NodeJSValidationRules;
@@ -481,7 +522,11 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
     this.compositionRules = new CompositionValidationRules();
   }
 
-  validate(prompt: string, rules: ValidationRule[], context: ValidationContext): ValidationResult {
+  validate(
+    prompt: string,
+    rules: ValidationRule[],
+    context: ValidationContext
+  ): ValidationResult {
     const issues: ValidationIssue[] = [];
     let score = 100;
 
@@ -514,7 +559,10 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
     };
   }
 
-  private validateNodeJSPatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateNodeJSPatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check Node.js best practices
@@ -522,7 +570,8 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
       issues.push({
         severity: 'high',
         message: 'Missing async/await patterns for asynchronous operations',
-        suggestion: 'Use async/await instead of callbacks for better code readability',
+        suggestion:
+          'Use async/await instead of callbacks for better code readability',
         rule: 'nodejs-async-patterns'
       });
     }
@@ -548,7 +597,10 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
     return issues;
   }
 
-  private validateTypeScriptPatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateTypeScriptPatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check TypeScript best practices
@@ -582,15 +634,22 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
     return issues;
   }
 
-  private validateMCPPatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateMCPPatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check MCP-specific patterns
-    if (!prompt.includes('tool validation') && context.involvesToolDevelopment) {
+    if (
+      !prompt.includes('tool validation') &&
+      context.involvesToolDevelopment
+    ) {
       issues.push({
         severity: 'high',
         message: 'Missing tool parameter validation',
-        suggestion: 'Implement comprehensive parameter validation for MCP tools',
+        suggestion:
+          'Implement comprehensive parameter validation for MCP tools',
         rule: 'mcp-tool-validation'
       });
     }
@@ -599,7 +658,8 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
       issues.push({
         severity: 'high',
         message: 'Missing MCP service error handling',
-        suggestion: 'Implement proper error handling for MCP service operations',
+        suggestion:
+          'Implement proper error handling for MCP service operations',
         rule: 'mcp-error-handling'
       });
     }
@@ -616,7 +676,10 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
     return issues;
   }
 
-  private validateCompositionPatterns(prompt: string, context: ValidationContext): ValidationIssue[] {
+  private validateCompositionPatterns(
+    prompt: string,
+    context: ValidationContext
+  ): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
 
     // Check composition patterns
@@ -624,7 +687,8 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
       issues.push({
         severity: 'medium',
         message: 'Missing dependency injection pattern',
-        suggestion: 'Use dependency injection for better testability and modularity',
+        suggestion:
+          'Use dependency injection for better testability and modularity',
         rule: 'composition-dependency-injection'
       });
     }
@@ -655,6 +719,7 @@ class UIForgeMCPValidator implements TechnologySpecificValidator {
 ## 📊 Validation Metrics and Reporting
 
 ### **Validation Metrics System**
+
 ```typescript
 class ValidationMetrics {
   private validationHistory: ValidationRecord[] = [];
@@ -689,7 +754,7 @@ class ValidationMetrics {
 
   private generateOverviewMetrics(): OverviewMetrics {
     const recentRecords = this.validationHistory.slice(-100); // Last 100 validations
-    
+
     return {
       totalValidations: this.validationHistory.length,
       averageScore: this.calculateAverageScore(recentRecords),
@@ -702,19 +767,21 @@ class ValidationMetrics {
 
   private generatePerformanceReport(): PerformanceReport {
     const performanceData = Array.from(this.performanceMetrics.values());
-    
+
     return {
-      averageProcessingTime: this.calculateAverageProcessingTime(performanceData),
+      averageProcessingTime:
+        this.calculateAverageProcessingTime(performanceData),
       slowestValidations: this.getSlowestValidations(performanceData),
       fastestValidations: this.getFastestValidations(performanceData),
       performanceTrends: this.calculatePerformanceTrends(performanceData),
-      optimizationOpportunities: this.identifyOptimizationOpportunities(performanceData)
+      optimizationOpportunities:
+        this.identifyOptimizationOpportunities(performanceData)
     };
   }
 
   private generateTrendReport(): TrendReport {
     const recentTrends = this.trendData.slice(-30); // Last 30 data points
-    
+
     return {
       scoreTrend: this.calculateScoreTrend(recentTrends),
       issueCountTrend: this.calculateIssueCountTrend(recentTrends),
@@ -726,11 +793,12 @@ class ValidationMetrics {
 
   private generateMetricsRecommendations(): ValidationRecommendation[] {
     const recommendations: ValidationRecommendation[] = [];
-    
+
     // Analyze common issues
     const commonIssues = this.getCommonIssues();
     for (const issue of commonIssues) {
-      if (issue.frequency > 0.3) { // Appears in >30% of validations
+      if (issue.frequency > 0.3) {
+        // Appears in >30% of validations
         recommendations.push({
           type: 'common_issue',
           priority: 'high',
@@ -773,6 +841,7 @@ class ValidationMetrics {
 ## 📝 Implementation Guide
 
 ### **Validation System Integration**
+
 ```typescript
 // Main validation system
 class EnhancedValidationSystem {
@@ -801,7 +870,9 @@ class EnhancedValidationSystem {
   ): Promise<ValidationResult> {
     const framework = this.frameworks.get(technology);
     if (!framework) {
-      throw new Error(`No validation framework found for technology: ${technology}`);
+      throw new Error(
+        `No validation framework found for technology: ${technology}`
+      );
     }
 
     const startTime = Date.now();
@@ -809,7 +880,7 @@ class EnhancedValidationSystem {
     result.processingTime = Date.now() - startTime;
 
     this.metrics.recordValidation(result);
-    
+
     return result;
   }
 
@@ -820,18 +891,20 @@ class EnhancedValidationSystem {
   ): Promise<CodeValidationResult> {
     const framework = this.frameworks.get(language);
     if (!framework) {
-      throw new Error(`No validation framework found for language: ${language}`);
+      throw new Error(
+        `No validation framework found for language: ${language}`
+      );
     }
 
     const result = await framework.validateCode(code, language, standards);
     this.metrics.recordCodeValidation(result);
-    
+
     return result;
   }
 
   async generateValidationReport(): Promise<ValidationReport> {
     const metricsReport = this.metrics.generateMetricsReport();
-    
+
     return {
       summary: metricsReport.overview,
       details: this.generateDetailedReport(),
@@ -862,4 +935,6 @@ class EnhancedValidationSystem {
 }
 ```
 
-This technology-specific validation framework ensures that all prompts and code generated across the Forge ecosystem meet high quality standards while providing detailed feedback and continuous improvement opportunities.
+This technology-specific validation framework ensures that all prompts and code
+generated across the Forge ecosystem meet high quality standards while providing
+detailed feedback and continuous improvement opportunities.

@@ -1,18 +1,26 @@
 # MCP Gateway Enhanced Prompts with Docker/FastAPI Integration
 
-Comprehensive, MCP-enhanced prompt library specifically designed for MCP Gateway development, combining Docker expertise, FastAPI mastery, and intelligent workflow integration.
+Comprehensive, MCP-enhanced prompt library specifically designed for MCP Gateway
+development, combining Docker expertise, FastAPI mastery, and intelligent
+workflow integration.
 
 ## 🎯 Purpose
 
-Provide specialized, context-aware prompts for MCP Gateway development that leverage MCP tools for intelligent analysis, Docker optimization, FastAPI best practices, and ecosystem integration.
+Provide specialized, context-aware prompts for MCP Gateway development that
+leverage MCP tools for intelligent analysis, Docker optimization, FastAPI best
+practices, and ecosystem integration.
 
 ## 🔄 MCP Integration
 
-- **@[/get-context]**: Real-time service state analysis and container health monitoring
-- **@[/mcp-docs-and-tools]**: Docker/FastAPI API verification and best practices validation
-- **@[/skill-mcp-docs-search]**: Containerization and microservices documentation research
+- **@[/get-context]**: Real-time service state analysis and container health
+  monitoring
+- **@[/mcp-docs-and-tools]**: Docker/FastAPI API verification and best practices
+  validation
+- **@[/skill-mcp-docs-search]**: Containerization and microservices
+  documentation research
 - **@[/update-docs]**: Automated API documentation and deployment guide updates
-- **@[/update-plan]**: Infrastructure planning and scaling strategy synchronization
+- **@[/update-plan]**: Infrastructure planning and scaling strategy
+  synchronization
 
 ## 📋 MCP Gateway Development Framework
 
@@ -320,12 +328,14 @@ IAC IMPLEMENTATION WORKFLOW:
 ## 📊 Success Metrics and KPIs
 
 ### Development Effectiveness
+
 - **Code Quality**: > 95% adherence to coding standards and best practices
 - **API Performance**: < 100ms average response time for API endpoints
 - **Container Efficiency**: > 80% resource utilization optimization
 - **Security Compliance**: 100% adherence to security policies and standards
 
 ### MCP Integration Benefits
+
 - **Context Awareness**: 95% relevance in development recommendations
 - **Documentation Automation**: 90% reduction in manual documentation effort
 - **Best Practice Compliance**: 98% adherence to Docker/FastAPI best practices
@@ -334,11 +344,18 @@ IAC IMPLEMENTATION WORKFLOW:
 ## 🔄 Continuous Improvement
 
 ### Learning and Adaptation
+
 - **Performance Monitoring**: Continuous monitoring of application performance
-- **Security Enhancement**: Ongoing security improvements and vulnerability management
-- **Architecture Evolution**: Continuous architecture assessment and optimization
-- **Team Capability Development**: Ongoing skill development and knowledge sharing
+- **Security Enhancement**: Ongoing security improvements and vulnerability
+  management
+- **Architecture Evolution**: Continuous architecture assessment and
+  optimization
+- **Team Capability Development**: Ongoing skill development and knowledge
+  sharing
 
 ---
 
-This MCP Gateway prompt library provides comprehensive, intelligent, and context-aware development guidance that leverages MCP tools to deliver high-quality, secure, and scalable solutions for Docker-based FastAPI applications in the Forge ecosystem.
+This MCP Gateway prompt library provides comprehensive, intelligent, and
+context-aware development guidance that leverages MCP tools to deliver
+high-quality, secure, and scalable solutions for Docker-based FastAPI
+applications in the Forge ecosystem.

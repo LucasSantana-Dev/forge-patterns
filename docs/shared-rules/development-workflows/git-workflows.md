@@ -1,6 +1,8 @@
 ---
 trigger: model_decision
-description: Git workflows, commit conventions, and release guidelines. Apply when authoring commits, PR templates, or release process changes.
+description:
+  Git workflows, commit conventions, and release guidelines. Apply when
+  authoring commits, PR templates, or release process changes.
 globs: []
 ---
 
@@ -10,14 +12,15 @@ globs: []
 >
 > **Source of Truth**: This file is the canonical standard for all projects
 >
-> **Last Updated**: 2026-02-20
-> **Version**: 1.0.0
+> **Last Updated**: 2026-02-20 **Version**: 1.0.0
 
 ---
 
 ## 🎯 Overview
 
-This document defines the standardized Git workflows, commit conventions, and release processes that apply across the entire Forge Space ecosystem. These workflows ensure consistency, quality, and maintainability across all projects.
+This document defines the standardized Git workflows, commit conventions, and
+release processes that apply across the entire Forge Space ecosystem. These
+workflows ensure consistency, quality, and maintainability across all projects.
 
 ## 📝 Commit Message Convention
 
@@ -33,47 +36,52 @@ This document defines the standardized Git workflows, commit conventions, and re
 
 ### Commit Types
 
-| Type | Description | When to Use |
-|------|-------------|------------|
-| `feat` | New feature | Adding new functionality |
-| `fix` | Bug fix | Fixing issues |
-| `docs` | Documentation | Documentation changes |
-| `style` | Code style | Formatting, linting |
+| Type       | Description   | When to Use                              |
+| ---------- | ------------- | ---------------------------------------- |
+| `feat`     | New feature   | Adding new functionality                 |
+| `fix`      | Bug fix       | Fixing issues                            |
+| `docs`     | Documentation | Documentation changes                    |
+| `style`    | Code style    | Formatting, linting                      |
 | `refactor` | Code refactor | Code improvement without feature changes |
-| `perf` | Performance | Performance improvements |
-| `test` | Testing | Adding or improving tests |
-| `chore` | Maintenance | Dependencies, build process |
-| `ci` | CI/CD | Continuous integration |
-| `build` | Build system | Build configuration |
-| `revert` | Revert | Reverting previous changes |
+| `perf`     | Performance   | Performance improvements                 |
+| `test`     | Testing       | Adding or improving tests                |
+| `chore`    | Maintenance   | Dependencies, build process              |
+| `ci`       | CI/CD         | Continuous integration                   |
+| `build`    | Build system  | Build configuration                      |
+| `revert`   | Revert        | Reverting previous changes               |
 
 ### Scopes by Project Type
 
 #### Universal Scopes
+
 - `git` - Git configuration and hooks
 - `deps` - Dependencies management
 - `ci` - CI/CD configuration
 - `docs` - Documentation
 
 #### Project-Specific Scopes
+
 - **MCP Gateway**: `gateway`, `ai`, `scoring`, `security`, `config`
 - **UIForge WebApp**: `ui`, `api`, `auth`, `components`, `database`
 - **UIForge MCP**: `mcp`, `tools`, `generation`, `ai`, `figma`
 - **Forge Patterns**: `patterns`, `workflows`, `templates`, `shared`
 
 ### Subject Rules
+
 - **Imperative mood**: Use command tone ("Add feature" not "Added feature")
 - **Lowercase start**: First letter lowercase
 - **Max 50 characters**: Keep it concise
 - **No trailing period**: Don't end with a period
 
 ### Body Rules
+
 - **Explain what and why**: Not how
 - **Line length**: ≤72 characters
 - **Blank line**: Between subject and body
 - **Wrap at 72**: For longer descriptions
 
 ### Footer Rules
+
 - **Issue references**: `Closes #123`, `Fixes #456`
 - **Breaking changes**: `BREAKING CHANGE:`
 - **Co-authors**: Only for human collaborators
@@ -81,12 +89,14 @@ This document defines the standardized Git workflows, commit conventions, and re
 ## 🚫 No AI Attribution (Mandatory)
 
 **NEVER add AI attribution lines:**
+
 - ❌ `Co-authored-by: Cursor`
 - ❌ `Co-authored-by: Windsurf`
 - ❌ `Co-authored-by: [any AI/assistant]`
 - ❌ Any similar AI attribution
 
 **Valid footer examples:**
+
 ```bash
 Closes #123
 Fixes #456
@@ -97,6 +107,7 @@ Co-authored-by: human-developer@example.com
 ## 🌿 Branch Naming Convention
 
 ### Feature Branches
+
 ```
 feat/<scope>-short-description
 fix/<scope>-short-description
@@ -104,6 +115,7 @@ docs/<scope>-short-description
 ```
 
 ### Examples
+
 ```bash
 feat/gateway-add-ai-routing
 fix/ui-auth-validation
@@ -112,6 +124,7 @@ refactor/scoring-algorithm
 ```
 
 ### Release Branches
+
 ```
 release/v1.2.0
 develop
@@ -123,31 +136,38 @@ main
 ### PR Requirements
 
 #### Branch Protection
+
 - **No direct pushes** to `main` or protected branches
 - **Required reviews**: Minimum 1 approving reviewer for non-trivial changes
 - **Required checks**: All CI checks must pass
 - **Required status**: Up-to-date with target branch
 
 #### PR Title Format
+
 - **Same as commit subject**: `type(scope): description`
 - **Imperative mood**: Describe the change
 - **Concise**: Max 50 characters
 
 #### PR Description Template
+
 ```markdown
 ## Description
+
 Brief description of the change
 
 ## Changes Made
+
 - Bullet list of key changes
 - Include breaking changes if any
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests pass
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows project conventions
 - [ ] Tests pass locally
 - [ ] Documentation updated
@@ -158,6 +178,7 @@ Brief description of the change
 ### PR Quality Gates
 
 #### Automated Checks
+
 - **Lint**: 0 errors, 0 warnings
 - **Type Check**: 0 type errors
 - **Format**: Properly formatted
@@ -166,6 +187,7 @@ Brief description of the change
 - **Security**: No high/critical vulnerabilities
 
 #### Manual Review Criteria
+
 - **Code quality**: Follows project patterns
 - **Functionality**: Works as intended
 - **Performance**: No performance regressions
@@ -175,16 +197,19 @@ Brief description of the change
 ## 🔄 Merge Strategy
 
 ### When to Squash
+
 - **Small PRs**: Single feature or fix
 - **Cleanup PRs**: Minor improvements
 - **Documentation**: Documentation updates
 
 ### When to Rebase
+
 - **Feature branches**: Preserving commit history
 - **Long-lived branches**: Maintaining linear history
 - **Collaborative work**: Multiple contributors
 
 ### Merge Commands
+
 ```bash
 # Squash merge
 git checkout main
@@ -198,6 +223,7 @@ git rebase feature-branch
 ## 🚀 Release Process
 
 ### Semantic Versioning
+
 - **Major**: `X.0.0` - Breaking changes
 - **Minor**: `X.Y.0` - New features (backward compatible)
 - **Patch**: `X.Y.Z` - Bug fixes
@@ -205,6 +231,7 @@ git rebase feature-branch
 ### Release Steps
 
 #### 1. Prepare Release
+
 ```bash
 # Update version files
 npm version patch  # or minor/major
@@ -218,6 +245,7 @@ npm test
 ```
 
 #### 2. Tag Release
+
 ```bash
 # Create tag
 git tag -a v1.2.3 -m "Release version 1.2.3"
@@ -227,6 +255,7 @@ git push origin v1.2.3
 ```
 
 #### 3. Publish
+
 ```bash
 # Publish package (JavaScript/TypeScript)
 npm publish
@@ -240,6 +269,7 @@ npm run deploy
 ```
 
 ### Release Validation
+
 - **Version consistency**: All version files updated
 - **CHANGELOG accuracy**: Reflects actual changes
 - **Build success**: Production build passes
@@ -249,6 +279,7 @@ npm run deploy
 ## 🛠️ Development Workflow Examples
 
 ### Feature Development Workflow
+
 ```bash
 # 1. Create feature branch
 git checkout -b feat/ui-add-component-generation
@@ -270,6 +301,7 @@ git push origin feat/ui-add-component-generation
 ```
 
 ### Bug Fix Workflow
+
 ```bash
 # 1. Create fix branch
 git checkout -b fix/auth-validation-error
@@ -291,6 +323,7 @@ git push origin fix/auth-validation-error
 ```
 
 ### Documentation Update Workflow
+
 ```bash
 # 1. Create docs branch
 git checkout -b docs/api-endpoint-documentation
@@ -310,21 +343,25 @@ git push origin docs/api-endpoint-documentation
 ## 📋 Project-Specific Adaptations
 
 ### MCP Gateway Specific
+
 - **Python dependencies**: Update `pyproject.toml` and `requirements.txt`
 - **Docker images**: Update version tags
 - **API documentation**: Update OpenAPI specs
 
 ### UIForge WebApp Specific
+
 - **Next.js dependencies**: Update `package.json`
 - **Database migrations**: Update Supabase migrations
 - **Component library**: Update component versions
 
 ### UIForge MCP Specific
+
 - **MCP protocol**: Update protocol version
 - **Tool definitions**: Update tool schemas
 - **AI providers**: Update provider integrations
 
 ### Forge Patterns Specific
+
 - **Shared configurations**: Update pattern versions
 - **Workflow templates**: Update workflow files
 - **Documentation**: Update shared documentation
@@ -332,6 +369,7 @@ git push origin docs/api-endpoint-documentation
 ## 🔍 Quality Assurance
 
 ### Pre-commit Hooks
+
 ```bash
 # .husky/pre-commit
 #!/usr/bin/env sh
@@ -343,6 +381,7 @@ npm run type-check
 ```
 
 ### CI/CD Pipeline
+
 ```yaml
 # .github/workflows/ci.yml
 name: CI/CD Pipeline
@@ -370,12 +409,14 @@ jobs:
 ## 🎯 Success Metrics
 
 ### Workflow Efficiency
+
 - **PR merge time**: <24 hours for small changes
 - **Release frequency**: Regular releases (weekly/bi-weekly)
 - **Branch protection**: 100% compliance
 - **Quality gates**: 100% pass rate
 
 ### Code Quality
+
 - **Commit message compliance**: 100% following convention
 - **PR description quality**: Complete and informative
 - **Review turnaround**: <48 hours for reviews
@@ -384,20 +425,29 @@ jobs:
 ## 🔗 Related Documentation
 
 ### Shared Rules
+
 - **[Agent Rules](../agent-rules.md)** - Core conduct principles
 - **[Quality Standards](../quality-standards/README.md)** - Quality requirements
 - **[Development Workflows](README.md)** - Process overview
 
 ### Project Documentation
-- **[MCP Gateway Development](../../../mcp-gateway/docs/DEVELOPMENT.md)** - Gateway-specific workflows
-- **[UIForge WebApp Development](../../../uiforge-webapp/docs/DEVELOPMENT.md)** - WebApp-specific workflows
-- **[UIForge MCP Development](../../../uiforge-mcp/docs/DEVELOPMENT.md)** - MCP-specific workflows
+
+- **[MCP Gateway Development](../../../mcp-gateway/docs/DEVELOPMENT.md)** -
+  Gateway-specific workflows
+- **[UIForge WebApp Development](../../../uiforge-webapp/docs/DEVELOPMENT.md)** -
+  WebApp-specific workflows
+- **[UIForge MCP Development](../../../uiforge-mcp/docs/DEVELOPMENT.md)** -
+  MCP-specific workflows
 
 ### External Resources
-- **[Angular Commit Convention](https://www.conventionalcommits.org/)** - Commit message standard
-- **[GitHub Flow](https://guides.github.com/introduction/flow/)** - GitHub workflow
+
+- **[Angular Commit Convention](https://www.conventionalcommits.org/)** - Commit
+  message standard
+- **[GitHub Flow](https://guides.github.com/introduction/flow/)** - GitHub
+  workflow
 - **[Semantic Versioning](https://semver.org/)** - Versioning standard
 
 ---
 
-*This Git workflow documentation is maintained as part of the forge-patterns repository and serves as the canonical standard for all Forge Space projects.*
+_This Git workflow documentation is maintained as part of the forge-patterns
+repository and serves as the canonical standard for all Forge Space projects._

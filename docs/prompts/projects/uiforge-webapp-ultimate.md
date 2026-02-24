@@ -1,15 +1,22 @@
 # UIForge WebApp Ultimate Enhanced Prompts
 
-Complete integration of all 13 skills for UIForge WebApp development, including Next.js 16 optimization, shadcn-ui component excellence, AI SDK integration, and professional theming.
+Complete integration of all 13 skills for UIForge WebApp development, including
+Next.js 16 optimization, shadcn-ui component excellence, AI SDK integration, and
+professional theming.
 
 ## 🚀 Next.js 16 Development with Complete Skills
 
 ### **Complete Next.js Stack with All Skills**
-```markdown
+
+````markdown
 # Next.js 16 with Complete Skill Integration
-You are building a Next.js 16 application for UIForge WebApp with complete skill integration including AI capabilities, professional theming, and systematic debugging.
+
+You are building a Next.js 16 application for UIForge WebApp with complete skill
+integration including AI capabilities, professional theming, and systematic
+debugging.
 
 COMPLETE NEXT.JS STACK:
+
 - @[/next-best-practices]: Next.js 16 optimization and App Router patterns
 - @[/shadcn-ui]: Production-ready component library with forms and validation
 - @[/theme-factory]: Professional theming across all interfaces
@@ -25,6 +32,7 @@ COMPLETE NEXT.JS STACK:
 - @[/brainstorming]: Creative solution development
 
 NEXT.JS DEVELOPMENT WORKFLOW:
+
 1. Apply Next.js 16 best practices with @[/next-best-practices]
 2. Create component library with @[/shadcn-ui]
 3. Apply professional themes with @[/theme-factory]
@@ -35,6 +43,7 @@ NEXT.JS DEVELOPMENT WORKFLOW:
 8. Integrate database with @[/supabase-postgres-best-practices]
 
 ULTIMATE NEXT.JS ARCHITECTURE:
+
 ```typescript
 // app/layout.tsx - Complete skill integration
 import { Inter } from 'next/font/google'
@@ -99,12 +108,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: theme.colors.background }}>
       <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
-      
+
       <main>
         <HeroSection theme={theme} />
         <FeaturesSection theme={theme} />
-        <AIChatSection 
-          theme={theme} 
+        <AIChatSection
+          theme={theme}
           messages={messages}
           onSendMessage={sendMessage}
         />
@@ -113,8 +122,10 @@ export default function HomePage() {
   )
 }
 ```
+````
 
 PROFESSIONAL COMPONENT ARCHITECTURE:
+
 ```typescript
 // components/ui/complete-form-system.tsx
 "use client"
@@ -159,7 +170,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
       }}
     >
       <CardHeader>
-        <CardTitle 
+        <CardTitle
           style={{
             fontFamily: theme.typography.heading,
             color: theme.colors.primary
@@ -171,7 +182,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
           {features.description}
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -183,7 +194,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
                 name={fieldName as any}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel 
+                    <FormLabel
                       style={{
                         fontFamily: theme.typography.body,
                         color: theme.colors.primary,
@@ -205,7 +216,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
                 )}
               />
             ))}
-            
+
             {/* AI Assistant Integration */}
             {features.aiAssistant && (
               <Card
@@ -216,7 +227,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 
+                    <h4
                       style={{
                         fontFamily: theme.typography.heading,
                         color: theme.colors.primary
@@ -233,7 +244,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
                       Powered by AI SDK
                     </Badge>
                   </div>
-                  <AIFormAssistant 
+                  <AIFormAssistant
                     schema={schema}
                     currentValues={form.getValues()}
                     theme={theme}
@@ -244,7 +255,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
                 </CardContent>
               </Card>
             )}
-            
+
             {/* Form Actions */}
             <div className="flex gap-4">
               <Button
@@ -256,7 +267,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
               >
                 {features.submitText || 'Submit'}
               </Button>
-              
+
               {features.showReset && (
                 <Button
                   type="button"
@@ -325,7 +336,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
         />
       )
     }
-    
+
     if (fieldSchema._def.typeName === 'ZodEnum') {
       return (
         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -342,7 +353,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
         </Select>
       )
     }
-    
+
     if (fieldSchema._def.typeName === 'ZodBoolean') {
       return (
         <Checkbox
@@ -354,7 +365,7 @@ export function CompleteFormSystem({ schema, onSubmit, theme, features }: Comple
         />
       )
     }
-    
+
     return (
       <Input
         {...field}
@@ -385,14 +396,14 @@ function AIFormAssistant({ schema, currentValues, theme, onSuggestion }: {
 
   return (
     <div className="space-y-4">
-      <div className="h-32 overflow-y-auto border rounded p-2" 
-           style={{ 
+      <div className="h-32 overflow-y-auto border rounded p-2"
+           style={{
              backgroundColor: theme.colors.background,
-             borderColor: theme.colors.border 
+             borderColor: theme.colors.border
            }}>
         {messages.map((message) => (
           <div key={message.id} className="mb-2">
-            <div 
+            <div
               className={cn(
                 "p-2 rounded text-sm",
                 message.role === 'user' ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"
@@ -403,7 +414,7 @@ function AIFormAssistant({ schema, currentValues, theme, onSuggestion }: {
           </div>
         ))}
       </div>
-      
+
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           value={input}
@@ -429,7 +440,8 @@ function AIFormAssistant({ schema, currentValues, theme, onSuggestion }: {
   )
 }
 ```
-```
+
+````
 
 ## 🎨 shadcn-ui Component Library with Complete Skills
 
@@ -528,12 +540,12 @@ const UltimateButton = forwardRef<HTMLButtonElement, ButtonProps>(
           size,
           context: 'user_interaction'
         })
-        
+
         if (suggestion) {
           console.log('AI Suggestion:', suggestion)
         }
       }
-      
+
       if (props.onClick) {
         props.onClick(event)
       }
@@ -572,13 +584,13 @@ const UltimateButton = forwardRef<HTMLButtonElement, ButtonProps>(
 UltimateButton.displayName = "Button"
 
 // Theme-enhanced card component
-export function UltimateCard({ 
-  children, 
-  className, 
-  theme, 
+export function UltimateCard({
+  children,
+  className,
+  theme,
   variant = "default",
   interactive = false,
-  ...props 
+  ...props
 }: CardProps) {
   const { currentTheme } = useTheme()
   const appliedTheme = theme || currentTheme
@@ -605,13 +617,13 @@ export function UltimateCard({
 }
 
 // AI-powered form component
-export function UltimateForm({ 
-  schema, 
-  onSubmit, 
-  theme, 
+export function UltimateForm({
+  schema,
+  onSubmit,
+  theme,
   aiAssistance = true,
   className,
-  ...props 
+  ...props
 }: FormProps) {
   const { currentTheme } = useTheme()
   const appliedTheme = theme || currentTheme
@@ -627,7 +639,7 @@ export function UltimateForm({
       {...props}
     >
       {/* Form content */}
-      
+
       {aiAssistance && (
         <div className="flex justify-end">
           <UltimateButton
@@ -645,23 +657,24 @@ export function UltimateForm({
     </form>
   )
 }
-```
+````
 
 PROFESSIONAL COMPONENT GENERATION:
+
 ```typescript
 // Component generation with AI SDK and theme factory
-import { generateText, tool } from 'ai'
-import { z } from 'zod'
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
 
 export class ComponentGenerator {
-  private themeFactory: ThemeFactory
-  private designPrinciples: FrontendDesignPrinciples
-  private accessibilityStandards: UIUXProMaxStandards
+  private themeFactory: ThemeFactory;
+  private designPrinciples: FrontendDesignPrinciples;
+  private accessibilityStandards: UIUXProMaxStandards;
 
   constructor() {
-    this.themeFactory = new ThemeFactory()
-    this.designPrinciples = new FrontendDesignPrinciples()
-    this.accessibilityStandards = new UIUXProMaxStandards()
+    this.themeFactory = new ThemeFactory();
+    this.designPrinciples = new FrontendDesignPrinciples();
+    this.accessibilityStandards = new UIUXProMaxStandards();
   }
 
   async generateComponent(componentSpec: ComponentSpecification) {
@@ -694,33 +707,38 @@ export class ComponentGenerator {
       system: `You are an expert React component developer with access to professional theming, 
               design principles, and accessibility standards. Use all available tools to create 
               comprehensive, production-ready components.`
-    })
+    });
 
     return {
       component: text,
       theme: this.themeFactory.applyTheme(componentSpec.aesthetic),
       design: this.designPrinciples.applyDesign(componentSpec.designDirection),
-      accessibility: this.accessibilityStandards.ensureCompliance(componentSpec.accessibilityLevel)
-    }
+      accessibility: this.accessibilityStandards.ensureCompliance(
+        componentSpec.accessibilityLevel
+      )
+    };
   }
 
   async generateThemedComponent(themeName: string, componentType: string) {
-    const theme = this.themeFactory.getTheme(themeName)
-    const designDirection = this.designPrinciples.getDesignDirection(themeName)
-    
+    const theme = this.themeFactory.getTheme(themeName);
+    const designDirection = this.designPrinciples.getDesignDirection(themeName);
+
     switch (componentType) {
       case 'button':
-        return this.generateThemedButton(theme, designDirection)
+        return this.generateThemedButton(theme, designDirection);
       case 'card':
-        return this.generateThemedCard(theme, designDirection)
+        return this.generateThemedCard(theme, designDirection);
       case 'form':
-        return this.generateThemedForm(theme, designDirection)
+        return this.generateThemedForm(theme, designDirection);
       default:
-        throw new Error(`Unsupported component type: ${componentType}`)
+        throw new Error(`Unsupported component type: ${componentType}`);
     }
   }
 
-  private generateThemedButton(theme: ProfessionalTheme, design: DesignDirection) {
+  private generateThemedButton(
+    theme: ProfessionalTheme,
+    design: DesignDirection
+  ) {
     return `
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -744,11 +762,12 @@ export function ${theme.name}Button({ variant = "default", size = "default", cla
     />
   )
 }
-    `.trim()
+    `.trim();
   }
 }
 ```
-```
+
+````
 
 ## 🤖 AI SDK Integration with Complete Skills
 
@@ -801,7 +820,7 @@ const aiTools = {
       }).optional()
     })
   }),
-  
+
   applyDesignPrinciples: tool({
     description: 'Apply frontend design principles to the solution',
     parameters: z.object({
@@ -810,7 +829,7 @@ const aiTools = {
       targetAudience: z.string().describe('Target audience for the design')
     })
   }),
-  
+
   ensureAccessibility: tool({
     description: 'Ensure WCAG compliance for the solution',
     parameters: z.object({
@@ -819,7 +838,7 @@ const aiTools = {
       userNeeds: z.array(z.string()).describe('Specific user accessibility needs')
     })
   }),
-  
+
   systematicDebugging: tool({
     description: 'Apply systematic debugging to identify and resolve issues',
     parameters: z.object({
@@ -828,7 +847,7 @@ const aiTools = {
       recentChanges: z.array(z.string()).describe('Recent changes that might be related')
     })
   }),
-  
+
   creativeProblemSolving: tool({
     description: 'Apply creative problem-solving approaches',
     parameters: z.object({
@@ -842,17 +861,17 @@ const aiTools = {
 export async function POST(req: Request) {
   try {
     const { messages, skills, theme, context } = await req.json()
-    
+
     // Initialize skill integrations
     const themeFactory = new ThemeFactory()
     const debugger = new SystematicDebugger()
     const creativeSolver = new CreativeProblemSolver()
-    
+
     const response = await generateText({
       model: openai('gpt-4-turbo'),
       messages,
       tools: aiTools,
-      system: `You are an expert AI assistant with complete skill integration. 
+      system: `You are an expert AI assistant with complete skill integration.
              You have access to professional theming, design principles, accessibility standards,
              systematic debugging, and creative problem-solving. Use these skills to provide
              comprehensive, context-aware solutions that are both technically sound and
@@ -864,9 +883,9 @@ export async function POST(req: Request) {
   } catch (error) {
     // Apply systematic debugging to AI errors
     const debugging = await debugger.analyzeError(error, 'ai_chat_api')
-    
+
     return Response.json(
-      { 
+      {
         error: 'AI service temporarily unavailable',
         debugging: debugging,
         fallback: 'Please try again later'
@@ -897,15 +916,15 @@ interface UltimateChatInterfaceProps {
   features: ChatFeatures
 }
 
-export function UltimateChatInterface({ 
-  initialTheme = "Tech Innovation", 
-  availableSkills, 
-  features 
+export function UltimateChatInterface({
+  initialTheme = "Tech Innovation",
+  availableSkills,
+  features
 }: UltimateChatInterfaceProps) {
   const { theme, setTheme } = useTheme(initialTheme)
   const { ensureAccessibility } = useAccessibility()
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>(availableSkills.slice(0, 3))
-  
+
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: "/api/ai/chat",
     body: {
@@ -926,7 +945,7 @@ export function UltimateChatInterface({
   })
 
   return (
-    <div 
+    <div
       className="w-full max-w-4xl mx-auto p-6"
       style={{
         backgroundColor: theme.colors.background,
@@ -943,7 +962,7 @@ export function UltimateChatInterface({
       >
         <CardHeader style={{ borderBottom: `1px solid ${theme.colors.border}/20` }}>
           <div className="flex items-center justify-between">
-            <CardTitle 
+            <CardTitle
               style={{
                 fontFamily: theme.typography.heading,
                 color: theme.colors.primary
@@ -951,14 +970,14 @@ export function UltimateChatInterface({
             >
               AI Assistant
             </CardTitle>
-            
+
             <div className="flex items-center gap-4">
-              <ThemeSelector 
-                currentTheme={theme} 
+              <ThemeSelector
+                currentTheme={theme}
                 onThemeChange={setTheme}
                 compact
               />
-              
+
               <div className="flex gap-2">
                 {selectedSkills.slice(0, 3).map((skill) => (
                   <Badge
@@ -976,7 +995,7 @@ export function UltimateChatInterface({
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           <Tabs defaultValue="chat" className="w-full">
             <TabsList
@@ -990,9 +1009,9 @@ export function UltimateChatInterface({
               <TabsTrigger value="settings">Settings</TabsTrigger>
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="chat" className="space-y-4">
-              <div 
+              <div
                 className={cn(
                   "h-96 overflow-y-auto border rounded-lg p-4",
                   "scrollbar-thin scrollbar-thumb-" + theme.colors.primary
@@ -1050,7 +1069,7 @@ export function UltimateChatInterface({
                   </div>
                 )}
               </div>
-              
+
               <form onSubmit={handleSubmit} className="flex gap-2">
                 <Input
                   value={input}
@@ -1075,7 +1094,7 @@ export function UltimateChatInterface({
                 </Button>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="skills" className="space-y-4">
               <SkillSelector
                 availableSkills={availableSkills}
@@ -1090,6 +1109,9 @@ export function UltimateChatInterface({
     </div>
   )
 }
-```
+````
 
-This ultimate enhanced prompts system for UIForge WebApp integrates all 13 available skills to create comprehensive, intelligent, and professionally themed Next.js applications with AI-powered capabilities, systematic debugging, and complete accessibility compliance.
+This ultimate enhanced prompts system for UIForge WebApp integrates all 13
+available skills to create comprehensive, intelligent, and professionally themed
+Next.js applications with AI-powered capabilities, systematic debugging, and
+complete accessibility compliance.
