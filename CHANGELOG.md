@@ -1,3 +1,11 @@
+## [1.3.1] - 2026-02-25
+
+### Security
+- **VSCode Extension Hardening**: Path traversal protection, symlink skipping, malformed JSON reporting, improved error handling across discovery, scaffolding, and validation modules
+- 38 tests across 3 suites (was 33)
+
+---
+
 ## [1.3.0] - 2026-02-25
 
 ### Features
