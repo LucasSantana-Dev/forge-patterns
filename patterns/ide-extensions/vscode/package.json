@@ -3,12 +3,21 @@
   "displayName": "Forge Patterns",
   "description": "Pattern discovery, application, and validation for UIForge ecosystem projects",
   "version": "0.1.0",
-  "publisher": "{{PUBLISHER}}",
+  "publisher": "forge-space",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
+    "Linters",
+    "Snippets",
     "Other"
+  ],
+  "keywords": [
+    "forge-patterns",
+    "scaffolding",
+    "compliance",
+    "patterns",
+    "uiforge"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -49,11 +58,15 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "lint": "eslint src --ext ts"
+    "lint": "eslint src --ext ts",
+    "test": "jest --config jest.config.json"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
     "@types/node": "^20.0.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.3.0",
     "@vscode/vsce": "^2.22.0"
   }
