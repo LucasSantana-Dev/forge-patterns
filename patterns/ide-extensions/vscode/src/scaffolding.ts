@@ -15,6 +15,14 @@ export interface ScaffoldResult {
   conflicts: string[];
 }
 
+function assertWithinTarget(dest: string, targetDir: string): void {
+  const normalized = path.resolve(dest);
+  const targetResolved = path.resolve(targetDir);
+  if (!normalized.startsWith(targetResolved + path.sep) && normalized !== targetResolved) {
+    throw new Error('Path traversal blocked: destination escapes target directory');
+  }
+}
+
 export async function scaffoldPattern(
   pattern: PatternInfo,
   repoPath: string,
@@ -37,6 +45,7 @@ export async function scaffoldPattern(
   for (const file of files) {
     const relative = path.relative(sourcePath, file);
     const dest = path.join(targetDir, relative);
+    assertWithinTarget(dest, targetDir);
 
     if (fs.existsSync(dest) && !options.overwrite) {
       result.conflicts.push(relative);
@@ -61,23 +70,28 @@ export async function scaffoldPattern(
   return result;
 }
 
-export async function promptAndScaffold(pattern: PatternInfo, repoPath: string): Promise<void> {
+async function selectTargetDir(): Promise<string | undefined> {
   const { workspaceFolders } = vscode.workspace;
   if (!workspaceFolders?.length) {
     vscode.window.showWarningMessage('Open a workspace folder before applying patterns.');
-    return;
+    return undefined;
   }
 
-  let targetDir = workspaceFolders[0].uri.fsPath;
-
-  if (workspaceFolders.length > 1) {
-    const picked = await vscode.window.showWorkspaceFolderPick({
-      placeHolder: 'Select target workspace folder'
-    });
-    if (!picked) return;
-    targetDir = picked.uri.fsPath;
+  if (workspaceFolders.length === 1) {
+    return workspaceFolders[0].uri.fsPath;
   }
 
+  const picked = await vscode.window.showWorkspaceFolderPick({
+    placeHolder: 'Select target workspace folder'
+  });
+  return picked?.uri.fsPath;
+}
+
+async function confirmScaffold(
+  pattern: PatternInfo,
+  repoPath: string,
+  targetDir: string
+): Promise<{ confirmed: boolean; overwrite: boolean }> {
   const dryResult = await scaffoldPattern(pattern, repoPath, targetDir, {
     dryRun: true,
     overwrite: false
@@ -90,7 +104,7 @@ export async function promptAndScaffold(pattern: PatternInfo, repoPath: string):
     detail += `, ${conflictCount} conflict(s)`;
   }
 
-  const confirm = await vscode.window.showInformationMessage(
+  const choice = await vscode.window.showInformationMessage(
     `Apply "${pattern.path}"? ${detail}`,
     { modal: true },
     'Apply',
@@ -98,9 +112,21 @@ export async function promptAndScaffold(pattern: PatternInfo, repoPath: string):
     'Cancel'
   );
 
-  if (!confirm || confirm === 'Cancel') return;
+  if (!choice || choice === 'Cancel') {
+    return { confirmed: false, overwrite: false };
+  }
+  return {
+    confirmed: true,
+    overwrite: choice === 'Apply (overwrite)'
+  };
+}
 
-  const overwrite = confirm === 'Apply (overwrite)';
+export async function promptAndScaffold(pattern: PatternInfo, repoPath: string): Promise<void> {
+  const targetDir = await selectTargetDir();
+  if (!targetDir) return;
+
+  const { confirmed, overwrite } = await confirmScaffold(pattern, repoPath, targetDir);
+  if (!confirmed) return;
 
   await vscode.window.withProgress(
     {

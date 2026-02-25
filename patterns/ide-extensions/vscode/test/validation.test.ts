@@ -49,7 +49,8 @@ describe('validation', () => {
   describe('ESLint config check', () => {
     it('passes when eslint.config.js exists', async () => {
       fs.writeFileSync(
-        path.join(tmpDir, 'eslint.config.js'), 'export default [];'
+        path.join(tmpDir, 'eslint.config.js'),
+        'export default [];'
       );
       const results = await validateCompliance(tmpDir);
       const eslint = results.filter(
@@ -237,6 +238,26 @@ describe('validation', () => {
       );
       expect(secrets.length).toBeGreaterThan(0);
     });
+
+    it('skips symlinks in secret scanning', async () => {
+      const secretDir = fs.mkdtempSync(
+        path.join(os.tmpdir(), 'fp-secret-')
+      );
+      fs.writeFileSync(
+        path.join(secretDir, 'secret.ts'),
+        'const token = "leaked";'
+      );
+      fs.symlinkSync(
+        secretDir,
+        path.join(tmpDir, 'linked-dir')
+      );
+      const results = await validateCompliance(tmpDir);
+      const secrets = results.filter(
+        r => r.rule === 'BR-001 Zero-Secrets'
+      );
+      expect(secrets.length).toBe(0);
+      fs.rmSync(secretDir, { recursive: true, force: true });
+    });
   });
 
   describe('TypeScript config with comments', () => {
@@ -257,15 +278,29 @@ describe('validation', () => {
       expect(ts.length).toBe(0);
     });
 
-    it('handles malformed tsconfig gracefully', async () => {
+    it('reports malformed tsconfig as error', async () => {
       fs.writeFileSync(
         path.join(tmpDir, 'tsconfig.json'), 'not json'
       );
       const results = await validateCompliance(tmpDir);
-      const ts = results.filter(
-        r => r.message.includes('strict mode')
+      const ts = results.find(
+        r => r.message.includes('Invalid JSON')
       );
-      expect(ts.length).toBe(0);
+      expect(ts).toBeDefined();
+      expect(ts!.severity).toBe('error');
+    });
+
+    it('reports malformed package.json as error', async () => {
+      fs.writeFileSync(
+        path.join(tmpDir, 'package.json'), '{ bad json'
+      );
+      const results = await validateCompliance(tmpDir);
+      const pkg = results.find(
+        r => r.message.includes('Invalid JSON')
+      );
+      expect(pkg).toBeDefined();
+      expect(pkg!.severity).toBe('error');
+      expect(pkg!.file).toBe('package.json');
     });
   });
 

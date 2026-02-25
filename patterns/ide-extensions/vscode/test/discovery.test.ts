@@ -70,7 +70,9 @@ describe('discovery', () => {
 
     it('filters by category', async () => {
       const patterns = await discoverPatterns(tmpDir, 'docker');
-      const categories = new Set(patterns.map(p => p.category));
+      const categories = new Set(
+        patterns.map(p => p.category)
+      );
       expect(categories.size).toBe(1);
       expect(categories.has('docker')).toBe(true);
     });
@@ -89,14 +91,38 @@ describe('discovery', () => {
       const patterns = await discoverPatterns(tmpDir);
       const ai = patterns.find(p => p.path === 'ai');
       expect(ai!.description.length).toBeLessThanOrEqual(81);
-      expect(ai!.description.endsWith('…')).toBe(true);
+      expect(ai!.description.endsWith('\u2026')).toBe(true);
+    });
+
+    it('skips symlinked categories', async () => {
+      const externalDir = fs.mkdtempSync(
+        path.join(os.tmpdir(), 'fp-ext-')
+      );
+      fs.writeFileSync(
+        path.join(externalDir, 'README.md'), '# External'
+      );
+      fs.symlinkSync(
+        externalDir,
+        path.join(tmpDir, 'patterns', 'symlinked')
+      );
+      const patterns = await discoverPatterns(tmpDir);
+      const symlinked = patterns.find(
+        p => p.name === 'symlinked'
+      );
+      expect(symlinked).toBeUndefined();
+      fs.rmSync(externalDir, {
+        recursive: true, force: true
+      });
     });
   });
 
   describe('groupByCategory', () => {
     it('groups sub-patterns by category', () => {
       const patterns: PatternInfo[] = [
-        { category: 'ai', name: 'ai', path: 'ai', description: '' },
+        {
+          category: 'ai', name: 'ai',
+          path: 'ai', description: ''
+        },
         {
           category: 'ai', name: 'ml-project',
           path: 'ai/ml-project', description: ''
@@ -117,7 +143,10 @@ describe('discovery', () => {
 
     it('excludes category-level entries', () => {
       const patterns: PatternInfo[] = [
-        { category: 'ai', name: 'ai', path: 'ai', description: '' }
+        {
+          category: 'ai', name: 'ai',
+          path: 'ai', description: ''
+        }
       ];
       const grouped = groupByCategory(patterns);
       expect(grouped.get('ai')).toBeUndefined();
@@ -142,11 +171,28 @@ describe('discovery', () => {
       );
       fs.mkdirSync(path.join(patternPath, 'node_modules'));
       fs.writeFileSync(
-        path.join(patternPath, 'node_modules', 'pkg.json'), '{}'
+        path.join(patternPath, 'node_modules', 'pkg.json'),
+        '{}'
       );
       const files = getPatternFiles(patternPath);
       const basenames = files.map(f => path.basename(f));
       expect(basenames).not.toContain('pkg.json');
+    });
+
+    it('skips symlinked files', () => {
+      const patternPath = path.join(
+        tmpDir, 'patterns', 'docker', 'multi-stage'
+      );
+      const external = path.join(os.tmpdir(), 'fp-ext-file');
+      fs.writeFileSync(external, 'external content');
+      fs.symlinkSync(
+        external,
+        path.join(patternPath, 'linked.txt')
+      );
+      const files = getPatternFiles(patternPath);
+      const basenames = files.map(f => path.basename(f));
+      expect(basenames).not.toContain('linked.txt');
+      fs.unlinkSync(external);
     });
   });
 });

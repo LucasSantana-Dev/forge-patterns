@@ -25,8 +25,8 @@ export async function discoverPatterns(
     if (categoryFilter && category !== categoryFilter) continue;
 
     const categoryPath = path.join(patternsDir, category);
-    const stat = fs.statSync(categoryPath);
-    if (!stat.isDirectory()) continue;
+    const stat = safeLstat(categoryPath);
+    if (!stat || stat.isSymbolicLink() || !stat.isDirectory()) continue;
 
     const description = readDescription(path.join(categoryPath, 'README.md'));
 
@@ -37,11 +37,17 @@ export async function discoverPatterns(
       description
     });
 
-    const entries = fs.readdirSync(categoryPath);
+    let entries: string[];
+    try {
+      entries = fs.readdirSync(categoryPath);
+    } catch {
+      continue;
+    }
+
     for (const entry of entries) {
       const entryPath = path.join(categoryPath, entry);
-      const entryStat = fs.statSync(entryPath);
-      if (!entryStat.isDirectory()) continue;
+      const entryStat = safeLstat(entryPath);
+      if (!entryStat || entryStat.isSymbolicLink() || !entryStat.isDirectory()) continue;
 
       const subDesc = readDescription(path.join(entryPath, 'README.md'));
       patterns.push({
@@ -74,11 +80,17 @@ export function getPatternFiles(patternPath: string): string[] {
 
 function walkDir(dir: string, skip: Set<string>): string[] {
   const files: string[] = [];
-  const entries = fs.readdirSync(dir);
+  let entries: string[];
+  try {
+    entries = fs.readdirSync(dir);
+  } catch {
+    return files;
+  }
   for (const entry of entries) {
     if (skip.has(entry)) continue;
     const fullPath = path.join(dir, entry);
-    const stat = fs.statSync(fullPath);
+    const stat = safeLstat(fullPath);
+    if (!stat || stat.isSymbolicLink()) continue;
     if (stat.isDirectory()) {
       files.push(...walkDir(fullPath, skip));
     } else {
@@ -88,10 +100,18 @@ function walkDir(dir: string, skip: Set<string>): string[] {
   return files;
 }
 
+function safeLstat(p: string): fs.Stats | undefined {
+  try {
+    return fs.lstatSync(p);
+  } catch {
+    return undefined;
+  }
+}
+
 function readDescription(readmePath: string): string {
   if (!fs.existsSync(readmePath)) return '';
   const content = fs.readFileSync(readmePath, 'utf8');
   const match = content.match(/^[^#\n].+/m);
   const desc = match?.[0]?.trim() ?? '';
-  return desc.length > 80 ? desc.slice(0, 80) + '…' : desc;
+  return desc.length > 80 ? desc.slice(0, 80) + '\u2026' : desc;
 }

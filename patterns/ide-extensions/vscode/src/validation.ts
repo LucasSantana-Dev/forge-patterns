@@ -31,6 +31,9 @@ const SKIP_DIRS = new Set([
   '.venv'
 ]);
 
+const MAX_SCAN_DEPTH = 8;
+const MAX_SECRET_RESULTS = 20;
+
 export async function validateCompliance(workspacePath: string): Promise<ValidationResult[]> {
   const results: ValidationResult[] = [];
 
@@ -103,7 +106,17 @@ function checkTypeScriptStrict(dir: string): ValidationResult[] {
         message: 'TypeScript strict mode is not enabled'
       }
     ];
-  } catch {
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return [
+        {
+          file: 'tsconfig.json',
+          rule: 'BR-003 Code Quality',
+          severity: 'error',
+          message: `Invalid JSON syntax: ${error.message}`
+        }
+      ];
+    }
     return [];
   }
 }
@@ -112,26 +125,38 @@ function checkPackageScripts(dir: string): ValidationResult[] {
   const pkgPath = path.join(dir, 'package.json');
   if (!fs.existsSync(pkgPath)) return [];
 
+  let pkg: Record<string, unknown>;
   try {
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    const scripts = pkg.scripts ?? {};
-    const results: ValidationResult[] = [];
-    const required = ['lint', 'format', 'test'];
-
-    for (const name of required) {
-      if (!scripts[name]) {
-        results.push({
+    pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return [
+        {
           file: 'package.json',
           rule: 'BR-003 Code Quality',
-          severity: 'warning',
-          message: `Missing "${name}" script in package.json`
-        });
-      }
+          severity: 'error',
+          message: `Invalid JSON syntax: ${error.message}`
+        }
+      ];
     }
-    return results;
-  } catch {
     return [];
   }
+
+  const scripts = (pkg.scripts as Record<string, string>) ?? {};
+  const results: ValidationResult[] = [];
+  const required = ['lint', 'format', 'test'];
+
+  for (const name of required) {
+    if (!scripts[name]) {
+      results.push({
+        file: 'package.json',
+        rule: 'BR-003 Code Quality',
+        severity: 'warning',
+        message: `Missing "${name}" script in package.json`
+      });
+    }
+  }
+  return results;
 }
 
 function scanForSecrets(dir: string): ValidationResult[] {
@@ -161,7 +186,9 @@ function walkForSecrets(
   results: ValidationResult[],
   depth: number
 ): void {
-  if (depth > 8 || results.length > 20) return;
+  if (depth > MAX_SCAN_DEPTH || results.length > MAX_SECRET_RESULTS) {
+    return;
+  }
 
   let entries: string[];
   try {
@@ -176,10 +203,12 @@ function walkForSecrets(
 
     let stat: fs.Stats;
     try {
-      stat = fs.statSync(fullPath);
+      stat = fs.lstatSync(fullPath);
     } catch {
       continue;
     }
+
+    if (stat.isSymbolicLink()) continue;
 
     if (stat.isDirectory()) {
       walkForSecrets(fullPath, exts, results, depth + 1);
@@ -187,28 +216,32 @@ function walkForSecrets(
     }
 
     if (!exts.has(path.extname(entry))) continue;
+    scanFileForSecrets(fullPath, dir, results);
+    if (results.length > MAX_SECRET_RESULTS) return;
+  }
+}
 
-    try {
-      const content = fs.readFileSync(fullPath, 'utf8');
-      const lines = content.split('\n');
-      for (let i = 0; i < lines.length; i++) {
-        for (const pattern of SECRET_PATTERNS) {
-          if (pattern.test(lines[i])) {
-            results.push({
-              file: path.relative(dir, fullPath),
-              rule: 'BR-001 Zero-Secrets',
-              severity: 'error',
-              message: 'Possible hardcoded secret detected',
-              line: i + 1
-            });
-            break;
-          }
+function scanFileForSecrets(filePath: string, baseDir: string, results: ValidationResult[]): void {
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    const lines = content.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      for (const pattern of SECRET_PATTERNS) {
+        if (pattern.test(lines[i])) {
+          results.push({
+            file: path.relative(baseDir, filePath),
+            rule: 'BR-001 Zero-Secrets',
+            severity: 'error',
+            message: 'Possible hardcoded secret detected',
+            line: i + 1
+          });
+          break;
         }
-        if (results.length > 20) return;
       }
-    } catch {
-      // skip unreadable files
+      if (results.length > MAX_SECRET_RESULTS) return;
     }
+  } catch {
+    log(`Secrets scan: cannot read ${filePath}`);
   }
 }
 
@@ -246,5 +279,5 @@ export function publishDiagnostics(
     collection.set(uri, diagnostics);
   }
 
-  log(`Validation: ${results.length} issue(s) across ${byFile.size} file(s)`);
+  log(`Validation: ${results.length} issue(s) ` + `across ${byFile.size} file(s)`);
 }

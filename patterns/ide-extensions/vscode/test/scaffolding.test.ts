@@ -71,7 +71,9 @@ describe('scaffolding', () => {
       fs.existsSync(path.join(targetDir, 'Dockerfile'))
     ).toBe(true);
     expect(
-      fs.existsSync(path.join(targetDir, 'scripts', 'build.sh'))
+      fs.existsSync(
+        path.join(targetDir, 'scripts', 'build.sh')
+      )
     ).toBe(true);
   });
 
@@ -86,7 +88,9 @@ describe('scaffolding', () => {
     expect(result.conflicts).toContain('Dockerfile');
     expect(result.created.length).toBe(2);
     expect(
-      fs.readFileSync(path.join(targetDir, 'Dockerfile'), 'utf8')
+      fs.readFileSync(
+        path.join(targetDir, 'Dockerfile'), 'utf8'
+      )
     ).toBe('existing');
   });
 
@@ -101,7 +105,9 @@ describe('scaffolding', () => {
     expect(result.conflicts.length).toBe(0);
     expect(result.created.length).toBe(3);
     expect(
-      fs.readFileSync(path.join(targetDir, 'Dockerfile'), 'utf8')
+      fs.readFileSync(
+        path.join(targetDir, 'Dockerfile'), 'utf8'
+      )
     ).toBe('FROM node:22-alpine');
   });
 
@@ -115,5 +121,26 @@ describe('scaffolding', () => {
         dryRun: false, overwrite: false
       })
     ).rejects.toThrow('Pattern not found');
+  });
+
+  it('blocks path traversal via crafted file list', async () => {
+    const discovery = require('../src/discovery');
+    const original = discovery.getPatternFiles;
+
+    const outsideFile = path.join(os.tmpdir(), 'fp-evil.txt');
+    fs.writeFileSync(outsideFile, 'evil');
+
+    discovery.getPatternFiles = () => [outsideFile];
+
+    try {
+      await expect(
+        scaffoldPattern(pattern, repoDir, targetDir, {
+          dryRun: false, overwrite: false
+        })
+      ).rejects.toThrow('Path traversal blocked');
+    } finally {
+      discovery.getPatternFiles = original;
+      try { fs.unlinkSync(outsideFile); } catch {}
+    }
   });
 });
