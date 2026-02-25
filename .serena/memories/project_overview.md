@@ -1,7 +1,7 @@
-# UIForge Patterns Project Overview
+# Forge Space Core — Project Overview
 
 ## Project Purpose
-UIForge Patterns provides shared configuration, workflows, and architectural patterns for the UIForge ecosystem. It ensures consistency, security, and high-quality code across all UIForge projects (mcp-gateway, uiforge-webapp, uiforge-mcp).
+Forge Space Core provides shared configuration, workflows, and architectural patterns for the Forge Space ecosystem — "The Open Full-Stack AI Workspace". It ensures consistency, security, and high-quality code across all repos (siza, mcp-gateway, siza-mcp, branding-mcp).
 
 ## Tech Stack
 - **Language**: TypeScript (ES2022)
@@ -42,10 +42,16 @@ core/
 4. **BR-004 Documentation Coverage**: Complete README.md for all patterns
 5. **BR-005 Performance Standards**: Measurable performance targets
 
-## Integration Projects
-- **mcp-gateway**: Python/Node.js MCP gateway
-- **uiforge-webapp**: Next.js web application
-- **uiforge-mcp**: Node.js MCP server
+## Coverage
+- **100% test coverage** (PR #53, 2026-02-24)
+- ESM mcp-context-server excluded from coverage (needs Vitest, not Jest)
+- shared-constants module fully tested
+
+## Integration Projects (Forge Space Ecosystem)
+- **siza** v0.3.0: Next.js 16 AI workspace (Cloudflare Workers), 90.02% coverage
+- **mcp-gateway** v1.7.0: Python/Node.js MCP tool routing hub, 93.58% coverage
+- **siza-mcp** v0.6.1: 17 MCP tools for UI generation, 82.72% coverage
+- **branding-mcp** v1.3.0: 7 MCP tools for brand identity generation, 97.63% coverage
 
 ## Package Information
 - **Name**: @forgespace/core
