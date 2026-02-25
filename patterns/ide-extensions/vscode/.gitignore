@@ -1,0 +1,5 @@
+out/
+node_modules/
+*.js
+*.js.map
+!jest.config.json

@@ -1,3 +1,18 @@
+## [1.3.0] - 2026-02-25
+
+### Features
+- **VSCode Extension**: Implemented pattern discovery, scaffolding, and compliance validation
+  - Dynamic pattern scanning from local forge-patterns clone via `forgePatterns.repoPath` setting
+  - One-click pattern application with dry-run preview and conflict detection
+  - Workspace compliance validation (ESLint, Prettier, TypeScript strict, secrets scanning)
+  - VSCode Diagnostics integration — results appear in Problems panel
+  - 33 tests across 3 suites (discovery, scaffolding, validation)
+
+### Changed
+- Root Jest config now excludes `patterns/ide-extensions/` (extension has own Jest config)
+
+---
+
 ## [1.2.1] - 2026-02-20
 
 ### Features

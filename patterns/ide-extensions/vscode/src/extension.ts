@@ -1,50 +1,106 @@
 import * as vscode from 'vscode';
+import { discoverPatterns } from './discovery';
+import { showPatternPicker } from './ui/pattern-picker';
+import { promptAndScaffold } from './scaffolding';
+import { validateCompliance as runValidation, publishDiagnostics } from './validation';
+import { log, show } from './ui/output';
+
+let diagnosticCollection: vscode.DiagnosticCollection;
 
 export function activate(context: vscode.ExtensionContext): void {
+  diagnosticCollection = vscode.languages.createDiagnosticCollection('forgePatterns');
+  context.subscriptions.push(diagnosticCollection);
+
   context.subscriptions.push(
     vscode.commands.registerCommand('forgePatterns.listPatterns', listPatterns),
     vscode.commands.registerCommand('forgePatterns.applyPattern', applyPattern),
     vscode.commands.registerCommand('forgePatterns.validateCompliance', validateCompliance)
   );
+
+  log('Forge Patterns extension activated');
+}
+
+function getRepoPath(): string | undefined {
+  const config = vscode.workspace.getConfiguration('forgePatterns');
+  const repoPath = config.get<string>('repoPath');
+  if (!repoPath) {
+    vscode.window.showWarningMessage(
+      'Set "forgePatterns.repoPath" in settings ' + 'to point to your local forge-patterns clone.'
+    );
+    return undefined;
+  }
+  return repoPath;
 }
 
 async function listPatterns(): Promise<void> {
-  // TODO: Fetch patterns from local forge-patterns repo or bundled index
-  const patterns = [
-    'go/web-service',
-    'go/cli-app',
-    'rust/web-service',
-    'rust/cli-app',
-    'rust/library',
-    'java/spring-boot-web',
-    'java/cli-app',
-    'java/library',
-    'ai/ml-project',
-    'ai/deep-learning',
-    'ai/ai-api'
-  ];
+  const repoPath = getRepoPath();
+  if (!repoPath) return;
 
-  const selected = await vscode.window.showQuickPick(patterns, {
-    placeHolder: 'Select a pattern to view'
-  });
+  const patterns = await discoverPatterns(repoPath);
+  if (patterns.length === 0) {
+    vscode.window.showInformationMessage('No patterns found. Check forgePatterns.repoPath.');
+    return;
+  }
 
+  const selected = await showPatternPicker(patterns);
   if (selected) {
-    vscode.window.showInformationMessage(`Pattern selected: ${selected}`);
+    const action = await vscode.window.showInformationMessage(
+      `${selected.path}: ${selected.description}`,
+      'Apply to workspace'
+    );
+    if (action) {
+      await promptAndScaffold(selected, repoPath);
+    }
   }
 }
 
 async function applyPattern(): Promise<void> {
-  // TODO: Scaffold selected pattern into the current workspace
-  vscode.window.showInformationMessage(
-    'Apply Pattern: Coming soon. Use the CLI (npx forge-patterns apply <pattern>) in the meantime.'
-  );
+  const repoPath = getRepoPath();
+  if (!repoPath) return;
+
+  const patterns = await discoverPatterns(repoPath);
+  const selected = await showPatternPicker(patterns);
+  if (selected) {
+    await promptAndScaffold(selected, repoPath);
+  }
 }
 
 async function validateCompliance(): Promise<void> {
-  // TODO: Run pattern compliance checks against the current workspace
-  vscode.window.showInformationMessage(
-    'Validate Compliance: Coming soon. Use the CLI (npx forge-patterns validate) in the meantime.'
+  const { workspaceFolders } = vscode.workspace;
+  if (!workspaceFolders?.length) {
+    vscode.window.showWarningMessage('Open a workspace folder to validate.');
+    return;
+  }
+
+  const workspacePath = workspaceFolders[0].uri.fsPath;
+
+  await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: 'Validating workspace compliance...',
+      cancellable: false
+    },
+    async () => {
+      const results = await runValidation(workspacePath);
+      publishDiagnostics(diagnosticCollection, workspacePath, results);
+
+      const errors = results.filter(r => r.severity === 'error');
+      const warnings = results.filter(r => r.severity === 'warning');
+
+      if (results.length === 0) {
+        vscode.window.showInformationMessage('All compliance checks passed!');
+      } else {
+        show();
+        vscode.window.showWarningMessage(
+          `Compliance: ${errors.length} error(s), ` +
+            `${warnings.length} warning(s). ` +
+            'See Problems panel for details.'
+        );
+      }
+    }
   );
 }
 
-export function deactivate(): void {}
+export function deactivate(): void {
+  diagnosticCollection?.dispose();
+}

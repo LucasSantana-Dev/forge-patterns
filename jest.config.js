@@ -15,6 +15,7 @@ module.exports = {
     '<rootDir>/test/**/*.test.ts',
     '<rootDir>/test/**/*.spec.ts'
   ],
+  testPathIgnorePatterns: ['/node_modules/', '/patterns/ide-extensions/'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',

@@ -1,0 +1,22 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "roots": ["<rootDir>/test"],
+  "moduleFileExtensions": ["ts", "js"],
+  "collectCoverageFrom": [
+    "src/discovery.ts",
+    "src/scaffolding.ts",
+    "src/validation.ts"
+  ],
+  "coveragePathIgnorePatterns": [
+    "node_modules"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 60,
+      "functions": 60,
+      "lines": 75,
+      "statements": 75
+    }
+  }
+}

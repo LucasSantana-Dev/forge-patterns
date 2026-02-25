@@ -107,6 +107,7 @@ For complete documentation, see our **[Documentation Hub](docs/README.md)** whic
 - **[Architecture Decisions](docs/architecture-decisions/)** - System design decisions
 - **[User Guides](docs/guides/)** - Deployment and user journey guides
 - **[MCP Context Server](docs/guides/MCP_CONTEXT_SERVER.md)** - Setup and IDE integration for the Forge Space context MCP server
+- **[VSCode Extension](patterns/ide-extensions/vscode/README.md)** - Pattern discovery, scaffolding, and compliance validation in VSCode
 - **[Development Standards](docs/standards/)** - Coding and security standards
 
 ## 🚀 Quick Start
