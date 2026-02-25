@@ -112,3 +112,6 @@ verify-claude-code-phase2.sh
 # Claude Code configuration (user-specific)
 .claude/
 ~/.claude/
+
+.windsurf/plans/
+.claude/plans/
