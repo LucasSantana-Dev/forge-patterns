@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { scaffoldPattern, ScaffoldResult } from '../src/scaffolding';
+import { scaffoldPattern } from '../src/scaffolding';
 import { PatternInfo } from '../src/discovery';
 
 jest.mock('vscode', () => ({
@@ -124,6 +124,7 @@ describe('scaffolding', () => {
   });
 
   it('blocks path traversal via crafted file list', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const discovery = require('../src/discovery');
     const original = discovery.getPatternFiles;
 
@@ -140,7 +141,7 @@ describe('scaffolding', () => {
       ).rejects.toThrow('Path traversal blocked');
     } finally {
       discovery.getPatternFiles = original;
-      try { fs.unlinkSync(outsideFile); } catch {}
+      try { fs.unlinkSync(outsideFile); } catch { void 0; }
     }
   });
 });
