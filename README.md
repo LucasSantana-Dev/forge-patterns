@@ -4,7 +4,6 @@
 
 Part of [Forge Space](https://github.com/Forge-Space) — the open full-stack AI workspace. This repo provides the foundation that all other Forge Space projects build on: code quality standards, security framework, CI/CD workflows, and a local MCP context server for IDE integration.
 
-**Version 1.2.0**
 
 ## Overview
 
@@ -26,9 +25,11 @@ Forge-Space Core provides shared configurations, workflows, and architectural pa
 
 ## 📋 Projects Using These Patterns
 
-- **mcp-gateway**: Python/Node.js MCP gateway with comprehensive CI/CD
-- **forge-space-ui**: Next.js web application with multi-environment deployment
-- **forge-space-mcp**: Node.js MCP server with security-focused workflows
+- **[siza](https://github.com/Forge-Space/siza)**: Next.js web application with multi-environment deployment
+- **[siza-mcp](https://github.com/Forge-Space/ui-mcp)**: MCP server for AI-powered UI generation
+- **[mcp-gateway](https://github.com/Forge-Space/mcp-gateway)**: Python/Node.js MCP gateway with comprehensive CI/CD
+- **[branding-mcp](https://github.com/Forge-Space/branding-mcp)**: AI-powered brand identity generation
+- **[siza-gen](https://github.com/Forge-Space/siza-gen)**: AI generation engine with component registry
 
 ## 🌐 Ecosystem Integration
 
@@ -40,14 +41,13 @@ This core repository provides the foundation for the entire Forge Space ecosyste
 - **📊 Quality Gates**: Standardized testing and quality requirements
 
 **Related Projects:**
-- [**Forge Space - UI**](../uiforge-webapp/) - AI-powered UI generation platform
-- [**MCP Gateway**](../mcp-gateway/) - Central tool aggregation and routing
-- [**Forge Space - UI MCP**](../uiforge-mcp/) - Specialized UI development tools
+- [**Siza**](https://github.com/Forge-Space/siza) - AI-powered full-stack workspace
+- [**MCP Gateway**](https://github.com/Forge-Space/mcp-gateway) - Central tool aggregation and routing
+- [**Siza MCP**](https://github.com/Forge-Space/ui-mcp) - MCP server for UI generation
 
 **Documentation:**
-- [**Ecosystem Overview**](../../ECOSYSTEM_OVERVIEW.md) - Complete ecosystem guide
-- [**Integration Guide**](../../docs/ecosystem/INTEGRATION_GUIDE.md) - Step-by-step integration instructions
-- [**Architecture Diagrams**](../../docs/ecosystem/ARCHITECTURE_DIAGRAM.md) - Visual architecture reference
+- [**Documentation Hub**](docs/README.md) - Complete documentation
+- [**Project Context**](docs/project/PROJECT_CONTEXT.MD) - Project guide and context
 
 ## � GitHub Workflows Optimization
 
@@ -115,7 +115,7 @@ For complete documentation, see our **[Documentation Hub](docs/README.md)** whic
 ### 1. Install Forge Patterns
 
 ```bash
-npm install @uiforge/forge-patterns
+npm install @forgespace/core
 ```
 
 ### 2. Integrate into Your Project
@@ -128,15 +128,15 @@ npx forge-patterns integrate
 
 # Or use individual integration commands
 npx forge-patterns integrate --project=mcp-gateway
-npx forge-patterns integrate --project=uiforge-mcp
-npx forge-patterns integrate --project=uiforge-webapp
+npx forge-patterns integrate --project=siza-mcp
+npx forge-patterns integrate --project=siza
 ```
 
 ## 📁 Repository Structure
 
 ```bash
 
-uiforge-patterns/
+forge-patterns/
 ├── .github/
 │   ├── workflows/          # CI/CD workflow templates
 │   └── templates/          # GitHub templates (PR, issues)
