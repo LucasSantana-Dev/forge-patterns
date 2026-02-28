@@ -48,10 +48,15 @@ core/
 - shared-constants module fully tested
 
 ## Integration Projects (Forge Space Ecosystem)
-- **siza** v0.3.0: Next.js 16 AI workspace (Cloudflare Workers), 90.02% coverage
-- **mcp-gateway** v1.7.0: Python/Node.js MCP tool routing hub, 93.58% coverage
-- **siza-mcp** v0.6.1: 17 MCP tools for UI generation, 82.72% coverage
-- **branding-mcp** v1.3.0: 7 MCP tools for brand identity generation, 97.63% coverage
+- **siza** v0.10.0: Next.js 16 AI workspace (Cloudflare Workers), 85%+ coverage
+- **siza-gen** v0.2.0: AI generation engine (npm: @forgespace/siza-gen), 343 tests
+- **siza-mcp** v0.9.0: Thin MCP adapter (21 tools), 394 tests
+- **mcp-gateway** v1.7.4: Python/Node.js MCP tool routing hub, 91.46% coverage, 1567 tests
+- **branding-mcp** v0.2.0: 7 MCP tools for brand identity generation, 97.63% coverage
+
+## Recent Changes (2026-02-27)
+- Added LICENSE (MIT) and CLAUDE.md to this repo
+- GitHub issue #56: Standardize Actions versions across ecosystem
 
 ## Package Information
 - **Name**: @forgespace/core
