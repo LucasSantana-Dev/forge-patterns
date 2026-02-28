@@ -49,7 +49,7 @@ core/
 
 ## Integration Projects (Forge Space Ecosystem)
 - **siza** v0.10.0: Next.js 16 AI workspace (Cloudflare Workers), 85%+ coverage
-- **siza-gen** v0.2.0: AI generation engine (npm: @forgespace/siza-gen), 343 tests
+- **siza-gen** v0.5.0 RELEASED: AI generation engine (npm: @forgespace/siza-gen), 424 TS + 41 Python tests, Python ML sidecar (FastAPI), PR #4 merged, tag pushed, npm published
 - **siza-mcp** v0.9.0: Thin MCP adapter (21 tools), 394 tests
 - **mcp-gateway** v1.7.4: Python/Node.js MCP tool routing hub, 91.46% coverage, 1567 tests
 - **branding-mcp** v0.2.0: 7 MCP tools for brand identity generation, 97.63% coverage
