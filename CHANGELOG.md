@@ -1,3 +1,19 @@
+## [1.3.2] - 2026-02-28
+
+### Fixed
+- **Minimatch ReDoS**: Resolve GHSA-7r86-cg39-jmmj vulnerability via npm audit fix
+- **ESLint errors**: Fix scaffolding test lint violations
+- **README**: Update project names and links to current ecosystem state
+
+### Changed
+- **CI**: Standardize GitHub Actions versions across all workflows (checkout@v4, github-script@v8, codecov@v5, build-push@v6, trufflehog@v3.93.4)
+
+### Added
+- **LICENSE**: MIT license file
+- **CLAUDE.md**: Project-level Claude Code instructions
+
+---
+
 ## [1.3.1] - 2026-02-25
 
 ### Security
