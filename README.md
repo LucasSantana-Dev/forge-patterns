@@ -1,6 +1,10 @@
-# Forge-Space Core
-
-> **Shared standards, patterns, and MCP context server for the Forge Space ecosystem.**
+<div align="center">
+  <a href="https://forgespace.co">
+    <img src="https://brand.forgespace.co/logos/wordmark.svg" alt="Forge Space" height="48">
+  </a>
+  <h1>Forge-Space Core</h1>
+  <p>Shared standards, patterns, and MCP context server for the Forge Space ecosystem.</p>
+</div>
 
 Part of [Forge Space](https://github.com/Forge-Space) — the open full-stack AI workspace. This repo provides the foundation that all other Forge Space projects build on: code quality standards, security framework, CI/CD workflows, and a local MCP context server for IDE integration.
 
