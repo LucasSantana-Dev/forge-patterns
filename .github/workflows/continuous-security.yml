@@ -14,7 +14,7 @@ jobs:
     name: Daily Security Monitoring
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.schedule == '0 6 * * 1' # Only on Mondays
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Generate Weekly Security Report
         env:
