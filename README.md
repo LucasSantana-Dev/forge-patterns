@@ -167,6 +167,8 @@ forge-patterns/
 ├── scripts/
 │   ├── forge-features      # 🎛️ CLI tool for feature management
 │   ├── integrate.js        # Automated integration script
+│   ├── apply-readme-branding.sh     # Forge Space README header (CDN wordmark)
+│   ├── apply-readme-branding-all.sh # Run branding for all Forge Space projects
 │   ├── security/          # Security validation scripts
 │   └── bootstrap/         # Project bootstrap scripts
 ├── src/                   # TypeScript source files
@@ -534,6 +536,19 @@ This repository is designed to be **completely public** with zero secrets:
 
 # Sync templates
 ./scripts/sync/templates.sh
+```
+
+### Repository branding
+
+Apply the Forge Space README header (CDN wordmark) to any repo. See [brand-guide/docs/REPOSITORY_BRANDING.md](https://github.com/Forge-Space/brand-guide/blob/main/docs/REPOSITORY_BRANDING.md). Logo assets: SVG, PNG, WEBP at `https://brand.forgespace.co/logos/` (e.g. `wordmark.svg`, `wordmark.png`, `wordmark.webp`).
+
+```bash
+# Single repo
+./scripts/apply-readme-branding.sh path/to/repo [TITLE] [DESCRIPTION]
+
+# All Forge Space projects (from monorepo root)
+./scripts/apply-readme-branding-all.sh --dry-run   # preview
+./scripts/apply-readme-branding-all.sh             # apply
 ```
 
 ### Validation Scripts
