@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PatternInfo, getPatternFiles } from './discovery';
+import { assertWithinBase } from './pathUtils';
 import { log } from './ui/output';
 
 export interface ScaffoldOptions {
@@ -15,21 +16,16 @@ export interface ScaffoldResult {
   conflicts: string[];
 }
 
-function assertWithinTarget(dest: string, targetDir: string): void {
-  const normalized = path.resolve(dest);
-  const targetResolved = path.resolve(targetDir);
-  if (!normalized.startsWith(targetResolved + path.sep) && normalized !== targetResolved) {
-    throw new Error('Path traversal blocked: destination escapes target directory');
-  }
-}
-
 export async function scaffoldPattern(
   pattern: PatternInfo,
   repoPath: string,
   targetDir: string,
   options: ScaffoldOptions
 ): Promise<ScaffoldResult> {
-  const sourcePath = path.join(repoPath, 'patterns', pattern.path);
+  const patternsBase = path.join(repoPath, 'patterns');
+  const sourcePath = path.join(patternsBase, pattern.path);
+  assertWithinBase(path.resolve(sourcePath), path.resolve(patternsBase));
+
   const result: ScaffoldResult = {
     created: [],
     skipped: [],
@@ -40,14 +36,23 @@ export async function scaffoldPattern(
     throw new Error(`Pattern not found: ${sourcePath}`);
   }
 
+  const targetResolved = path.resolve(targetDir);
   const files = getPatternFiles(sourcePath);
 
   for (const file of files) {
     const relative = path.relative(sourcePath, file);
     const dest = path.join(targetDir, relative);
-    assertWithinTarget(dest, targetDir);
+    assertWithinBase(path.resolve(dest), targetResolved);
 
-    if (fs.existsSync(dest) && !options.overwrite) {
+    let destExists = false;
+    try {
+      await vscode.workspace.fs.stat(vscode.Uri.file(dest));
+      destExists = true;
+    } catch {
+      destExists = false;
+    }
+
+    if (destExists && !options.overwrite) {
       result.conflicts.push(relative);
       continue;
     }
@@ -58,11 +63,15 @@ export async function scaffoldPattern(
     }
 
     const destDir = path.dirname(dest);
-    if (!fs.existsSync(destDir)) {
-      fs.mkdirSync(destDir, { recursive: true });
+    const destDirUri = vscode.Uri.file(destDir);
+    try {
+      await vscode.workspace.fs.stat(destDirUri);
+    } catch {
+      await vscode.workspace.fs.createDirectory(destDirUri);
     }
 
-    fs.copyFileSync(file, dest);
+    const content = fs.readFileSync(file);
+    await vscode.workspace.fs.writeFile(vscode.Uri.file(dest), content);
     result.created.push(relative);
     log(`Created: ${relative}`);
   }

@@ -5,6 +5,7 @@
   "moduleFileExtensions": ["ts", "js"],
   "collectCoverageFrom": [
     "src/discovery.ts",
+    "src/pathUtils.ts",
     "src/scaffolding.ts",
     "src/validation.ts"
   ],

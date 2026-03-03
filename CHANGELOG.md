@@ -1,3 +1,16 @@
+## [1.3.4] - 2026-03-02
+
+### Changed
+- **VSCode Extension**: Migrate scaffolding to `vscode.workspace.fs` for virtual workspace support (WSL, Codespaces, remote SSH)
+- **VSCode Extension**: Use `pathUtils.assertWithinBase` for target path validation
+- **VSCode Extension**: Add `.vscodeignore` to slim published VSIX (~12 KB vs ~82 KB)
+- **VSCode Extension**: Add `repository` field to package.json for vsce packaging
+
+### Added
+- **VSCode Extension**: README usage instructions, commands, configuration, and development workflow
+
+---
+
 ## [1.3.3] - 2026-03-01
 
 ### Fixed
