@@ -26,7 +26,13 @@ export class ScorecardAggregator {
   private weights: ScorecardWeights;
 
   constructor(weights?: Partial<ScorecardWeights>) {
-    this.weights = { ...DEFAULT_WEIGHTS, ...weights };
+    const merged = { ...DEFAULT_WEIGHTS, ...weights };
+    for (const [key, val] of Object.entries(merged)) {
+      if (typeof val !== 'number' || val < 0 || !Number.isFinite(val)) {
+        throw new Error(`Invalid weight for ${key}: must be a positive finite number`);
+      }
+    }
+    this.weights = merged;
   }
 
   addCollector(collector: BaseCollector): void {

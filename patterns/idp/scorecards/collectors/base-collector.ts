@@ -9,6 +9,7 @@ export abstract class BaseCollector {
   protected cacheTtlMs: number;
   private cache: { result: CollectorResult; expiry: number } | null =
     null;
+  private inflight: Promise<CollectorResult> | null = null;
 
   constructor(cacheTtlMs = 60_000) {
     this.cacheTtlMs = cacheTtlMs;
@@ -21,12 +22,19 @@ export abstract class BaseCollector {
       return this.cache.result;
     }
 
-    const result = await this.doCollect(context);
-    this.cache = {
-      result,
-      expiry: Date.now() + this.cacheTtlMs,
-    };
-    return result;
+    if (this.inflight) return this.inflight;
+
+    this.inflight = this.doCollect(context);
+    try {
+      const result = await this.inflight;
+      this.cache = {
+        result,
+        expiry: Date.now() + this.cacheTtlMs,
+      };
+      return result;
+    } finally {
+      this.inflight = null;
+    }
   }
 
   invalidateCache(): void {
