@@ -68,28 +68,21 @@ async function main() {
       ...result,
       grade,
       categories: Object.fromEntries(
-        Object.entries(result.categories).map(
-          ([name, data]) => [
-            name,
-            { ...data, grade: scoreToGrade(data.score) }
-          ]
-        )
+        Object.entries(result.categories).map(([name, data]) => [
+          name,
+          { ...data, grade: scoreToGrade(data.score) }
+        ])
       )
     };
     console.log(JSON.stringify(jsonOutput, null, 2));
   } else {
     const grade = scoreToGrade(result.overallScore);
-    console.log(
-      `\nScorecard: ${result.overallScore}/100 (${grade})`
-    );
+    console.log(`\nScorecard: ${result.overallScore}/100 (${grade})`);
     console.log('─'.repeat(40));
     for (const [cat, data] of Object.entries(result.categories)) {
       const v = data.violations.length;
       const g = scoreToGrade(data.score);
-      console.log(
-        `  ${cat}: ${data.score}/100 (${g})`
-        + (v > 0 ? ` — ${v} violations` : '')
-      );
+      console.log(`  ${cat}: ${data.score}/100 (${g})` + (v > 0 ? ` — ${v} violations` : ''));
     }
     if (result.recommendations.length > 0) {
       console.log('\nRecommendations:');
