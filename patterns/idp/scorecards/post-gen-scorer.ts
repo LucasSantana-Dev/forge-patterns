@@ -28,10 +28,10 @@ const ANTI_PATTERNS = [
 ];
 
 const REACT_CHECKS = [
-  { pattern: /onClick\s*=\s*\{[^}]*\}/g, positive: true, name: 'event-handlers', msg: 'Uses proper event handlers' },
-  { pattern: /aria-|role=/g, positive: true, name: 'accessibility', msg: 'Includes accessibility attributes' },
-  { pattern: /key\s*=\s*\{/g, positive: true, name: 'list-keys', msg: 'Uses key prop in lists' },
-  { pattern: /dangerouslySet/g, positive: false, name: 'no-unsafe-html', msg: 'Avoid unsafe HTML injection' }
+  { pattern: /onClick\s*=\s*\{[^}]*\}/, positive: true, name: 'event-handlers', msg: 'Uses proper event handlers' },
+  { pattern: /aria-|role=/, positive: true, name: 'accessibility', msg: 'Includes accessibility attributes' },
+  { pattern: /key\s*=\s*\{/, positive: true, name: 'list-keys', msg: 'Uses key prop in lists' },
+  { pattern: /dangerouslySet/, positive: false, name: 'no-unsafe-html', msg: 'Avoid unsafe HTML injection' }
 ];
 
 function gradeFromScore(score: number): PostGenScore['grade'] {
