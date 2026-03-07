@@ -15,9 +15,9 @@ module.exports = {
         'chore',
         'ci',
         'build',
-        'revert',
-      ],
+        'revert'
+      ]
     ],
-    'header-max-length': [2, 'always', 100],
-  },
+    'header-max-length': [2, 'always', 100]
+  }
 };
