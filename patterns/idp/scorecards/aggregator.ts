@@ -18,7 +18,7 @@ const DEFAULT_WEIGHTS: ScorecardWeights = {
   security: 0.3,
   quality: 0.3,
   performance: 0.2,
-  compliance: 0.2,
+  compliance: 0.2
 };
 
 export class ScorecardAggregator {
@@ -45,7 +45,7 @@ export class ScorecardAggregator {
     const results = await Promise.all(
       this.collectors.map(async (c) => ({
         name: c.name,
-        result: await c.collect(context),
+        result: await c.collect(context)
       }))
     );
 
@@ -76,7 +76,7 @@ export class ScorecardAggregator {
       overallScore,
       categories,
       recommendations,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 

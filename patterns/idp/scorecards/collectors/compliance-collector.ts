@@ -1,6 +1,6 @@
 import {
   BaseCollector,
-  type CollectorResult,
+  type CollectorResult
 } from './base-collector.js';
 
 export class ComplianceCollector extends BaseCollector {

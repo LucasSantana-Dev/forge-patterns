@@ -4,16 +4,16 @@ import { join } from 'node:path';
 import { PolicyEvaluator } from '../policy-engine/evaluator.js';
 import {
   evaluateCondition,
-  resolveFieldPath,
+  resolveFieldPath
 } from '../policy-engine/builtin-functions.js';
 import {
   loadPolicyFromFile,
-  loadPoliciesFromDir,
+  loadPoliciesFromDir
 } from '../policy-engine/loader.js';
 import type {
   Policy,
   PolicyRule,
-  Condition,
+  Condition
 } from '../policy-engine/schema.js';
 
 describe('PolicyEngine', () => {
@@ -187,9 +187,9 @@ describe('PolicyEngine', () => {
         user: {
           profile: {
             name: 'John',
-            age: 25,
-          },
-        },
+            age: 25
+          }
+        }
       };
       expect(resolveFieldPath(obj, 'user.profile.name')).toBe('John');
       expect(resolveFieldPath(obj, 'user.profile.age')).toBe(25);
@@ -200,10 +200,10 @@ describe('PolicyEngine', () => {
         security: {
           scan: {
             results: {
-              injection_risk: 'high',
-            },
-          },
-        },
+              injection_risk: 'high'
+            }
+          }
+        }
       };
       expect(
         resolveFieldPath(obj, 'security.scan.results.injection_risk')
@@ -224,7 +224,7 @@ describe('PolicyEngine', () => {
     it('should handle arrays and objects', () => {
       const obj = {
         items: [{ id: 1 }, { id: 2 }],
-        meta: { count: 2 },
+        meta: { count: 2 }
       };
       expect(resolveFieldPath(obj, 'meta.count')).toBe(2);
     });
@@ -243,14 +243,14 @@ describe('PolicyEngine', () => {
           id: 'test-policy',
           name: 'Test Policy',
           version: '1.0.0',
-          rules: [],
+          rules: []
         };
         evaluator.loadPolicies([policy]);
         expect(evaluator.evaluate({})).toEqual({
           shouldBlock: false,
           violations: [],
           warnings: [],
-          logs: [],
+          logs: []
         });
       });
 
@@ -265,15 +265,15 @@ describe('PolicyEngine', () => {
               name: 'Rule 1',
               enabled: true,
               conditions: [{ field: 'test', operator: 'eq', value: true }],
-              actions: [{ type: 'block', message: 'Blocked' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'Blocked' }]
+            }
+          ]
         };
         const policy2: Policy = {
           id: 'policy-2',
           name: 'Policy 2',
           version: '1.0.0',
-          rules: [],
+          rules: []
         };
 
         evaluator.loadPolicies([policy1]);
@@ -292,7 +292,7 @@ describe('PolicyEngine', () => {
           id: 'policy-1',
           name: 'Policy 1',
           version: '1.0.0',
-          rules: [],
+          rules: []
         };
         const policy2: Policy = {
           id: 'policy-2',
@@ -304,9 +304,9 @@ describe('PolicyEngine', () => {
               name: 'Rule 2',
               enabled: true,
               conditions: [{ field: 'test', operator: 'eq', value: true }],
-              actions: [{ type: 'warn', message: 'Warning' }],
-            },
-          ],
+              actions: [{ type: 'warn', message: 'Warning' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy1]);
@@ -324,7 +324,7 @@ describe('PolicyEngine', () => {
           shouldBlock: false,
           violations: [],
           warnings: [],
-          logs: [],
+          logs: []
         });
       });
 
@@ -339,9 +339,9 @@ describe('PolicyEngine', () => {
               name: 'Disabled Rule',
               enabled: false,
               conditions: [{ field: 'test', operator: 'eq', value: true }],
-              actions: [{ type: 'block', message: 'Should not trigger' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'Should not trigger' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -363,11 +363,11 @@ describe('PolicyEngine', () => {
               enabled: true,
               conditions: [
                 { field: 'test1', operator: 'eq', value: true },
-                { field: 'test2', operator: 'eq', value: true },
+                { field: 'test2', operator: 'eq', value: true }
               ],
-              actions: [{ type: 'block', message: 'Both conditions met' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'Both conditions met' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -393,9 +393,9 @@ describe('PolicyEngine', () => {
               name: 'Block Rule',
               enabled: true,
               conditions: [{ field: 'blocked', operator: 'eq', value: true }],
-              actions: [{ type: 'block', message: 'Access blocked' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'Access blocked' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -418,9 +418,9 @@ describe('PolicyEngine', () => {
               name: 'Warn Rule',
               enabled: true,
               conditions: [{ field: 'warning', operator: 'eq', value: true }],
-              actions: [{ type: 'warn', message: 'Warning message' }],
-            },
-          ],
+              actions: [{ type: 'warn', message: 'Warning message' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -443,9 +443,9 @@ describe('PolicyEngine', () => {
               name: 'Log Rule',
               enabled: true,
               conditions: [{ field: 'log', operator: 'eq', value: true }],
-              actions: [{ type: 'log', message: 'Log message' }],
-            },
-          ],
+              actions: [{ type: 'log', message: 'Log message' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -468,9 +468,9 @@ describe('PolicyEngine', () => {
               name: 'Notify Rule',
               enabled: true,
               conditions: [{ field: 'notify', operator: 'eq', value: true }],
-              actions: [{ type: 'notify', message: 'Notify message' }],
-            },
-          ],
+              actions: [{ type: 'notify', message: 'Notify message' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -495,10 +495,10 @@ describe('PolicyEngine', () => {
               actions: [
                 { type: 'log', message: 'Logging event' },
                 { type: 'warn', message: 'Warning user' },
-                { type: 'block', message: 'Blocking access' },
-              ],
-            },
-          ],
+                { type: 'block', message: 'Blocking access' }
+              ]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -521,16 +521,16 @@ describe('PolicyEngine', () => {
               name: 'Rule 1',
               enabled: true,
               conditions: [{ field: 'test1', operator: 'eq', value: true }],
-              actions: [{ type: 'warn', message: 'Warning 1' }],
+              actions: [{ type: 'warn', message: 'Warning 1' }]
             },
             {
               id: 'rule-2',
               name: 'Rule 2',
               enabled: true,
               conditions: [{ field: 'test2', operator: 'eq', value: true }],
-              actions: [{ type: 'log', message: 'Log 2' }],
-            },
-          ],
+              actions: [{ type: 'log', message: 'Log 2' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -551,9 +551,9 @@ describe('PolicyEngine', () => {
               name: 'Context Rule',
               enabled: true,
               conditions: [{ field: 'check', operator: 'eq', value: true }],
-              actions: [{ type: 'block', message: 'Blocked' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'Blocked' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -578,11 +578,11 @@ describe('PolicyEngine', () => {
                 {
                   type: 'warn',
                   message: 'Warning',
-                  metadata: { severity: 'high', category: 'security' },
-                },
-              ],
-            },
-          ],
+                  metadata: { severity: 'high', category: 'security' }
+                }
+              ]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
@@ -590,7 +590,7 @@ describe('PolicyEngine', () => {
 
         expect(result.warnings[0].action.metadata).toEqual({
           severity: 'high',
-          category: 'security',
+          category: 'security'
         });
       });
 
@@ -608,17 +608,17 @@ describe('PolicyEngine', () => {
                 {
                   field: 'security.injection_risk',
                   operator: 'eq',
-                  value: 'high',
-                },
+                  value: 'high'
+                }
               ],
-              actions: [{ type: 'block', message: 'High injection risk' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'High injection risk' }]
+            }
+          ]
         };
 
         evaluator.loadPolicies([policy]);
         const result = evaluator.evaluate({
-          security: { injection_risk: 'high' },
+          security: { injection_risk: 'high' }
         });
 
         expect(result.shouldBlock).toBe(true);
@@ -653,9 +653,9 @@ describe('PolicyEngine', () => {
               name: 'Rule 1',
               enabled: true,
               conditions: [{ field: 'test', operator: 'eq', value: true }],
-              actions: [{ type: 'block', message: 'Blocked' }],
-            },
-          ],
+              actions: [{ type: 'block', message: 'Blocked' }]
+            }
+          ]
         };
 
         const filePath = join(tempDir, 'test.policy.json');
@@ -681,17 +681,17 @@ describe('PolicyEngine', () => {
               description: 'Checks security',
               enabled: true,
               conditions: [
-                { field: 'security.level', operator: 'gte', value: 5 },
+                { field: 'security.level', operator: 'gte', value: 5 }
               ],
               actions: [
                 {
                   type: 'warn',
                   message: 'Security level warning',
-                  metadata: { priority: 'high' },
-                },
-              ],
-            },
-          ],
+                  metadata: { priority: 'high' }
+                }
+              ]
+            }
+          ]
         };
 
         const filePath = join(tempDir, 'comprehensive.policy.json');
@@ -702,7 +702,7 @@ describe('PolicyEngine', () => {
         expect(loaded.description).toBe('A comprehensive test policy');
         expect(loaded.rules[0].description).toBe('Checks security');
         expect(loaded.rules[0].actions[0].metadata).toEqual({
-          priority: 'high',
+          priority: 'high'
         });
       });
     });
@@ -713,13 +713,13 @@ describe('PolicyEngine', () => {
           id: 'policy-1',
           name: 'Policy 1',
           version: '1.0.0',
-          rules: [],
+          rules: []
         };
         const policy2: Policy = {
           id: 'policy-2',
           name: 'Policy 2',
           version: '1.0.0',
-          rules: [],
+          rules: []
         };
 
         writeFileSync(
@@ -736,7 +736,7 @@ describe('PolicyEngine', () => {
         expect(policies).toHaveLength(2);
         expect(policies.map((p) => p.id).sort()).toEqual([
           'policy-1',
-          'policy-2',
+          'policy-2'
         ]);
       });
 
@@ -745,7 +745,7 @@ describe('PolicyEngine', () => {
           id: 'policy-1',
           name: 'Policy 1',
           version: '1.0.0',
-          rules: [],
+          rules: []
         };
 
         writeFileSync(

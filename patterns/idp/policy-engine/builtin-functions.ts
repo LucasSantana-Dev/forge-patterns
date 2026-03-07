@@ -54,7 +54,7 @@ const matchers: Record<ConditionOperator, MatcherFn> = {
     } catch {
       return false;
     }
-  },
+  }
 };
 
 export function evaluateCondition(
@@ -68,7 +68,7 @@ export function evaluateCondition(
 }
 
 const BLOCKED_PROPS = new Set([
-  '__proto__', 'constructor', 'prototype',
+  '__proto__', 'constructor', 'prototype'
 ]);
 const MAX_DEPTH = 10;
 

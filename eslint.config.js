@@ -7,7 +7,7 @@ module.exports = [
   js.configs.recommended,
   prettier,
   {
-    ignores: ['.claude/**', 'node_modules/**', 'dist/**', 'build/**', 'coverage/**', '**/*.min.js']
+    ignores: ['.claude/**', '.serena/**', 'node_modules/**', 'dist/**', 'build/**', 'coverage/**', '**/*.min.js', '**/out/**', '**/__tests__/**', 'jest.config.old.js']
   },
   {
     files: ['**/*.js', '**/*.ts'],

@@ -2,7 +2,7 @@ export { PolicyEvaluator } from './evaluator.js';
 export { loadPolicyFromFile, loadPoliciesFromDir } from './loader.js';
 export {
   evaluateCondition,
-  resolveFieldPath,
+  resolveFieldPath
 } from './builtin-functions.js';
 export type {
   Action,
@@ -12,5 +12,5 @@ export type {
   Policy,
   PolicyEvaluationResult,
   PolicyRule,
-  PolicyViolation,
+  PolicyViolation
 } from './schema.js';

@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import type { Policy } from './schema.js';
 
 const VALID_OPERATORS = new Set([
-  'eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'contains', 'matches',
+  'eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'contains', 'matches'
 ]);
 const VALID_ACTIONS = new Set(['block', 'warn', 'log', 'notify']);
 

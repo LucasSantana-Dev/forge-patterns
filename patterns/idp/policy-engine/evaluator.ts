@@ -3,7 +3,7 @@ import type {
   Policy,
   PolicyEvaluationResult,
   PolicyRule,
-  PolicyViolation,
+  PolicyViolation
 } from './schema.js';
 
 export class PolicyEvaluator {
@@ -37,7 +37,7 @@ export class PolicyEvaluator {
             ruleId: rule.id,
             ruleName: rule.name,
             action,
-            context,
+            context
           };
 
           switch (action.type) {

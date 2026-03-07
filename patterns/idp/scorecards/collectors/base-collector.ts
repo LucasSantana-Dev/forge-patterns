@@ -29,7 +29,7 @@ export abstract class BaseCollector {
       const result = await this.inflight;
       this.cache = {
         result,
-        expiry: Date.now() + this.cacheTtlMs,
+        expiry: Date.now() + this.cacheTtlMs
       };
       return result;
     } finally {

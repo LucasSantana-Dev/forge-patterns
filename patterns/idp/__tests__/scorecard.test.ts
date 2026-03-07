@@ -22,7 +22,7 @@ class TestCollector extends BaseCollector {
     return {
       score: this.score,
       breakdown: { test: this.score },
-      violations: this.score < 100 ? ['Test violation'] : [],
+      violations: this.score < 100 ? ['Test violation'] : []
     };
   }
 }
@@ -135,7 +135,7 @@ describe('Scorecards', () => {
         secrets_scan_passed: true,
         dependency_vulnerabilities: 0,
         auth_enabled: true,
-        rls_enabled: true,
+        rls_enabled: true
       };
 
       const result = await collector.collect(context);
@@ -146,7 +146,7 @@ describe('Scorecards', () => {
         secrets: 100,
         dependencies: 100,
         authentication: 100,
-        rls: 100,
+        rls: 100
       });
     });
 
@@ -155,7 +155,7 @@ describe('Scorecards', () => {
         secrets_scan_passed: false,
         dependency_vulnerabilities: 5,
         auth_enabled: false,
-        rls_enabled: false,
+        rls_enabled: false
       };
 
       const result = await collector.collect(context);
@@ -207,7 +207,7 @@ describe('Scorecards', () => {
         secrets_scan_passed: true,
         dependency_vulnerabilities: 0,
         auth_enabled: false,
-        rls_enabled: true,
+        rls_enabled: true
       };
 
       const result = await collector.collect(context);
@@ -234,7 +234,7 @@ describe('Scorecards', () => {
         type_check_passed: true,
         coverage_percent: 95,
         has_tests: true,
-        accessibility_passed: true,
+        accessibility_passed: true
       };
 
       const result = await collector.collect(context);
@@ -246,7 +246,7 @@ describe('Scorecards', () => {
         type_check: 100,
         coverage: 95,
         tests: 100,
-        accessibility: 100,
+        accessibility: 100
       });
     });
 
@@ -256,7 +256,7 @@ describe('Scorecards', () => {
         type_check_passed: false,
         coverage_percent: 30,
         has_tests: false,
-        accessibility_passed: false,
+        accessibility_passed: false
       };
 
       const result = await collector.collect(context);
@@ -329,7 +329,7 @@ describe('Scorecards', () => {
       const context = {
         generation_latency_ms: 1500,
         cache_hit_rate: 85,
-        error_rate_percent: 0.5,
+        error_rate_percent: 0.5
       };
 
       const result = await collector.collect(context);
@@ -345,7 +345,7 @@ describe('Scorecards', () => {
       const context = {
         generation_latency_ms: 15000,
         cache_hit_rate: 20,
-        error_rate_percent: 10,
+        error_rate_percent: 10
       };
 
       const result = await collector.collect(context);
@@ -440,7 +440,7 @@ describe('Scorecards', () => {
         rls_enabled: true,
         encryption_at_rest: true,
         log_retention_days: 90,
-        audit_logging: true,
+        audit_logging: true
       };
 
       const result = await collector.collect(context);
@@ -451,7 +451,7 @@ describe('Scorecards', () => {
         rls: 100,
         encryption: 100,
         retention: 100,
-        audit: 100,
+        audit: 100
       });
     });
 
@@ -460,7 +460,7 @@ describe('Scorecards', () => {
         rls_enabled: false,
         encryption_at_rest: false,
         log_retention_days: 0,
-        audit_logging: false,
+        audit_logging: false
       };
 
       const result = await collector.collect(context);
@@ -551,7 +551,7 @@ describe('Scorecards', () => {
         security: 0.5,
         quality: 0.2,
         performance: 0.2,
-        compliance: 0.1,
+        compliance: 0.1
       };
 
       const aggregator = new ScorecardAggregator(weights);
@@ -571,7 +571,7 @@ describe('Scorecards', () => {
         type_check_passed: true,
         coverage_percent: 90,
         has_tests: true,
-        accessibility_passed: true,
+        accessibility_passed: true
       };
 
       const result = await aggregator.aggregate(context);
@@ -598,7 +598,7 @@ describe('Scorecards', () => {
           return {
             score: this.fixedScore,
             breakdown: {},
-            violations: [],
+            violations: []
           };
         }
       }
@@ -607,7 +607,7 @@ describe('Scorecards', () => {
         security: 0.5,
         quality: 0.5,
         performance: 0,
-        compliance: 0,
+        compliance: 0
       });
 
       aggregator.addCollector(new FixedCollector('security', 100));
@@ -664,7 +664,7 @@ describe('Scorecards', () => {
 
       const context = {
         secrets_scan_passed: true,
-        lint_passed: false,
+        lint_passed: false
       };
 
       const result = await aggregator.aggregate(context);
@@ -684,7 +684,7 @@ describe('Scorecards', () => {
         lint_passed: true,
         type_check_passed: true,
         has_tests: true,
-        accessibility_passed: true,
+        accessibility_passed: true
       };
 
       const result = await aggregator.aggregate(context);
@@ -728,7 +728,7 @@ describe('Scorecards', () => {
         secrets_scan_passed: true,
         dependency_vulnerabilities: 0,
         auth_enabled: true,
-        rls_enabled: true,
+        rls_enabled: true
       };
 
       const result = await aggregator.aggregate(context);
@@ -801,7 +801,7 @@ describe('Scorecards', () => {
         lint_passed: true,
         type_check_passed: true,
         has_tests: true,
-        accessibility_passed: true,
+        accessibility_passed: true
       };
 
       const result = await aggregator.aggregate(context);
@@ -832,7 +832,7 @@ describe('Scorecards', () => {
         has_tests: true,
         accessibility_passed: true,
         cache_hit_rate: 80,
-        error_rate_percent: 1,
+        error_rate_percent: 1
       };
 
       const result = await aggregator.aggregate(context);
