@@ -61,6 +61,17 @@ CLI tools for project governance, shipped as part of `@forgespace/core`:
 |------|---------|---------|
 | **Scorecard** | `npx forge-scorecard` | Evaluate project quality across security, quality, performance, compliance |
 | **Policy Engine** | `npx forge-policy` | Enforce governance policies with block/warn/log actions |
+| **Init** | `npx forge-init` | Bootstrap governance for any project |
+| **Feature Toggles** | `npx forge-features` | Manage file-based feature toggles |
+
+### Quick Start
+
+```bash
+npx forge-init --template nextjs   # Next.js project with SSR + bundle policies
+npx forge-init --template react    # React with accessibility + component coverage
+npx forge-init --template node     # Node.js with dependency audit + API validation
+npx forge-init                     # Base governance (no framework-specific rules)
+```
 
 ### Guides
 

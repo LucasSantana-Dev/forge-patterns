@@ -1,3 +1,15 @@
+## [1.8.0] - 2026-03-07
+
+### Added
+- **`forge-init --template` flag** — Framework-specific governance scaffolding (closes #85)
+  - Templates: `react`, `nextjs`, `node` — each adds framework-specific policy rules and scorecard weights
+  - `react`: accessibility checks, component test coverage (70% threshold)
+  - `nextjs`: react rules + bundle size limit (300 KB), server component hygiene (40% client ratio)
+  - `node`: dependency audit (high/critical block), unused deps, API input validation
+  - Scorecard weights tuned per template (e.g., node: security 35%, nextjs: performance 30%)
+  - Templates extend base scaffold — security/quality/compliance policies always included
+  - 9 new tests (412 total across 20 suites)
+
 ## [1.7.1] - 2026-03-07
 
 ### Added
