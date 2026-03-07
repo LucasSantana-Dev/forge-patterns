@@ -35,7 +35,7 @@
     "test:shared-constants": "node test/shared-constants-validation.js",
     "test:all": "npm run test:validation && npm run test:coverage",
     "knip": "knip",
-    "prepare": "npm run build && husky install",
+    "prepare": "npm run build && husky",
     "pre-commit": "npm run lint && npm run format && npm run test:validation && .husky/pre-commit-backup-check",
     "prepack": "npm run build",
     "publish:npm": "npm publish --access public",
@@ -64,7 +64,7 @@
     "forge-features": "dist/patterns/idp/feature-toggles/cli.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "chalk": "^5.3.0",
     "commander": "^11.0.0",
     "fs-extra": "^11.1.1",
@@ -87,7 +87,7 @@
     "eslint-plugin-import": "^2.32.0",
     "fast-check": "^4.5.3",
     "globals": "^17.3.0",
-    "husky": "^8.0.3",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "knip": "^5.85.0",
     "lint-staged": "^16.2.7",
