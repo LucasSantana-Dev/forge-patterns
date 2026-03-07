@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Library
+metadata:
+  name: forge-patterns
+  description: Shared patterns, scorecards, policy engine, and CLI tools for Forge Space ecosystem
+  tags:
+    - typescript
+    - npm
+    - governance
+    - patterns
+spec:
+  owner: forge-space
+  system: siza
+  lifecycle: production
+  dependsOn: []
