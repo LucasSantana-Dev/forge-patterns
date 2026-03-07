@@ -2,12 +2,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import {
-  type TemplateName,
-  TEMPLATE_NAMES,
-  getTemplate,
-  isValidTemplate
-} from './templates.js';
+import { type TemplateName, TEMPLATE_NAMES, getTemplate, isValidTemplate } from './templates.js';
 
 const SCORECARD_CONFIG = {
   threshold: 60,
@@ -229,13 +224,7 @@ export function initProject(
 
   for (const name of ['security', 'quality', 'compliance']) {
     const content = loadBundledPolicy(name);
-    writeIfNeeded(
-      join(policiesDir, `${name}.policy.json`),
-      content,
-      force,
-      dryRun,
-      result
-    );
+    writeIfNeeded(join(policiesDir, `${name}.policy.json`), content, force, dryRun, result);
   }
 
   const scorecardConfig = options.template
@@ -261,21 +250,9 @@ export function initProject(
     result
   );
 
-  writeIfNeeded(
-    join(workflowsDir, 'scorecard.yml'),
-    scorecardWorkflow(),
-    force,
-    dryRun,
-    result
-  );
+  writeIfNeeded(join(workflowsDir, 'scorecard.yml'), scorecardWorkflow(), force, dryRun, result);
 
-  writeIfNeeded(
-    join(workflowsDir, 'policy-check.yml'),
-    policyWorkflow(),
-    force,
-    dryRun,
-    result
-  );
+  writeIfNeeded(join(workflowsDir, 'policy-check.yml'), policyWorkflow(), force, dryRun, result);
 
   if (options.template) {
     const tmpl = getTemplate(options.template);
@@ -313,14 +290,8 @@ function main(): void {
   const dryRun = opts['dry-run'] === true;
   const templateArg = opts['template'] as string | undefined;
 
-  if (
-    templateArg !== undefined &&
-    !isValidTemplate(templateArg)
-  ) {
-    console.error(
-      `Unknown template: ${templateArg}. ` +
-        `Available: ${TEMPLATE_NAMES.join(', ')}`
-    );
+  if (templateArg !== undefined && !isValidTemplate(templateArg)) {
+    console.error(`Unknown template: ${templateArg}. ` + `Available: ${TEMPLATE_NAMES.join(', ')}`);
     process.exit(1);
   }
 
