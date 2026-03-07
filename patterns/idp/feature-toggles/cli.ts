@@ -22,6 +22,8 @@ function parseArgs(args: string[]) {
       opts['enabled'] = true;
     } else if (arg === '--disabled') {
       opts['disabled'] = true;
+    } else if (arg === '--dry-run') {
+      opts['dry-run'] = true;
     } else if (arg?.startsWith('--') && i + 1 < args.length) {
       opts[arg.slice(2)] = args[++i] ?? '';
     } else if (arg) {
@@ -51,6 +53,7 @@ Options:
   --enabled           Filter or create as enabled
   --disabled          Filter by disabled
   --json              Output as JSON
+  --dry-run           Show what would happen without making changes
 
 Examples:
   forge-features create ENABLE_NEW_SPOKE --namespace mcp-gateway --description "New spoke rollout"
@@ -63,6 +66,7 @@ Examples:
 function main(): void {
   const { positional, opts } = parseArgs(process.argv.slice(2));
   const command = positional[0];
+  const dryRun = opts['dry-run'] === true;
   const storePath = resolve((opts['store'] as string) ?? '.forge/features.json');
   const store = new FileToggleStore(storePath);
 
@@ -148,6 +152,10 @@ function main(): void {
         const createOpts: { description?: string; enabled?: boolean } = {};
         if (typeof opts['description'] === 'string') createOpts.description = opts['description'];
         if (opts['enabled'] === true) createOpts.enabled = true;
+        if (dryRun) {
+          console.log(`[dry-run] Would create toggle "${name}" in ${namespace}`);
+          break;
+        }
         const toggle = store.create(name, namespace, createOpts);
         console.log(`Created toggle "${toggle.name}" in ${toggle.namespace}`);
       } catch (err) {
@@ -162,6 +170,10 @@ function main(): void {
       if (!name) {
         console.error('Usage: forge-features enable <name>');
         process.exit(1);
+      }
+      if (dryRun) {
+        console.log(`[dry-run] Would enable "${name}"`);
+        break;
       }
       try {
         store.enable(name);
@@ -179,6 +191,10 @@ function main(): void {
         console.error('Usage: forge-features disable <name>');
         process.exit(1);
       }
+      if (dryRun) {
+        console.log(`[dry-run] Would disable "${name}"`);
+        break;
+      }
       try {
         store.disable(name);
         console.log(`Disabled "${name}"`);
@@ -194,6 +210,10 @@ function main(): void {
       if (!name) {
         console.error('Usage: forge-features remove <name>');
         process.exit(1);
+      }
+      if (dryRun) {
+        console.log(`[dry-run] Would remove "${name}"`);
+        break;
       }
       const removed = store.remove(name);
       if (removed) {

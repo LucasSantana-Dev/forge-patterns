@@ -20,12 +20,29 @@ describe('forge-scorecard CLI', () => {
     expect(out).toContain('/100');
   });
 
-  it('produces JSON output', () => {
+  it('produces JSON output with --output json', () => {
     const out = runCli(`--project-dir "${PROJECT_DIR}" --output json`);
     const parsed = JSON.parse(out);
     expect(parsed).toHaveProperty('overallScore');
     expect(parsed).toHaveProperty('categories');
     expect(parsed).toHaveProperty('timestamp');
+    expect(parsed).toHaveProperty('grade');
+    expect(['A', 'B', 'C', 'D', 'F']).toContain(parsed.grade);
+  });
+
+  it('produces JSON output with --json flag', () => {
+    const out = runCli(`--project-dir "${PROJECT_DIR}" --json`);
+    const parsed = JSON.parse(out);
+    expect(parsed).toHaveProperty('overallScore');
+    expect(parsed).toHaveProperty('grade');
+    for (const cat of Object.values(parsed.categories) as Array<Record<string, unknown>>) {
+      expect(cat).toHaveProperty('grade');
+    }
+  });
+
+  it('includes grade in summary output', () => {
+    const out = runCli(`--project-dir "${PROJECT_DIR}"`);
+    expect(out).toMatch(/Scorecard: \d+\/100 \([A-F]\)/);
   });
 
   it('exits 0 when score meets threshold', () => {
