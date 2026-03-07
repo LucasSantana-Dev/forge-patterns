@@ -53,7 +53,7 @@ export class ScorecardAggregator {
 
     for (const { name, result } of results) {
       categories[name] = result;
-      const w = (this.weights as Record<string, number>)[name] ?? 0.1;
+      const w = (this.weights as unknown as Record<string, number>)[name] ?? 0.1;
       weightedTotal += result.score * w;
       weightSum += w;
     }

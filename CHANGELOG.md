@@ -1,3 +1,20 @@
+## [1.5.0] - 2026-03-06
+
+### Added
+- **Scorecard CLI** — `forge-scorecard` bin for project quality evaluation from terminal/CI
+- **Policy Engine CLI** — `forge-policy` bin for governance policy evaluation from terminal/CI
+- **Scorecard Integration Guide** — `docs/guides/scorecard-integration.md`
+- **Policy Engine Integration Guide** — `docs/guides/policy-engine-integration.md`
+- 10 new CLI tests (5 scorecard + 5 policy engine)
+
+### Fixed
+- **Scorecard aggregator** — `ScorecardWeights` cast for strict TypeScript compilation
+
+### Changed
+- **tsconfig** — Include `patterns/idp/**/*.ts` in compilation for IDP CLI builds
+
+---
+
 ## [1.4.0] - 2026-03-06
 
 ### Added
