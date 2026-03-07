@@ -34,17 +34,13 @@ function loadPolicies(dir: string): Policy[] {
 
 function main() {
   const opts = parseArgs(process.argv.slice(2));
-  const policyDir = resolve(
-    (opts['policy-dir'] as string) ?? './policies'
-  );
+  const policyDir = resolve((opts['policy-dir'] as string) ?? './policies');
   const contextFile = opts['context-file'] as string | undefined;
   const failOnBlock = opts['fail-on-block'] === true;
 
   let context: Record<string, unknown> = {};
   if (contextFile && existsSync(resolve(contextFile))) {
-    context = JSON.parse(
-      readFileSync(resolve(contextFile), 'utf-8')
-    ) as Record<string, unknown>;
+    context = JSON.parse(readFileSync(resolve(contextFile), 'utf-8')) as Record<string, unknown>;
   }
 
   const policies = loadPolicies(policyDir);
@@ -76,10 +72,7 @@ function main() {
     }
   }
 
-  if (
-    result.violations.length === 0 &&
-    result.warnings.length === 0
-  ) {
+  if (result.violations.length === 0 && result.warnings.length === 0) {
     console.log('\nAll policies passed.');
   }
 

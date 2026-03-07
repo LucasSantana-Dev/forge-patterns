@@ -32,13 +32,13 @@ async function main() {
 
   const pkgPath = resolve(projectDir, 'package.json');
   const pkg = existsSync(pkgPath)
-    ? JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>
+    ? (JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>)
     : {};
 
   const context: Record<string, unknown> = {
     projectDir,
     packageJson: pkg,
-    projectName: (pkg['name'] as string) ?? projectDir,
+    projectName: (pkg['name'] as string) ?? projectDir
   };
 
   const aggregator = new ScorecardAggregator();
@@ -57,8 +57,7 @@ async function main() {
     for (const [cat, data] of Object.entries(result.categories)) {
       const violations = data.violations.length;
       console.log(
-        `  ${cat}: ${data.score}/100` +
-          (violations > 0 ? ` (${violations} violations)` : '')
+        `  ${cat}: ${data.score}/100` + (violations > 0 ? ` (${violations} violations)` : '')
       );
     }
     if (result.recommendations.length > 0) {
@@ -70,9 +69,7 @@ async function main() {
   }
 
   if (threshold > 0 && result.overallScore < threshold) {
-    console.error(
-      `\nScore ${result.overallScore} below threshold ${threshold}`
-    );
+    console.error(`\nScore ${result.overallScore} below threshold ${threshold}`);
     process.exit(1);
   }
 }
