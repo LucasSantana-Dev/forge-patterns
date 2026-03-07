@@ -4,14 +4,38 @@ import * as os from 'os';
 import { scaffoldPattern } from '../src/scaffolding';
 import { PatternInfo } from '../src/discovery';
 
-jest.mock('vscode', () => ({
-  window: {
-    createOutputChannel: () => ({
-      appendLine: jest.fn(),
-      show: jest.fn()
-    })
-  }
-}), { virtual: true });
+jest.mock('vscode', () => {
+  const fsMod = jest.requireActual<typeof import('fs')>('fs');
+  const pathMod = jest.requireActual<typeof import('path')>('path');
+  return {
+    window: {
+      createOutputChannel: () => ({
+        appendLine: jest.fn(),
+        show: jest.fn()
+      })
+    },
+    workspace: {
+      fs: {
+        stat: jest.fn().mockImplementation(async (uri: { fsPath: string }) => {
+          const s = fsMod.statSync(uri.fsPath);
+          return { type: s.isDirectory() ? 2 : 1 };
+        }),
+        createDirectory: jest.fn().mockImplementation(async (uri: { fsPath: string }) => {
+          fsMod.mkdirSync(uri.fsPath, { recursive: true });
+        }),
+        readFile: jest.fn().mockImplementation(async (uri: { fsPath: string }) => {
+          return fsMod.readFileSync(uri.fsPath);
+        }),
+        writeFile: jest.fn().mockImplementation(async (uri: { fsPath: string }, data: Uint8Array) => {
+          fsMod.writeFileSync(uri.fsPath, Buffer.from(data));
+        })
+      }
+    },
+    Uri: {
+      file: (p: string) => ({ fsPath: pathMod.resolve(p), scheme: 'file' })
+    }
+  };
+}, { virtual: true });
 
 describe('scaffolding', () => {
   let repoDir: string;
@@ -123,9 +147,22 @@ describe('scaffolding', () => {
     ).rejects.toThrow('Pattern not found');
   });
 
+  it('blocks source path traversal via malicious pattern.path', async () => {
+    const malicious: PatternInfo = {
+      category: 'docker',
+      name: 'evil',
+      path: '../../../etc/passwd',
+      description: ''
+    };
+    await expect(
+      scaffoldPattern(malicious, repoDir, targetDir, {
+        dryRun: true, overwrite: false
+      })
+    ).rejects.toThrow('Path traversal');
+  });
+
   it('blocks path traversal via crafted file list', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const discovery = require('../src/discovery');
+    const discovery = jest.requireActual<typeof import('../src/discovery')>('../src/discovery');
     const original = discovery.getPatternFiles;
 
     const outsideFile = path.join(os.tmpdir(), 'fp-evil.txt');
@@ -138,7 +175,7 @@ describe('scaffolding', () => {
         scaffoldPattern(pattern, repoDir, targetDir, {
           dryRun: false, overwrite: false
         })
-      ).rejects.toThrow('Path traversal blocked');
+      ).rejects.toThrow('Path traversal');
     } finally {
       discovery.getPatternFiles = original;
       try { fs.unlinkSync(outsideFile); } catch { void 0; }

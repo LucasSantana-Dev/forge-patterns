@@ -1,0 +1,56 @@
+{
+  "id": "forge-quality",
+  "name": "Forge Quality Policy",
+  "version": "1.0.0",
+  "description": "Lint pass, test existence, coverage threshold enforcement",
+  "rules": [
+    {
+      "id": "qual-001",
+      "name": "Lint check required",
+      "description": "Block if lint check has not passed",
+      "conditions": [
+        { "field": "quality.lint_passed", "operator": "eq", "value": false }
+      ],
+      "actions": [
+        { "type": "block", "message": "Lint check must pass before proceeding" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "qual-002",
+      "name": "Tests required",
+      "description": "Block if no tests exist for new modules",
+      "conditions": [
+        { "field": "quality.has_tests", "operator": "eq", "value": false }
+      ],
+      "actions": [
+        { "type": "block", "message": "Tests are required for new modules" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "qual-003",
+      "name": "Coverage threshold",
+      "description": "Warn if test coverage drops below 80%",
+      "conditions": [
+        { "field": "quality.coverage_percent", "operator": "lt", "value": 80 }
+      ],
+      "actions": [
+        { "type": "warn", "message": "Test coverage below 80% threshold" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "qual-004",
+      "name": "Type check required",
+      "description": "Block if TypeScript type checking fails",
+      "conditions": [
+        { "field": "quality.type_check_passed", "operator": "eq", "value": false }
+      ],
+      "actions": [
+        { "type": "block", "message": "TypeScript type check must pass" }
+      ],
+      "enabled": true
+    }
+  ]
+}

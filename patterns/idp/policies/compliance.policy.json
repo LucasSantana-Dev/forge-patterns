@@ -1,0 +1,44 @@
+{
+  "id": "forge-compliance",
+  "name": "Forge Compliance Policy",
+  "version": "1.0.0",
+  "description": "RLS enabled, audit logging, structured logging",
+  "rules": [
+    {
+      "id": "comp-001",
+      "name": "RLS enforcement",
+      "description": "Block if row-level security is not enabled on user-facing tables",
+      "conditions": [
+        { "field": "compliance.rls_enabled", "operator": "eq", "value": false }
+      ],
+      "actions": [
+        { "type": "block", "message": "Row-level security must be enabled" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "comp-002",
+      "name": "Audit logging required",
+      "description": "Warn if audit logging is not configured",
+      "conditions": [
+        { "field": "compliance.audit_logging", "operator": "eq", "value": false }
+      ],
+      "actions": [
+        { "type": "warn", "message": "Audit logging should be enabled" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "comp-003",
+      "name": "Correlation IDs required",
+      "description": "Warn if requests lack correlation IDs for traceability",
+      "conditions": [
+        { "field": "request.correlation_id", "operator": "eq", "value": null }
+      ],
+      "actions": [
+        { "type": "warn", "message": "Request should include correlation ID" }
+      ],
+      "enabled": true
+    }
+  ]
+}

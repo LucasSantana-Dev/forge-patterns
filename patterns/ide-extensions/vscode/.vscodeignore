@@ -1,0 +1,8 @@
+.vscode/**
+src/**
+test/**
+coverage/**
+jest.config.json
+tsconfig.json
+**/*.map
+**/*.ts

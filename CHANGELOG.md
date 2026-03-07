@@ -1,3 +1,37 @@
+## [1.4.0] - 2026-03-06
+
+### Added
+- **IDP Policy Engine** — JSON-defined rules with 8 condition operators (eq, ne, gt, gte, lt, lte, contains, matches), nested field resolution, AND logic evaluation
+- **Policy loader** — Load policies from JSON files or directories
+- **Built-in policies** — Security (secrets, injection, auth), quality (lint, tests, coverage), compliance (RLS, audit, correlation IDs)
+- **Scorecard collectors** — Abstract `BaseCollector` with TTL caching, 4 concrete collectors: security, quality, performance, compliance
+- **Scorecard aggregator** — Weighted aggregation (30/30/20/20), automatic recommendation generation from violations
+- 99 new tests (53 policy engine + 46 scorecard) with >90% coverage
+
+---
+
+## [1.3.4] - 2026-03-02
+
+### Changed
+- **VSCode Extension**: Migrate scaffolding to `vscode.workspace.fs` for virtual workspace support (WSL, Codespaces, remote SSH)
+- **VSCode Extension**: Use `pathUtils.assertWithinBase` for target path validation
+- **VSCode Extension**: Add `.vscodeignore` to slim published VSIX (~12 KB vs ~82 KB)
+- **VSCode Extension**: Add `repository` field to package.json for vsce packaging
+
+### Fixed
+- **VSCode Extension**: `safeJoin` now rejects absolute path segments and validates result with `assertWithinBase`
+- **VSCode Extension**: `assertWithinBase` no longer over-rejects valid names like `..cache` (use `rel === '..' || rel.startsWith('..' + sep)`)
+- **VSCode Extension**: Replace `fs.readFileSync` with `vscode.workspace.fs.readFile` to avoid blocking extension host
+- **VSCode Extension**: Narrow scaffolding catch blocks to only treat `FileNotFound`/`ENOENT` as "not exists"; rethrow other errors
+- **VSCode Extension**: Refactor `scaffoldPattern` into smaller helpers (`destExists`, `ensureDestDirectory`, `readSourceFile`)
+- **VSCode Extension**: Use `jest.requireActual` in tests to satisfy `@typescript-eslint/no-require-imports`
+- **VSCode Extension**: Add `out` directory to discovery skip test; add `safeJoin` test for absolute segments
+
+### Added
+- **VSCode Extension**: README usage instructions, commands, configuration, and development workflow
+
+---
+
 ## [1.3.3] - 2026-03-01
 
 ### Fixed

@@ -179,6 +179,32 @@ describe('discovery', () => {
       expect(basenames).not.toContain('pkg.json');
     });
 
+    it('skips __pycache__, dist, out', () => {
+      const patternPath = path.join(
+        tmpDir, 'patterns', 'docker', 'multi-stage'
+      );
+      fs.mkdirSync(path.join(patternPath, '__pycache__'));
+      fs.writeFileSync(
+        path.join(patternPath, '__pycache__', 'module.pyc'),
+        'bytecode'
+      );
+      fs.mkdirSync(path.join(patternPath, 'dist'));
+      fs.writeFileSync(
+        path.join(patternPath, 'dist', 'bundle.js'),
+        'bundle'
+      );
+      fs.mkdirSync(path.join(patternPath, 'out'));
+      fs.writeFileSync(
+        path.join(patternPath, 'out', 'out.js'),
+        'output'
+      );
+      const files = getPatternFiles(patternPath);
+      const basenames = files.map(f => path.basename(f));
+      expect(basenames).not.toContain('module.pyc');
+      expect(basenames).not.toContain('bundle.js');
+      expect(basenames).not.toContain('out.js');
+    });
+
     it('skips symlinked files', () => {
       const patternPath = path.join(
         tmpDir, 'patterns', 'docker', 'multi-stage'
