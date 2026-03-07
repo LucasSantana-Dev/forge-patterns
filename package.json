@@ -34,6 +34,7 @@
     "test:integration": "node test/cross-project-integration.js",
     "test:shared-constants": "node test/shared-constants-validation.js",
     "test:all": "npm run test:validation && npm run test:coverage",
+    "knip": "knip",
     "prepare": "npm run build && husky install",
     "pre-commit": "npm run lint && npm run format && npm run test:validation && .husky/pre-commit-backup-check",
     "prepack": "npm run build",
@@ -71,6 +72,8 @@
     "semver": "^7.5.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.3",
+    "@commitlint/config-conventional": "^20.4.3",
     "@eslint/js": "^9.39.2",
     "@types/fs-extra": "^11.0.1",
     "@types/jest": "^29.5.14",
@@ -85,6 +88,7 @@
     "globals": "^17.3.0",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
+    "knip": "^5.85.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "ts-jest": "^29.4.6",

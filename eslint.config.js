@@ -18,7 +18,8 @@ module.exports = [
       '**/out/**',
       '**/__tests__/**',
       '**/test/**',
-      'jest.config.old.js'
+      'jest.config.old.js',
+      'commitlint.config.js'
     ]
   },
   {
