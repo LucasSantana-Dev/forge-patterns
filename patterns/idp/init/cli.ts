@@ -161,12 +161,7 @@ function parseArgs(args: string[]) {
 }
 
 function loadBundledPolicy(name: string): string {
-  const policyPath = resolve(
-    __dirname,
-    '..',
-    'policies',
-    `${name}.policy.json`
-  );
+  const policyPath = resolve(__dirname, '..', 'policies', `${name}.policy.json`);
   if (existsSync(policyPath)) {
     return readFileSync(policyPath, 'utf-8');
   }
@@ -218,13 +213,7 @@ export function initProject(
 
   for (const name of ['security', 'quality', 'compliance']) {
     const content = loadBundledPolicy(name);
-    writeIfNeeded(
-      join(policiesDir, `${name}.policy.json`),
-      content,
-      force,
-      dryRun,
-      result
-    );
+    writeIfNeeded(join(policiesDir, `${name}.policy.json`), content, force, dryRun, result);
   }
 
   writeIfNeeded(
@@ -243,21 +232,9 @@ export function initProject(
     result
   );
 
-  writeIfNeeded(
-    join(workflowsDir, 'scorecard.yml'),
-    scorecardWorkflow(),
-    force,
-    dryRun,
-    result
-  );
+  writeIfNeeded(join(workflowsDir, 'scorecard.yml'), scorecardWorkflow(), force, dryRun, result);
 
-  writeIfNeeded(
-    join(workflowsDir, 'policy-check.yml'),
-    policyWorkflow(),
-    force,
-    dryRun,
-    result
-  );
+  writeIfNeeded(join(workflowsDir, 'policy-check.yml'), policyWorkflow(), force, dryRun, result);
 
   return result;
 }
