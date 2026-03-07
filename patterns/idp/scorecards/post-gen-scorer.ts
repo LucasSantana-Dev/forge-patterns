@@ -23,15 +23,34 @@ const ANTI_PATTERNS = [
   { pattern: /console\.(log|debug|info)\(/g, name: 'no-console', msg: 'Remove console statements' },
   { pattern: /\/\/\s*TODO/gi, name: 'no-todo', msg: 'Resolve TODO comments before shipping' },
   { pattern: /\/\/\s*FIXME/gi, name: 'no-fixme', msg: 'Resolve FIXME comments before shipping' },
-  { pattern: /style\s*=\s*\{\{/g, name: 'no-inline-styles', msg: 'Avoid inline styles, use CSS classes' },
+  {
+    pattern: /style\s*=\s*\{\{/g,
+    name: 'no-inline-styles',
+    msg: 'Avoid inline styles, use CSS classes'
+  },
   { pattern: /!important/g, name: 'no-important', msg: 'Avoid !important in CSS' }
 ];
 
 const REACT_CHECKS = [
-  { pattern: /onClick\s*=\s*\{[^}]*\}/, positive: true, name: 'event-handlers', msg: 'Uses proper event handlers' },
-  { pattern: /aria-|role=/, positive: true, name: 'accessibility', msg: 'Includes accessibility attributes' },
+  {
+    pattern: /onClick\s*=\s*\{[^}]*\}/,
+    positive: true,
+    name: 'event-handlers',
+    msg: 'Uses proper event handlers'
+  },
+  {
+    pattern: /aria-|role=/,
+    positive: true,
+    name: 'accessibility',
+    msg: 'Includes accessibility attributes'
+  },
   { pattern: /key\s*=\s*\{/, positive: true, name: 'list-keys', msg: 'Uses key prop in lists' },
-  { pattern: /dangerouslySet/, positive: false, name: 'no-unsafe-html', msg: 'Avoid unsafe HTML injection' }
+  {
+    pattern: /dangerouslySet/,
+    positive: false,
+    name: 'no-unsafe-html',
+    msg: 'Avoid unsafe HTML injection'
+  }
 ];
 
 function gradeFromScore(score: number): PostGenScore['grade'] {
@@ -98,9 +117,10 @@ function checkStructure(code: string): PostGenCheck[] {
 function checkTypeScript(code: string): PostGenCheck[] {
   const checks: PostGenCheck[] = [];
 
-  const hasTypes = /:\s*(string|number|boolean|Record|Array|Promise|void)\b/.test(code)
-    || /interface\s+\w+/.test(code)
-    || /type\s+\w+\s*=/.test(code);
+  const hasTypes =
+    /:\s*(string|number|boolean|Record|Array|Promise|void)\b/.test(code) ||
+    /interface\s+\w+/.test(code) ||
+    /type\s+\w+\s*=/.test(code);
   checks.push({
     name: 'type-annotations',
     passed: hasTypes,
@@ -142,9 +162,7 @@ export function scoreGeneratedCode(code: string, opts?: PostGenOptions): PostGen
   ];
 
   const totalWeight = checks.reduce((sum, c) => sum + c.weight, 0);
-  const earnedWeight = checks
-    .filter(c => c.passed)
-    .reduce((sum, c) => sum + c.weight, 0);
+  const earnedWeight = checks.filter(c => c.passed).reduce((sum, c) => sum + c.weight, 0);
 
   const score = totalWeight > 0 ? Math.round((earnedWeight / totalWeight) * 100) : 0;
   const minScore = opts?.minScore ?? 60;
