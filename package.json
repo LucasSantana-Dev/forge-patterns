@@ -61,7 +61,8 @@
     "forge-patterns": "dist/cli.js",
     "forge-scorecard": "dist/patterns/idp/scorecards/cli.js",
     "forge-policy": "dist/patterns/idp/policy-engine/cli.js",
-    "forge-features": "dist/patterns/idp/feature-toggles/cli.js"
+    "forge-features": "dist/patterns/idp/feature-toggles/cli.js",
+    "forge-init": "dist/patterns/idp/init/cli.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
