@@ -15,12 +15,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - run: npm ci
+      - uses: Forge-Space/.github/.github/actions/setup-node@main
       - run: npm run lint:check
       - run: npm run format:check
 
@@ -28,48 +23,28 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - run: npm ci
+      - uses: Forge-Space/.github/.github/actions/setup-node@main
       - run: npm test
 
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - run: npm ci
+      - uses: Forge-Space/.github/.github/actions/setup-node@main
       - run: npm run build
 
   validation:
     name: Pattern Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - run: npm ci
+      - uses: Forge-Space/.github/.github/actions/setup-node@main
       - run: npm run test:validation
 
   security:
     name: Security Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - run: npm ci
+      - uses: Forge-Space/.github/.github/actions/setup-node@main
       - name: Run npm audit
         run: npm audit --audit-level=high --omit=dev
         continue-on-error: true
