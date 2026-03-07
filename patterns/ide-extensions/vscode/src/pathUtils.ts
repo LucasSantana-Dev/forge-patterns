@@ -8,24 +8,23 @@ export function assertWithinBase(resolved: string, base: string): void {
   const normalizedResolved = path.resolve(resolved);
   const normalizedBase = path.resolve(base);
   const rel = path.relative(normalizedBase, normalizedResolved);
-  if (rel.startsWith('..') || path.isAbsolute(rel)) {
-    throw new Error(
-      `Path traversal detected: "${resolved}" escapes base "${base}".`
-    );
+  const { sep } = path;
+  if (path.isAbsolute(rel) || rel === '..' || rel.startsWith('..' + sep)) {
+    throw new Error(`Path traversal detected: "${resolved}" escapes base "${base}".`);
   }
 }
 
 /**
- * Joins base with segments, rejecting any segment containing `..`. Returns normalized path.
+ * Joins base with segments, rejecting `..` and absolute segments. Returns normalized path.
  */
 export function safeJoin(base: string, ...segments: string[]): string {
+  const resolvedBase = path.resolve(base);
   for (const seg of segments) {
-    if (seg.includes('..')) {
-      throw new Error(
-        `Path traversal detected: segment "${seg}" contains "..".`
-      );
+    if (path.isAbsolute(seg) || seg.includes('..')) {
+      throw new Error(`Path traversal detected: segment "${seg}" contains invalid path.`);
     }
   }
-  const joined = path.join(base, ...segments);
+  const joined = path.resolve(resolvedBase, ...segments);
+  assertWithinBase(joined, resolvedBase);
   return path.normalize(joined);
 }

@@ -67,15 +67,10 @@ export function evaluateCondition(
   return fn(actual, expected);
 }
 
-const BLOCKED_PROPS = new Set([
-  '__proto__', 'constructor', 'prototype'
-]);
+const BLOCKED_PROPS = new Set(['__proto__', 'constructor', 'prototype']);
 const MAX_DEPTH = 10;
 
-export function resolveFieldPath(
-  obj: Record<string, unknown>,
-  path: string
-): unknown {
+export function resolveFieldPath(obj: Record<string, unknown>, path: string): unknown {
   const parts = path.split('.');
   if (parts.length > MAX_DEPTH) return undefined;
 

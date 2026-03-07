@@ -42,7 +42,7 @@ describe('pathUtils', () => {
 
     it('should reject segment containing ..', () => {
       expect(() => safeJoin('/base', 'sub', '..', 'file.txt')).toThrow(
-        /Path traversal detected.*contains "\.\."/
+        /Path traversal detected/
       );
     });
 
@@ -57,6 +57,10 @@ describe('pathUtils', () => {
     it('should return normalized path for valid segments', () => {
       const result = safeJoin('/base', 'sub', '.', 'file.txt');
       expect(result).toBe(path.normalize('/base/sub/file.txt'));
+    });
+
+    it('should reject absolute path segments', () => {
+      expect(() => safeJoin('/base', '/etc/passwd')).toThrow(/Path traversal detected/);
     });
   });
 });

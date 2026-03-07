@@ -3,10 +3,7 @@ export {
   type AggregatedScorecard,
   type ScorecardWeights
 } from './aggregator.js';
-export {
-  BaseCollector,
-  type CollectorResult
-} from './collectors/base-collector.js';
+export { BaseCollector, type CollectorResult } from './collectors/base-collector.js';
 export { SecurityCollector } from './collectors/security-collector.js';
 export { QualityCollector } from './collectors/quality-collector.js';
 export { PerformanceCollector } from './collectors/performance-collector.js';

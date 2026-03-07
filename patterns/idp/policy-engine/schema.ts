@@ -1,12 +1,4 @@
-export type ConditionOperator =
-  | 'eq'
-  | 'ne'
-  | 'gt'
-  | 'gte'
-  | 'lt'
-  | 'lte'
-  | 'contains'
-  | 'matches';
+export type ConditionOperator = 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'matches';
 
 export type ActionType = 'block' | 'warn' | 'log' | 'notify';
 

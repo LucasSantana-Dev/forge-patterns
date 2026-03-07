@@ -5,8 +5,8 @@ import { scaffoldPattern } from '../src/scaffolding';
 import { PatternInfo } from '../src/discovery';
 
 jest.mock('vscode', () => {
-  const fsMod = require('fs');
-  const pathMod = require('path');
+  const fsMod = jest.requireActual<typeof import('fs')>('fs');
+  const pathMod = jest.requireActual<typeof import('path')>('path');
   return {
     window: {
       createOutputChannel: () => ({
@@ -22,6 +22,9 @@ jest.mock('vscode', () => {
         }),
         createDirectory: jest.fn().mockImplementation(async (uri: { fsPath: string }) => {
           fsMod.mkdirSync(uri.fsPath, { recursive: true });
+        }),
+        readFile: jest.fn().mockImplementation(async (uri: { fsPath: string }) => {
+          return fsMod.readFileSync(uri.fsPath);
         }),
         writeFile: jest.fn().mockImplementation(async (uri: { fsPath: string }, data: Uint8Array) => {
           fsMod.writeFileSync(uri.fsPath, Buffer.from(data));
@@ -159,8 +162,7 @@ describe('scaffolding', () => {
   });
 
   it('blocks path traversal via crafted file list', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const discovery = require('../src/discovery');
+    const discovery = jest.requireActual<typeof import('../src/discovery')>('../src/discovery');
     const original = discovery.getPatternFiles;
 
     const outsideFile = path.join(os.tmpdir(), 'fp-evil.txt');

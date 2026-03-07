@@ -3,9 +3,7 @@ import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Policy } from './schema.js';
 
-const VALID_OPERATORS = new Set([
-  'eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'contains', 'matches'
-]);
+const VALID_OPERATORS = new Set(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'contains', 'matches']);
 const VALID_ACTIONS = new Set(['block', 'warn', 'log', 'notify']);
 
 function validatePolicy(data: unknown): Policy {
@@ -37,9 +35,7 @@ function validateRule(r: Record<string, unknown>): void {
   }
   for (const c of r.conditions as Record<string, unknown>[]) {
     if (!VALID_OPERATORS.has(c.operator as string)) {
-      throw new Error(
-        `Rule ${r.id}: invalid operator "${c.operator}"`
-      );
+      throw new Error(`Rule ${r.id}: invalid operator "${c.operator}"`);
     }
     if (typeof c.field !== 'string' || !c.field) {
       throw new Error(`Rule ${r.id}: condition missing field`);
@@ -50,9 +46,7 @@ function validateRule(r: Record<string, unknown>): void {
   }
   for (const a of r.actions as Record<string, unknown>[]) {
     if (!VALID_ACTIONS.has(a.type as string)) {
-      throw new Error(
-        `Rule ${r.id}: invalid action type "${a.type}"`
-      );
+      throw new Error(`Rule ${r.id}: invalid action type "${a.type}"`);
     }
   }
 }
@@ -63,15 +57,9 @@ export function loadPolicyFromFile(filePath: string): Policy {
   return validatePolicy(parsed);
 }
 
-export async function loadPoliciesFromDir(
-  dirPath: string
-): Promise<Policy[]> {
+export async function loadPoliciesFromDir(dirPath: string): Promise<Policy[]> {
   const entries = await readdir(dirPath);
-  const policyFiles = entries.filter(
-    (f) => f.endsWith('.policy.json')
-  );
+  const policyFiles = entries.filter(f => f.endsWith('.policy.json'));
 
-  return policyFiles.map((f) =>
-    loadPolicyFromFile(join(dirPath, f))
-  );
+  return policyFiles.map(f => loadPolicyFromFile(join(dirPath, f)));
 }

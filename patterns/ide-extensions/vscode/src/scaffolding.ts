@@ -16,6 +16,38 @@ export interface ScaffoldResult {
   conflicts: string[];
 }
 
+function isFileNotFound(err: unknown): boolean {
+  const code = (err as { code?: string })?.code;
+  return code === 'FileNotFound' || code === 'ENOENT';
+}
+
+async function destExists(dest: string): Promise<boolean> {
+  try {
+    await vscode.workspace.fs.stat(vscode.Uri.file(dest));
+    return true;
+  } catch (err) {
+    if (isFileNotFound(err)) return false;
+    throw err;
+  }
+}
+
+async function ensureDestDirectory(destDir: string): Promise<void> {
+  const uri = vscode.Uri.file(destDir);
+  try {
+    await vscode.workspace.fs.stat(uri);
+  } catch (err) {
+    if (isFileNotFound(err)) {
+      await vscode.workspace.fs.createDirectory(uri);
+      return;
+    }
+    throw err;
+  }
+}
+
+async function readSourceFile(filePath: string): Promise<Uint8Array> {
+  return vscode.workspace.fs.readFile(vscode.Uri.file(filePath));
+}
+
 export async function scaffoldPattern(
   pattern: PatternInfo,
   repoPath: string,
@@ -44,15 +76,8 @@ export async function scaffoldPattern(
     const dest = path.join(targetDir, relative);
     assertWithinBase(path.resolve(dest), targetResolved);
 
-    let destExists = false;
-    try {
-      await vscode.workspace.fs.stat(vscode.Uri.file(dest));
-      destExists = true;
-    } catch {
-      destExists = false;
-    }
-
-    if (destExists && !options.overwrite) {
+    const exists = await destExists(dest);
+    if (exists && !options.overwrite) {
       result.conflicts.push(relative);
       continue;
     }
@@ -63,14 +88,9 @@ export async function scaffoldPattern(
     }
 
     const destDir = path.dirname(dest);
-    const destDirUri = vscode.Uri.file(destDir);
-    try {
-      await vscode.workspace.fs.stat(destDirUri);
-    } catch {
-      await vscode.workspace.fs.createDirectory(destDirUri);
-    }
+    await ensureDestDirectory(destDir);
 
-    const content = fs.readFileSync(file);
+    const content = await readSourceFile(file);
     await vscode.workspace.fs.writeFile(vscode.Uri.file(dest), content);
     result.created.push(relative);
     log(`Created: ${relative}`);

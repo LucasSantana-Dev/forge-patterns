@@ -193,10 +193,16 @@ describe('discovery', () => {
         path.join(patternPath, 'dist', 'bundle.js'),
         'bundle'
       );
+      fs.mkdirSync(path.join(patternPath, 'out'));
+      fs.writeFileSync(
+        path.join(patternPath, 'out', 'out.js'),
+        'output'
+      );
       const files = getPatternFiles(patternPath);
       const basenames = files.map(f => path.basename(f));
       expect(basenames).not.toContain('module.pyc');
       expect(basenames).not.toContain('bundle.js');
+      expect(basenames).not.toContain('out.js');
     });
 
     it('skips symlinked files', () => {
