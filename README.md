@@ -53,6 +53,20 @@ This core repository provides the foundation for the entire Forge Space ecosyste
 - [**Documentation Hub**](docs/README.md) - Complete documentation
 - [**Project Context**](docs/project/PROJECT_CONTEXT.MD) - Project guide and context
 
+## IDP — Internal Developer Platform
+
+CLI tools for project governance, shipped as part of `@forgespace/core`:
+
+| Tool | Command | Purpose |
+|------|---------|---------|
+| **Scorecard** | `npx forge-scorecard` | Evaluate project quality across security, quality, performance, compliance |
+| **Policy Engine** | `npx forge-policy` | Enforce governance policies with block/warn/log actions |
+
+### Guides
+
+- [Scorecard Integration](docs/guides/scorecard-integration.md) — add quality scorecards to any repo
+- [Policy Engine Integration](docs/guides/policy-engine-integration.md) — add policy checks to any repo
+
 ## � GitHub Workflows Optimization
 
 ### Organization-Level Reusable Workflows
