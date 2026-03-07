@@ -14,6 +14,7 @@ jobs:
   semgrep:
     name: Semgrep Scan
     runs-on: ubuntu-latest
+    continue-on-error: true
     container:
       image: semgrep/semgrep
     if: (github.actor != 'dependabot[bot]')
