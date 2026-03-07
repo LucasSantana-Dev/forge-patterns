@@ -23,22 +23,22 @@ npx forge-scorecard --project-dir . --threshold 60 --output summary
 
 ### Options
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--project-dir` | `.` | Project root directory |
-| `--output` | `summary` | Output format: `summary` or `json` |
-| `--threshold` | `0` | Minimum score (exits 1 if below) |
+| Flag            | Default   | Description                        |
+| --------------- | --------- | ---------------------------------- |
+| `--project-dir` | `.`       | Project root directory             |
+| `--output`      | `summary` | Output format: `summary` or `json` |
+| `--threshold`   | `0`       | Minimum score (exits 1 if below)   |
 
 ## Collectors
 
 Four built-in collectors evaluate your project:
 
-| Collector | Weight | What it checks |
-|-----------|--------|----------------|
-| `security` | 30% | Secret exposure, auth enforcement, injection risk |
-| `quality` | 30% | Test coverage, code complexity, lint violations |
-| `performance` | 20% | Generation latency, cache hit ratios |
-| `compliance` | 20% | Audit logging, data retention, RLS policies |
+| Collector     | Weight | What it checks                                    |
+| ------------- | ------ | ------------------------------------------------- |
+| `security`    | 30%    | Secret exposure, auth enforcement, injection risk |
+| `quality`     | 30%    | Test coverage, code complexity, lint violations   |
+| `performance` | 20%    | Generation latency, cache hit ratios              |
+| `compliance`  | 20%    | Audit logging, data retention, RLS policies       |
 
 ## CI Workflow
 

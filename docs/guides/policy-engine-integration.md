@@ -23,21 +23,21 @@ npx forge-policy --policy-dir ./policies --context-file context.json --fail-on-b
 
 ### Options
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--policy-dir` | `./policies` | Directory containing `.policy.json` files |
-| `--context-file` | — | JSON file with evaluation context |
-| `--fail-on-block` | `false` | Exit 1 if any blocking violations |
+| Flag              | Default      | Description                               |
+| ----------------- | ------------ | ----------------------------------------- |
+| `--policy-dir`    | `./policies` | Directory containing `.policy.json` files |
+| `--context-file`  | —            | JSON file with evaluation context         |
+| `--fail-on-block` | `false`      | Exit 1 if any blocking violations         |
 
 ## Built-in Policies
 
 Three policy packs ship with `@forgespace/core`:
 
-| Policy | File | What it enforces |
-|--------|------|------------------|
-| Security | `security.policy.json` | Secret exposure, prompt injection, auth |
-| Quality | `quality.policy.json` | Code standards, testing, documentation |
-| Compliance | `compliance.policy.json` | Audit logging, data retention, RLS |
+| Policy     | File                     | What it enforces                        |
+| ---------- | ------------------------ | --------------------------------------- |
+| Security   | `security.policy.json`   | Secret exposure, prompt injection, auth |
+| Quality    | `quality.policy.json`    | Code standards, testing, documentation  |
+| Compliance | `compliance.policy.json` | Audit logging, data retention, RLS      |
 
 ## Writing Custom Policies
 
@@ -55,9 +55,7 @@ Create a `.policy.json` file:
       "conditions": [
         { "field": "auth.authenticated", "operator": "eq", "value": false }
       ],
-      "actions": [
-        { "type": "block", "message": "Authentication required" }
-      ],
+      "actions": [{ "type": "block", "message": "Authentication required" }],
       "enabled": true
     }
   ]
@@ -70,12 +68,12 @@ Create a `.policy.json` file:
 
 ### Action Types
 
-| Type | Behavior |
-|------|----------|
-| `block` | Fails the check (exit 1 with `--fail-on-block`) |
-| `warn` | Prints warning, does not fail |
-| `log` | Records for audit trail |
-| `notify` | Prints warning (notification channel TBD) |
+| Type     | Behavior                                        |
+| -------- | ----------------------------------------------- |
+| `block`  | Fails the check (exit 1 with `--fail-on-block`) |
+| `warn`   | Prints warning, does not fail                   |
+| `log`    | Records for audit trail                         |
+| `notify` | Prints warning (notification channel TBD)       |
 
 ## CI Workflow
 
