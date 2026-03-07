@@ -1,3 +1,20 @@
+## [1.6.0] - 2026-03-07
+
+### Added
+- **Feature Toggles CLI** — `forge-features` bin for managing file-based feature toggles (`.forge/features.json`)
+  - Commands: `list`, `get`, `create`, `enable`, `disable`, `remove`, `check`
+  - 4 namespaces: `global`, `mcp-gateway`, `uiforge-mcp`, `uiforge-webapp`
+  - Filtering by namespace/enabled state, `--json` output, strategy support
+- **Post-Generation Scorer** — `scoreGeneratedCode()` for inline code quality grading
+  - Anti-pattern detection (console, TODO/FIXME, inline styles, !important)
+  - Structure checks (exports, line length, error handling)
+  - TypeScript checks (type annotations, no `any`)
+  - React-specific checks (accessibility, list keys, unsafe HTML)
+  - A-F grading with configurable min score threshold
+- 36 new tests (18 feature toggles + 18 post-gen scorer)
+
+---
+
 ## [1.5.0] - 2026-03-06
 
 ### Added
