@@ -2,6 +2,12 @@
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import {
+  type TemplateName,
+  TEMPLATE_NAMES,
+  getTemplate,
+  isValidTemplate
+} from './templates.js';
 
 const SCORECARD_CONFIG = {
   threshold: 60,
@@ -130,14 +136,20 @@ Usage:
   forge-init [options]
 
 Options:
-  --dir <path>    Target project directory (default: .)
-  --force         Overwrite existing files
-  --dry-run       Show what would be created without writing
-  --help          Show this help
+  --dir <path>        Target project directory (default: .)
+  --template <name>   Framework template: ${TEMPLATE_NAMES.join(', ')}
+  --force             Overwrite existing files
+  --dry-run           Show what would be created without writing
+  --help              Show this help
+
+Templates:
+  react     Accessibility rules, component test coverage checks
+  nextjs    React rules + bundle size, server component hygiene
+  node      Dependency audit, unused deps, API input validation
 
 Creates:
   .forge/policies/         Default security + quality + compliance policies
-  .forge/scorecard.json    Scorecard configuration
+  .forge/scorecard.json    Scorecard configuration (weights per template)
   .forge/features.json     Feature toggle seed file
   .github/workflows/       Scorecard + policy-check CI workflows
 `);
@@ -201,7 +213,11 @@ function writeIfNeeded(
 
 export function initProject(
   targetDir: string,
-  options: { force?: boolean; dryRun?: boolean } = {}
+  options: {
+    force?: boolean;
+    dryRun?: boolean;
+    template?: TemplateName;
+  } = {}
 ): InitResult {
   const force = options.force ?? false;
   const dryRun = options.dryRun ?? false;
@@ -213,12 +229,25 @@ export function initProject(
 
   for (const name of ['security', 'quality', 'compliance']) {
     const content = loadBundledPolicy(name);
-    writeIfNeeded(join(policiesDir, `${name}.policy.json`), content, force, dryRun, result);
+    writeIfNeeded(
+      join(policiesDir, `${name}.policy.json`),
+      content,
+      force,
+      dryRun,
+      result
+    );
   }
+
+  const scorecardConfig = options.template
+    ? {
+        ...SCORECARD_CONFIG,
+        weights: getTemplate(options.template).scorecardWeights
+      }
+    : SCORECARD_CONFIG;
 
   writeIfNeeded(
     join(forgeDir, 'scorecard.json'),
-    JSON.stringify(SCORECARD_CONFIG, null, 2) + '\n',
+    JSON.stringify(scorecardConfig, null, 2) + '\n',
     force,
     dryRun,
     result
@@ -232,9 +261,41 @@ export function initProject(
     result
   );
 
-  writeIfNeeded(join(workflowsDir, 'scorecard.yml'), scorecardWorkflow(), force, dryRun, result);
+  writeIfNeeded(
+    join(workflowsDir, 'scorecard.yml'),
+    scorecardWorkflow(),
+    force,
+    dryRun,
+    result
+  );
 
-  writeIfNeeded(join(workflowsDir, 'policy-check.yml'), policyWorkflow(), force, dryRun, result);
+  writeIfNeeded(
+    join(workflowsDir, 'policy-check.yml'),
+    policyWorkflow(),
+    force,
+    dryRun,
+    result
+  );
+
+  if (options.template) {
+    const tmpl = getTemplate(options.template);
+    for (const [name, rules] of Object.entries(tmpl.policies)) {
+      const policy = {
+        id: `forge-${name}`,
+        name: `Forge ${name.charAt(0).toUpperCase() + name.slice(1)} Policy`,
+        version: '1.0.0',
+        description: `Framework-specific ${name} governance rules`,
+        rules
+      };
+      writeIfNeeded(
+        join(policiesDir, `${name}.policy.json`),
+        JSON.stringify(policy, null, 2) + '\n',
+        force,
+        dryRun,
+        result
+      );
+    }
+  }
 
   return result;
 }
@@ -250,6 +311,20 @@ function main(): void {
   const targetDir = resolve((opts['dir'] as string) ?? '.');
   const force = opts['force'] === true;
   const dryRun = opts['dry-run'] === true;
+  const templateArg = opts['template'] as string | undefined;
+
+  if (
+    templateArg !== undefined &&
+    !isValidTemplate(templateArg)
+  ) {
+    console.error(
+      `Unknown template: ${templateArg}. ` +
+        `Available: ${TEMPLATE_NAMES.join(', ')}`
+    );
+    process.exit(1);
+  }
+
+  const template = templateArg as TemplateName | undefined;
 
   if (!existsSync(targetDir)) {
     console.error(`Directory not found: ${targetDir}`);
@@ -260,7 +335,15 @@ function main(): void {
     console.log('\n\x1b[36mDry run — no files will be written\x1b[0m\n');
   }
 
-  const result = initProject(targetDir, { force, dryRun });
+  if (template) {
+    console.log(`\x1b[36mTemplate: ${template}\x1b[0m\n`);
+  }
+
+  const result = initProject(targetDir, {
+    force,
+    dryRun,
+    ...(template ? { template } : {})
+  });
 
   if (result.created.length > 0) {
     const verb = dryRun ? 'Would create' : 'Created';

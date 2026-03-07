@@ -104,4 +104,138 @@ describe('forge-init', () => {
     expect(policy).toContain('npx forge-policy');
     expect(policy).toContain('.forge/policies');
   });
+
+  describe('--template', () => {
+    it('react template adds accessibility policy', () => {
+      const result = initProject(tmpDir, { template: 'react' });
+
+      expect(result.created.length).toBeGreaterThan(7);
+
+      const policy = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/policies/react.policy.json'),
+          'utf-8'
+        )
+      );
+      expect(policy.id).toBe('forge-react');
+      expect(policy.rules).toHaveLength(2);
+      expect(
+        policy.rules.some(
+          (r: { id: string }) => r.id === 'react-001'
+        )
+      ).toBe(true);
+    });
+
+    it('react template sets scorecard weights', () => {
+      initProject(tmpDir, { template: 'react' });
+
+      const scorecard = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/scorecard.json'),
+          'utf-8'
+        )
+      );
+      expect(scorecard.weights).toEqual({
+        security: 25,
+        quality: 30,
+        performance: 20,
+        compliance: 25
+      });
+    });
+
+    it('nextjs template includes react + next rules', () => {
+      initProject(tmpDir, { template: 'nextjs' });
+
+      const policy = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/policies/nextjs.policy.json'),
+          'utf-8'
+        )
+      );
+      expect(policy.id).toBe('forge-nextjs');
+      expect(policy.rules.length).toBeGreaterThanOrEqual(4);
+      expect(
+        policy.rules.some(
+          (r: { id: string }) => r.id === 'next-003'
+        )
+      ).toBe(true);
+    });
+
+    it('nextjs template prioritizes performance weight', () => {
+      initProject(tmpDir, { template: 'nextjs' });
+
+      const scorecard = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/scorecard.json'),
+          'utf-8'
+        )
+      );
+      expect(scorecard.weights.performance).toBe(30);
+    });
+
+    it('node template adds security-focused policies', () => {
+      initProject(tmpDir, { template: 'node' });
+
+      const policy = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/policies/node.policy.json'),
+          'utf-8'
+        )
+      );
+      expect(policy.id).toBe('forge-node');
+      expect(policy.rules).toHaveLength(3);
+      expect(
+        policy.rules.some(
+          (r: { id: string }) => r.id === 'node-001'
+        )
+      ).toBe(true);
+    });
+
+    it('node template prioritizes security weight', () => {
+      initProject(tmpDir, { template: 'node' });
+
+      const scorecard = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/scorecard.json'),
+          'utf-8'
+        )
+      );
+      expect(scorecard.weights.security).toBe(35);
+    });
+
+    it('no template keeps default scorecard without weights', () => {
+      initProject(tmpDir);
+
+      const scorecard = JSON.parse(
+        readFileSync(
+          join(tmpDir, '.forge/scorecard.json'),
+          'utf-8'
+        )
+      );
+      expect(scorecard.weights).toBeUndefined();
+      expect(scorecard.threshold).toBe(60);
+    });
+
+    it('template + force overwrites template policy', () => {
+      initProject(tmpDir, { template: 'react' });
+      const result = initProject(tmpDir, {
+        template: 'node',
+        force: true
+      });
+
+      expect(
+        result.created.some((f) => f.includes('node.policy.json'))
+      ).toBe(true);
+    });
+
+    it('template + dry-run shows extra files', () => {
+      const result = initProject(tmpDir, {
+        template: 'react',
+        dryRun: true
+      });
+
+      expect(result.created.length).toBeGreaterThan(7);
+      expect(existsSync(join(tmpDir, '.forge'))).toBe(false);
+    });
+  });
 });
