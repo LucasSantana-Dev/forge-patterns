@@ -8,6 +8,7 @@ export { SecurityCollector } from './collectors/security-collector.js';
 export { QualityCollector } from './collectors/quality-collector.js';
 export { PerformanceCollector } from './collectors/performance-collector.js';
 export { ComplianceCollector } from './collectors/compliance-collector.js';
+export { DependencyCollector, type DependencyStatus } from './collectors/dependency-collector.js';
 export {
   scoreGeneratedCode,
   type PostGenCheck,

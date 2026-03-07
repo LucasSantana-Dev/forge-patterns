@@ -95,6 +95,12 @@ export class ScorecardAggregator {
     if (violations.some(v => v.includes('retention'))) {
       recs.push('Extend log retention to at least 90 days for compliance');
     }
+    if (violations.some(v => v.includes('outdated'))) {
+      recs.push('Update outdated dependencies to reduce supply chain risk');
+    }
+    if (violations.some(v => v.includes('vulnerabilit'))) {
+      recs.push('Run npm audit fix to resolve known dependency vulnerabilities');
+    }
 
     return recs;
   }

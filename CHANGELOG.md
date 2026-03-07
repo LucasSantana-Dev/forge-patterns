@@ -1,3 +1,14 @@
+## [1.7.0] - 2026-03-07
+
+### Added
+- **Dependency Collector** — `DependencyCollector` scorecard collector for supply chain health
+  - Scores dependency freshness (40%), major version gaps (25%), vulnerabilities (20%), lockfile presence (15%)
+  - Registered in `forge-scorecard` CLI and exported from scorecards barrel
+  - Aggregator generates recommendations for outdated deps and vulnerabilities
+  - 10 new tests (396 total across 19 suites)
+
+---
+
 ## [1.6.0] - 2026-03-07
 
 ### Added
