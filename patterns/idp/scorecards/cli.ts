@@ -7,6 +7,7 @@ import { SecurityCollector } from './collectors/security-collector.js';
 import { QualityCollector } from './collectors/quality-collector.js';
 import { PerformanceCollector } from './collectors/performance-collector.js';
 import { ComplianceCollector } from './collectors/compliance-collector.js';
+import { DependencyCollector } from './collectors/dependency-collector.js';
 
 function parseArgs(args: string[]) {
   const opts: Record<string, string> = {};
@@ -46,6 +47,7 @@ async function main() {
   aggregator.addCollector(new QualityCollector());
   aggregator.addCollector(new PerformanceCollector());
   aggregator.addCollector(new ComplianceCollector());
+  aggregator.addCollector(new DependencyCollector());
 
   const result = await aggregator.aggregate(context);
 
