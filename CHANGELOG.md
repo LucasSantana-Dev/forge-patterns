@@ -1,3 +1,14 @@
+## [1.7.1] - 2026-03-07
+
+### Added
+- **Scorecard grade output** — `forge-scorecard` now shows A-F grades in both summary and JSON output (closes #90)
+  - `--json` flag shorthand for `--output json`
+  - JSON includes `grade` field at top level and per-category
+  - Summary output shows grade next to each score
+- **Feature toggles `--dry-run`** — All mutating commands (create, enable, disable, remove) support `--dry-run` (closes #91)
+  - Shows `[dry-run] Would <action>` without making changes
+  - 5 new CLI tests + 3 new scorecard CLI tests
+
 ## [1.7.0] - 2026-03-07
 
 ### Added

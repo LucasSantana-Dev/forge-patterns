@@ -11,19 +11,30 @@ import { DependencyCollector } from './collectors/dependency-collector.js';
 
 function parseArgs(args: string[]) {
   const opts: Record<string, string> = {};
+  const flags = new Set<string>();
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    if (arg?.startsWith('--') && i + 1 < args.length) {
+    if (arg === '--json') {
+      flags.add('json');
+    } else if (arg?.startsWith('--') && i + 1 < args.length) {
       opts[arg.slice(2)] = args[++i] ?? '';
     }
   }
-  return opts;
+  return { opts, flags };
+}
+
+function scoreToGrade(score: number): string {
+  if (score >= 90) return 'A';
+  if (score >= 80) return 'B';
+  if (score >= 70) return 'C';
+  if (score >= 60) return 'D';
+  return 'F';
 }
 
 async function main() {
-  const opts = parseArgs(process.argv.slice(2));
+  const { opts, flags } = parseArgs(process.argv.slice(2));
   const projectDir = resolve(opts['project-dir'] ?? '.');
-  const output = opts['output'] ?? 'summary';
+  const useJson = flags.has('json') || opts['output'] === 'json';
   const threshold = Number(opts['threshold'] ?? '0');
 
   if (!existsSync(projectDir)) {
@@ -51,15 +62,33 @@ async function main() {
 
   const result = await aggregator.aggregate(context);
 
-  if (output === 'json') {
-    console.log(JSON.stringify(result, null, 2));
+  if (useJson) {
+    const grade = scoreToGrade(result.overallScore);
+    const jsonOutput = {
+      ...result,
+      grade,
+      categories: Object.fromEntries(
+        Object.entries(result.categories).map(
+          ([name, data]) => [
+            name,
+            { ...data, grade: scoreToGrade(data.score) }
+          ]
+        )
+      )
+    };
+    console.log(JSON.stringify(jsonOutput, null, 2));
   } else {
-    console.log(`\nScorecard: ${result.overallScore}/100`);
+    const grade = scoreToGrade(result.overallScore);
+    console.log(
+      `\nScorecard: ${result.overallScore}/100 (${grade})`
+    );
     console.log('─'.repeat(40));
     for (const [cat, data] of Object.entries(result.categories)) {
-      const violations = data.violations.length;
+      const v = data.violations.length;
+      const g = scoreToGrade(data.score);
       console.log(
-        `  ${cat}: ${data.score}/100` + (violations > 0 ? ` (${violations} violations)` : '')
+        `  ${cat}: ${data.score}/100 (${g})`
+        + (v > 0 ? ` — ${v} violations` : '')
       );
     }
     if (result.recommendations.length > 0) {
