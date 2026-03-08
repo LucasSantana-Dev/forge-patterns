@@ -1,9 +1,15 @@
 {
   "name": "@forgespace/core",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Shared configuration, workflows, and architectural patterns for the Forgespace ecosystem",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
   "files": [
     "dist/",
     "patterns/",

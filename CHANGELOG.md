@@ -1,3 +1,11 @@
+## [1.10.1] - 2026-03-08
+
+### Fixed
+- **Package entry point**: Fixed `main`/`types` pointing to `dist/index.js` instead of `dist/src/index.js` (tsc `rootDir: "./"` outputs to `dist/src/`)
+- **Barrel re-exports**: `src/index.ts` now re-exports all IDP patterns (migration, scorecards, policy-engine, feature-toggles)
+- **`exports` map**: Added package.json `exports` field for proper ESM/CJS resolution
+- Consumers can now `import { assessProject } from '@forgespace/core'` without bundler workarounds
+
 ## [1.10.0] - 2026-03-08
 
 ### Added
