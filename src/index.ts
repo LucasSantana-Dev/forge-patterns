@@ -101,5 +101,8 @@ export class ForgePatterns {
   }
 }
 
+// IDP Patterns re-exports
+export * from '../patterns/idp/index.js';
+
 // Export default instance
 export default ForgePatterns.getInstance();
