@@ -1,0 +1,10 @@
+{
+  "threshold": 60,
+  "collectors": [
+    "security",
+    "quality",
+    "performance",
+    "compliance"
+  ],
+  "output": "summary"
+}
