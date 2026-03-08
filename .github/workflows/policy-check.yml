@@ -1,0 +1,29 @@
+name: Policy Check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  policy-check:
+    name: Policy Evaluation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run policy check
+        continue-on-error: true
+        run: |
+          npx forge-policy \
+            --policy-dir .forge/policies \
+            --fail-on-block

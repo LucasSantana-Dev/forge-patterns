@@ -1,0 +1,58 @@
+{
+  "id": "forge-security",
+  "name": "Forge Security Policy",
+  "version": "1.0.0",
+  "description": "Zero secrets, prompt injection detection, authentication enforcement",
+  "rules": [
+    {
+      "id": "sec-001",
+      "name": "Block secret exposure",
+      "description": "Block requests containing potential secrets or credentials",
+      "conditions": [
+        { "field": "content", "operator": "matches", "value": "(password|secret|api_key|private_key|token)\\s*[:=]\\s*['\"][^'\"]{8,}" }
+      ],
+      "actions": [
+        { "type": "block", "message": "Content contains potential secret or credential" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "sec-002",
+      "name": "High-risk prompt injection",
+      "description": "Block prompts with injection risk score above threshold",
+      "conditions": [
+        { "field": "security.injection_risk", "operator": "gte", "value": 0.7 }
+      ],
+      "actions": [
+        { "type": "block", "message": "Prompt injection risk exceeds threshold (0.7)" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "sec-003",
+      "name": "Unauthenticated access",
+      "description": "Block unauthenticated requests to protected resources",
+      "conditions": [
+        { "field": "auth.authenticated", "operator": "eq", "value": false }
+      ],
+      "actions": [
+        { "type": "block", "message": "Authentication required" },
+        { "type": "log", "message": "Unauthenticated access attempt" }
+      ],
+      "enabled": true
+    },
+    {
+      "id": "sec-004",
+      "name": "Suspicious IP activity",
+      "description": "Warn on requests from IPs with high failed attempt counts",
+      "conditions": [
+        { "field": "security.failed_attempts", "operator": "gte", "value": 5 }
+      ],
+      "actions": [
+        { "type": "warn", "message": "IP has multiple failed authentication attempts" },
+        { "type": "log", "message": "Suspicious IP activity detected" }
+      ],
+      "enabled": true
+    }
+  ]
+}

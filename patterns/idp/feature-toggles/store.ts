@@ -32,7 +32,7 @@ export class FileToggleStore {
   }
 
   list(opts?: ToggleListOptions): FeatureToggle[] {
-    let toggles = this.store.toggles;
+    let {toggles} = this.store;
     if (opts?.namespace) {
       toggles = toggles.filter(t => t.namespace === opts.namespace);
     }
