@@ -1,3 +1,14 @@
+## [1.9.0] - 2026-03-08
+
+### Added
+- **AI-specific post-gen scoring checks** — 5 new check categories for `scoreGeneratedCode()`:
+  - `architecture`: file size (>300 lines), function count (>10), prop count (>10)
+  - `error-handling`: empty catch blocks, console-only catch, unhandled promise chains
+  - `scalability`: N+1 query detection, missing pagination on list rendering
+  - `hardcoded-values`: production URLs, hardcoded secrets
+  - `engineering`: @ts-ignore/@ts-nocheck, synchronous I/O, array index as React key
+- 17 new post-gen scorer tests (429 total across 20 suites)
+
 ## [1.8.0] - 2026-03-07
 
 ### Added

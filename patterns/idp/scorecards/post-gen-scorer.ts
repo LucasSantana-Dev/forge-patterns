@@ -153,10 +153,197 @@ function checkFramework(code: string, framework: string): PostGenCheck[] {
   });
 }
 
+function checkArchitecture(code: string): PostGenCheck[] {
+  const checks: PostGenCheck[] = [];
+  const lines = code.split('\n');
+
+  const tooLong = lines.length > 300;
+  checks.push({
+    name: 'architecture-file-size',
+    passed: !tooLong,
+    message: tooLong
+      ? `File has ${lines.length} lines (max 300)`
+      : 'File size within limits',
+    weight: 15
+  });
+
+  const fnCount = (
+    code.match(/(?:function\s+\w+|(?:const|let)\s+\w+\s*=\s*(?:async\s*)?\()/g) || []
+  ).length;
+  checks.push({
+    name: 'architecture-function-count',
+    passed: fnCount <= 10,
+    message: fnCount > 10
+      ? `${fnCount} functions in one file (max 10)`
+      : `${fnCount} functions`,
+    weight: 10
+  });
+
+  const propMatch = code.match(/(?:interface|type)\s+\w*[Pp]rops\s*(?:=\s*)?\{([^}]*)}/);
+  if (propMatch) {
+    const propBody = propMatch[1] ?? '';
+    const propCount = propBody.split(/[;\n]/).filter(l => l.trim()).length;
+    const tooMany = propCount > 10;
+    checks.push({
+      name: 'architecture-prop-count',
+      passed: !tooMany,
+      message: tooMany
+        ? `${propCount} props (max 10, consider splitting)`
+        : `${propCount} props`,
+      weight: 10
+    });
+  }
+
+  return checks;
+}
+
+function checkErrorHandling(code: string): PostGenCheck[] {
+  const checks: PostGenCheck[] = [];
+
+  const emptyCatch = /catch\s*\([^)]*\)\s*\{\s*\}/.test(code);
+  checks.push({
+    name: 'error-handling-empty-catch',
+    passed: !emptyCatch,
+    message: emptyCatch
+      ? 'Empty catch block swallows errors'
+      : 'No empty catch blocks',
+    weight: 15
+  });
+
+  const consoleOnlyCatch =
+    /catch\s*\([^)]*\)\s*\{\s*console\.(log|error|warn)\([^)]*\);\s*\}/.test(code);
+  checks.push({
+    name: 'error-handling-console-catch',
+    passed: !consoleOnlyCatch,
+    message: consoleOnlyCatch
+      ? 'Catch block only logs — consider proper error handling'
+      : 'Catch blocks handle errors properly',
+    weight: 10
+  });
+
+  const unhandledPromise =
+    /\.then\s*\(/.test(code) && !/\.catch\s*\(/.test(code);
+  checks.push({
+    name: 'error-handling-unhandled-promise',
+    passed: !unhandledPromise,
+    message: unhandledPromise
+      ? 'Promise chain without .catch()'
+      : 'Promise chains have error handling',
+    weight: 10
+  });
+
+  return checks;
+}
+
+function checkScalability(code: string): PostGenCheck[] {
+  const checks: PostGenCheck[] = [];
+
+  const n1Pattern =
+    /for\s*\(.*\)\s*\{[^}]*(fetch|query|select|findOne|findMany)\s*\(/;
+  const hasN1 = n1Pattern.test(code);
+  checks.push({
+    name: 'scalability-n-plus-1',
+    passed: !hasN1,
+    message: hasN1
+      ? 'Possible N+1: data fetching inside loop'
+      : 'No N+1 query patterns detected',
+    weight: 15
+  });
+
+  const hasList = /\.map\s*\(/.test(code);
+  const hasPagination =
+    /page|limit|offset|cursor|hasMore|pageSize/i.test(code);
+  const missingPagination = hasList && !hasPagination;
+  checks.push({
+    name: 'scalability-pagination',
+    passed: !missingPagination,
+    message: missingPagination
+      ? 'List rendering without pagination'
+      : 'Lists have pagination or are bounded',
+    weight: 10
+  });
+
+  return checks;
+}
+
+function checkHardcodedValues(code: string): PostGenCheck[] {
+  const checks: PostGenCheck[] = [];
+
+  const urlPattern =
+    /["'`]https?:\/\/(?!localhost|127\.0\.0\.1|example\.com)[^"'`]+["'`]/;
+  const hasHardcodedUrl = urlPattern.test(code);
+  checks.push({
+    name: 'hardcoded-urls',
+    passed: !hasHardcodedUrl,
+    message: hasHardcodedUrl
+      ? 'Hardcoded URL — use environment variables'
+      : 'No hardcoded URLs',
+    weight: 10
+  });
+
+  const secretPattern =
+    /(?:password|secret|api_key|apiKey|token)\s*[:=]\s*["'`][^"'`]+["'`]/i;
+  const hasSecrets = secretPattern.test(code);
+  checks.push({
+    name: 'hardcoded-secrets',
+    passed: !hasSecrets,
+    message: hasSecrets
+      ? 'Possible hardcoded secret — use environment variables'
+      : 'No hardcoded secrets detected',
+    weight: 20
+  });
+
+  return checks;
+}
+
+function checkEngineering(code: string): PostGenCheck[] {
+  const checks: PostGenCheck[] = [];
+
+  const tsIgnore = /@ts-ignore|@ts-nocheck/.test(code);
+  checks.push({
+    name: 'engineering-ts-ignore',
+    passed: !tsIgnore,
+    message: tsIgnore
+      ? '@ts-ignore/@ts-nocheck suppresses type safety'
+      : 'No TypeScript suppressions',
+    weight: 10
+  });
+
+  const syncIO =
+    /readFileSync|writeFileSync|appendFileSync|mkdirSync|readdirSync/.test(
+      code
+    );
+  checks.push({
+    name: 'engineering-sync-io',
+    passed: !syncIO,
+    message: syncIO
+      ? 'Synchronous I/O blocks the event loop'
+      : 'No synchronous I/O',
+    weight: 10
+  });
+
+  const indexKey = /key\s*=\s*\{?\s*(?:index|i|idx)\s*\}?/.test(code);
+  checks.push({
+    name: 'engineering-index-key',
+    passed: !indexKey,
+    message: indexKey
+      ? 'Array index as React key causes rendering bugs'
+      : 'No index-as-key anti-pattern',
+    weight: 10
+  });
+
+  return checks;
+}
+
 export function scoreGeneratedCode(code: string, opts?: PostGenOptions): PostGenScore {
   const checks: PostGenCheck[] = [
     ...checkAntiPatterns(code),
     ...checkStructure(code),
+    ...checkArchitecture(code),
+    ...checkErrorHandling(code),
+    ...checkScalability(code),
+    ...checkHardcodedValues(code),
+    ...checkEngineering(code),
     ...(opts?.typescript !== false ? checkTypeScript(code) : []),
     ...(opts?.framework ? checkFramework(code, opts.framework) : [])
   ];
