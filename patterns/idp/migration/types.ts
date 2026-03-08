@@ -5,7 +5,8 @@ export type AssessmentCategory =
   | 'architecture'
   | 'security'
   | 'quality'
-  | 'migration-readiness';
+  | 'migration-readiness'
+  | 'ai-governance';
 
 export type MigrationStrategy =
   | 'strangler-fig'

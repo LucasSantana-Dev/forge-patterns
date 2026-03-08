@@ -62,7 +62,7 @@ describe('forge-audit CLI', () => {
     );
     const report = JSON.parse(output);
     expect(report.overallScore).toBeGreaterThanOrEqual(0);
-    expect(report.categories).toHaveLength(5);
+    expect(report.categories).toHaveLength(6);
     expect(report.strategy).toBeTruthy();
     expect(report.readiness).toBeTruthy();
 
