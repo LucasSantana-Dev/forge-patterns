@@ -8,7 +8,7 @@ export type {
   Severity,
   Grade,
   MigrationStrategy,
-  MigrationReadiness,
+  MigrationReadiness
 } from './types.js';
 export { collectDependencyFindings } from './collectors/dependency-assessor.js';
 export { collectArchitectureFindings } from './collectors/architecture-assessor.js';

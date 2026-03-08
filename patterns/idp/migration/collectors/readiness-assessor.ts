@@ -3,28 +3,28 @@ import { join, extname } from 'node:path';
 import type {
   AssessmentFinding,
   AssessmentContext,
-  CategoryScore,
+  CategoryScore
 } from '../types.js';
 
 const LEGACY_STACKS = [
   'jquery', 'backbone', 'angularjs', 'ember',
-  'knockout', 'prototype', 'mootools',
+  'knockout', 'prototype', 'mootools'
 ];
 
 const SOURCE_EXTS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte',
+  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
   'node_modules', 'dist', 'build', '.next',
   '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache',
+  'coverage', '.cache'
 ]);
 
 export function collectReadinessFindings(
   ctx: AssessmentContext,
-  maxFiles = 500,
+  maxFiles = 500
 ): CategoryScore {
   const findings: AssessmentFinding[] = [];
 
@@ -35,7 +35,7 @@ export function collectReadinessFindings(
     findings.push({
       category: 'migration-readiness',
       severity: 'critical',
-      message: 'No test framework — migration unsafe',
+      message: 'No test framework — migration unsafe'
     });
   }
 
@@ -43,7 +43,7 @@ export function collectReadinessFindings(
     findings.push({
       category: 'migration-readiness',
       severity: 'high',
-      message: 'No CI pipeline — no safety net',
+      message: 'No CI pipeline — no safety net'
     });
   }
 
@@ -54,7 +54,7 @@ export function collectReadinessFindings(
     findings.push({
       category: 'migration-readiness',
       severity: 'medium',
-      message: 'No documentation found',
+      message: 'No documentation found'
     });
   }
 
@@ -65,13 +65,13 @@ export function collectReadinessFindings(
 
 function checkLegacyStack(
   ctx: AssessmentContext,
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): void {
   const pkgPath = join(ctx.dir, 'package.json');
   if (!existsSync(pkgPath)) return;
 
   const pkg = JSON.parse(
-    readFileSync(pkgPath, 'utf-8'),
+    readFileSync(pkgPath, 'utf-8')
   ) as Record<string, unknown>;
   const deps = pkg['dependencies'] as Record<string, string> | undefined;
   if (!deps) return;
@@ -83,7 +83,7 @@ function checkLegacyStack(
         category: 'migration-readiness',
         severity: 'high',
         message: `Legacy stack dependency: ${name}`,
-        file: 'package.json',
+        file: 'package.json'
       });
     }
   }
@@ -91,7 +91,7 @@ function checkLegacyStack(
 
 function checkTypeScriptAdoption(
   ctx: AssessmentContext,
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): void {
   if (ctx.language !== 'javascript' && ctx.language !== 'typescript') {
     return;
@@ -103,7 +103,7 @@ function checkTypeScriptAdoption(
       findings.push({
         category: 'migration-readiness',
         severity: 'medium',
-        message: 'JavaScript without TypeScript',
+        message: 'JavaScript without TypeScript'
       });
     }
   }
@@ -112,14 +112,15 @@ function checkTypeScriptAdoption(
 function checkGlobalState(
   dir: string,
   findings: AssessmentFinding[],
-  maxFiles: number,
+  maxFiles: number
 ): void {
   const stack = [dir];
   let count = 0;
   let globalAssignments = 0;
 
   while (stack.length > 0 && count < maxFiles) {
-    const current = stack.pop()!;
+    const current = stack.pop();
+    if (!current) break;
     let entries: string[];
     try {
       entries = readdirSync(current);
@@ -143,7 +144,7 @@ function checkGlobalState(
         try {
           const content = readFileSync(fullPath, 'utf-8');
           const matches = content.match(
-            /(?:window|global|globalThis)\.\w+\s*=/g,
+            /(?:window|global|globalThis)\.\w+\s*=/g
           );
           globalAssignments += matches?.length ?? 0;
         } catch {
@@ -159,13 +160,13 @@ function checkGlobalState(
     findings.push({
       category: 'migration-readiness',
       severity: 'high',
-      message: `Global state pollution: ${globalAssignments} assignments`,
+      message: `Global state pollution: ${globalAssignments} assignments`
     });
   }
 }
 
 function scoreCategory(
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
@@ -185,6 +186,6 @@ function scoreCategory(
     category: 'migration-readiness',
     score,
     grade,
-    findings,
+    findings
   };
 }

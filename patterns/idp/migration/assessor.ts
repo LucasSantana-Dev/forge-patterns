@@ -3,7 +3,7 @@ import type {
   AssessmentReport,
   MigrationStrategy,
   MigrationReadiness,
-  Grade,
+  Grade
 } from './types.js';
 import { collectDependencyFindings } from './collectors/dependency-assessor.js';
 import { collectArchitectureFindings } from './collectors/architecture-assessor.js';
@@ -13,14 +13,14 @@ import { collectReadinessFindings } from './collectors/readiness-assessor.js';
 
 export function assessProject(
   ctx: AssessmentContext,
-  maxFiles = 500,
+  maxFiles = 500
 ): AssessmentReport {
   const categories = [
     collectDependencyFindings(ctx),
     collectArchitectureFindings(ctx, maxFiles),
     collectSecurityFindings(ctx, maxFiles),
     collectQualityFindings(ctx, maxFiles),
-    collectReadinessFindings(ctx, maxFiles),
+    collectReadinessFindings(ctx, maxFiles)
   ];
 
   const allFindings = categories.flatMap(c => c.findings);
@@ -31,7 +31,7 @@ export function assessProject(
 
   const totalScore = categories.reduce(
     (sum, c) => sum + c.score,
-    0,
+    0
   );
   const overallScore = Math.round(totalScore / categories.length);
   const grade = scoreToGrade(overallScore);
@@ -40,11 +40,11 @@ export function assessProject(
 
   let fileCount = 0;
   const archCat = categories.find(
-    c => c.category === 'architecture',
+    c => c.category === 'architecture'
   );
   if (archCat?.findings) {
     const fileFinding = archCat.findings.filter(f =>
-      f.file !== undefined,
+      f.file !== undefined
     );
     fileCount = fileFinding.length;
   }
@@ -57,7 +57,7 @@ export function assessProject(
     categories,
     findings: allFindings,
     fileCount,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   };
 }
 
@@ -71,7 +71,7 @@ function scoreToGrade(score: number): Grade {
 
 function determineReadiness(
   score: number,
-  categories: { category: string; findings: { severity: string }[] }[],
+  categories: { category: string; findings: { severity: string }[] }[]
 ): MigrationReadiness {
   const criticals = categories
     .flatMap(c => c.findings)
@@ -83,7 +83,7 @@ function determineReadiness(
 }
 
 export function detectStrategy(
-  ctx: AssessmentContext,
+  ctx: AssessmentContext
 ): MigrationStrategy {
   const fw = ctx.framework;
   if (

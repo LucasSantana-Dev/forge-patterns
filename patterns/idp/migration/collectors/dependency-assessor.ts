@@ -3,17 +3,17 @@ import { join } from 'node:path';
 import type {
   AssessmentFinding,
   AssessmentContext,
-  CategoryScore,
+  CategoryScore
 } from '../types.js';
 
 const LEGACY_PACKAGES = [
   'jquery', 'moment', 'backbone', 'angular',
   'grunt', 'gulp', 'bower', 'coffeescript',
-  'request', 'underscore',
+  'request', 'underscore'
 ];
 
 export function collectDependencyFindings(
-  ctx: AssessmentContext,
+  ctx: AssessmentContext
 ): CategoryScore {
   const findings: AssessmentFinding[] = [];
   const pkgPath = join(ctx.dir, 'package.json');
@@ -23,7 +23,7 @@ export function collectDependencyFindings(
   }
 
   const pkg = JSON.parse(
-    readFileSync(pkgPath, 'utf-8'),
+    readFileSync(pkgPath, 'utf-8')
   ) as Record<string, unknown>;
   const deps = pkg['dependencies'] as Record<string, string> | undefined;
   const devDeps = pkg['devDependencies'] as Record<string, string> | undefined;
@@ -36,7 +36,7 @@ export function collectDependencyFindings(
         category: 'dependencies',
         severity: 'high',
         message: `Legacy package: ${name}`,
-        file: 'package.json',
+        file: 'package.json'
       });
     }
   }
@@ -46,20 +46,20 @@ export function collectDependencyFindings(
       category: 'dependencies',
       severity: depCount > 100 ? 'high' : 'medium',
       message: `Excessive dependencies: ${depCount}`,
-      file: 'package.json',
+      file: 'package.json'
     });
   }
 
   const lockFiles = [
     'package-lock.json', 'yarn.lock',
-    'pnpm-lock.yaml', 'bun.lockb',
+    'pnpm-lock.yaml', 'bun.lockb'
   ];
   const hasLock = lockFiles.some(f => existsSync(join(ctx.dir, f)));
   if (!hasLock) {
     findings.push({
       category: 'dependencies',
       severity: 'medium',
-      message: 'No lockfile found',
+      message: 'No lockfile found'
     });
   }
 
@@ -69,7 +69,7 @@ export function collectDependencyFindings(
       category: 'dependencies',
       severity: 'low',
       message: 'No engine constraint in package.json',
-      file: 'package.json',
+      file: 'package.json'
     });
   }
 
@@ -78,7 +78,7 @@ export function collectDependencyFindings(
       category: 'dependencies',
       severity: 'medium',
       message: 'No devDependencies — missing dev tooling',
-      file: 'package.json',
+      file: 'package.json'
     });
   }
 
@@ -86,7 +86,7 @@ export function collectDependencyFindings(
 }
 
 function scoreCategory(
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
@@ -97,7 +97,7 @@ function scoreCategory(
     category: 'dependencies',
     score,
     grade: scoreToGrade(score),
-    findings,
+    findings
   };
 }
 
@@ -112,7 +112,7 @@ function severityWeight(s: string): number {
 }
 
 function scoreToGrade(
-  score: number,
+  score: number
 ): 'A' | 'B' | 'C' | 'D' | 'F' {
   if (score >= 90) return 'A';
   if (score >= 75) return 'B';

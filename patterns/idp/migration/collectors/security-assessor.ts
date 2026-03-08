@@ -2,24 +2,24 @@ import {
   readFileSync,
   existsSync,
   readdirSync,
-  statSync,
+  statSync
 } from 'node:fs';
 import { join, extname } from 'node:path';
 import type {
   AssessmentFinding,
   AssessmentContext,
-  CategoryScore,
+  CategoryScore
 } from '../types.js';
 
 const SOURCE_EXTS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte',
+  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
   'node_modules', 'dist', 'build', '.next',
   '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache',
+  'coverage', '.cache'
 ]);
 
 interface SecurityRule {
@@ -32,53 +32,53 @@ const RULES: SecurityRule[] = [
   {
     pattern: /(?:password|secret|apiKey|api_key|token)\s*[:=]\s*['"][^'"]{4,}/i,
     severity: 'critical',
-    message: 'Potential hardcoded secret',
+    message: 'Potential hardcoded secret'
   },
   {
     pattern: /AKIA[0-9A-Z]{16}/,
     severity: 'critical',
-    message: 'AWS access key detected',
+    message: 'AWS access key detected'
   },
   {
     pattern: /-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/,
     severity: 'critical',
-    message: 'Private key detected',
+    message: 'Private key detected'
   },
   {
     pattern: /\beval\s*\(/,
     severity: 'high',
-    message: 'eval() usage — code injection risk',
+    message: 'eval() usage — code injection risk'
   },
   {
     pattern: /dangerouslySetInnerHTML/,
     severity: 'high',
-    message: 'dangerouslySetInnerHTML — XSS risk',
+    message: 'dangerouslySetInnerHTML — XSS risk'
   },
   {
     pattern: /\.innerHTML\s*=/,
     severity: 'high',
-    message: 'innerHTML assignment — XSS risk',
+    message: 'innerHTML assignment — XSS risk'
   },
   {
     pattern: /['"`]\s*(?:SELECT|INSERT|UPDATE|DELETE)\s.*\+\s*(?:\w+|['"`])/i,
     severity: 'high',
-    message: 'SQL string concatenation — injection risk',
+    message: 'SQL string concatenation — injection risk'
   },
   {
     pattern: /child_process.*exec\s*\(/,
     severity: 'high',
-    message: 'exec() with child_process — command injection',
+    message: 'exec() with child_process — command injection'
   },
   {
     pattern: /cors\(\s*\)/,
     severity: 'medium',
-    message: 'Unrestricted CORS — allows all origins',
-  },
+    message: 'Unrestricted CORS — allows all origins'
+  }
 ];
 
 export function collectSecurityFindings(
   ctx: AssessmentContext,
-  maxFiles = 500,
+  maxFiles = 500
 ): CategoryScore {
   const findings: AssessmentFinding[] = [];
 
@@ -90,14 +90,14 @@ export function collectSecurityFindings(
         category: 'security',
         severity: 'high',
         message: '.env not in .gitignore',
-        file: '.gitignore',
+        file: '.gitignore'
       });
     }
   } else if (existsSync(join(ctx.dir, '.env'))) {
     findings.push({
       category: 'security',
       severity: 'critical',
-      message: 'No .gitignore but .env exists',
+      message: 'No .gitignore but .env exists'
     });
   }
 
@@ -105,7 +105,7 @@ export function collectSecurityFindings(
     findings.push({
       category: 'security',
       severity: 'low',
-      message: 'No SECURITY.md policy',
+      message: 'No SECURITY.md policy'
     });
   }
 
@@ -117,13 +117,14 @@ export function collectSecurityFindings(
 function scanSourceFiles(
   dir: string,
   findings: AssessmentFinding[],
-  maxFiles: number,
+  maxFiles: number
 ): void {
   const stack = [dir];
   let count = 0;
 
   while (stack.length > 0 && count < maxFiles) {
-    const current = stack.pop()!;
+    const current = stack.pop();
+    if (!current) break;
     let entries: string[];
     try {
       entries = readdirSync(current);
@@ -155,7 +156,7 @@ function scanSourceFiles(
 function scanFile(
   filePath: string,
   baseDir: string,
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): void {
   let content: string;
   try {
@@ -176,7 +177,7 @@ function scanFile(
           severity: rule.severity,
           message: rule.message,
           file: relPath,
-          line: i + 1,
+          line: i + 1
         });
       }
     }
@@ -184,7 +185,7 @@ function scanFile(
 }
 
 function scoreCategory(
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): CategoryScore {
   let penalty = 0;
   for (const f of findings) {

@@ -68,11 +68,11 @@ function detectContext(dir: string): AssessmentContext {
 
   if (existsSync(pkgPath)) {
     const pkg = JSON.parse(
-      readFileSync(pkgPath, 'utf-8'),
+      readFileSync(pkgPath, 'utf-8')
     ) as Record<string, unknown>;
     const deps = {
       ...(pkg['dependencies'] as Record<string, string> | undefined),
-      ...(pkg['devDependencies'] as Record<string, string> | undefined),
+      ...(pkg['devDependencies'] as Record<string, string> | undefined)
     };
 
     if (existsSync(join(dir, 'tsconfig.json'))) {
@@ -103,7 +103,7 @@ function detectContext(dir: string): AssessmentContext {
 
     const lockFiles = [
       'package-lock.json', 'yarn.lock',
-      'pnpm-lock.yaml', 'bun.lockb',
+      'pnpm-lock.yaml', 'bun.lockb'
     ];
     if (lockFiles.some(f => existsSync(join(dir, f)))) {
       ctx.packageManager = 'npm';
@@ -155,12 +155,12 @@ function main(): void {
     const r = '\x1b[0m';
     console.log(
       `\n${gradeColor(report.grade)}` +
-      `  Migration Assessment: ` +
-      `${report.overallScore}/100 (${report.grade})${r}`,
+      '  Migration Assessment: ' +
+      `${report.overallScore}/100 (${report.grade})${r}`
     );
     console.log(`  Readiness: ${report.readiness}`);
     console.log(
-      `  Strategy: ${report.strategy.replace(/-/g, ' ')}`,
+      `  Strategy: ${report.strategy.replace(/-/g, ' ')}`
     );
     console.log('─'.repeat(50));
 
@@ -170,7 +170,7 @@ function main(): void {
       console.log(
         `  ${gc}${cat.category}: ` +
         `${cat.score}/100 (${cat.grade})${r}` +
-        (fc > 0 ? ` — ${fc} findings` : ''),
+        (fc > 0 ? ` — ${fc} findings` : '')
       );
     }
 
@@ -183,7 +183,7 @@ function main(): void {
           ? ` (${f.file}${f.line ? `:${f.line}` : ''})`
           : '';
         console.log(
-          `  ${sc}[${f.severity}]${r} ${f.message}${loc}`,
+          `  ${sc}[${f.severity}]${r} ${f.message}${loc}`
         );
       }
       const remaining = report.findings.length - top.length;
@@ -197,7 +197,7 @@ function main(): void {
 
   if (threshold > 0 && report.overallScore < threshold) {
     console.error(
-      `Score ${report.overallScore} below threshold ${threshold}`,
+      `Score ${report.overallScore} below threshold ${threshold}`
     );
     process.exit(1);
   }

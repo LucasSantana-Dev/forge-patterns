@@ -3,23 +3,23 @@ import { join, extname } from 'node:path';
 import type {
   AssessmentFinding,
   AssessmentContext,
-  CategoryScore,
+  CategoryScore
 } from '../types.js';
 
 const SOURCE_EXTS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte',
+  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
   'node_modules', 'dist', 'build', '.next',
   '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache',
+  'coverage', '.cache'
 ]);
 
 export function collectQualityFindings(
   ctx: AssessmentContext,
-  maxFiles = 500,
+  maxFiles = 500
 ): CategoryScore {
   const findings: AssessmentFinding[] = [];
 
@@ -27,7 +27,7 @@ export function collectQualityFindings(
     findings.push({
       category: 'quality',
       severity: 'high',
-      message: 'No test framework detected',
+      message: 'No test framework detected'
     });
   }
 
@@ -35,7 +35,7 @@ export function collectQualityFindings(
     findings.push({
       category: 'quality',
       severity: 'medium',
-      message: 'No linter configured',
+      message: 'No linter configured'
     });
   }
 
@@ -43,7 +43,7 @@ export function collectQualityFindings(
     findings.push({
       category: 'quality',
       severity: 'medium',
-      message: 'No type checking configured',
+      message: 'No type checking configured'
     });
   }
 
@@ -51,7 +51,7 @@ export function collectQualityFindings(
     findings.push({
       category: 'quality',
       severity: 'low',
-      message: 'No code formatter configured',
+      message: 'No code formatter configured'
     });
   }
 
@@ -59,7 +59,7 @@ export function collectQualityFindings(
     findings.push({
       category: 'quality',
       severity: 'high',
-      message: 'No CI/CD pipeline detected',
+      message: 'No CI/CD pipeline detected'
     });
   }
 
@@ -71,7 +71,7 @@ export function collectQualityFindings(
     findings.push({
       category: 'quality',
       severity: 'medium',
-      message: `Low test ratio: ${Math.round(testRatio * 100)}%`,
+      message: `Low test ratio: ${Math.round(testRatio * 100)}%`
     });
   }
 
@@ -80,7 +80,7 @@ export function collectQualityFindings(
 
 function scanCodeQuality(
   dir: string,
-  maxFiles: number,
+  maxFiles: number
 ): AssessmentFinding[] {
   const findings: AssessmentFinding[] = [];
   const stack = [dir];
@@ -89,7 +89,8 @@ function scanCodeQuality(
   let todoCount = 0;
 
   while (stack.length > 0 && count < maxFiles) {
-    const current = stack.pop()!;
+    const current = stack.pop();
+    if (!current) break;
     let entries: string[];
     try {
       entries = readdirSync(current);
@@ -123,7 +124,7 @@ function scanCodeQuality(
     findings.push({
       category: 'quality',
       severity: emptyCatches > 5 ? 'high' : 'medium',
-      message: `${emptyCatches} empty catch blocks`,
+      message: `${emptyCatches} empty catch blocks`
     });
   }
 
@@ -131,7 +132,7 @@ function scanCodeQuality(
     findings.push({
       category: 'quality',
       severity: 'low',
-      message: `${todoCount} TODO/FIXME comments`,
+      message: `${todoCount} TODO/FIXME comments`
     });
   }
 
@@ -140,7 +141,7 @@ function scanCodeQuality(
 
 function scanFileQuality(
   filePath: string,
-  _baseDir: string,
+  _baseDir: string
 ): { emptyCatches: number; todos: number } {
   let content: string;
   try {
@@ -164,7 +165,8 @@ function computeTestRatio(dir: string): number | null {
   const stack = [dir];
 
   while (stack.length > 0) {
-    const current = stack.pop()!;
+    const current = stack.pop();
+    if (!current) break;
     let entries: string[];
     try {
       entries = readdirSync(current);
@@ -203,7 +205,7 @@ function computeTestRatio(dir: string): number | null {
 }
 
 function scoreCategory(
-  findings: AssessmentFinding[],
+  findings: AssessmentFinding[]
 ): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
