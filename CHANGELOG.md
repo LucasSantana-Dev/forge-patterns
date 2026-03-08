@@ -1,3 +1,23 @@
+## [1.10.0] - 2026-03-08
+
+### Added
+- **Migration assessment module** (`patterns/idp/migration/`) — legacy codebase health assessment
+  - 5 specialized collectors: dependencies, architecture, security, quality, migration readiness
+  - Health score (0-100) with A-F grading per category and overall
+  - Migration readiness classification: ready / needs-work / high-risk
+  - Auto-detected migration strategy: strangler-fig, branch-by-abstraction, parallel-run
+  - Legacy package detection (jQuery, Moment, Backbone, AngularJS, etc.)
+  - God file detection (>500/1000 lines), function sprawl (>20), high coupling (>15 imports)
+  - Security scanning: hardcoded secrets, AWS keys, eval/innerHTML/SQL injection, CORS
+  - Code quality: empty catch blocks, TODO accumulation, test coverage ratio
+  - Global state pollution detection (window/global/globalThis assignments)
+- **`forge-audit` CLI** — new binary for running migration assessments
+  - `forge-audit --dir <path>` — assess any project directory
+  - `forge-audit --json` — machine-readable JSON output
+  - `forge-audit --threshold <n>` — exit 1 if score below threshold
+  - Colored terminal output with severity indicators
+- 21 new migration assessment tests (450 total across 22 suites)
+
 ## [1.9.0] - 2026-03-08
 
 ### Added
