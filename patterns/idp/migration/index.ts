@@ -15,3 +15,4 @@ export { collectArchitectureFindings } from './collectors/architecture-assessor.
 export { collectSecurityFindings } from './collectors/security-assessor.js';
 export { collectQualityFindings } from './collectors/quality-assessor.js';
 export { collectReadinessFindings } from './collectors/readiness-assessor.js';
+export { collectGovernanceFindings } from './collectors/ai-governance-assessor.js';

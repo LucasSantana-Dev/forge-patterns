@@ -9,6 +9,7 @@ import {
   collectSecurityFindings,
   collectQualityFindings,
   collectReadinessFindings,
+  collectGovernanceFindings,
   type AssessmentContext,
 } from '../migration/index.js';
 
@@ -45,7 +46,7 @@ afterEach(() => {
 });
 
 describe('assessProject', () => {
-  it('returns a complete report with 5 categories', () => {
+  it('returns a complete report with 6 categories', () => {
     const dir = makeTmpDir();
     writeFile(dir, 'package.json', JSON.stringify({
       dependencies: { express: '^4.0.0' },
@@ -56,7 +57,7 @@ describe('assessProject', () => {
     const ctx = makeCtx(dir);
     const report = assessProject(ctx);
 
-    expect(report.categories).toHaveLength(5);
+    expect(report.categories).toHaveLength(6);
     expect(report.overallScore).toBeGreaterThanOrEqual(0);
     expect(report.overallScore).toBeLessThanOrEqual(100);
     expect(['A', 'B', 'C', 'D', 'F']).toContain(report.grade);
@@ -265,6 +266,111 @@ describe('collectReadinessFindings', () => {
     const ctx = makeCtx(dir);
     const result = collectReadinessFindings(ctx);
     expect(result.score).toBeGreaterThanOrEqual(80);
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+});
+
+describe('collectGovernanceFindings', () => {
+  it('flags missing AI coding rules', () => {
+    const dir = makeTmpDir();
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const finding = result.findings.find(f =>
+      f.message.includes('No AI coding rules'),
+    );
+    expect(finding).toBeTruthy();
+    expect(finding!.severity).toBe('critical');
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('passes when CLAUDE.md exists with content', () => {
+    const dir = makeTmpDir();
+    writeFile(dir, 'CLAUDE.md', '# Project\n' + 'x'.repeat(300));
+    writeFile(dir, '.gitignore', '.env\nnode_modules');
+    writeFile(dir, 'SECURITY.md', '# Security Policy');
+
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const ruleFinding = result.findings.find(f =>
+      f.message.includes('No AI coding rules'),
+    );
+    expect(ruleFinding).toBeUndefined();
+    expect(result.score).toBeGreaterThanOrEqual(70);
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('flags minimal CLAUDE.md', () => {
+    const dir = makeTmpDir();
+    writeFile(dir, 'CLAUDE.md', '# Short');
+    writeFile(dir, '.gitignore', '.env');
+
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const finding = result.findings.find(f =>
+      f.message.includes('minimal'),
+    );
+    expect(finding).toBeTruthy();
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('flags .env not in .gitignore', () => {
+    const dir = makeTmpDir();
+    writeFile(dir, 'CLAUDE.md', '# Project\n' + 'x'.repeat(300));
+    writeFile(dir, '.gitignore', 'node_modules');
+
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const finding = result.findings.find(f =>
+      f.message.includes('.env not in .gitignore'),
+    );
+    expect(finding).toBeTruthy();
+    expect(finding!.severity).toBe('high');
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('flags missing SECURITY.md', () => {
+    const dir = makeTmpDir();
+    writeFile(dir, 'CLAUDE.md', '# Project\n' + 'x'.repeat(300));
+    writeFile(dir, '.gitignore', '.env');
+
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const finding = result.findings.find(f =>
+      f.message.includes('SECURITY.md'),
+    );
+    expect(finding).toBeTruthy();
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('flags secrets in .mcp.json', () => {
+    const dir = makeTmpDir();
+    writeFile(dir, 'CLAUDE.md', '# Project\n' + 'x'.repeat(300));
+    writeFile(dir, '.gitignore', '.env');
+    writeFile(dir, '.mcp.json', '{"env": {"API_KEY": "sk-123"}}');
+
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const finding = result.findings.find(f =>
+      f.message.includes('hardcoded secrets'),
+    );
+    expect(finding).toBeTruthy();
+    expect(finding!.severity).toBe('critical');
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('flags missing secret scanning in CI', () => {
+    const dir = makeTmpDir();
+    writeFile(dir, 'CLAUDE.md', '# Project\n' + 'x'.repeat(300));
+    writeFile(dir, '.gitignore', '.env');
+    writeFile(dir, 'SECURITY.md', '# Security');
+    writeFile(dir, '.github/workflows/ci.yml', 'name: CI\non: push');
+
+    const result = collectGovernanceFindings(makeCtx(dir));
+    const finding = result.findings.find(f =>
+      f.message.includes('secret scanning'),
+    );
+    expect(finding).toBeTruthy();
 
     rmSync(dir, { recursive: true, force: true });
   });

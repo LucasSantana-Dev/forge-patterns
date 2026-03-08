@@ -10,6 +10,7 @@ import { collectArchitectureFindings } from './collectors/architecture-assessor.
 import { collectSecurityFindings } from './collectors/security-assessor.js';
 import { collectQualityFindings } from './collectors/quality-assessor.js';
 import { collectReadinessFindings } from './collectors/readiness-assessor.js';
+import { collectGovernanceFindings } from './collectors/ai-governance-assessor.js';
 
 export function assessProject(ctx: AssessmentContext, maxFiles = 500): AssessmentReport {
   const categories = [
@@ -17,7 +18,8 @@ export function assessProject(ctx: AssessmentContext, maxFiles = 500): Assessmen
     collectArchitectureFindings(ctx, maxFiles),
     collectSecurityFindings(ctx, maxFiles),
     collectQualityFindings(ctx, maxFiles),
-    collectReadinessFindings(ctx, maxFiles)
+    collectReadinessFindings(ctx, maxFiles),
+    collectGovernanceFindings(ctx)
   ];
 
   const allFindings = categories.flatMap(c => c.findings);
