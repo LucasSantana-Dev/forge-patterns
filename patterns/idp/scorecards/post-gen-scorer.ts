@@ -161,9 +161,7 @@ function checkArchitecture(code: string): PostGenCheck[] {
   checks.push({
     name: 'architecture-file-size',
     passed: !tooLong,
-    message: tooLong
-      ? `File has ${lines.length} lines (max 300)`
-      : 'File size within limits',
+    message: tooLong ? `File has ${lines.length} lines (max 300)` : 'File size within limits',
     weight: 15
   });
 
@@ -173,9 +171,7 @@ function checkArchitecture(code: string): PostGenCheck[] {
   checks.push({
     name: 'architecture-function-count',
     passed: fnCount <= 10,
-    message: fnCount > 10
-      ? `${fnCount} functions in one file (max 10)`
-      : `${fnCount} functions`,
+    message: fnCount > 10 ? `${fnCount} functions in one file (max 10)` : `${fnCount} functions`,
     weight: 10
   });
 
@@ -187,9 +183,7 @@ function checkArchitecture(code: string): PostGenCheck[] {
     checks.push({
       name: 'architecture-prop-count',
       passed: !tooMany,
-      message: tooMany
-        ? `${propCount} props (max 10, consider splitting)`
-        : `${propCount} props`,
+      message: tooMany ? `${propCount} props (max 10, consider splitting)` : `${propCount} props`,
       weight: 10
     });
   }
@@ -204,14 +198,13 @@ function checkErrorHandling(code: string): PostGenCheck[] {
   checks.push({
     name: 'error-handling-empty-catch',
     passed: !emptyCatch,
-    message: emptyCatch
-      ? 'Empty catch block swallows errors'
-      : 'No empty catch blocks',
+    message: emptyCatch ? 'Empty catch block swallows errors' : 'No empty catch blocks',
     weight: 15
   });
 
-  const consoleOnlyCatch =
-    /catch\s*\([^)]*\)\s*\{\s*console\.(log|error|warn)\([^)]*\);\s*\}/.test(code);
+  const consoleOnlyCatch = /catch\s*\([^)]*\)\s*\{\s*console\.(log|error|warn)\([^)]*\);\s*\}/.test(
+    code
+  );
   checks.push({
     name: 'error-handling-console-catch',
     passed: !consoleOnlyCatch,
@@ -221,8 +214,7 @@ function checkErrorHandling(code: string): PostGenCheck[] {
     weight: 10
   });
 
-  const unhandledPromise =
-    /\.then\s*\(/.test(code) && !/\.catch\s*\(/.test(code);
+  const unhandledPromise = /\.then\s*\(/.test(code) && !/\.catch\s*\(/.test(code);
   checks.push({
     name: 'error-handling-unhandled-promise',
     passed: !unhandledPromise,
@@ -238,21 +230,17 @@ function checkErrorHandling(code: string): PostGenCheck[] {
 function checkScalability(code: string): PostGenCheck[] {
   const checks: PostGenCheck[] = [];
 
-  const n1Pattern =
-    /for\s*\(.*\)\s*\{[^}]*(fetch|query|select|findOne|findMany)\s*\(/;
+  const n1Pattern = /for\s*\(.*\)\s*\{[^}]*(fetch|query|select|findOne|findMany)\s*\(/;
   const hasN1 = n1Pattern.test(code);
   checks.push({
     name: 'scalability-n-plus-1',
     passed: !hasN1,
-    message: hasN1
-      ? 'Possible N+1: data fetching inside loop'
-      : 'No N+1 query patterns detected',
+    message: hasN1 ? 'Possible N+1: data fetching inside loop' : 'No N+1 query patterns detected',
     weight: 15
   });
 
   const hasList = /\.map\s*\(/.test(code);
-  const hasPagination =
-    /page|limit|offset|cursor|hasMore|pageSize/i.test(code);
+  const hasPagination = /page|limit|offset|cursor|hasMore|pageSize/i.test(code);
   const missingPagination = hasList && !hasPagination;
   checks.push({
     name: 'scalability-pagination',
@@ -269,20 +257,16 @@ function checkScalability(code: string): PostGenCheck[] {
 function checkHardcodedValues(code: string): PostGenCheck[] {
   const checks: PostGenCheck[] = [];
 
-  const urlPattern =
-    /["'`]https?:\/\/(?!localhost|127\.0\.0\.1|example\.com)[^"'`]+["'`]/;
+  const urlPattern = /["'`]https?:\/\/(?!localhost|127\.0\.0\.1|example\.com)[^"'`]+["'`]/;
   const hasHardcodedUrl = urlPattern.test(code);
   checks.push({
     name: 'hardcoded-urls',
     passed: !hasHardcodedUrl,
-    message: hasHardcodedUrl
-      ? 'Hardcoded URL — use environment variables'
-      : 'No hardcoded URLs',
+    message: hasHardcodedUrl ? 'Hardcoded URL — use environment variables' : 'No hardcoded URLs',
     weight: 10
   });
 
-  const secretPattern =
-    /(?:password|secret|api_key|apiKey|token)\s*[:=]\s*["'`][^"'`]+["'`]/i;
+  const secretPattern = /(?:password|secret|api_key|apiKey|token)\s*[:=]\s*["'`][^"'`]+["'`]/i;
   const hasSecrets = secretPattern.test(code);
   checks.push({
     name: 'hardcoded-secrets',
@@ -309,16 +293,11 @@ function checkEngineering(code: string): PostGenCheck[] {
     weight: 10
   });
 
-  const syncIO =
-    /readFileSync|writeFileSync|appendFileSync|mkdirSync|readdirSync/.test(
-      code
-    );
+  const syncIO = /readFileSync|writeFileSync|appendFileSync|mkdirSync|readdirSync/.test(code);
   checks.push({
     name: 'engineering-sync-io',
     passed: !syncIO,
-    message: syncIO
-      ? 'Synchronous I/O blocks the event loop'
-      : 'No synchronous I/O',
+    message: syncIO ? 'Synchronous I/O blocks the event loop' : 'No synchronous I/O',
     weight: 10
   });
 
