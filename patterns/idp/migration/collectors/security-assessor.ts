@@ -1,25 +1,33 @@
-import {
-  readFileSync,
-  existsSync,
-  readdirSync,
-  statSync
-} from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
-import type {
-  AssessmentFinding,
-  AssessmentContext,
-  CategoryScore
-} from '../types.js';
+import type { AssessmentFinding, AssessmentContext, CategoryScore } from '../types.js';
 
 const SOURCE_EXTS = new Set([
-  '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
+  '.ts',
+  '.tsx',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cjs',
+  '.py',
+  '.go',
+  '.rs',
+  '.java',
+  '.vue',
+  '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
-  'node_modules', 'dist', 'build', '.next',
-  '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache'
+  'node_modules',
+  'dist',
+  'build',
+  '.next',
+  '__pycache__',
+  '.git',
+  'target',
+  'vendor',
+  'coverage',
+  '.cache'
 ]);
 
 interface SecurityRule {
@@ -76,10 +84,7 @@ const RULES: SecurityRule[] = [
   }
 ];
 
-export function collectSecurityFindings(
-  ctx: AssessmentContext,
-  maxFiles = 500
-): CategoryScore {
+export function collectSecurityFindings(ctx: AssessmentContext, maxFiles = 500): CategoryScore {
   const findings: AssessmentFinding[] = [];
 
   const gitignorePath = join(ctx.dir, '.gitignore');
@@ -114,11 +119,7 @@ export function collectSecurityFindings(
   return scoreCategory(findings);
 }
 
-function scanSourceFiles(
-  dir: string,
-  findings: AssessmentFinding[],
-  maxFiles: number
-): void {
+function scanSourceFiles(dir: string, findings: AssessmentFinding[], maxFiles: number): void {
   const stack = [dir];
   let count = 0;
 
@@ -153,11 +154,7 @@ function scanSourceFiles(
   }
 }
 
-function scanFile(
-  filePath: string,
-  baseDir: string,
-  findings: AssessmentFinding[]
-): void {
+function scanFile(filePath: string, baseDir: string, findings: AssessmentFinding[]): void {
   let content: string;
   try {
     content = readFileSync(filePath, 'utf-8');
@@ -184,22 +181,25 @@ function scanFile(
   }
 }
 
-function scoreCategory(
-  findings: AssessmentFinding[]
-): CategoryScore {
+function scoreCategory(findings: AssessmentFinding[]): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
     switch (f.severity) {
-      case 'critical': penalty += 25; break;
-      case 'high': penalty += 15; break;
-      case 'medium': penalty += 8; break;
-      case 'low': penalty += 3; break;
+      case 'critical':
+        penalty += 25;
+        break;
+      case 'high':
+        penalty += 15;
+        break;
+      case 'medium':
+        penalty += 8;
+        break;
+      case 'low':
+        penalty += 3;
+        break;
     }
   }
   const score = Math.max(0, 100 - penalty);
-  const grade = score >= 90 ? 'A'
-    : score >= 75 ? 'B'
-    : score >= 60 ? 'C'
-    : score >= 40 ? 'D' : 'F';
+  const grade = score >= 90 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : score >= 40 ? 'D' : 'F';
   return { category: 'security', score, grade, findings };
 }

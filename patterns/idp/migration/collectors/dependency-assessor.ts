@@ -1,20 +1,21 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type {
-  AssessmentFinding,
-  AssessmentContext,
-  CategoryScore
-} from '../types.js';
+import type { AssessmentFinding, AssessmentContext, CategoryScore } from '../types.js';
 
 const LEGACY_PACKAGES = [
-  'jquery', 'moment', 'backbone', 'angular',
-  'grunt', 'gulp', 'bower', 'coffeescript',
-  'request', 'underscore'
+  'jquery',
+  'moment',
+  'backbone',
+  'angular',
+  'grunt',
+  'gulp',
+  'bower',
+  'coffeescript',
+  'request',
+  'underscore'
 ];
 
-export function collectDependencyFindings(
-  ctx: AssessmentContext
-): CategoryScore {
+export function collectDependencyFindings(ctx: AssessmentContext): CategoryScore {
   const findings: AssessmentFinding[] = [];
   const pkgPath = join(ctx.dir, 'package.json');
 
@@ -22,9 +23,7 @@ export function collectDependencyFindings(
     return scoreCategory(findings);
   }
 
-  const pkg = JSON.parse(
-    readFileSync(pkgPath, 'utf-8')
-  ) as Record<string, unknown>;
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>;
   const deps = pkg['dependencies'] as Record<string, string> | undefined;
   const devDeps = pkg['devDependencies'] as Record<string, string> | undefined;
   const allDeps = { ...deps, ...devDeps };
@@ -50,10 +49,7 @@ export function collectDependencyFindings(
     });
   }
 
-  const lockFiles = [
-    'package-lock.json', 'yarn.lock',
-    'pnpm-lock.yaml', 'bun.lockb'
-  ];
+  const lockFiles = ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb'];
   const hasLock = lockFiles.some(f => existsSync(join(ctx.dir, f)));
   if (!hasLock) {
     findings.push({
@@ -85,9 +81,7 @@ export function collectDependencyFindings(
   return scoreCategory(findings);
 }
 
-function scoreCategory(
-  findings: AssessmentFinding[]
-): CategoryScore {
+function scoreCategory(findings: AssessmentFinding[]): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
     penalty += severityWeight(f.severity);
@@ -103,17 +97,20 @@ function scoreCategory(
 
 function severityWeight(s: string): number {
   switch (s) {
-    case 'critical': return 25;
-    case 'high': return 15;
-    case 'medium': return 8;
-    case 'low': return 3;
-    default: return 0;
+    case 'critical':
+      return 25;
+    case 'high':
+      return 15;
+    case 'medium':
+      return 8;
+    case 'low':
+      return 3;
+    default:
+      return 0;
   }
 }
 
-function scoreToGrade(
-  score: number
-): 'A' | 'B' | 'C' | 'D' | 'F' {
+function scoreToGrade(score: number): 'A' | 'B' | 'C' | 'D' | 'F' {
   if (score >= 90) return 'A';
   if (score >= 75) return 'B';
   if (score >= 60) return 'C';

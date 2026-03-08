@@ -23,20 +23,29 @@ function parseArgs(args: string[]) {
 
 function gradeColor(grade: Grade): string {
   switch (grade) {
-    case 'A': return '\x1b[32m';
-    case 'B': return '\x1b[36m';
-    case 'C': return '\x1b[33m';
-    case 'D': return '\x1b[33m';
-    case 'F': return '\x1b[31m';
+    case 'A':
+      return '\x1b[32m';
+    case 'B':
+      return '\x1b[36m';
+    case 'C':
+      return '\x1b[33m';
+    case 'D':
+      return '\x1b[33m';
+    case 'F':
+      return '\x1b[31m';
   }
 }
 
 function sevColor(s: string): string {
   switch (s) {
-    case 'critical': return '\x1b[31m';
-    case 'high': return '\x1b[33m';
-    case 'medium': return '\x1b[36m';
-    default: return '\x1b[90m';
+    case 'critical':
+      return '\x1b[31m';
+    case 'high':
+      return '\x1b[33m';
+    case 'medium':
+      return '\x1b[36m';
+    default:
+      return '\x1b[90m';
   }
 }
 
@@ -67,9 +76,7 @@ function detectContext(dir: string): AssessmentContext {
   const pkgPath = join(dir, 'package.json');
 
   if (existsSync(pkgPath)) {
-    const pkg = JSON.parse(
-      readFileSync(pkgPath, 'utf-8')
-    ) as Record<string, unknown>;
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>;
     const deps = {
       ...(pkg['dependencies'] as Record<string, string> | undefined),
       ...(pkg['devDependencies'] as Record<string, string> | undefined)
@@ -90,29 +97,19 @@ function detectContext(dir: string): AssessmentContext {
     else if (deps['svelte']) ctx.framework = 'svelte';
 
     if (deps['jest'] || deps['vitest'] || deps['mocha']) {
-      ctx.testFramework = deps['jest'] ? 'jest'
-        : deps['vitest'] ? 'vitest' : 'mocha';
+      ctx.testFramework = deps['jest'] ? 'jest' : deps['vitest'] ? 'vitest' : 'mocha';
     }
 
-    ctx.hasLinting = !!(
-      deps['eslint'] || deps['biome'] || deps['oxlint']
-    );
-    ctx.hasFormatting = !!(
-      deps['prettier'] || deps['biome']
-    );
+    ctx.hasLinting = !!(deps['eslint'] || deps['biome'] || deps['oxlint']);
+    ctx.hasFormatting = !!(deps['prettier'] || deps['biome']);
 
-    const lockFiles = [
-      'package-lock.json', 'yarn.lock',
-      'pnpm-lock.yaml', 'bun.lockb'
-    ];
+    const lockFiles = ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb'];
     if (lockFiles.some(f => existsSync(join(dir, f)))) {
       ctx.packageManager = 'npm';
     }
-  } else if (existsSync(join(dir, 'requirements.txt')) ||
-    existsSync(join(dir, 'pyproject.toml'))) {
+  } else if (existsSync(join(dir, 'requirements.txt')) || existsSync(join(dir, 'pyproject.toml'))) {
     ctx.language = 'python';
-    if (existsSync(join(dir, 'mypy.ini')) ||
-      existsSync(join(dir, 'pyrightconfig.json'))) {
+    if (existsSync(join(dir, 'mypy.ini')) || existsSync(join(dir, 'pyrightconfig.json'))) {
       ctx.hasTypeChecking = true;
     }
   } else if (existsSync(join(dir, 'go.mod'))) {
@@ -123,8 +120,8 @@ function detectContext(dir: string): AssessmentContext {
     ctx.hasTypeChecking = true;
   }
 
-  ctx.hasCi = existsSync(join(dir, '.github', 'workflows')) ||
-    existsSync(join(dir, '.gitlab-ci.yml'));
+  ctx.hasCi =
+    existsSync(join(dir, '.github', 'workflows')) || existsSync(join(dir, '.gitlab-ci.yml'));
 
   return ctx;
 }
@@ -155,13 +152,11 @@ function main(): void {
     const r = '\x1b[0m';
     console.log(
       `\n${gradeColor(report.grade)}` +
-      '  Migration Assessment: ' +
-      `${report.overallScore}/100 (${report.grade})${r}`
+        '  Migration Assessment: ' +
+        `${report.overallScore}/100 (${report.grade})${r}`
     );
     console.log(`  Readiness: ${report.readiness}`);
-    console.log(
-      `  Strategy: ${report.strategy.replace(/-/g, ' ')}`
-    );
+    console.log(`  Strategy: ${report.strategy.replace(/-/g, ' ')}`);
     console.log('─'.repeat(50));
 
     for (const cat of report.categories) {
@@ -169,8 +164,8 @@ function main(): void {
       const fc = cat.findings.length;
       console.log(
         `  ${gc}${cat.category}: ` +
-        `${cat.score}/100 (${cat.grade})${r}` +
-        (fc > 0 ? ` — ${fc} findings` : '')
+          `${cat.score}/100 (${cat.grade})${r}` +
+          (fc > 0 ? ` — ${fc} findings` : '')
       );
     }
 
@@ -179,12 +174,8 @@ function main(): void {
       const top = report.findings.slice(0, 10);
       for (const f of top) {
         const sc = sevColor(f.severity);
-        const loc = f.file
-          ? ` (${f.file}${f.line ? `:${f.line}` : ''})`
-          : '';
-        console.log(
-          `  ${sc}[${f.severity}]${r} ${f.message}${loc}`
-        );
+        const loc = f.file ? ` (${f.file}${f.line ? `:${f.line}` : ''})` : '';
+        console.log(`  ${sc}[${f.severity}]${r} ${f.message}${loc}`);
       }
       const remaining = report.findings.length - top.length;
       if (remaining > 0) {
@@ -196,9 +187,7 @@ function main(): void {
   }
 
   if (threshold > 0 && report.overallScore < threshold) {
-    console.error(
-      `Score ${report.overallScore} below threshold ${threshold}`
-    );
+    console.error(`Score ${report.overallScore} below threshold ${threshold}`);
     process.exit(1);
   }
 }

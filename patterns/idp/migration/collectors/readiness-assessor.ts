@@ -1,31 +1,46 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
-import type {
-  AssessmentFinding,
-  AssessmentContext,
-  CategoryScore
-} from '../types.js';
+import type { AssessmentFinding, AssessmentContext, CategoryScore } from '../types.js';
 
 const LEGACY_STACKS = [
-  'jquery', 'backbone', 'angularjs', 'ember',
-  'knockout', 'prototype', 'mootools'
+  'jquery',
+  'backbone',
+  'angularjs',
+  'ember',
+  'knockout',
+  'prototype',
+  'mootools'
 ];
 
 const SOURCE_EXTS = new Set([
-  '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
+  '.ts',
+  '.tsx',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cjs',
+  '.py',
+  '.go',
+  '.rs',
+  '.java',
+  '.vue',
+  '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
-  'node_modules', 'dist', 'build', '.next',
-  '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache'
+  'node_modules',
+  'dist',
+  'build',
+  '.next',
+  '__pycache__',
+  '.git',
+  'target',
+  'vendor',
+  'coverage',
+  '.cache'
 ]);
 
-export function collectReadinessFindings(
-  ctx: AssessmentContext,
-  maxFiles = 500
-): CategoryScore {
+export function collectReadinessFindings(ctx: AssessmentContext, maxFiles = 500): CategoryScore {
   const findings: AssessmentFinding[] = [];
 
   checkLegacyStack(ctx, findings);
@@ -47,10 +62,7 @@ export function collectReadinessFindings(
     });
   }
 
-  if (
-    !existsSync(join(ctx.dir, 'README.md')) &&
-    !existsSync(join(ctx.dir, 'docs'))
-  ) {
+  if (!existsSync(join(ctx.dir, 'README.md')) && !existsSync(join(ctx.dir, 'docs'))) {
     findings.push({
       category: 'migration-readiness',
       severity: 'medium',
@@ -63,16 +75,11 @@ export function collectReadinessFindings(
   return scoreCategory(findings);
 }
 
-function checkLegacyStack(
-  ctx: AssessmentContext,
-  findings: AssessmentFinding[]
-): void {
+function checkLegacyStack(ctx: AssessmentContext, findings: AssessmentFinding[]): void {
   const pkgPath = join(ctx.dir, 'package.json');
   if (!existsSync(pkgPath)) return;
 
-  const pkg = JSON.parse(
-    readFileSync(pkgPath, 'utf-8')
-  ) as Record<string, unknown>;
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>;
   const deps = pkg['dependencies'] as Record<string, string> | undefined;
   if (!deps) return;
 
@@ -89,10 +96,7 @@ function checkLegacyStack(
   }
 }
 
-function checkTypeScriptAdoption(
-  ctx: AssessmentContext,
-  findings: AssessmentFinding[]
-): void {
+function checkTypeScriptAdoption(ctx: AssessmentContext, findings: AssessmentFinding[]): void {
   if (ctx.language !== 'javascript' && ctx.language !== 'typescript') {
     return;
   }
@@ -109,11 +113,7 @@ function checkTypeScriptAdoption(
   }
 }
 
-function checkGlobalState(
-  dir: string,
-  findings: AssessmentFinding[],
-  maxFiles: number
-): void {
+function checkGlobalState(dir: string, findings: AssessmentFinding[], maxFiles: number): void {
   const stack = [dir];
   let count = 0;
   let globalAssignments = 0;
@@ -143,9 +143,7 @@ function checkGlobalState(
       } else if (SOURCE_EXTS.has(extname(entry))) {
         try {
           const content = readFileSync(fullPath, 'utf-8');
-          const matches = content.match(
-            /(?:window|global|globalThis)\.\w+\s*=/g
-          );
+          const matches = content.match(/(?:window|global|globalThis)\.\w+\s*=/g);
           globalAssignments += matches?.length ?? 0;
         } catch {
           // skip unreadable files
@@ -165,23 +163,26 @@ function checkGlobalState(
   }
 }
 
-function scoreCategory(
-  findings: AssessmentFinding[]
-): CategoryScore {
+function scoreCategory(findings: AssessmentFinding[]): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
     switch (f.severity) {
-      case 'critical': penalty += 25; break;
-      case 'high': penalty += 15; break;
-      case 'medium': penalty += 8; break;
-      case 'low': penalty += 3; break;
+      case 'critical':
+        penalty += 25;
+        break;
+      case 'high':
+        penalty += 15;
+        break;
+      case 'medium':
+        penalty += 8;
+        break;
+      case 'low':
+        penalty += 3;
+        break;
     }
   }
   const score = Math.max(0, 100 - penalty);
-  const grade = score >= 90 ? 'A'
-    : score >= 75 ? 'B'
-    : score >= 60 ? 'C'
-    : score >= 40 ? 'D' : 'F';
+  const grade = score >= 90 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : score >= 40 ? 'D' : 'F';
   return {
     category: 'migration-readiness',
     score,

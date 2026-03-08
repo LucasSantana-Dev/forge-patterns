@@ -11,10 +11,7 @@ import { collectSecurityFindings } from './collectors/security-assessor.js';
 import { collectQualityFindings } from './collectors/quality-assessor.js';
 import { collectReadinessFindings } from './collectors/readiness-assessor.js';
 
-export function assessProject(
-  ctx: AssessmentContext,
-  maxFiles = 500
-): AssessmentReport {
+export function assessProject(ctx: AssessmentContext, maxFiles = 500): AssessmentReport {
   const categories = [
     collectDependencyFindings(ctx),
     collectArchitectureFindings(ctx, maxFiles),
@@ -29,23 +26,16 @@ export function assessProject(
     return order[a.severity] - order[b.severity];
   });
 
-  const totalScore = categories.reduce(
-    (sum, c) => sum + c.score,
-    0
-  );
+  const totalScore = categories.reduce((sum, c) => sum + c.score, 0);
   const overallScore = Math.round(totalScore / categories.length);
   const grade = scoreToGrade(overallScore);
   const readiness = determineReadiness(overallScore, categories);
   const strategy = detectStrategy(ctx);
 
   let fileCount = 0;
-  const archCat = categories.find(
-    c => c.category === 'architecture'
-  );
+  const archCat = categories.find(c => c.category === 'architecture');
   if (archCat?.findings) {
-    const fileFinding = archCat.findings.filter(f =>
-      f.file !== undefined
-    );
+    const fileFinding = archCat.findings.filter(f => f.file !== undefined);
     fileCount = fileFinding.length;
   }
 
@@ -82,9 +72,7 @@ function determineReadiness(
   return 'needs-work';
 }
 
-export function detectStrategy(
-  ctx: AssessmentContext
-): MigrationStrategy {
+export function detectStrategy(ctx: AssessmentContext): MigrationStrategy {
   const fw = ctx.framework;
   if (
     fw === 'express' ||
@@ -95,12 +83,7 @@ export function detectStrategy(
   ) {
     return 'strangler-fig';
   }
-  if (
-    fw === 'react' ||
-    fw === 'vue' ||
-    fw === 'nextjs' ||
-    fw === 'svelte'
-  ) {
+  if (fw === 'react' || fw === 'vue' || fw === 'nextjs' || fw === 'svelte') {
     return 'branch-by-abstraction';
   }
   if (ctx.language === 'java') {

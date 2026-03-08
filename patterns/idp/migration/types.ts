@@ -13,10 +13,7 @@ export type MigrationStrategy =
   | 'parallel-run'
   | 'lift-and-shift';
 
-export type MigrationReadiness =
-  | 'ready'
-  | 'needs-work'
-  | 'high-risk';
+export type MigrationReadiness = 'ready' | 'needs-work' | 'high-risk';
 
 export type Grade = 'A' | 'B' | 'C' | 'D' | 'F';
 

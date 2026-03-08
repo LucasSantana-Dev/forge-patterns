@@ -1,26 +1,36 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
-import type {
-  AssessmentFinding,
-  AssessmentContext,
-  CategoryScore
-} from '../types.js';
+import type { AssessmentFinding, AssessmentContext, CategoryScore } from '../types.js';
 
 const SOURCE_EXTS = new Set([
-  '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
+  '.ts',
+  '.tsx',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cjs',
+  '.py',
+  '.go',
+  '.rs',
+  '.java',
+  '.vue',
+  '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
-  'node_modules', 'dist', 'build', '.next',
-  '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache'
+  'node_modules',
+  'dist',
+  'build',
+  '.next',
+  '__pycache__',
+  '.git',
+  'target',
+  'vendor',
+  'coverage',
+  '.cache'
 ]);
 
-export function collectQualityFindings(
-  ctx: AssessmentContext,
-  maxFiles = 500
-): CategoryScore {
+export function collectQualityFindings(ctx: AssessmentContext, maxFiles = 500): CategoryScore {
   const findings: AssessmentFinding[] = [];
 
   if (!ctx.testFramework) {
@@ -78,10 +88,7 @@ export function collectQualityFindings(
   return scoreCategory(findings);
 }
 
-function scanCodeQuality(
-  dir: string,
-  maxFiles: number
-): AssessmentFinding[] {
+function scanCodeQuality(dir: string, maxFiles: number): AssessmentFinding[] {
   const findings: AssessmentFinding[] = [];
   const stack = [dir];
   let count = 0;
@@ -187,11 +194,7 @@ function computeTestRatio(dir: string): number | null {
       if (stat.isDirectory()) {
         stack.push(fullPath);
       } else if (SOURCE_EXTS.has(extname(entry))) {
-        if (
-          entry.includes('.test.') ||
-          entry.includes('.spec.') ||
-          entry.includes('_test.')
-        ) {
+        if (entry.includes('.test.') || entry.includes('.spec.') || entry.includes('_test.')) {
           testFiles++;
         } else {
           srcFiles++;
@@ -204,22 +207,25 @@ function computeTestRatio(dir: string): number | null {
   return testFiles / srcFiles;
 }
 
-function scoreCategory(
-  findings: AssessmentFinding[]
-): CategoryScore {
+function scoreCategory(findings: AssessmentFinding[]): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
     switch (f.severity) {
-      case 'critical': penalty += 25; break;
-      case 'high': penalty += 15; break;
-      case 'medium': penalty += 8; break;
-      case 'low': penalty += 3; break;
+      case 'critical':
+        penalty += 25;
+        break;
+      case 'high':
+        penalty += 15;
+        break;
+      case 'medium':
+        penalty += 8;
+        break;
+      case 'low':
+        penalty += 3;
+        break;
     }
   }
   const score = Math.max(0, 100 - penalty);
-  const grade = score >= 90 ? 'A'
-    : score >= 75 ? 'B'
-    : score >= 60 ? 'C'
-    : score >= 40 ? 'D' : 'F';
+  const grade = score >= 90 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : score >= 40 ? 'D' : 'F';
   return { category: 'quality', score, grade, findings };
 }

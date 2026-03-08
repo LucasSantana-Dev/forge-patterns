@@ -1,20 +1,34 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
-import type {
-  AssessmentFinding,
-  AssessmentContext,
-  CategoryScore
-} from '../types.js';
+import type { AssessmentFinding, AssessmentContext, CategoryScore } from '../types.js';
 
 const SOURCE_EXTS = new Set([
-  '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.go', '.rs', '.java', '.vue', '.svelte'
+  '.ts',
+  '.tsx',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cjs',
+  '.py',
+  '.go',
+  '.rs',
+  '.java',
+  '.vue',
+  '.svelte'
 ]);
 
 const SKIP_DIRS = new Set([
-  'node_modules', 'dist', 'build', '.next', '.nuxt',
-  '__pycache__', '.git', 'target', 'vendor',
-  'coverage', '.cache'
+  'node_modules',
+  'dist',
+  'build',
+  '.next',
+  '.nuxt',
+  '__pycache__',
+  '.git',
+  'target',
+  'vendor',
+  'coverage',
+  '.cache'
 ]);
 
 interface FileInfo {
@@ -24,10 +38,7 @@ interface FileInfo {
   functions: number;
 }
 
-export function collectArchitectureFindings(
-  ctx: AssessmentContext,
-  maxFiles = 500
-): CategoryScore {
+export function collectArchitectureFindings(ctx: AssessmentContext, maxFiles = 500): CategoryScore {
   const findings: AssessmentFinding[] = [];
   const files = walkSourceFiles(ctx.dir, maxFiles);
 
@@ -78,9 +89,7 @@ export function collectArchitectureFindings(
     }
   }
 
-  const avgFileSize = files.length > 0
-    ? Math.round(totalLines / files.length)
-    : 0;
+  const avgFileSize = files.length > 0 ? Math.round(totalLines / files.length) : 0;
   if (avgFileSize > 200 && files.length > 5) {
     findings.push({
       category: 'architecture',
@@ -89,9 +98,7 @@ export function collectArchitectureFindings(
     });
   }
 
-  const topDirs = new Set(
-    files.map(f => f.path.split('/')[0]).filter(Boolean)
-  );
+  const topDirs = new Set(files.map(f => f.path.split('/')[0]).filter(Boolean));
   if (files.length > 20 && topDirs.size <= 2) {
     findings.push({
       category: 'architecture',
@@ -103,10 +110,7 @@ export function collectArchitectureFindings(
   return scoreCategory(findings);
 }
 
-function walkSourceFiles(
-  dir: string,
-  maxFiles: number
-): FileInfo[] {
+function walkSourceFiles(dir: string, maxFiles: number): FileInfo[] {
   const result: FileInfo[] = [];
   const stack = [dir];
 
@@ -143,16 +147,11 @@ function walkSourceFiles(
   return result;
 }
 
-function analyzeFile(
-  filePath: string,
-  baseDir: string
-): FileInfo | null {
+function analyzeFile(filePath: string, baseDir: string): FileInfo | null {
   try {
     const content = readFileSync(filePath, 'utf-8');
     const lines = content.split('\n').length;
-    const importMatches = content.match(
-      /^(import |from |require\(|const .* = require)/gm
-    );
+    const importMatches = content.match(/^(import |from |require\(|const .* = require)/gm);
     const fnMatches = content.match(
       /^(export )?(async )?(function |const \w+ = (?:async )?(?:\(|=>))/gm
     );
@@ -167,22 +166,25 @@ function analyzeFile(
   }
 }
 
-function scoreCategory(
-  findings: AssessmentFinding[]
-): CategoryScore {
+function scoreCategory(findings: AssessmentFinding[]): CategoryScore {
   let penalty = 0;
   for (const f of findings) {
     switch (f.severity) {
-      case 'critical': penalty += 25; break;
-      case 'high': penalty += 15; break;
-      case 'medium': penalty += 8; break;
-      case 'low': penalty += 3; break;
+      case 'critical':
+        penalty += 25;
+        break;
+      case 'high':
+        penalty += 15;
+        break;
+      case 'medium':
+        penalty += 8;
+        break;
+      case 'low':
+        penalty += 3;
+        break;
     }
   }
   const score = Math.max(0, 100 - penalty);
-  const grade = score >= 90 ? 'A'
-    : score >= 75 ? 'B'
-    : score >= 60 ? 'C'
-    : score >= 40 ? 'D' : 'F';
+  const grade = score >= 90 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : score >= 40 ? 'D' : 'F';
   return { category: 'architecture', score, grade, findings };
 }
