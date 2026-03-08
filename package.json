@@ -1,6 +1,6 @@
 {
   "name": "@forgespace/core",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Shared configuration, workflows, and architectural patterns for the Forgespace ecosystem",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -63,7 +63,8 @@
     "forge-scorecard": "dist/patterns/idp/scorecards/cli.js",
     "forge-policy": "dist/patterns/idp/policy-engine/cli.js",
     "forge-features": "dist/patterns/idp/feature-toggles/cli.js",
-    "forge-init": "dist/patterns/idp/init/cli.js"
+    "forge-init": "dist/patterns/idp/init/cli.js",
+    "forge-audit": "dist/patterns/idp/migration/cli.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
