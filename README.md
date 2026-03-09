@@ -517,6 +517,9 @@ This repository is designed to be **completely public** with zero secrets:
 ./scripts/security/validate-placeholders.sh
 ```
 
+`validate-no-secrets.sh` excludes `.forge`, `.serena`, and `.agents` so policy and
+assistant metadata do not produce false positives.
+
 ### Security Features
 
 - **Trufflehog**: Secret detection with verified secrets only

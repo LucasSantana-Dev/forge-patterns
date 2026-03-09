@@ -2,6 +2,8 @@
 
 ### Changed
 - **Contributor guidance** — Added `AGENTS.md` operations guide and linked it from README contributing docs.
+- **Security validation** — `validate-no-secrets.sh` now excludes metadata/system folders
+  (`.forge`, `.serena`, `.agents`) to prevent policy-text false positives.
 
 ## [1.10.1] - 2026-03-08
 
