@@ -643,6 +643,7 @@ Apply the Forge Space README header (CDN wordmark) to any repo. See [brand-guide
 ## 🤝 Contributing
 
 We welcome contributions to Forge Space Patterns! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
+For repository-specific agent workflow and operational gotchas, see [AGENTS.md](AGENTS.md).
 
 ### Contribution Process
 

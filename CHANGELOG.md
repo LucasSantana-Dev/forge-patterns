@@ -1,3 +1,8 @@
+## [Unreleased]
+
+### Changed
+- **Contributor guidance** — Added `AGENTS.md` operations guide and linked it from README contributing docs.
+
 ## [1.10.1] - 2026-03-08
 
 ### Fixed
