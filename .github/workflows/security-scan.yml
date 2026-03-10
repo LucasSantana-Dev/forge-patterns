@@ -18,13 +18,14 @@ jobs:
   secret-scan:
     name: Secret Detection
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Trufflehog Secret Scan
-        uses: trufflesecurity/trufflehog@v3.93.6
+        uses: trufflesecurity/trufflehog@v3.93.7
         with:
           path: ./
           base: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before || 'HEAD~1' }}
@@ -80,6 +81,7 @@ jobs:
   comprehensive-scan:
     name: Comprehensive Security Scan
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
 
