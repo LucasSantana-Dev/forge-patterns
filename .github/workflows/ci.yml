@@ -101,4 +101,4 @@ jobs:
           annotations: true
       - name: Skip parity when tenant profile repo is unavailable
         if: steps.tenant_profile_check.outputs.available != 'true'
-        run: echo "Skipping test-autogen parity: tenant profile repo/path unavailable."
+        run: 'echo "Skipping test-autogen parity: tenant profile repo/path unavailable."'
