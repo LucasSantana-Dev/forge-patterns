@@ -517,6 +517,9 @@ This repository is designed to be **completely public** with zero secrets:
 ./scripts/security/validate-placeholders.sh
 ```
 
+`validate-no-secrets.sh` excludes `.forge`, `.serena`, and `.agents` so policy and
+assistant metadata do not produce false positives.
+
 ### Security Features
 
 - **Trufflehog**: Secret detection with verified secrets only
@@ -643,6 +646,7 @@ Apply the Forge Space README header (CDN wordmark) to any repo. See [brand-guide
 ## 🤝 Contributing
 
 We welcome contributions to Forge Space Patterns! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
+For repository-specific agent workflow and operational gotchas, see [AGENTS.md](AGENTS.md).
 
 ### Contribution Process
 
