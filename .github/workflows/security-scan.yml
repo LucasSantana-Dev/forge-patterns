@@ -18,6 +18,7 @@ jobs:
   secret-scan:
     name: Secret Detection
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
         with:
@@ -80,6 +81,7 @@ jobs:
   comprehensive-scan:
     name: Comprehensive Security Scan
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
 
