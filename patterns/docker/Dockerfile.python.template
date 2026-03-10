@@ -35,8 +35,8 @@ RUN addgroup -g 1001 -S appuser && \
 WORKDIR /app
 
 # Copy installed packages and application
-COPY --from=builder --chown=appuser:appuser --chmod=0555 /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages # NOSONAR
-COPY --from=builder --chown=appuser:appuser --chmod=0555 /app /app # NOSONAR
+COPY --from=builder --chown=appuser:appuser --chmod=555 /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder --chown=appuser:appuser --chmod=555 /app /app
 
 # Switch to non-root user
 USER appuser
