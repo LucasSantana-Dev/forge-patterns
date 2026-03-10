@@ -1,6 +1,9 @@
 ## [Unreleased]
 
 ### Changed
+- **TypeScript ESLint alignment** — Synchronized `@typescript-eslint/eslint-plugin`,
+  `@typescript-eslint/parser`, and `typescript-eslint` to `8.57.0` to keep peer
+  dependencies compatible in CI installs.
 - **Tenant isolation baseline** — Added platform-level `TenantProfile` contract export with
   runtime validators and CI guardrail `check:tenant-decoupling` to block tenant-specific
   hardcodes in platform paths (with `rg` and `grep` fallback support in CI/local runs).
