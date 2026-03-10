@@ -212,7 +212,7 @@ See `examples/mcp-gateway-integration.js` for complete integration example.
 
 ## 📚 Documentation
 
-- [Forge Patterns Documentation](https://github.com/LucasSantana-Dev/forge-patterns)
+- [Forge Patterns Documentation](https://github.com/Forge-Space/core)
 - [MCP Gateway Patterns](../patterns/mcp-gateway/)
 - [Security Patterns](../patterns/mcp-gateway/security/)
 - [Performance Patterns](../patterns/mcp-gateway/performance/)

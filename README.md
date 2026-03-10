@@ -28,13 +28,33 @@ Forge-Space Core provides shared configurations, workflows, and architectural pa
 - 🔄 **GitHub Workflows Optimization**: Organization-level reusable workflows eliminating duplication
 - 🔐 **SHA-Pinned Automation**: Workflow/action references use full commit SHAs for supply-chain safety
 
+## Tenant Isolation Standard
+
+Forge-Space Core now defines an explicit tenant contract and enforces decoupling checks
+to keep platform code tenant-agnostic.
+
+- Contract export: `TenantProfile` and validators from `src/tenant/contract.ts`
+- Required profile keys:
+  - `tenant_id`
+  - `github_owner`
+  - `sonar_org`
+  - `npm_scope`
+  - `quality_policy`
+  - `ci_policy`
+- CI guardrail: `npm run check:tenant-decoupling`
+  - Blocks tenant-specific hardcodes in platform paths (`src`, `patterns`, `scripts`, `.github`)
+  - Allowed references should live in dedicated tenant profile repositories or explicit examples
+
 ## Test Autogen — Phase 0 (Warn)
 
 Phase 0 is active in warn-only mode to guide contributors without blocking delivery:
 
-- Local hooks (`.husky/pre-commit`, `.husky/pre-push`) run `forge-ai-init test-autogen` and always exit `0`.
+- Local hooks (`.husky/pre-commit`, `.husky/pre-push`) run `forge-ai-init test-autogen` only
+  when `FORGE_TENANT_ID` and `FORGE_TENANT_PROFILE_REF` are set, and always exit `0` in phase 0.
 - Pull requests run CI job `test-autogen-warn` using `forge-ai-action` with:
   - `command: test-autogen-check`
+  - `tenant: acme-sandbox`
+  - `tenant_profile_ref: .forge-tenant-profiles/tenants/acme-sandbox/profile.yaml`
   - `test_autogen_phase: warn`
   - PR feedback enabled (`comment: true`, `annotations: true`)
 

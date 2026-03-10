@@ -583,9 +583,9 @@ See \`examples/${projectType}-integration.js\` for complete integration example.
 
 ## 📚 Documentation
 
-- [Forge Patterns Documentation](https://github.com/LucasSantana-Dev/forge-patterns)
+- [Forge Patterns Documentation](https://github.com/Forge-Space/core)
 - [Pattern Library](../patterns/)
-- [Integration Guide](https://github.com/LucasSantana-Dev/forge-patterns/blob/main/IMPLEMENTATION_GUIDE.md)
+- [Integration Guide](https://github.com/Forge-Space/core/blob/main/IMPLEMENTATION_GUIDE.md)
 
 ## 🔧 Configuration
 
@@ -613,7 +613,7 @@ If you encounter issues:
 3. Check the integration example for proper usage
 4. Run validation: \`npm run validate\`
 
-For more help, see the [Forge Patterns Documentation](https://github.com/LucasSantana-Dev/forge-patterns).
+For more help, see the [Forge Patterns Documentation](https://github.com/Forge-Space/core).
 `;
 
     await fs.writeFile(docFile, docContent);

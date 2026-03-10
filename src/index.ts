@@ -103,6 +103,7 @@ export class ForgePatterns {
 
 // IDP Patterns re-exports
 export * from '../patterns/idp/index.js';
+export * from './tenant/contract.js';
 
 // Export default instance
 export default ForgePatterns.getInstance();

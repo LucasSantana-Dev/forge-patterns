@@ -393,7 +393,7 @@ This project follows UIForge security patterns:
 
 ## 📚 Documentation
 
-- [UIForge Patterns](https://github.com/LucasSantana-Dev/uiforge-patterns)
+- [UIForge Patterns](https://github.com/Forge-Space/core)
 - [Security Guidelines](docs/SECURITY.md)
 - [Development Guide](docs/DEVELOPMENT.md)
 - [Docker Patterns](docs/DOCKER.md)

@@ -427,7 +427,7 @@ See `examples/uiforge-mcp-integration.js` for complete integration example.
 
 ## 📚 Documentation
 
-- [Forge Patterns Documentation](https://github.com/LucasSantana-Dev/forge-patterns)
+- [Forge Patterns Documentation](https://github.com/Forge-Space/core)
 - [MCP Server Patterns](../patterns/mcp-servers/)
 - [AI Provider Patterns](../patterns/mcp-servers/ai-providers/)
 - [Template Patterns](../patterns/mcp-servers/templates/)

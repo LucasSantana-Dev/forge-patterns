@@ -30,7 +30,7 @@ configuration and troubleshooting.
 
 ```bash
 # Clone the gateway repository
-git clone https://github.com/LucasSantana-Dev/forge-mcp-gateway.git
+git clone https://github.com/Forge-Space/mcp-gateway.git
 cd forge-mcp-gateway
 
 # Start the gateway services
@@ -44,7 +44,7 @@ make register
 
 ```bash
 # Clone the MCP server repository
-git clone https://github.com/LucasSantana-Dev/uiforge-mcp.git
+git clone https://github.com/Forge-Space/ui-mcp.git
 cd uiforge-mcp
 
 # Install dependencies
@@ -58,7 +58,7 @@ npm run dev
 
 ```bash
 # Clone the webapp repository
-git clone https://github.com/LucasSantana-Dev/uiforge-webapp.git
+git clone https://github.com/Forge-Space/UI.git
 cd uiforge-webapp
 
 # Install dependencies
@@ -93,9 +93,9 @@ mkdir uiforge-ecosystem
 cd uiforge-ecosystem
 
 # Clone all repositories
-git clone https://github.com/LucasSantana-Dev/forge-mcp-gateway.git
-git clone https://github.com/LucasSantana-Dev/uiforge-mcp.git
-git clone https://github.com/LucasSantana-Dev/uiforge-webapp.git
+git clone https://github.com/Forge-Space/mcp-gateway.git
+git clone https://github.com/Forge-Space/ui-mcp.git
+git clone https://github.com/Forge-Space/UI.git
 
 # Verify structure
 tree -L 2

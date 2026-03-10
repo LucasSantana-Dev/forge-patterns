@@ -10,8 +10,6 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
-    assignees:
-      - "LucasSantana-Dev"
     labels:
       - "dependencies"
       - "npm"
@@ -26,8 +24,6 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
-    assignees:
-      - "LucasSantana-Dev"
     labels:
       - "dependencies"
       - "python"
@@ -42,8 +38,6 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
-    assignees:
-      - "LucasSantana-Dev"
     labels:
       - "dependencies"
       - "github-actions"

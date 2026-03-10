@@ -469,7 +469,7 @@ Workflows use the following environment variables:
 NODE_VERSION: '22'
 PYTHON_VERSION: '3.12'
 SNYK_SEVERITY_THRESHOLD: 'high'
-SNYK_ORGANIZATION: 'LucasSantana-Dev'
+SNYK_ORGANIZATION: '<your-snyk-org>'
 
 # Project-specific variables
 PROJECT_TYPE: 'gateway' # Set by workflow input

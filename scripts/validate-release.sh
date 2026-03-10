@@ -4,11 +4,8 @@
 set -e
 
 # Configuration
-CORE_REPO="/Users/lucassantana/Desenvolvimento/forge-patterns"
-DEPENDENT_PROJECTS=(
-    "/Users/lucassantana/Desenvolvimento/uiforge-mcp"
-    "/Users/lucassantana/Desenvolvimento/uiforge-webapp"
-)
+CORE_REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+IFS=':' read -r -a DEPENDENT_PROJECTS <<< "${FORGE_DEPENDENT_PROJECTS:-}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -204,6 +201,7 @@ validate_version_consistency() {
     local inconsistent_projects=()
     
     for project in "${DEPENDENT_PROJECTS[@]}"; do
+        [ -z "$project" ] && continue
         if [ ! -d "$project" ]; then
             continue
         fi
@@ -282,6 +280,7 @@ validate_version_consistency
 echo ""
 log_info "Validating dependent projects..."
 for project in "${DEPENDENT_PROJECTS[@]}"; do
+    [ -z "$project" ] && continue
     validate_dependent_project "$project"
     echo ""
 done

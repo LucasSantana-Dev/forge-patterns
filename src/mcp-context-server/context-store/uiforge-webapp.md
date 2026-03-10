@@ -814,9 +814,9 @@ src/
 
 ### Community
 
-- [UIForge MCP Server](https://github.com/lucassantana/uiforge-mcp)
-- [Discussions](https://github.com/lucassantana/uiforge-webapp/discussions)
-- [Issues](https://github.com/lucassantana/uiforge-webapp/issues)
+- [UIForge MCP Server](https://github.com/Forge-Space/uiforge-mcp)
+- [Discussions](https://github.com/Forge-Space/uiforge-webapp/discussions)
+- [Issues](https://github.com/Forge-Space/uiforge-webapp/issues)
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Version:** 1.31.0
 **Last Updated:** 2026-02-18
-**Repository:** [forge-mcp-gateway](https://github.com/LucasSantana-Dev/forge-mcp-gateway)
+**Repository:** [forge-mcp-gateway](https://github.com/Forge-Space/mcp-gateway)
 
 ## 📋 Executive Summary
 
@@ -605,6 +605,6 @@ forge-mcp-gateway/
 
 **Last Updated**: 2026-02-18
 **Next Review**: After Phase 5 planning
-**Maintained By**: Lucas Santana (@LucasSantana-Dev)
+**Maintained By**: Forge Space Team (@Forge-Space)
 **Recent Achievement**: Phase 4 AI-Enhanced Tool Router Complete
 **Current Phase**: Phase 5 Planning - Admin UI Enhancements
