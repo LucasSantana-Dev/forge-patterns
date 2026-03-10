@@ -493,7 +493,7 @@ curl -X POST http://localhost:3000/api/feature-toggles \\
 
 ## 📚 Documentation
 
-- [Forge Patterns Documentation](https://github.com/LucasSantana-Dev/forge-patterns)
+- [Forge Patterns Documentation](https://github.com/Forge-Space/core)
 - [Code Quality Patterns](../patterns/code-quality/)
 - [Feature Toggle Patterns](../patterns/feature-toggles/)
 - [Next.js Integration Guide](https://nextjs.org/docs)

@@ -11,10 +11,10 @@ SECRET_PATTERNS=(
   "password"
   "secret"
   "token"
-  "key"
-  "auth"
-  "credential"
-  "private"
+  "api[_-]?key"
+  "secret[_-]?key"
+  "private[_-]?key"
+  "access[_-]?key"
   "cert"
   "pem"
   "p12"
@@ -23,7 +23,7 @@ SECRET_PATTERNS=(
 
 for pattern in "${SECRET_PATTERNS[@]}"; do
   echo "Checking for pattern: $pattern"
-  if grep -r -i "$pattern" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" \
+  if grep -r -E -i "$pattern" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" \
     --exclude="package-lock.json" --exclude=".gitleaks.yml" \
     --exclude-dir="node_modules" --exclude-dir=".git" --exclude-dir="dist" \
     --exclude-dir=".claude" --exclude-dir=".windsurf" --exclude-dir="coverage" \
@@ -37,6 +37,7 @@ for pattern in "${SECRET_PATTERNS[@]}"; do
     | grep -v "workflow" | grep -v "github-actions" \
     | grep -v "maxToken" | grep -v "costPerToken" | grep -v "Object\.keys" | grep -v "Object\.entries" \
     | grep -v "keywords" | grep -v "visitor-keys" | grep -v "path-key" \
+    | grep -v "required keys are" \
     | grep -v "apiKey.*process\.env" | grep -v "process\.env\.[A-Z_]*KEY" \
     | grep -v "integrity.*sha" | grep -v "resolved.*registry" \
     | grep -v "\"key\":\s*\"" | grep -v "\[key\]" | grep -v "(key)" | grep -v "\[key," \

@@ -1,17 +1,33 @@
 ## [Unreleased]
 
 ### Changed
+- **Tenant isolation baseline** — Added platform-level `TenantProfile` contract export with
+  runtime validators and CI guardrail `check:tenant-decoupling` to block tenant-specific
+  hardcodes in platform paths (with `rg` and `grep` fallback support in CI/local runs).
+- **Owner hardcode sanitization** — Replaced personal-owner links in active scripts/context docs
+  with Forge-Space organization references.
 - **Contributor guidance** — Added `AGENTS.md` operations guide and linked it from README contributing docs.
 - **Security validation** — `validate-no-secrets.sh` now excludes metadata/system folders
-  (`.forge`, `.serena`, `.agents`) to prevent policy-text false positives.
+  (`.forge`, `.serena`, `.agents`) and uses targeted key patterns to prevent
+  policy-text false positives.
 - **Phase 0 test-autogen rollout (warn-only)** — Added local hooks and CI parity check:
-  - `.husky/pre-commit` → `forge-ai-init test-autogen --staged --write --json` (non-blocking)
-  - `.husky/pre-push` → `forge-ai-init test-autogen --check --json` (non-blocking)
-  - CI job `test-autogen-warn` on pull requests with comment + annotations.
+  - `.husky/pre-commit` → `forge-ai-init test-autogen --staged --write --json --tenant "$FORGE_TENANT_ID" --tenant-profile-ref "$FORGE_TENANT_PROFILE_REF"` when tenant context is set (non-blocking)
+  - `.husky/pre-push` → `forge-ai-init test-autogen --check --json --tenant "$FORGE_TENANT_ID" --tenant-profile-ref "$FORGE_TENANT_PROFILE_REF"` when tenant context is set (non-blocking)
+  - CI job `test-autogen-warn` on pull requests with explicit tenant context (`acme-sandbox`) and comment + annotations.
+  - CI checkout for external tenant profile repo is now best-effort; parity check auto-skips when profile path is unavailable.
 - **Sonar/security hardening** — Removed hotspot patterns flagged on `main` by hardening
   workflow references, Docker templates, CLI/test command execution, and ID generation.
 - **Migration assessor tests** — Refactored temporary-project test setup to reduce duplicated
   blocks and keep new-code duplication under quality-gate thresholds.
+- **CI tenant-decoupling hardening** — `Tenant Decoupling` workflow now ensures `ripgrep` exists
+  on the runner and validator script now falls back to `grep` when `rg` is unavailable.
+- **Cross-repo profile checkout token** — `test-autogen-warn` now uses
+  `FORGE_TENANT_PROFILES_READ_TOKEN` (fallback `GITHUB_TOKEN`) for private tenant-profile checkout.
+- **Security scan noise reduction** — Secret validation patterns were tightened to remove generic
+  `key` false positives, and hardcoded URL scanning now excludes lockfiles/tests and scans only
+  platform paths.
+- **Scanner regression coverage** — Added tests for secret-scan false-positive regression and
+  tenant-decoupling fallback behavior.
 
 ## [1.10.1] - 2026-03-08
 

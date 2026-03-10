@@ -4,10 +4,7 @@
 set -e
 
 # Configuration
-PROJECTS=(
-    "/Users/lucassantana/Desenvolvimento/uiforge-mcp"
-    "/Users/lucassantana/Desenvolvimento/uiforge-webapp"
-)
+IFS=':' read -r -a PROJECTS <<< "${FORGE_DEPENDENT_PROJECTS:-}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -122,6 +119,7 @@ FAILED_PROJECTS=()
 
 # Update each project
 for project in "${PROJECTS[@]}"; do
+    [ -z "$project" ] && continue
     if update_project "$project"; then
         SUCCESSFUL_PROJECTS+=("$project")
     else

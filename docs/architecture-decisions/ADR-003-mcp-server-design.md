@@ -170,6 +170,6 @@ const result = await server.callTool('generate-from-template', {
 ## References
 
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [UIForge Component Library](https://github.com/LucasSantana-Dev/uiforge-mcp)
+- [UIForge Component Library](https://github.com/Forge-Space/ui-mcp)
 - [React Documentation](https://react.dev/)
 - [Vue.js Documentation](https://vuejs.org/)

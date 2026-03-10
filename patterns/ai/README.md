@@ -117,5 +117,5 @@ See [Community Guidelines](../../../docs/COMMUNITY.md) for contributing AI patte
 ---
 
 **Last Updated**: 2026-02-17  
-**Maintainers**: Lucas Santana (@LucasSantana-Dev)  
+**Maintainers**: Forge Space Team (@Forge-Space)  
 **Version**: 1.0.0

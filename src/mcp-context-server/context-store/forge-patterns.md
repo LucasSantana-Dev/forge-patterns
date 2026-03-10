@@ -60,7 +60,7 @@
 
 ### 🔗 Essential Links
 
-- **Main Repository**: [forge-patterns](https://github.com/LucasSantana-Dev/forge-patterns)
+- **Main Repository**: [forge-patterns](https://github.com/Forge-Space/core)
 - **Integration Guide**: [INTEGRATION_GUIDE.md](../ecosystem/INTEGRATION_GUIDE.md)
 - **Architecture Decisions**: [ADRs](../architecture-decisions/)
 - **Security Policy**: [SECURITY.md](../SECURITY.md)
@@ -532,7 +532,7 @@ forge-patterns/
 
 **Last Updated**: February 18, 2026
 **Next Review**: March 18, 2026
-**Maintained By**: Lucas Santana (@LucasSantana-Dev)
+**Maintained By**: Forge Space Team (@Forge-Space)
 **Recent Achievement**: Phase 1 Advanced Pattern Features — plugin system, AI/ML patterns, cloud-native patterns, CLI tool, CHANGELOG, CONTRIBUTING
 **Current Phase**: Phase 1 — Advanced Pattern Features (Week 1-8, Q1 2026)
 **Version**: 1.2.0 (see CHANGELOG.md)

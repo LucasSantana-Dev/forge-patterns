@@ -2,7 +2,15 @@
 set -eu
 
 echo "⚙️  [test-autogen] pre-push (phase0 warn)"
-if ! npx forge-ai-init test-autogen --check --json; then
+TENANT_ID="${FORGE_TENANT_ID:-}"
+TENANT_PROFILE_REF="${FORGE_TENANT_PROFILE_REF:-}"
+
+if [ -z "$TENANT_ID" ] || [ -z "$TENANT_PROFILE_REF" ]; then
+  echo "⚠️  FORGE_TENANT_ID/FORGE_TENANT_PROFILE_REF ausentes; pulando test-autogen (warn-only)."
+  exit 0
+fi
+
+if ! npx forge-ai-init test-autogen --check --json --tenant "$TENANT_ID" --tenant-profile-ref "$TENANT_PROFILE_REF"; then
   echo "⚠️  gaps detectados em test-autogen; push segue em modo warn."
 fi
 exit 0

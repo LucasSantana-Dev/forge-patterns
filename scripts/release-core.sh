@@ -4,11 +4,8 @@
 set -e
 
 # Configuration
-CORE_REPO="/Users/lucassantana/Desenvolvimento/forge-patterns"
-DEPENDENT_PROJECTS=(
-    "/Users/lucassantana/Desenvolvimento/uiforge-mcp"
-    "/Users/lucassantana/Desenvolvimento/uiforge-webapp"
-)
+CORE_REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+IFS=':' read -r -a DEPENDENT_PROJECTS <<< "${FORGE_DEPENDENT_PROJECTS:-}"
 QUALITY_GATES=true
 ROLLBACK_ENABLED=true
 TEAM_NOTIFICATIONS=true
@@ -140,6 +137,7 @@ log_info "Updating dependent projects..."
 FAILED_PROJECTS=()
 
 for project in "${DEPENDENT_PROJECTS[@]}"; do
+    [ -z "$project" ] && continue
     log_info "Updating $project..."
     cd "$project"
     
@@ -172,6 +170,7 @@ log_info "Running integration tests..."
 FAILED_TESTS=()
 
 for project in "${DEPENDENT_PROJECTS[@]}"; do
+    [ -z "$project" ] && continue
     # Skip projects that failed to update
     found=false
     for failed_project in "${FAILED_PROJECTS[@]}"; do

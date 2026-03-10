@@ -243,10 +243,10 @@ Each project maintains minimal local documentation:
 
 ### Community Resources
 
-- **[GitHub Discussions](https://github.com/LucasSantana-Dev/forge-patterns/discussions)** -
+- **[GitHub Discussions](https://github.com/Forge-Space/core/discussions)** -
   General discussions
-- **[GitHub Issues](https://github.com/LucasSantana-Dev/forge-patterns/issues)** -
-  Bug reports and features
+- **[GitHub Issues](https://github.com/Forge-Space/core/issues)** - Bug reports
+  and features
 - **[Discord Community](https://discord.gg/)** - Real-time chat and support
 
 ---

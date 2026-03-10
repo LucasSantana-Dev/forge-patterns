@@ -5,11 +5,8 @@ set -e
 
 # Configuration
 PREVIOUS_VERSION=${1:-""}
-CORE_REPO="/Users/lucassantana/Desenvolvimento/forge-patterns"
-DEPENDENT_PROJECTS=(
-    "/Users/lucassantana/Desenvolvimento/uiforge-mcp"
-    "/Users/lucassantana/Desenvolvimento/uiforge-webapp"
-)
+CORE_REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+IFS=':' read -r -a DEPENDENT_PROJECTS <<< "${FORGE_DEPENDENT_PROJECTS:-}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -202,6 +199,7 @@ SUCCESSFUL_PROJECTS=()
 FAILED_PROJECTS=()
 
 for project in "${DEPENDENT_PROJECTS[@]}"; do
+    [ -z "$project" ] && continue
     if rollback_project "$project" "$PREVIOUS_VERSION"; then
         SUCCESSFUL_PROJECTS+=("$project")
     else
