@@ -26,7 +26,8 @@ for pattern in "${SECRET_PATTERNS[@]}"; do
   if grep -r -i "$pattern" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" \
     --exclude="package-lock.json" --exclude=".gitleaks.yml" \
     --exclude-dir="node_modules" --exclude-dir=".git" --exclude-dir="dist" \
-    --exclude-dir=".claude" --exclude-dir=".windsurf" --exclude-dir="coverage" . \
+    --exclude-dir=".claude" --exclude-dir=".windsurf" --exclude-dir="coverage" \
+    --exclude-dir=".forge" --exclude-dir=".serena" --exclude-dir=".agents" . \
     | grep -v "REPLACE_WITH_" \
     | grep -v "#.*example" | grep -v "//.*example" \
     | grep -v "SECURITY NOTICE" | grep -v "placeholder" | grep -v "template" \
