@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "⚙️  [test-autogen] pre-commit (phase0 warn)"
+if ! npx forge-ai-init test-autogen --staged --write --json; then
+  echo "⚠️  test-autogen falhou ou indisponivel; commit segue em modo warn."
+fi
+exit 0

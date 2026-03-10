@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "⚙️  [test-autogen] pre-push (phase0 warn)"
+if ! npx forge-ai-init test-autogen --check --json; then
+  echo "⚠️  gaps detectados em test-autogen; push segue em modo warn."
+fi
+exit 0

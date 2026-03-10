@@ -10,6 +10,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   lint:
     name: Lint
@@ -48,3 +53,20 @@ jobs:
       - name: Run npm audit
         run: npm audit --audit-level=high --omit=dev
         continue-on-error: true
+
+  test-autogen-warn:
+    name: Test Autogen (Warn)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Forge-Space/.github/.github/actions/setup-node@main
+      - name: Run test-autogen parity check
+        uses: Forge-Space/forge-ai-action@b4b07901e4e2e4f5ed510f4abc42c5e061fa735f
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: test-autogen-check
+          test_autogen_phase: warn
+          comment: true
+          annotations: true
