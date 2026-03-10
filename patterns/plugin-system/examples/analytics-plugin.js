@@ -3,6 +3,8 @@
  * Tracks feature usage and system events
  */
 
+const { randomUUID } = require('node:crypto');
+
 module.exports = {
   name: 'analytics-plugin',
   version: '1.0.0',
@@ -149,7 +151,7 @@ module.exports = {
    * Generate unique event ID
    */
   generateEventId() {
-    return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `evt_${Date.now()}_${randomUUID()}`;
   },
 
   /**

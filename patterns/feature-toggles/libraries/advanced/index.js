@@ -4,6 +4,7 @@
  */
 
 const { initialize } = require('unleash-client-node');
+const { randomUUID } = require('node:crypto');
 
 // Constants
 const DEFAULT_REFRESH_INTERVAL = 15000;
@@ -667,11 +668,11 @@ class AdvancedFeatureToggles {
   }
 
   generateTestId() {
-    return `ab-test-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `ab-test-${Date.now()}-${randomUUID()}`;
   }
 
   generateStrategyId() {
-    return `strategy-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `strategy-${Date.now()}-${randomUUID()}`;
   }
 
   async loadABTestConfigurations() {

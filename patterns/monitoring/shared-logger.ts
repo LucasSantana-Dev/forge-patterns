@@ -416,6 +416,7 @@ export class SharedLogger {
 
 // Global logger instance
 let globalLogger: SharedLogger | null = null;
+let correlationCounter = 0;
 
 /**
  * Initialize the shared logger
@@ -436,7 +437,11 @@ export function getSharedLogger(): SharedLogger | null {
  * Create a correlation ID for request tracing
  */
 export function createCorrelationId(): string {
-  return `corr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `corr_${crypto.randomUUID()}`;
+  }
+  correlationCounter += 1;
+  return `corr_${Date.now()}_${correlationCounter}`;
 }
 
 /**

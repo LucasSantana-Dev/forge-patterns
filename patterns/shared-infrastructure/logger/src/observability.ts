@@ -1,5 +1,15 @@
 import { LogLevel, LogEntry } from '../src/types.js';
 
+let observabilityIdCounter = 0;
+
+function createObservabilityId(prefix: string): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `${prefix}_${crypto.randomUUID()}`;
+  }
+  observabilityIdCounter += 1;
+  return `${prefix}_${Date.now()}_${observabilityIdCounter}`;
+}
+
 /**
  * Metrics collection for observability
  */
@@ -34,7 +44,7 @@ export class MetricsCollector {
 
   startTimer(name: string, tags?: Record<string, string>): string {
     const key = this.buildKey(name, tags);
-    const timerId = `${key}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const timerId = `${key}_${createObservabilityId('timer')}`;
     this.timers.set(timerId, { startTime: Date.now(), count: 1 });
     return timerId;
   }
@@ -224,11 +234,11 @@ export class DistributedTracer {
   }
 
   private generateTraceId(): string {
-    return `trace_${Date.now()}_${Math.random().toString(36).substr(2, 16)}`;
+    return createObservabilityId('trace');
   }
 
   private generateSpanId(): string {
-    return `span_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
+    return createObservabilityId('span');
   }
 }
 
@@ -426,7 +436,7 @@ export class AlertManager {
   }
 
   private generateAlertId(): string {
-    return `alert_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
+    return createObservabilityId('alert');
   }
 }
 

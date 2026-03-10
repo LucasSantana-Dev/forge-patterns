@@ -6,6 +6,7 @@
  */
 
 const fs = require('fs-extra');
+const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
 const { performance } = require('perf_hooks');
@@ -25,7 +26,7 @@ class PerformanceBenchmark {
         failed: 0
       }
     };
-    this.testDir = '/tmp/forge-benchmark-test';
+    this.testDir = null;
   }
 
   log(message, type = 'info') {
@@ -33,6 +34,20 @@ class PerformanceBenchmark {
     const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
      
     console.log(`${timestamp} ${prefix} ${message}`);
+  }
+
+  async ensureTestDir() {
+    if (!this.testDir) {
+      this.testDir = await fs.mkdtemp(path.join(os.tmpdir(), 'forge-benchmark-test-'));
+    }
+    return this.testDir;
+  }
+
+  async cleanupTestDir() {
+    if (this.testDir && await fs.pathExists(this.testDir)) {
+      await fs.remove(this.testDir);
+    }
+    this.testDir = null;
   }
 
   async measurePerformance(testName, testFn) {
@@ -88,7 +103,8 @@ class PerformanceBenchmark {
 
   async benchmarkIntegrationSpeed() {
     return this.measurePerformance('Integration Speed', async () => {
-      const projectDir = path.join(this.testDir, 'speed-test');
+      const testDir = await this.ensureTestDir();
+      const projectDir = path.join(testDir, 'speed-test');
       await fs.ensureDir(projectDir);
 
       // Create package.json
@@ -105,7 +121,7 @@ class PerformanceBenchmark {
 
       // Run integration
       return new Promise((resolve, reject) => {
-        const child = spawn('node', [
+        const child = spawn(process.execPath, [
           path.join(__dirname, '../scripts/integrate.js'),
           'integrate',
           '--project=mcp-gateway'
@@ -324,12 +340,15 @@ class PerformanceBenchmark {
 
       if (this.results.summary.failed > 0) {
         this.log('❌ Some benchmarks failed - see details above', 'error');
+        await this.cleanupTestDir();
         process.exit(1);
       } else {
         this.log('✅ All benchmarks completed successfully!', 'success');
+        await this.cleanupTestDir();
       }
     } catch (error) {
       this.log(`❌ Benchmarking failed: ${error.message}`, 'error');
+      await this.cleanupTestDir();
       process.exit(1);
     }
   }

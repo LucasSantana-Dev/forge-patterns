@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   trivy:
-    uses: Forge-Space/.github/.github/workflows/reusable-trivy.yml@main
+    uses: Forge-Space/.github/.github/workflows/reusable-trivy.yml@6fbe56bc610ddf84b70f213c752b95196bcadd95
     permissions:
       contents: read
       security-events: write

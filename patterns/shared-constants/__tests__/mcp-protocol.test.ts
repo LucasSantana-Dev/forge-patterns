@@ -165,10 +165,22 @@ describe('Protocol Versioning', () => {
 
   describe('Client Names', () => {
     it('should have descriptive names', () => {
+      const isLowercaseDash = (value: string): boolean =>
+        [...value].every(char => (char >= 'a' && char <= 'z') || char === '-');
+      const isLowercaseDashUnderscore = (value: string): boolean =>
+        [...value].every(
+          char =>
+            (char >= 'a' && char <= 'z') ||
+            (char >= '0' && char <= '9') ||
+            char === '-' ||
+            char === '_'
+        );
+
       expect(MCP_GATEWAY_CLIENT_NAME).toContain('gateway');
       expect(MCP_UIFORGE_SERVER_NAME).toContain('uiforge');
-      expect(MCP_GATEWAY_CLIENT_NAME).toMatch(/^[a-z-]+-[\w-]+$/);
-      expect(MCP_UIFORGE_SERVER_NAME).toMatch(/^[a-z-]+$/); // uiforge doesn't have hyphens
+      expect(MCP_GATEWAY_CLIENT_NAME).toContain('-');
+      expect(isLowercaseDashUnderscore(MCP_GATEWAY_CLIENT_NAME)).toBe(true);
+      expect(isLowercaseDash(MCP_UIFORGE_SERVER_NAME)).toBe(true);
     });
 
     it('should be lowercase with hyphens', () => {

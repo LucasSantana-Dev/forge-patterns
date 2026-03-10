@@ -1,6 +1,6 @@
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { resolve, join } from 'node:path';
-import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
 const CLI_PATH = resolve(
@@ -9,16 +9,18 @@ const CLI_PATH = resolve(
 );
 
 function makeTmpDir(): string {
-  const dir = join(tmpdir(), `forge-cli-${Date.now()}-${Math.random().toString(36).slice(2)}`);
-  mkdirSync(dir, { recursive: true });
-  return dir;
+  return mkdtempSync(join(tmpdir(), 'forge-cli-'));
+}
+
+function runCli(args: string[]): string {
+  return execFileSync(process.execPath, [CLI_PATH, ...args], {
+    encoding: 'utf-8',
+  });
 }
 
 describe('forge-audit CLI', () => {
   it('prints help', () => {
-    const output = execSync(`node ${CLI_PATH} --help`, {
-      encoding: 'utf-8',
-    });
+    const output = runCli(['--help']);
     expect(output).toContain('forge-audit');
     expect(output).toContain('--dir');
     expect(output).toContain('--json');
@@ -35,10 +37,7 @@ describe('forge-audit CLI', () => {
     );
     writeFileSync(join(dir, '.gitignore'), '.env\nnode_modules');
 
-    const output = execSync(
-      `node ${CLI_PATH} --dir ${dir}`,
-      { encoding: 'utf-8' },
-    );
+    const output = runCli(['--dir', dir]);
     expect(output).toContain('Migration Assessment');
     expect(output).toContain('Readiness');
     expect(output).toContain('Strategy');
@@ -56,10 +55,7 @@ describe('forge-audit CLI', () => {
       }),
     );
 
-    const output = execSync(
-      `node ${CLI_PATH} --dir ${dir} --json`,
-      { encoding: 'utf-8' },
-    );
+    const output = runCli(['--dir', dir, '--json']);
     const report = JSON.parse(output);
     expect(report.overallScore).toBeGreaterThanOrEqual(0);
     expect(report.categories).toHaveLength(6);
@@ -77,10 +73,7 @@ describe('forge-audit CLI', () => {
     );
 
     expect(() =>
-      execSync(
-        `node ${CLI_PATH} --dir ${dir} --threshold 999`,
-        { encoding: 'utf-8' },
-      ),
+      runCli(['--dir', dir, '--threshold', '999']),
     ).toThrow();
 
     rmSync(dir, { recursive: true, force: true });
@@ -88,10 +81,7 @@ describe('forge-audit CLI', () => {
 
   it('exits 1 for non-existent directory', () => {
     expect(() =>
-      execSync(
-        `node ${CLI_PATH} --dir /nonexistent/path`,
-        { encoding: 'utf-8' },
-      ),
+      runCli(['--dir', '/nonexistent/path']),
     ).toThrow();
   });
 });

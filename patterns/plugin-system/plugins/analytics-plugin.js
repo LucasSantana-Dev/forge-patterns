@@ -3,6 +3,8 @@
  * Production-ready analytics and event tracking plugin
  */
 
+const { randomUUID } = require('node:crypto');
+
 module.exports = {
   name: 'analytics-plugin',
   version: '1.0.0',
@@ -138,7 +140,7 @@ module.exports = {
   },
 
   generateEventId() {
-    return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `evt_${Date.now()}_${randomUUID()}`;
   },
 
   getSessionId() {

@@ -301,7 +301,14 @@ function checkEngineering(code: string): PostGenCheck[] {
     weight: 10
   });
 
-  const indexKey = /key\s*=\s*\{?\s*(?:index|i|idx)\s*\}?/.test(code);
+  const normalized = code.replace(/\s+/g, '');
+  const indexKey =
+    normalized.includes('key={index}') ||
+    normalized.includes('key={i}') ||
+    normalized.includes('key={idx}') ||
+    normalized.includes('key=index') ||
+    normalized.includes('key=i') ||
+    normalized.includes('key=idx');
   checks.push({
     name: 'engineering-index-key',
     passed: !indexKey,

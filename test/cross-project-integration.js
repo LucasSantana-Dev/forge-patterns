@@ -6,6 +6,7 @@
  */
 
 const fs = require('fs-extra');
+const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -19,7 +20,7 @@ class CrossProjectIntegrationTester {
       failed: 0,
       scenarios: []
     };
-    this.testDir = '/tmp/forge-integration-test';
+    this.testDir = null;
   }
 
   log(message, type = 'info') {
@@ -33,21 +34,21 @@ class CrossProjectIntegrationTester {
     this.log('Setting up test environment...');
     
     // Clean up any existing test directory
-    if (await fs.pathExists(this.testDir)) {
+    if (this.testDir && await fs.pathExists(this.testDir)) {
       await fs.remove(this.testDir);
     }
-    
-    await fs.ensureDir(this.testDir);
+
+    this.testDir = await fs.mkdtemp(path.join(os.tmpdir(), 'forge-integration-test-'));
   }
 
   async cleanup() {
     this.log('Cleaning up test environment...');
-    if (await fs.pathExists(this.testDir)) {
+    if (this.testDir && await fs.pathExists(this.testDir)) {
       await fs.remove(this.testDir);
     }
   }
 
-  async runCommand(command, args, cwd = this.testDir) {
+  async runCommand(command, args, cwd = this.testDir || process.cwd()) {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
         cwd,
@@ -107,7 +108,7 @@ class CrossProjectIntegrationTester {
       
       // Run integration
       const { code, stderr } = await this.runCommand(
-        'node',
+        process.execPath,
         [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=mcp-gateway'],
         projectDir
       );
@@ -159,7 +160,7 @@ class CrossProjectIntegrationTester {
       
       // Run integration
       const { code, stderr } = await this.runCommand(
-        'node',
+        process.execPath,
         [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=uiforge-mcp'],
         projectDir
       );
@@ -200,7 +201,7 @@ class CrossProjectIntegrationTester {
       
       // Run integration
       const { code, stderr } = await this.runCommand(
-        'node',
+        process.execPath,
         [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=uiforge-webapp'],
         projectDir
       );

@@ -10,6 +10,7 @@ import {
   HealthChecker,
   AlertManager
 } from '../index.js';
+import { randomInt } from 'node:crypto';
 
 // Example 1: Custom Transport Configuration
 console.log('=== Custom Transport Configuration ===');
@@ -61,10 +62,12 @@ const metricsCollector = new MetricsCollector();
 
 // Simulate API requests
 const simulateApiRequests = () => {
+  const methods = ['GET', 'POST', 'PUT', 'DELETE'];
+  const statuses = [200, 201, 400, 404, 500];
   for (let i = 0; i < 100; i++) {
-    const method = ['GET', 'POST', 'PUT', 'DELETE'][Math.floor(Math.random() * 4)];
-    const status = [200, 201, 400, 404, 500][Math.floor(Math.random() * 5)];
-    const duration = Math.floor(Math.random() * 1000) + 50;
+    const method = methods[randomInt(methods.length)];
+    const status = statuses[randomInt(statuses.length)];
+    const duration = randomInt(1000) + 50;
 
     metricsCollector.incrementCounter('api.requests', 1, {
       method,
@@ -77,7 +80,7 @@ const simulateApiRequests = () => {
     });
 
     if (i % 10 === 0) {
-      metricsCollector.setGauge('memory.usage', Math.random() * 100, {
+      metricsCollector.setGauge('memory.usage', randomInt(10_000) / 100, {
         type: 'heap'
       });
     }
@@ -160,13 +163,13 @@ const healthChecker = new HealthChecker();
 healthChecker.registerCheck('database', {
   async execute() {
     // Simulate database health check
-    const isHealthy = Math.random() > 0.1; // 90% success rate
+    const isHealthy = randomInt(10) > 0; // 90% success rate
     return {
       healthy: isHealthy,
       message: isHealthy ? 'Database connection healthy' : 'Database connection failed',
       details: {
         connectionPool: 'active',
-        activeConnections: Math.floor(Math.random() * 20) + 5,
+        activeConnections: randomInt(20) + 5,
         maxConnections: 25
       }
     };
@@ -199,7 +202,7 @@ healthChecker.registerCheck('external-api', {
 healthChecker.registerCheck('disk-space', {
   async execute() {
     // Simulate disk space check
-    const usagePercent = Math.random() * 100;
+    const usagePercent = randomInt(10_000) / 100;
     const isHealthy = usagePercent < 90;
 
     return {

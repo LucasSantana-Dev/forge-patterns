@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 
 const CLI_PATH = resolve(
@@ -6,22 +6,23 @@ const CLI_PATH = resolve(
 );
 const PROJECT_DIR = resolve(__dirname, '../../../');
 
-function runCli(args: string): string {
-  return execSync(
-    `node "${CLI_PATH}" ${args}`,
-    { cwd: PROJECT_DIR, encoding: 'utf-8', timeout: 15_000 }
-  );
+function runCli(args: string[]): string {
+  return execFileSync(process.execPath, [CLI_PATH, ...args], {
+    cwd: PROJECT_DIR,
+    encoding: 'utf-8',
+    timeout: 15_000,
+  });
 }
 
 describe('forge-scorecard CLI', () => {
   it('produces summary output', () => {
-    const out = runCli(`--project-dir "${PROJECT_DIR}" --output summary`);
+    const out = runCli(['--project-dir', PROJECT_DIR, '--output', 'summary']);
     expect(out).toContain('Scorecard:');
     expect(out).toContain('/100');
   });
 
   it('produces JSON output with --output json', () => {
-    const out = runCli(`--project-dir "${PROJECT_DIR}" --output json`);
+    const out = runCli(['--project-dir', PROJECT_DIR, '--output', 'json']);
     const parsed = JSON.parse(out);
     expect(parsed).toHaveProperty('overallScore');
     expect(parsed).toHaveProperty('categories');
@@ -31,7 +32,7 @@ describe('forge-scorecard CLI', () => {
   });
 
   it('produces JSON output with --json flag', () => {
-    const out = runCli(`--project-dir "${PROJECT_DIR}" --json`);
+    const out = runCli(['--project-dir', PROJECT_DIR, '--json']);
     const parsed = JSON.parse(out);
     expect(parsed).toHaveProperty('overallScore');
     expect(parsed).toHaveProperty('grade');
@@ -41,25 +42,25 @@ describe('forge-scorecard CLI', () => {
   });
 
   it('includes grade in summary output', () => {
-    const out = runCli(`--project-dir "${PROJECT_DIR}"`);
+    const out = runCli(['--project-dir', PROJECT_DIR]);
     expect(out).toMatch(/Scorecard: \d+\/100 \([A-F]\)/);
   });
 
   it('exits 0 when score meets threshold', () => {
     expect(() => {
-      runCli(`--project-dir "${PROJECT_DIR}" --threshold 0`);
+      runCli(['--project-dir', PROJECT_DIR, '--threshold', '0']);
     }).not.toThrow();
   });
 
   it('exits 1 when score below threshold', () => {
     expect(() => {
-      runCli(`--project-dir "${PROJECT_DIR}" --threshold 101`);
+      runCli(['--project-dir', PROJECT_DIR, '--threshold', '101']);
     }).toThrow();
   });
 
   it('exits 1 for non-existent project dir', () => {
     expect(() => {
-      runCli('--project-dir /tmp/nonexistent-forge-dir');
+      runCli(['--project-dir', '/tmp/nonexistent-forge-dir']);
     }).toThrow();
   });
 });
