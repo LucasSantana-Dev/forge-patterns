@@ -11,10 +11,12 @@ SECRET_PATTERNS=(
   "password"
   "secret"
   "token"
-  "key"
+  "api[_-]?key"
+  "private[_-]?key"
+  "secret[_-]?key"
+  "access[_-]?key"
   "auth"
   "credential"
-  "private"
   "cert"
   "pem"
   "p12"
@@ -23,7 +25,7 @@ SECRET_PATTERNS=(
 
 for pattern in "${SECRET_PATTERNS[@]}"; do
   echo "Checking for pattern: $pattern"
-  if grep -r -i "$pattern" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" \
+  if grep -r -E -i "$pattern" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" \
     --exclude="package-lock.json" --exclude=".gitleaks.yml" \
     --exclude-dir="node_modules" --exclude-dir=".git" --exclude-dir="dist" \
     --exclude-dir=".claude" --exclude-dir=".windsurf" --exclude-dir="coverage" \

@@ -4,11 +4,6 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT_DIR"
 
-if ! command -v rg >/dev/null 2>&1; then
-  echo "ERROR: ripgrep (rg) is required for tenant-decoupling validation."
-  exit 1
-fi
-
 INCLUDE_PATHS=(
   "src"
   "patterns"
@@ -38,8 +33,26 @@ TOKENS=(
 
 FAIL=0
 
+scan_token() {
+  local token="$1"
+
+  if command -v rg >/dev/null 2>&1; then
+    rg -n --no-heading "${ALLOWLIST_GLOBS[@]}" "$token" "${INCLUDE_PATHS[@]}" || true
+    return
+  fi
+
+  grep -RIn \
+    --exclude-dir=node_modules \
+    --exclude-dir=dist \
+    --exclude-dir=coverage \
+    --exclude='*.lock' \
+    --exclude='CHANGELOG.md' \
+    --exclude='validate-tenant-decoupling.sh' \
+    -- "$token" "${INCLUDE_PATHS[@]}" 2>/dev/null || true
+}
+
 for token in "${TOKENS[@]}"; do
-  MATCHES="$(rg -n --no-heading "${ALLOWLIST_GLOBS[@]}" "$token" "${INCLUDE_PATHS[@]}" || true)"
+  MATCHES="$(scan_token "$token")"
   if [[ -n "$MATCHES" ]]; then
     echo "BLOCKED token found: $token"
     echo "$MATCHES"
