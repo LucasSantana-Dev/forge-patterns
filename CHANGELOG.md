@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+### Fixed
+- **IDP init import side effects** — Package root imports no longer trigger `forge-init` writes.
+  `initProject` now lives in side-effect-free `patterns/idp/init/project.ts`, CLI execution in
+  `patterns/idp/init/cli.ts` is entrypoint-guarded, and IDP barrel exports avoid CLI module
+  loading at import time.
+
 ### Changed
 - **TypeScript ESLint alignment** — Synchronized `@typescript-eslint/eslint-plugin`,
   `@typescript-eslint/parser`, and `typescript-eslint` to `8.57.0` to keep peer
