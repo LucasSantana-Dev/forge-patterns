@@ -79,7 +79,7 @@ jobs:
           path: .forge-tenant-profiles
           token: ${{ secrets.FORGE_TENANT_PROFILES_READ_TOKEN || secrets.GITHUB_TOKEN }}
       - name: Detect tenant profile availability
-        id: tenant-profile-check
+        id: tenant_profile_check
         run: |
           if [ -f .forge-tenant-profiles/tenants/acme-sandbox/profile.yaml ]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
@@ -87,7 +87,7 @@ jobs:
             echo "available=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Run test-autogen parity check
-        if: steps.tenant-profile-check.outputs.available == 'true'
+        if: steps.tenant_profile_check.outputs.available == 'true'
         uses: Forge-Space/forge-ai-action@484c056b923dcd1b8f43c5a18dfa147c77bcb23b
         continue-on-error: true
         env:
@@ -100,5 +100,5 @@ jobs:
           comment: true
           annotations: true
       - name: Skip parity when tenant profile repo is unavailable
-        if: steps.tenant-profile-check.outputs.available != 'true'
+        if: steps.tenant_profile_check.outputs.available != 'true'
         run: echo "Skipping test-autogen parity: tenant profile repo/path unavailable."
