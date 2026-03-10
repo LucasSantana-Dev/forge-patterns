@@ -65,6 +65,12 @@ Phase 0 is active in warn-only mode to guide contributors without blocking deliv
 
 This phase highlights missing tests early while preserving non-blocking developer flow.
 
+## Lint Toolchain Compatibility
+
+Keep `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, and
+`typescript-eslint` on the same minor version to avoid `npm ci` peer-dependency
+resolution failures in CI.
+
 ## 📋 Projects Using These Patterns
 
 - **[siza](https://github.com/Forge-Space/siza)**: Next.js web application with multi-environment deployment
