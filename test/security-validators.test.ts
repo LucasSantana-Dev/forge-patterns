@@ -33,7 +33,7 @@ function runScript(
   extraEnv: Record<string, string> = {}
 ): ScriptResult {
   try {
-    const output = execFileSync('bash', [`scripts/security/${scriptName}`], {
+    const output = execFileSync('/bin/bash', [`scripts/security/${scriptName}`], {
       cwd,
       env: { ...process.env, ...extraEnv },
       encoding: 'utf8',
