@@ -109,6 +109,12 @@ CLI tools for project governance, shipped as part of `@forgespace/core`:
 | **Feature Toggles** | `npx forge-features` | Manage file-based feature toggles |
 | **Audit** | `npx forge-audit` | Assess legacy codebase migration readiness |
 
+### Runtime Import Safety
+
+Importing `@forgespace/core` is side-effect free. Governance scaffolding runs only when
+`forge-init` is executed as a CLI command (`npx forge-init` or `forge-init` binary), not when the
+package is imported in application runtime code.
+
 ### Quick Start
 
 ```bash
