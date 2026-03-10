@@ -88,7 +88,7 @@ jobs:
           fi
       - name: Run test-autogen parity check
         if: steps.tenant_profile_check.outputs.available == 'true'
-        uses: Forge-Space/forge-ai-action@484c056b923dcd1b8f43c5a18dfa147c77bcb23b
+        uses: Forge-Space/forge-ai-action@1db98d0da7c82be72aeb5a7b57d7c4d5a5882653
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
