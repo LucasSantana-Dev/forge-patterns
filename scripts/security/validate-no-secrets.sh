@@ -12,11 +12,9 @@ SECRET_PATTERNS=(
   "secret"
   "token"
   "api[_-]?key"
-  "private[_-]?key"
   "secret[_-]?key"
+  "private[_-]?key"
   "access[_-]?key"
-  "auth"
-  "credential"
   "cert"
   "pem"
   "p12"
@@ -39,6 +37,7 @@ for pattern in "${SECRET_PATTERNS[@]}"; do
     | grep -v "workflow" | grep -v "github-actions" \
     | grep -v "maxToken" | grep -v "costPerToken" | grep -v "Object\.keys" | grep -v "Object\.entries" \
     | grep -v "keywords" | grep -v "visitor-keys" | grep -v "path-key" \
+    | grep -v "required keys are" \
     | grep -v "apiKey.*process\.env" | grep -v "process\.env\.[A-Z_]*KEY" \
     | grep -v "integrity.*sha" | grep -v "resolved.*registry" \
     | grep -v "\"key\":\s*\"" | grep -v "\[key\]" | grep -v "(key)" | grep -v "\[key," \

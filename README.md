@@ -43,6 +43,7 @@ to keep platform code tenant-agnostic.
   - `ci_policy`
 - CI guardrail: `npm run check:tenant-decoupling`
   - Blocks tenant-specific hardcodes in platform paths (`src`, `patterns`, `scripts`, `.github`)
+  - Uses `rg` when available and automatically falls back to `grep` on constrained runners
   - Allowed references should live in dedicated tenant profile repositories or explicit examples
   - Works in CI/local environments with `rg` or `grep` fallback
 
@@ -58,6 +59,7 @@ Phase 0 is active in warn-only mode to guide contributors without blocking deliv
   - `tenant_profile_ref: .forge-tenant-profiles/tenants/acme-sandbox/profile.yaml`
   - `test_autogen_phase: warn`
   - PR feedback enabled (`comment: true`, `annotations: true`)
+  - Cross-repo profile checkout token: `FORGE_TENANT_PROFILES_READ_TOKEN` (fallback: `GITHUB_TOKEN`)
   - External tenant profile checkout is best-effort; if unavailable, parity is skipped
     and the warn-only flow remains non-blocking
 

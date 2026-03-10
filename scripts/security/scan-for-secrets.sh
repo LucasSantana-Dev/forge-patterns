@@ -70,7 +70,21 @@ done
 
 # 5. Check for hardcoded URLs and endpoints
 echo "5. Checking for hardcoded URLs..."
-if grep -r "https://.*\.com" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" . | grep -v "REPLACE_WITH_" | grep -v "github.com" | grep -v "npmjs.com" | grep -v "example.com" | grep -v "SECURITY NOTICE"; then
+URL_MATCHES="$(
+  grep -r -n "https://.*\.com" \
+    --include="*.yml" --include="*.yaml" --include="*.json" --include="*.js" --include="*.ts" \
+    --exclude="package-lock.json" --exclude="*.test.ts" --exclude="*.test.js" \
+    --exclude-dir="node_modules" --exclude-dir=".git" --exclude-dir="dist" \
+    src scripts .github 2>/dev/null \
+    | grep -v "REPLACE_WITH_" \
+    | grep -v "github.com" \
+    | grep -v "npmjs.com" \
+    | grep -v "example.com" \
+    | grep -v "SECURITY NOTICE" \
+    || true
+)"
+if [ -n "$URL_MATCHES" ]; then
+  echo "$URL_MATCHES"
   echo "⚠️  Found potentially hardcoded URLs - review manually"
 fi
 

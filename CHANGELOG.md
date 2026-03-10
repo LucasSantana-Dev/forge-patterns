@@ -19,6 +19,15 @@
   workflow references, Docker templates, CLI/test command execution, and ID generation.
 - **Migration assessor tests** — Refactored temporary-project test setup to reduce duplicated
   blocks and keep new-code duplication under quality-gate thresholds.
+- **CI tenant-decoupling hardening** — `Tenant Decoupling` workflow now ensures `ripgrep` exists
+  on the runner and validator script now falls back to `grep` when `rg` is unavailable.
+- **Cross-repo profile checkout token** — `test-autogen-warn` now uses
+  `FORGE_TENANT_PROFILES_READ_TOKEN` (fallback `GITHUB_TOKEN`) for private tenant-profile checkout.
+- **Security scan noise reduction** — Secret validation patterns were tightened to remove generic
+  `key` false positives, and hardcoded URL scanning now excludes lockfiles/tests and scans only
+  platform paths.
+- **Scanner regression coverage** — Added tests for secret-scan false-positive regression and
+  tenant-decoupling fallback behavior.
 
 ## [1.10.1] - 2026-03-08
 

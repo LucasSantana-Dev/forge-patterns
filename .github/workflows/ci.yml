@@ -45,6 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
+      - name: Ensure ripgrep is available
+        run: |
+          if ! command -v rg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ripgrep
+          fi
       - run: npm run check:tenant-decoupling
 
   security:
@@ -71,6 +77,7 @@ jobs:
         with:
           repository: Forge-Space/forge-tenant-profiles
           path: .forge-tenant-profiles
+          token: ${{ secrets.FORGE_TENANT_PROFILES_READ_TOKEN || secrets.GITHUB_TOKEN }}
       - name: Run test-autogen parity check
         if: hashFiles('.forge-tenant-profiles/tenants/acme-sandbox/profile.yaml') != ''
         uses: Forge-Space/forge-ai-action@484c056b923dcd1b8f43c5a18dfa147c77bcb23b
