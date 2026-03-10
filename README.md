@@ -27,6 +27,18 @@ Forge-Space Core provides shared configurations, workflows, and architectural pa
 - 🚀 **High Performance**: Sub-100ms integration times and optimized patterns
 - 🔄 **GitHub Workflows Optimization**: Organization-level reusable workflows eliminating duplication
 
+## Test Autogen — Phase 0 (Warn)
+
+Phase 0 is active in warn-only mode to guide contributors without blocking delivery:
+
+- Local hooks (`.husky/pre-commit`, `.husky/pre-push`) run `forge-ai-init test-autogen` and always exit `0`.
+- Pull requests run CI job `test-autogen-warn` using `forge-ai-action` with:
+  - `command: test-autogen-check`
+  - `test_autogen_phase: warn`
+  - PR feedback enabled (`comment: true`, `annotations: true`)
+
+This phase highlights missing tests early while preserving non-blocking developer flow.
+
 ## 📋 Projects Using These Patterns
 
 - **[siza](https://github.com/Forge-Space/siza)**: Next.js web application with multi-environment deployment

@@ -4,6 +4,10 @@
 - **Contributor guidance** — Added `AGENTS.md` operations guide and linked it from README contributing docs.
 - **Security validation** — `validate-no-secrets.sh` now excludes metadata/system folders
   (`.forge`, `.serena`, `.agents`) to prevent policy-text false positives.
+- **Phase 0 test-autogen rollout (warn-only)** — Added local hooks and CI parity check:
+  - `.husky/pre-commit` → `forge-ai-init test-autogen --staged --write --json` (non-blocking)
+  - `.husky/pre-push` → `forge-ai-init test-autogen --check --json` (non-blocking)
+  - CI job `test-autogen-warn` on pull requests with comment + annotations.
 
 ## [1.10.1] - 2026-03-08
 

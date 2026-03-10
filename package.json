@@ -30,6 +30,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "npm run lint:check && npm run format:check && npm run test:validation",
+    "ci:test-autogen:write": "npx forge-ai-init test-autogen --staged --write --json",
+    "ci:test-autogen:check": "npx forge-ai-init test-autogen --check --json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

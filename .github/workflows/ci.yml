@@ -48,3 +48,24 @@ jobs:
       - name: Run npm audit
         run: npm audit --audit-level=high --omit=dev
         continue-on-error: true
+
+  test-autogen-warn:
+    name: Test Autogen (Warn)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
+      - name: Run test-autogen parity check
+        uses: Forge-Space/forge-ai-action@484c056b923dcd1b8f43c5a18dfa147c77bcb23b
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: test-autogen-check
+          test_autogen_phase: warn
+          comment: true
+          annotations: true
