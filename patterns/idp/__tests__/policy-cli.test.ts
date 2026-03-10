@@ -6,6 +6,7 @@ const CLI_PATH = resolve(
 );
 const POLICY_DIR = resolve(__dirname, '../policies');
 const PROJECT_DIR = resolve(__dirname, '../../../');
+const MISSING_POLICY_DIR = resolve(PROJECT_DIR, '.nonexistent-policy-dir-for-tests');
 
 function runCli(args: string[]): string {
   return execFileSync(process.execPath, [CLI_PATH, ...args], {
@@ -35,7 +36,7 @@ describe('forge-policy CLI', () => {
 
   it('exits 1 for non-existent policy dir', () => {
     expect(() => {
-      runCli(['--policy-dir', '/tmp/nonexistent-policies']);
+      runCli(['--policy-dir', MISSING_POLICY_DIR]);
     }).toThrow();
   });
 

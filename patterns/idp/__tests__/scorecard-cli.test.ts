@@ -5,6 +5,7 @@ const CLI_PATH = resolve(
   __dirname, '../../../dist/patterns/idp/scorecards/cli.js'
 );
 const PROJECT_DIR = resolve(__dirname, '../../../');
+const MISSING_PROJECT_DIR = resolve(PROJECT_DIR, '.nonexistent-project-dir-for-tests');
 
 function runCli(args: string[]): string {
   return execFileSync(process.execPath, [CLI_PATH, ...args], {
@@ -60,7 +61,7 @@ describe('forge-scorecard CLI', () => {
 
   it('exits 1 for non-existent project dir', () => {
     expect(() => {
-      runCli(['--project-dir', '/tmp/nonexistent-forge-dir']);
+      runCli(['--project-dir', MISSING_PROJECT_DIR]);
     }).toThrow();
   });
 });
