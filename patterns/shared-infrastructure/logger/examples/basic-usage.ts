@@ -20,7 +20,7 @@ structuredLogger.info('User authenticated', {
   email: 'user@example.com',
   roles: ['admin', 'user'],
   loginMethod: 'oauth',
-  ip: '192.168.1.100',
+  ip: 'client-ip-placeholder',
   userAgent: 'Mozilla/5.0...'
 });
 

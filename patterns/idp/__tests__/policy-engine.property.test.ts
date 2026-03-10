@@ -105,8 +105,9 @@ describe('evaluateCondition — property tests', () => {
       fc.assert(
         fc.property(
           fc.array(fc.integer(), { minLength: 1 }),
-          (arr) => {
-            const idx = Math.floor(Math.random() * arr.length);
+          fc.nat(),
+          (arr, seed) => {
+            const idx = seed % arr.length;
             expect(evaluateCondition('contains', arr, arr[idx])).toBe(true);
           }
         )

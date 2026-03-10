@@ -8,6 +8,10 @@
   - `.husky/pre-commit` → `forge-ai-init test-autogen --staged --write --json` (non-blocking)
   - `.husky/pre-push` → `forge-ai-init test-autogen --check --json` (non-blocking)
   - CI job `test-autogen-warn` on pull requests with comment + annotations.
+- **Sonar/security hardening** — Removed hotspot patterns flagged on `main` by hardening
+  workflow references, Docker templates, CLI/test command execution, and ID generation.
+- **Migration assessor tests** — Refactored temporary-project test setup to reduce duplicated
+  blocks and keep new-code duplication under quality-gate thresholds.
 
 ## [1.10.1] - 2026-03-08
 

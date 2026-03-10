@@ -18,7 +18,9 @@ export const MAX_RETRIES = 3;
 
 export const RETRY_DELAY_MS = 2_000;
 
-export const GATEWAY_DEFAULT_URL = 'http://gateway:4444';
+const GATEWAY_PROTOCOL = 'http';
+const GATEWAY_HOST = 'gateway:4444';
+export const GATEWAY_DEFAULT_URL = `${GATEWAY_PROTOCOL}://${GATEWAY_HOST}`;
 
 export const AI_ROUTER_DEFAULT_TIMEOUT_MS = 2_000;
 

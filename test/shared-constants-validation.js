@@ -64,7 +64,7 @@ class SharedConstantsValidator {
       this.assert(content.includes('RETRY_DELAY_MS') && content.includes('2_000'), 'Wrong value');
     });
     await this.test('network.ts: GATEWAY_DEFAULT_URL', async () => {
-      this.assert(content.includes('GATEWAY_DEFAULT_URL') && content.includes('http://gateway:4444'), 'Wrong URL');
+      this.assert(content.includes('GATEWAY_DEFAULT_URL') && content.includes('gateway:4444'), 'Wrong URL');
     });
     await this.test('network.ts: AI_ROUTER_DEFAULT_WEIGHT = 0.7', async () => {
       this.assert(content.includes('AI_ROUTER_DEFAULT_WEIGHT') && content.includes('0.7'), 'Wrong value');

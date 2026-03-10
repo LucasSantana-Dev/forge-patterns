@@ -15,7 +15,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: Forge-Space/.github/.github/actions/setup-node@main
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
       - run: npm run lint:check
       - run: npm run format:check
 
@@ -23,28 +23,28 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: Forge-Space/.github/.github/actions/setup-node@main
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
       - run: npm test
 
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: Forge-Space/.github/.github/actions/setup-node@main
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
       - run: npm run build
 
   validation:
     name: Pattern Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: Forge-Space/.github/.github/actions/setup-node@main
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
       - run: npm run test:validation
 
   security:
     name: Security Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: Forge-Space/.github/.github/actions/setup-node@main
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
       - name: Run npm audit
         run: npm audit --audit-level=high --omit=dev
         continue-on-error: true

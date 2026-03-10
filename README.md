@@ -26,6 +26,7 @@ Forge-Space Core provides shared configurations, workflows, and architectural pa
 - 📝 **Logger Module**: Comprehensive logging with observability and distributed tracing
 - 🚀 **High Performance**: Sub-100ms integration times and optimized patterns
 - 🔄 **GitHub Workflows Optimization**: Organization-level reusable workflows eliminating duplication
+- 🔐 **SHA-Pinned Automation**: Workflow/action references use full commit SHAs for supply-chain safety
 
 ## Test Autogen — Phase 0 (Warn)
 
@@ -120,7 +121,7 @@ Forge-Space Core now provides **centralized reusable workflows** that eliminate 
 # In your project's .github/workflows/ci.yml
 jobs:
   ci:
-    uses: Forge-Space/core/.github/workflows/reusable/ci-base.yml@main
+    uses: Forge-Space/core/.github/workflows/reusable/ci-base.yml@<full-commit-sha>
     with:
       project-type: 'gateway'  # or 'mcp', 'webapp', 'patterns'
       node-version: '22'

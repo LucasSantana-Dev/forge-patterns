@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   ai-review:
-    uses: Forge-Space/.github/.github/workflows/reusable-ai-security-review.yml@main
+    uses: Forge-Space/.github/.github/workflows/reusable-ai-security-review.yml@6fbe56bc610ddf84b70f213c752b95196bcadd95
     with:
       exclude-directories: "dist/,node_modules/"
     secrets:

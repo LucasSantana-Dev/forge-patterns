@@ -10,6 +10,16 @@ import {
 } from './types.js';
 import { ConsoleTransport, JsonTransport, FileTransport } from './transports.js';
 
+let loggerIdCounter = 0;
+
+function createLoggerId(prefix: string): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `${prefix}_${crypto.randomUUID()}`;
+  }
+  loggerIdCounter += 1;
+  return `${prefix}_${Date.now()}_${loggerIdCounter}`;
+}
+
 /**
  * Performance Tracker Implementation
  */
@@ -82,7 +92,7 @@ class PerformanceTrackerImpl implements PerformanceTracker {
   }
 
   private generateTrackingId(): string {
-    return `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return createLoggerId('track');
   }
 
   private emitPerformanceEvent(event: any): void {
@@ -335,7 +345,7 @@ export class Logger implements ILogger {
   }
 
   private generateCorrelationId(): string {
-    return `corr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return createLoggerId('corr');
   }
 
   private initializeMetrics(): LoggerMetrics {

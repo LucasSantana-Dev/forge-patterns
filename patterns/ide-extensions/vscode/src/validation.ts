@@ -95,8 +95,7 @@ function checkTypeScriptStrict(dir: string): ValidationResult[] {
 
   try {
     const raw = fs.readFileSync(tsconfigPath, 'utf8');
-    const content = raw.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
-    const tsconfig = JSON.parse(content);
+    const tsconfig = JSON.parse(raw);
     if (tsconfig.compilerOptions?.strict === true) return [];
     return [
       {

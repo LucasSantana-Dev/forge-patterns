@@ -271,7 +271,7 @@ class AICodeAnalyzer {
       },
       {
         name: 'callback-hell',
-        pattern: /function\s*\([^)]*\s*{\s*[^}]*function\s*\([^)]*\s*{\s*[^}]*function/,
+        pattern: /function\s*\([^)]*\)\s*{[\s\S]{0,250}function\s*\(/,
         description: 'Callback hell pattern detected',
         recommendation: 'Use promises or async/await',
         impact: 'high',
@@ -341,14 +341,14 @@ class AICodeAnalyzer {
       },
       {
         name: 'memory-leak',
-        pattern: /setInterval\s*\([^)]*\s*,\s*\d+\)/,
+        pattern: /setInterval\s*\(/,
         description: 'setInterval without cleanup',
         severity: 'medium',
         recommendation: 'Clear intervals when not needed'
       },
       {
         name: 'large-loop',
-        pattern: /for\s*\([^)]*\)\s*{\s*[^}]*for\s*\(/,
+        pattern: /for\s*\([^)]*\)\s*{[\s\S]{0,200}for\s*\(/,
         description: 'Nested loop detected',
         severity: 'medium',
         recommendation: 'Consider algorithm optimization'

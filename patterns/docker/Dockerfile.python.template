@@ -17,7 +17,9 @@ COPY requirements.txt requirements-dev.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source code
-COPY . .
+COPY src ./src
+COPY pyproject.toml ./pyproject.toml
+COPY setup.py ./setup.py
 
 # Install application in development mode
 RUN pip install -e .
@@ -33,8 +35,8 @@ RUN addgroup -g 1001 -S appuser && \
 WORKDIR /app
 
 # Copy installed packages and application
-COPY --from=builder --chown=appuser:appuser /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder --chown=appuser:appuser /app /app
+COPY --from=builder --chmod=555 /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder --chmod=555 /app /app
 
 # Switch to non-root user
 USER appuser

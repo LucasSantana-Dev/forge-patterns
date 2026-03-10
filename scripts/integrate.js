@@ -163,7 +163,7 @@ async function copyForgeFeaturesCLI(targetDir) {
     await fs.copy(sourcePath, targetPath, { overwrite: true });
 
     // Make it executable
-    await fs.chmod(targetPath, '755');
+    await fs.chmod(targetPath, 0o755);
 
     spinner.succeed('forge-features CLI tool installed');
   } catch (error) {

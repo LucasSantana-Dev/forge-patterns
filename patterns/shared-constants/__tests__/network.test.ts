@@ -51,8 +51,10 @@ describe('Network Constants', () => {
 
   describe('URL Constants', () => {
     it('should have valid gateway URL', () => {
-      expect(GATEWAY_DEFAULT_URL).toBe('http://gateway:4444');
-      expect(GATEWAY_DEFAULT_URL).toMatch(/^https?:\/\//);
+      const gatewayUrl = new URL(GATEWAY_DEFAULT_URL);
+      expect(gatewayUrl.hostname).toBe('gateway');
+      expect(gatewayUrl.port).toBe('4444');
+      expect(gatewayUrl.protocol).toBe('http:');
       expect(typeof GATEWAY_DEFAULT_URL).toBe('string');
     });
 
@@ -62,7 +64,7 @@ describe('Network Constants', () => {
     });
 
     it('should use HTTP for development', () => {
-      expect(GATEWAY_DEFAULT_URL).toMatch(/^http:/);
+      expect(new URL(GATEWAY_DEFAULT_URL).protocol).toBe('http:');
     });
   });
 
@@ -178,12 +180,13 @@ describe('Network Constants', () => {
 
     it('should handle gateway URL configuration', () => {
       const gatewayUrl = GATEWAY_DEFAULT_URL;
-      
-      expect(gatewayUrl).toBe('http://gateway:4444');
-      
+      const parsed = new URL(gatewayUrl);
+      expect(parsed.hostname).toBe('gateway');
+      expect(parsed.port).toBe('4444');
+
       // Should use standard port for gateway
       expect(gatewayUrl).toContain(':4444');
-      expect(gatewayUrl).toMatch(/^http:/);
+      expect(parsed.protocol).toBe('http:');
     });
   });
 
@@ -226,7 +229,7 @@ describe('Network Constants', () => {
       expect(GATEWAY_DEFAULT_URL).toContain('4444');
       
       // Should be HTTP for internal service communication
-      expect(GATEWAY_DEFAULT_URL).toMatch(/^http:/);
+      expect(new URL(GATEWAY_DEFAULT_URL).protocol).toBe('http:');
     });
 
     it('should have reasonable defaults for production', () => {
@@ -253,7 +256,9 @@ describe('Network Constants', () => {
 
     it('should support container networking', () => {
       // Gateway URL uses service name for Docker/Kubernetes networking
-      expect(GATEWAY_DEFAULT_URL).toBe('http://gateway:4444');
+      const parsed = new URL(GATEWAY_DEFAULT_URL);
+      expect(parsed.hostname).toBe('gateway');
+      expect(parsed.port).toBe('4444');
       expect(GATEWAY_DEFAULT_URL).not.toContain('localhost');
       expect(GATEWAY_DEFAULT_URL).not.toContain('127.0.0.1');
     });
