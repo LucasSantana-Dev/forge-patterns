@@ -1,8 +1,8 @@
 # Organization Setup Guide
 
-This guide configures a new Forge-Space organization to consume reusable workflows
-from `Forge-Space/.github` and enable limit-aware CI defaults for newly
-bootstrapped projects.
+This guide configures a new Forge-Space organization to consume reusable
+workflows from `Forge-Space/.github` and enable limit-aware CI defaults for
+newly bootstrapped projects.
 
 ## Scope
 
