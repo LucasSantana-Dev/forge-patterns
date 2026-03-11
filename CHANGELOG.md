@@ -1,5 +1,21 @@
 ## [Unreleased]
 
+### Added
+- **Limit-aware bootstrap templates** — Added workflow templates for `node`,
+  `nextjs`, and `python` projects under
+  `scripts/bootstrap/templates/workflows/limit-aware/`, including:
+  - PR CI templates with baseline required checks and conditional heavy jobs
+  - Nightly security workflows that always run heavy scans
+- **Actions org setup helper** — Added `scripts/bootstrap/actions-org-setup.sh`
+  to validate org/repo Actions endpoints, query billing usage, and upsert:
+  - `ACTIONS_MONTHLY_CAP_MINUTES`
+  - `ACTIONS_WARN_PCT`
+  - `ACTIONS_DEGRADE_PCT`
+- **Actions limits documentation** — Added
+  `docs/guides/actions-limits-strategy.md` and refreshed
+  `docs/guides/organization-setup.md` for the `.github` canonical workflow
+  source.
+
 ### Fixed
 - **IDP init import side effects** — Package root imports no longer trigger `forge-init` writes.
   `initProject` now lives in side-effect-free `patterns/idp/init/project.ts`, CLI execution in
@@ -7,6 +23,13 @@
   loading at import time.
 
 ### Changed
+- **Bootstrap contract (new projects)** — `scripts/bootstrap/project.sh` now
+  defaults to `--ci-profile=limit-aware`, requires `--org` and
+  `--actions-cap-minutes` for that profile, and generates limit-aware CI
+  workflows from templates.
+- **Bootstrap path resolution** — Project bootstrapping now resolves source
+  files from repository-root absolute paths, avoiding relative path failures
+  during project generation.
 - **TypeScript ESLint alignment** — Synchronized `@typescript-eslint/eslint-plugin`,
   `@typescript-eslint/parser`, and `typescript-eslint` to `8.57.0` to keep peer
   dependencies compatible in CI installs.
