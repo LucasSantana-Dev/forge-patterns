@@ -36,8 +36,6 @@ jobs:
       monthly_cap_minutes: ${{ vars.ACTIONS_MONTHLY_CAP_MINUTES || '__ACTIONS_MONTHLY_CAP_MINUTES__' }}
       warn_pct: ${{ vars.ACTIONS_WARN_PCT || '__ACTIONS_WARN_PCT__' }}
       degrade_pct: ${{ vars.ACTIONS_DEGRADE_PCT || '__ACTIONS_DEGRADE_PCT__' }}
-    secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
     name: Lint

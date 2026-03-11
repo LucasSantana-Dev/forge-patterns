@@ -17,6 +17,9 @@
   source.
 
 ### Fixed
+- **Reusable budget guard compatibility** — Removed explicit secret mapping in
+  generated limit-aware CI templates because the reusable workflow now consumes
+  `secrets.GITHUB_TOKEN` directly.
 - **IDP init import side effects** — Package root imports no longer trigger `forge-init` writes.
   `initProject` now lives in side-effect-free `patterns/idp/init/project.ts`, CLI execution in
   `patterns/idp/init/cli.ts` is entrypoint-guarded, and IDP barrel exports avoid CLI module
