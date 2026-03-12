@@ -1,0 +1,76 @@
+{
+  "version": "v1",
+  "updated_at": "2026-03-11T00:00:00.000Z",
+  "rules": [
+    {
+      "rule_id": "SEC-SECRET-001",
+      "title": "Hardcoded Secret Pattern",
+      "description": "Detected token-like secret material committed in source files.",
+      "severity": "critical",
+      "category": "secrets",
+      "recommendation": "Remove the value, rotate exposed credentials, and load from environment.",
+      "risk_level": "high",
+      "tags": ["secrets", "credentials", "sast"]
+    },
+    {
+      "rule_id": "SEC-DEP-001",
+      "title": "Known Vulnerable Dependency",
+      "description": "Dependency version is flagged by the native advisory dataset.",
+      "severity": "high",
+      "category": "dependencies",
+      "recommendation": "Upgrade to a patched version and regenerate lockfiles.",
+      "risk_level": "high",
+      "tags": ["dependencies", "supply-chain", "sast"]
+    },
+    {
+      "rule_id": "SEC-INJ-001",
+      "title": "Injection Sink Pattern",
+      "description": "Potential command or SQL injection sink detected without sanitization.",
+      "severity": "high",
+      "category": "injection",
+      "recommendation": "Use parameterized APIs and sanitize untrusted inputs.",
+      "risk_level": "high",
+      "tags": ["injection", "owasp", "sast"]
+    },
+    {
+      "rule_id": "SEC-AUTH-001",
+      "title": "Missing Authorization Guard",
+      "description": "Sensitive code path appears to execute without access control checks.",
+      "severity": "medium",
+      "category": "auth",
+      "recommendation": "Add explicit authorization checks at the system boundary.",
+      "risk_level": "medium",
+      "tags": ["auth", "access-control", "sast"]
+    },
+    {
+      "rule_id": "SEC-TRANSPORT-001",
+      "title": "Insecure Transport Usage",
+      "description": "Plain HTTP endpoint usage detected for potentially sensitive traffic.",
+      "severity": "medium",
+      "category": "transport",
+      "recommendation": "Enforce HTTPS and reject insecure URL schemes in production flows.",
+      "risk_level": "medium",
+      "tags": ["transport", "tls", "sast"]
+    },
+    {
+      "rule_id": "SEC-CONFIG-001",
+      "title": "Overly Permissive Security Config",
+      "description": "Permissive CORS or security headers configuration detected.",
+      "severity": "medium",
+      "category": "config",
+      "recommendation": "Restrict origins/headers and apply environment-specific allowlists.",
+      "risk_level": "medium",
+      "tags": ["config", "cors", "sast"]
+    },
+    {
+      "rule_id": "SEC-DAST-001",
+      "title": "DAST Hook Telemetry",
+      "description": "DAST execution is not part of v1 and is tracked as telemetry only.",
+      "severity": "info",
+      "category": "dast",
+      "recommendation": "Review hook status and schedule DAST worker rollout separately.",
+      "risk_level": "low",
+      "tags": ["dast", "hooks", "telemetry"]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forgespace.co/schemas/security-spoke-report-v1.schema.json",
+  "title": "SecuritySpokeReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "generated_at",
+    "scanner",
+    "summary",
+    "findings",
+    "dast"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scanner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "execution"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "execution": {
+          "type": "string",
+          "enum": ["success", "error"]
+        },
+        "error_message": { "type": "string" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_findings", "by_severity", "by_risk_level"],
+      "properties": {
+        "total_findings": { "type": "integer", "minimum": 0 },
+        "by_severity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["critical", "high", "medium", "low", "info"],
+          "properties": {
+            "critical": { "type": "integer", "minimum": 0 },
+            "high": { "type": "integer", "minimum": 0 },
+            "medium": { "type": "integer", "minimum": 0 },
+            "low": { "type": "integer", "minimum": 0 },
+            "info": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "by_risk_level": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["high", "medium", "low"],
+          "properties": {
+            "high": { "type": "integer", "minimum": 0 },
+            "medium": { "type": "integer", "minimum": 0 },
+            "low": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rule_id",
+          "severity",
+          "category",
+          "title",
+          "evidence",
+          "recommendation",
+          "risk_level"
+        ],
+        "properties": {
+          "rule_id": { "type": "string", "minLength": 1 },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "secrets",
+              "dependencies",
+              "injection",
+              "auth",
+              "transport",
+              "config",
+              "dast",
+              "other"
+            ]
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "value"],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["file", "dependency", "code", "request", "other"]
+                },
+                "value": { "type": "string", "minLength": 1 },
+                "file": { "type": "string" },
+                "line": { "type": "integer", "minimum": 1 }
+              }
+            }
+          },
+          "recommendation": { "type": "string", "minLength": 1 },
+          "risk_level": { "type": "string", "enum": ["high", "medium", "low"] }
+        }
+      }
+    },
+    "dast": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "mode", "reason"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_executed", "scheduled", "running", "completed", "failed"]
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["hooks_only_v1", "full"]
+        },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

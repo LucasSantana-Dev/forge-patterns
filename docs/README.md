@@ -39,6 +39,7 @@
 - [User Guides](guides/) - Deployment and user journey guides
   - [Deployment Playbook](guides/DEPLOYMENT_PLAYBOOK.md)
   - [Developer Onboarding](guides/DEVELOPER_ONBOARDING.md)
+  - [Security Spoke Contract v1](guides/security-spoke-contract.md)
   - [Troubleshooting Guide](guides/TROUBLESHOOTING_GUIDE.md)
   - [User Journey](guides/USER_JOURNEY.md)
 - [Development Standards](standards/) - Coding and security standards

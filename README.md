@@ -131,6 +131,19 @@ npx forge-audit --json --threshold 60            # CI gate mode
 
 - [Scorecard Integration](docs/guides/scorecard-integration.md) — add quality scorecards to any repo
 - [Policy Engine Integration](docs/guides/policy-engine-integration.md) — add policy checks to any repo
+- [Security Spoke Contract v1](docs/guides/security-spoke-contract.md) — shared scanner output contract
+
+### Security Spoke Contract v1
+
+Security scanner outputs across Forge Space use the canonical v1 contract in
+`patterns/idp/security-spoke`.
+
+- Report schema:
+  `patterns/idp/security-spoke/schema/security-spoke-report-v1.schema.json`
+- Rule catalog:
+  `patterns/idp/security-spoke/rules/security-spoke-rules-v1.json`
+- Compatibility fixtures:
+  `patterns/idp/security-spoke/fixtures/*.json`
 
 ## � GitHub Workflows Optimization
 
