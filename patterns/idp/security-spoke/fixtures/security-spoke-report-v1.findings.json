@@ -1,0 +1,63 @@
+{
+  "version": "v1",
+  "generated_at": "2026-03-11T03:30:00.000Z",
+  "scanner": {
+    "name": "forge-security-spoke",
+    "version": "1.0.0",
+    "execution": "success"
+  },
+  "summary": {
+    "total_findings": 2,
+    "by_severity": {
+      "critical": 1,
+      "high": 1,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    },
+    "by_risk_level": {
+      "high": 2,
+      "medium": 0,
+      "low": 0
+    }
+  },
+  "findings": [
+    {
+      "rule_id": "SEC-SECRET-001",
+      "severity": "critical",
+      "category": "secrets",
+      "title": "Hardcoded Secret Pattern",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "AWS secret key-like token",
+          "file": "src/config.ts",
+          "line": 18
+        }
+      ],
+      "recommendation": "Remove hardcoded token, rotate credential, and use env injection.",
+      "risk_level": "high"
+    },
+    {
+      "rule_id": "SEC-INJ-001",
+      "severity": "high",
+      "category": "injection",
+      "title": "Injection Sink Pattern",
+      "evidence": [
+        {
+          "kind": "code",
+          "value": "string interpolation in SQL query",
+          "file": "src/repo/users.ts",
+          "line": 72
+        }
+      ],
+      "recommendation": "Replace dynamic SQL with parameterized query API.",
+      "risk_level": "high"
+    }
+  ],
+  "dast": {
+    "status": "not_executed",
+    "mode": "hooks_only_v1",
+    "reason": "DAST workers are deferred in security spoke v1."
+  }
+}

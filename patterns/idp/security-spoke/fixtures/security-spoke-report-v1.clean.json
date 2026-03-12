@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "generated_at": "2026-03-11T03:00:00.000Z",
+  "scanner": {
+    "name": "forge-security-spoke",
+    "version": "1.0.0",
+    "execution": "success"
+  },
+  "summary": {
+    "total_findings": 0,
+    "by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    },
+    "by_risk_level": {
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    }
+  },
+  "findings": [],
+  "dast": {
+    "status": "not_executed",
+    "mode": "hooks_only_v1",
+    "reason": "Security spoke v1 ships DAST hooks telemetry only."
+  }
+}

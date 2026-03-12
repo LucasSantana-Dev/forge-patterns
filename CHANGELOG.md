@@ -1,6 +1,12 @@
 ## [Unreleased]
 
 ### Added
+- **Security Spoke v1 contract** — Added canonical security-spoke artifacts
+  under `patterns/idp/security-spoke/`:
+  - JSON schema `security-spoke-report-v1.schema.json`
+  - app-native rule catalog `security-spoke-rules-v1.json`
+  - compatibility fixtures and contract tests for schema/enum stability
+  - TypeScript runtime guard and readers for shared report validation
 - **Limit-aware bootstrap templates** — Added workflow templates for `node`,
   `nextjs`, and `python` projects under
   `scripts/bootstrap/templates/workflows/limit-aware/`, including:
