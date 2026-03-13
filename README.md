@@ -115,6 +115,9 @@ Importing `@forgespace/core` is side-effect free. Governance scaffolding runs on
 `forge-init` is executed as a CLI command (`npx forge-init` or `forge-init` binary), not when the
 package is imported in application runtime code.
 
+`forge-audit` evaluates 6 categories: dependencies, architecture, security,
+quality, migration-readiness, and ai-governance.
+
 ### Quick Start
 
 ```bash

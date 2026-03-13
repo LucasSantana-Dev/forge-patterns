@@ -21,6 +21,11 @@
   `docs/guides/actions-limits-strategy.md` and refreshed
   `docs/guides/organization-setup.md` for the `.github` canonical workflow
   source.
+- **AI governance migration category** — `forge-audit` now reports
+  `ai-governance` as a first-class category (6 total categories), including:
+  - AI rules coverage (`CLAUDE.md` / `.cursorrules` / Copilot instructions)
+  - Claude hooks and skills governance signals
+  - CI secret-scanning governance checks
 
 ### Fixed
 - **Reusable budget guard compatibility** — Removed explicit secret mapping in
@@ -30,6 +35,10 @@
   `initProject` now lives in side-effect-free `patterns/idp/init/project.ts`, CLI execution in
   `patterns/idp/init/cli.ts` is entrypoint-guarded, and IDP barrel exports avoid CLI module
   loading at import time.
+- **`forge-audit` CLI contract** now validates and documents 6 categories
+  including `ai-governance`.
+- **Release workflow output typo** fixed in `.github/workflows/release.yml`
+  to keep publish detection reliable.
 
 ### Changed
 - **Bootstrap contract (new projects)** — `scripts/bootstrap/project.sh` now

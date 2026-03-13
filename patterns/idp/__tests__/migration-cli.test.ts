@@ -59,6 +59,9 @@ describe('forge-audit CLI', () => {
     const report = JSON.parse(output);
     expect(report.overallScore).toBeGreaterThanOrEqual(0);
     expect(report.categories).toHaveLength(6);
+    expect(report.categories.map((c: { category: string }) => c.category)).toContain(
+      'ai-governance',
+    );
     expect(report.strategy).toBeTruthy();
     expect(report.readiness).toBeTruthy();
 

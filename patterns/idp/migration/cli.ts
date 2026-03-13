@@ -68,6 +68,7 @@ Categories:
   security           Secrets, injection risks, CORS
   quality            Tests, linting, CI, code hygiene
   migration-readiness  Legacy stack, TypeScript, global state
+  ai-governance      AI rules, hooks, CI governance, secret hygiene
 `);
 }
 
