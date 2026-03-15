@@ -6,6 +6,11 @@
   <p>Shared standards, patterns, and MCP context server for the Forge Space ecosystem.</p>
 </div>
 
+[![CI](https://github.com/Forge-Space/core/actions/workflows/ci.yml/badge.svg)](https://github.com/Forge-Space/core/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
+
 Part of [Forge Space](https://github.com/Forge-Space) — the open full-stack AI workspace. This repo provides the foundation that all other Forge Space projects build on: code quality standards, security framework, CI/CD workflows, and a local MCP context server for IDE integration.
 
 
