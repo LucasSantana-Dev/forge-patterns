@@ -6,7 +6,7 @@
  */
 
 // Version information — kept in sync with package.json by scripts/release-core.sh
-export const VERSION = '1.11.0';
+export const VERSION = '1.11.2';
 
 // Type definitions
 export interface ProjectConfig {
