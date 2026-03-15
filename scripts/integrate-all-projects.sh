@@ -10,8 +10,8 @@ FORGE_PATTERNS_DIR="$(pwd)"
 # Project paths (update these to match your actual project locations)
 PROJECTS=(
     "$(pwd)/../mcp-gateway"
-    "$(pwd)/../uiforge-mcp"
-    "$(pwd)/../uiforge-webapp"
+    "$(pwd)/../ui-mcp"
+    "$(pwd)/../siza"
 )
 
 # Integration scripts
@@ -53,8 +53,8 @@ echo "🎉 All integrations completed!"
 echo ""
 echo "📋 Summary:"
 echo "  - MCP Gateway: Integrated with routing, security, and performance patterns"
-echo "  - UIForge MCP: Integrated with AI providers and template patterns"
-echo "  - UIForge WebApp: Integrated with code quality and feature toggle patterns"
+echo "  - UI MCP: Integrated with AI providers and template patterns"
+echo "  - Siza: Integrated with code quality and feature toggle patterns"
 echo ""
 echo "📋 Next steps for each project:"
 echo "   1. Navigate to project directory"

@@ -1,34 +1,51 @@
 # Feature Toggle System
 
 ## Purpose
-Guides editing of the Unleash-based cross-project feature toggle infrastructure.
+Guides editing of the file-based IDP feature-toggle infrastructure (`patterns/idp/feature-toggles/`).
 
 ## Key Files
-- `patterns/feature-toggles/README.md` — full documentation and SDK examples
-- `patterns/feature-toggles/libraries/nodejs/index.js` — Node.js `UIForgeFeatureToggles` class
-- `patterns/feature-toggles/libraries/advanced/index.js` — advanced toggle patterns
-- `patterns/feature-toggles/config/centralized-config.yml` — centralized toggle config
+- `patterns/idp/feature-toggles/schema.ts` — `ToggleNamespace`, `FeatureToggle`, types
+- `patterns/idp/feature-toggles/store.ts` — `FileToggleStore` class (create/enable/disable/remove/list/reload)
+- `patterns/idp/feature-toggles/cli.ts` — `forge-features` CLI
+- `patterns/idp/feature-toggles/index.ts` — barrel exports
+- `patterns/idp/__tests__/feature-toggles.test.ts` — 27 tests
+- `patterns/idp/__tests__/features-cli.test.ts` — 16 tests (dry-run coverage)
+- `patterns/feature-toggles/` — reference patterns (Unleash SDK wrappers, advanced patterns)
 
 ## Architecture
-Self-hosted Unleash instance (zero licensing cost) providing unified feature management across all Forge projects.
+File-based toggle store: `.forge/features.json` (JSON with version + toggles array).
 
-`forge-features` CLI for centralized management:
-- `forge-features enable global.debug-mode`
-- `forge-features enable mcp-gateway.rate-limiting`
-- `forge-features status --project=mcp-gateway`
+`FileToggleStore` methods: `create()`, `enable()`, `disable()`, `remove()`, `get()`, `list()`, `isEnabled()`, `reload()`.
 
-Feature namespaces:
-- `global.*` — cross-project (debug-mode, beta-features, experimental-ui, enhanced-logging)
-- `mcp-gateway.*` — rate-limiting, request-validation, security-headers
-- `uiforge-mcp.*` — ai-chat, template-management, ui-generation
-- `uiforge-webapp.*` — dark-mode, advanced-analytics, experimental-components
+`forge-features` CLI commands: `list`, `get`, `create`, `enable`, `disable`, `remove`, `check`.
 
-Toggle strategies: boolean, multivariate, gradual rollout, A/B testing, kill switches.
-SDK implementations: Node.js, Python, React (`FeatureToggleProvider` + hooks).
+## Canonical Namespaces (v1.11.2+)
+```ts
+type ToggleNamespace =
+  | 'global'        // cross-project flags
+  | 'mcp-gateway'   // gateway-specific
+  | 'ui-mcp'        // UI generation server (canonical, replaces 'uiforge-mcp')
+  | 'siza'          // web app (canonical, replaces 'uiforge-webapp')
+  | 'uiforge-mcp'   // @deprecated → use 'ui-mcp'
+  | 'uiforge-webapp'// @deprecated → use 'siza'
+```
 
-Unleash runs via Docker Compose on port 4242 with PostgreSQL.
+## Toggle Strategies
+- `default` — simple boolean
+- `gradual-rollout` — with `parameters: { rollout: 0-100 }`
+- `user-ids` — with `parameters: { ids: string[] }`
+
+## Feature Flag Examples
+```bash
+forge-features create ENABLE_BETA --namespace siza --description "Beta rollout" --enabled
+forge-features enable ENABLE_BETA
+forge-features list --namespace global
+forge-features check ENABLE_BETA
+```
 
 ## Critical Constraints
-- Zero-cost deployment requirement
-- Feature changes propagate via `forge-features` CLI (not direct API)
-- Kill switch pattern: `{feature}-killed` flag for emergency disable
+- `FeatureToggleStore.version` must always be `1` (version field is literal type `1`)
+- `create()` throws if toggle already exists — check with `get()` first
+- `enable()/disable()` throw if toggle not found
+- Legacy namespaces kept for backwards compat — don't remove them
+- `updatedAt` is ISO string set by `new Date().toISOString()`

@@ -1,13 +1,13 @@
 const { initialize } = require('unleash-client-node');
 
 /**
- * Centralized Feature Toggle System for UIForge Ecosystem
+ * Centralized Feature Toggle System for Forge Space Ecosystem
  * Supports cross-project feature management with global and project-specific features
  */
-class UIForgeFeatureToggles {
+class ForgeSpaceFeatureToggles {
   constructor(options = {}) {
     this.config = {
-      appName: options.appName || process.env.UNLEASH_APP_NAME || 'uiforge-app',
+      appName: options.appName || process.env.UNLEASH_APP_NAME || 'forge-app',
       unleashUrl: options.unleashUrl || process.env.UNLEASH_URL || 'http://localhost:4242',
       clientKey: options.clientKey || process.env.UNLEASH_CLIENT_KEY || 'default:development',
       refreshInterval: options.refreshInterval || 30000, // 30 seconds
@@ -380,4 +380,6 @@ class UIForgeFeatureToggles {
 }
 
 // Export the class
-module.exports = UIForgeFeatureToggles;
+module.exports = ForgeSpaceFeatureToggles;
+// Backwards compat alias
+module.exports.UIForgeFeatureToggles = ForgeSpaceFeatureToggles;

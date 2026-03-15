@@ -46,7 +46,7 @@ const PROJECT_CONFIGS = {
     example: 'examples/mcp-gateway-integration.js'
   },
   'uiforge-mcp': {
-    name: 'UIForge MCP',
+    name: 'UI MCP (legacy)',
     description: 'MCP server with AI integration and template management',
     patterns: [
       'mcp-servers/ai-providers',
@@ -66,10 +66,10 @@ const PROJECT_CONFIGS = {
       'prettier',
       'typescript'
     ],
-    example: 'examples/uiforge-mcp-integration.js'
+    example: 'examples/ui-mcp-integration.js'
   },
   'uiforge-webapp': {
-    name: 'UIForge WebApp',
+    name: 'Siza Web App (legacy)',
     description: 'Next.js web application with feature toggles and code quality',
     patterns: [
       'code-quality/eslint',
@@ -88,7 +88,52 @@ const PROJECT_CONFIGS = {
       'prettier',
       'typescript'
     ],
-    example: 'examples/uiforge-webapp-integration.js'
+    example: 'examples/siza-integration.js'
+  }, // Canonical Forge Space project names (aliases for backwards compat)
+  'ui-mcp': {
+    name: 'Forge UI MCP',
+    description: 'MCP server with AI integration and template management (canonical name)',
+    patterns: [
+      'mcp-servers/ai-providers',
+      'mcp-servers/templates',
+      'mcp-servers/ui-generation',
+      'mcp-servers/streaming',
+      'shared-infrastructure/sleep-architecture',
+      'feature-toggles/libraries/nodejs',
+      'feature-toggles/config/centralized-config.yml'
+    ],
+    configFiles: ['.eslintrc.js', '.prettierrc.json', 'tsconfig.json'],
+    dependencies: [
+      '@typescript-eslint/eslint-plugin',
+      '@typescript-eslint/parser',
+      'eslint',
+      'eslint-config-prettier',
+      'prettier',
+      'typescript'
+    ],
+    example: 'examples/ui-mcp-integration.js'
+  },
+  siza: {
+    name: 'Siza Web App',
+    description: 'Next.js web application with feature toggles and code quality (canonical name)',
+    patterns: [
+      'code-quality/eslint',
+      'code-quality/prettier',
+      'code-quality/typescript',
+      'feature-toggles/libraries/nodejs',
+      'feature-toggles/config/centralized-config.yml',
+      'feature-toggles'
+    ],
+    configFiles: ['.eslintrc.js', '.prettierrc.json'],
+    dependencies: [
+      '@typescript-eslint/eslint-plugin',
+      '@typescript-eslint/parser',
+      'eslint',
+      'eslint-config-prettier',
+      'prettier',
+      'typescript'
+    ],
+    example: 'examples/siza-integration.js'
   }
 };
 
@@ -213,14 +258,20 @@ async function createIntegrationExample(targetDir, projectType) {
 
   try {
     const examplesDir = path.join(targetDir, 'examples');
-    const exampleFile = path.join(examplesDir, `${projectType}-integration.js`);
+
+    // Normalise legacy aliases to canonical names
+    const LEGACY_MAP = { 'uiforge-mcp': 'ui-mcp', 'uiforge-webapp': 'siza' };
+    const canonicalType = LEGACY_MAP[projectType] ?? projectType;
+
+    const exampleFile = path.join(examplesDir, `${canonicalType}-integration.js`);
 
     await fs.ensureDir(examplesDir);
 
     // Create example based on project type
     let exampleContent = '';
+    const effectiveType = canonicalType;
 
-    if (projectType === 'mcp-gateway') {
+    if (effectiveType === 'mcp-gateway') {
       exampleContent = `// MCP Gateway Integration Example
 // This file demonstrates how to use Forge Patterns in your MCP Gateway project
 
@@ -278,18 +329,16 @@ app.use('/api/mcp/*', router.middleware);
 
 export { app, router, cache };
 `;
-    } else if (projectType === 'uiforge-mcp') {
-      exampleContent = `// UIForge MCP Integration Example
-// This file demonstrates how to use Forge Patterns in your UIForge MCP project
+    } else if (effectiveType === 'ui-mcp') {
+      exampleContent = `// UI MCP Integration Example
+// This file demonstrates how to use Forge Patterns in your ui-mcp project
 
 import { AIProviderManager } from '../patterns/mcp-servers/ai-providers/ai-provider-manager';
 import { TemplateManager } from '../patterns/mcp-servers/templates/template-manager';
 
-// Initialize patterns
 const providerManager = new AIProviderManager();
 const templateManager = new TemplateManager();
 
-// Register OpenAI provider
 await providerManager.registerProvider({
   name: 'openai-primary',
   type: 'openai',
@@ -312,212 +361,59 @@ await providerManager.registerProvider({
   ],
 });
 
-// Register React button template
-const buttonTemplate = {
-  id: 'react-button',
-  name: 'react-button',
-  version: '1.0.0',
-  content: \`
-import React from 'react';
-
-interface {{componentName}}Props {
-  {{#if onClick}}
-  onClick: () => void;
-  {{/if}}
-  {{#if children}}
-  children: React.ReactNode;
-  {{/if}}
-}
-
-export const {{componentName}}: React.FC<{{componentName}}Props> = ({
-  {{#if onClick}}
-  onClick,
-  {{/if}}
-  {{#if children}}
-  children,
-  {{/if}}
-}) => {
-  return (
-    <button onClick={onClick}>
-      {children}
-    </button>
-  );
-};
-  \`,
-  metadata: {
-    author: 'Forge Team',
-    description: 'React button component template',
-    tags: ['react', 'component', 'button'],
-    framework: 'react',
-    language: 'typescript',
-    category: 'ui-components',
-    parameters: [
-      {
-        name: 'componentName',
-        type: 'string',
-        required: true,
-        description: 'Name of the component',
-      },
-      {
-        name: 'onClick',
-        type: 'string',
-        required: false,
-        description: 'Click handler function',
-      },
-      {
-        name: 'children',
-        type: 'string',
-        required: false,
-        description: 'Button content',
-      },
-    ],
-  },
-  dependencies: [],
-  lastModified: new Date(),
-};
-
-await templateManager.registerTemplate(buttonTemplate);
-
-// MCP Server implementation
 export class MCPUIGenerationServer {
   async handleGenerateComponent(request) {
-    // Generate AI response
-    const aiResponse = await providerManager.generate(
-      request.prompt,
-      {
-        model: request.model || 'gpt-4',
-        temperature: 0.7,
-        maxTokens: request.maxTokens || 2000,
-      }
-    );
-
-    // Render template
-    const rendered = await templateManager.renderTemplate(
-      request.templateName || 'react-button',
-      {
-        ...request.context,
-        aiResponse: aiResponse.content,
-      }
-    );
-
+    const aiResponse = await providerManager.generate(request.prompt, {
+      model: request.model || 'gpt-4',
+      temperature: 0.7,
+      maxTokens: request.maxTokens || 2000,
+    });
     return {
       success: true,
-      data: {
-        component: rendered,
-        provider: aiResponse.provider,
-        usage: aiResponse.usage,
-      },
+      data: { component: aiResponse.content, provider: aiResponse.provider, usage: aiResponse.usage },
     };
   }
 }
 
 export { MCPUIGenerationServer, providerManager, templateManager };
 `;
-    } else if (projectType === 'uiforge-webapp') {
-      exampleContent = `// UIForge WebApp Integration Example
-// This file demonstrates how to use Forge Patterns in your UIForge WebApp project
+    } else if (effectiveType === 'siza') {
+      exampleContent = `// Siza Integration Example
+// This file demonstrates how to use Forge Patterns in your siza project
 
 import { FeatureToggleManager } from '../patterns/feature-toggles/libraries/nodejs';
 
-// Initialize feature toggle manager
 const featureToggleManager = new FeatureToggleManager({
   features: {
-    'new-dashboard': {
-      enabled: true,
-      description: 'Enable new dashboard UI',
-      rolloutPercentage: 100,
-    },
-    'advanced-analytics': {
-      enabled: false,
-      description: 'Enable advanced analytics dashboard',
-      rolloutPercentage: 0,
-    },
-    'ai-powered-search': {
-      enabled: true,
-      description: 'Enable AI-powered search functionality',
-      rolloutPercentage: 50,
-    },
-    'dark-mode': {
-      enabled: true,
-      description: 'Enable dark mode theme',
-      rolloutPercentage: 100,
-    },
+    'new-dashboard': { enabled: true, description: 'Enable new dashboard UI', rolloutPercentage: 100 },
+    'advanced-analytics': { enabled: false, description: 'Enable advanced analytics', rolloutPercentage: 0 },
+    'ai-powered-search': { enabled: true, description: 'AI-powered search', rolloutPercentage: 50 },
+    'dark-mode': { enabled: true, description: 'Enable dark mode theme', rolloutPercentage: 100 },
   },
 });
 
-// React hook for feature toggles
 export const useFeatureToggle = (featureName) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const checkFeature = async () => {
+    const check = async () => {
       setIsLoading(true);
-      const enabled = await featureToggleManager.isEnabled(featureName);
-      setIsEnabled(enabled);
+      setIsEnabled(await featureToggleManager.isEnabled(featureName));
       setIsLoading(false);
     };
-
-    checkFeature();
-
-    // Listen for feature changes
-    const handleFeatureChange = (changedFeature, enabled) => {
-      if (changedFeature === featureName) {
-        setIsEnabled(enabled);
-      }
+    check();
+    const onChange = (f, v) => {
+      if (f === featureName) setIsEnabled(v);
     };
-
-    featureToggleManager.on('featureChanged', handleFeatureChange);
-
-    return () => {
-      featureToggleManager.off('featureChanged', handleFeatureChange);
-    };
+    featureToggleManager.on('featureChanged', onChange);
+    return () => featureToggleManager.off('featureChanged', onChange);
   }, [featureName]);
 
   return { isEnabled, isLoading };
 };
 
-// Example component with feature toggle
-const NewDashboard = () => {
-  const { isEnabled: isNewDashboardEnabled, isLoading } = useFeatureToggle('new-dashboard');
-
-  if (isLoading) {
-    return <div>Loading dashboard...</div>;
-  }
-
-  if (!isNewDashboardEnabled) {
-    return <LegacyDashboard />;
-  }
-
-  return (
-    <div className="new-dashboard">
-      <h1>Enhanced Dashboard</h1>
-      <AdvancedAnalytics />
-      <AIPoweredSearch />
-      <DarkModeToggle />
-    </div>
-  );
-};
-
-// Advanced Analytics component (feature-gated)
-const AdvancedAnalytics = () => {
-  const { isEnabled: isAnalyticsEnabled } = useFeatureToggle('advanced-analytics');
-
-  if (!isAnalyticsEnabled) {
-    return null;
-  }
-
-  return (
-    <div className="advanced-analytics">
-      <h2>Advanced Analytics</h2>
-      <RealTimeMetrics />
-      <PredictiveInsights />
-      <CustomReports />
-    </div>
-  );
-};
-
-export { NewDashboard, AdvancedAnalytics, useFeatureToggle, featureToggleManager };
+export { featureToggleManager };
 `;
     }
 
@@ -634,7 +530,10 @@ program
 program
   .command('integrate')
   .description('Integrate Forge Patterns into a project')
-  .option('-p, --project <type>', 'Project type (mcp-gateway, uiforge-mcp, uiforge-webapp)')
+  .option(
+    '-p, --project <type>',
+    'Project type (mcp-gateway, ui-mcp, siza) — legacy: uiforge-mcp, uiforge-webapp'
+  )
   .option('-d, --dir <path>', 'Target directory (default: current directory)')
   .option('--force', 'Force overwrite existing files')
   .action(async options => {

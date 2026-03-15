@@ -4,7 +4,7 @@
  * forge-patterns CLI
  *
  * Command-line tool for discovering, listing, and applying patterns
- * from the UIForge Patterns library.
+ * from the Forge Space Patterns library.
  *
  * Usage:
  *   forge-patterns list
@@ -28,7 +28,7 @@ const program = new Command();
 
 program
   .name('forge-patterns')
-  .description('UIForge Patterns CLI — discover, apply, and validate patterns')
+  .description('Forge Space Patterns CLI — discover, apply, and validate patterns')
   .version('1.1.0');
 
 // ─── list ────────────────────────────────────────────────────────────────────

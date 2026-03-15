@@ -3,7 +3,7 @@
 # Integration script for siza project
 set -e
 
-echo "🚀 Integrating Forge Patterns into UIForge WebApp..."
+echo "🚀 Integrating Forge Patterns into Siza..."
 
 PROJECT_ROOT=${1:-$(pwd)}
 FORGE_PATTERNS_DIR=${2:-"$(pwd)"}
@@ -74,7 +74,7 @@ fi
 # Create integration example
 echo "📄 Creating integration example..."
 cat > "$PROJECT_ROOT/examples/siza-integration.js" << 'EOF'
-// UIForge WebApp Integration Example
+// Siza Integration Example
 import { FeatureToggleManager } from '../patterns/feature-toggles/libraries/nodejs';
 import { ESLintConfig } from '../patterns/code-quality/eslint/base.config';
 
@@ -428,7 +428,7 @@ echo "📖 Creating integration README..."
 cat > "$PROJECT_ROOT/docs/forge-patterns-integration.md" << 'EOF'
 # Forge Patterns Integration
 
-This document describes how Forge Patterns v1.0.0 is integrated into the UIForge WebApp project.
+This document describes how Forge Patterns v1.0.0 is integrated into the Siza project.
 
 ## 📋 Integrated Patterns
 
@@ -499,7 +499,7 @@ curl -X POST http://localhost:3000/api/feature-toggles \\
 - [Next.js Integration Guide](https://nextjs.org/docs)
 EOF
 
-echo "✅ UIForge WebApp integration completed!"
+echo "✅ Siza integration completed!"
 echo ""
 echo "📋 Next steps:"
 echo "1. Run 'npm install' to install dependencies"

@@ -98,14 +98,14 @@ FORGE_PATTERNS_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Define project paths relative to forge-patterns
 MCP_GATEWAY_DIR="$FORGE_PATTERNS_DIR/../mcp-gateway"
-UIFORGE_WEBAPP_DIR="$FORGE_PATTERNS_DIR/../uiforge-webapp"
-UIFORGE_MCP_DIR="$FORGE_PATTERNS_DIR/../uiforge-mcp"
+UIFORGE_WEBAPP_DIR="$FORGE_PATTERNS_DIR/../siza"
+UIFORGE_MCP_DIR="$FORGE_PATTERNS_DIR/../ui-mcp"
 
 print_status "INFO" "Starting validation of centralized documentation references"
 print_status "INFO" "Forge Patterns directory: $FORGE_PATTERNS_DIR"
 print_status "INFO" "MCP Gateway directory: $MCP_GATEWAY_DIR"
-print_status "INFO" "UIForge WebApp directory: $UIFORGE_WEBAPP_DIR"
-print_status "INFO" "UIForge MCP directory: $UIFORGE_MCP_DIR"
+print_status "INFO" "Forge Space WebApp directory: $UIFORGE_WEBAPP_DIR"
+print_status "INFO" "Forge Space MCP directory: $UIFORGE_MCP_DIR"
 echo ""
 
 # 1. Validate centralized documentation structure
@@ -144,38 +144,38 @@ fi
 
 echo ""
 
-# 3. Validate UIForge WebApp references
-print_status "INFO" "Validating UIForge WebApp documentation references..."
+# 3. Validate Forge Space WebApp references
+print_status "INFO" "Validating Forge Space WebApp documentation references..."
 
 if [[ -d "$UIFORGE_WEBAPP_DIR" ]]; then
-    check_file_exists "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "UIForge WebApp rules README"
-    check_file_exists "$UIFORGE_WEBAPP_DIR/.windsurf/rules/project-specific.md" "UIForge WebApp project-specific rules"
+    check_file_exists "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "Forge Space WebApp rules README"
+    check_file_exists "$UIFORGE_WEBAPP_DIR/.windsurf/rules/project-specific.md" "Forge Space WebApp project-specific rules"
     
-    # Validate specific references from UIForge WebApp README
-    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/agent-rules.md" "UIForge WebApp agent rules reference"
-    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/testing.md" "UIForge WebApp testing standards reference"
-    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/README.md" "UIForge WebApp quality standards reference"
-    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/development-workflows/README.md" "UIForge WebApp development workflows reference"
+    # Validate specific references from Forge Space WebApp README
+    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/agent-rules.md" "Forge Space WebApp agent rules reference"
+    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/testing.md" "Forge Space WebApp testing standards reference"
+    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/README.md" "Forge Space WebApp quality standards reference"
+    validate_relative_reference "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/development-workflows/README.md" "Forge Space WebApp development workflows reference"
 else
-    print_status "WARN" "UIForge WebApp directory not found: $UIFORGE_WEBAPP_DIR"
+    print_status "WARN" "Forge Space WebApp directory not found: $UIFORGE_WEBAPP_DIR"
 fi
 
 echo ""
 
-# 4. Validate UIForge MCP references
-print_status "INFO" "Validating UIForge MCP documentation references..."
+# 4. Validate Forge Space MCP references
+print_status "INFO" "Validating Forge Space MCP documentation references..."
 
 if [[ -d "$UIFORGE_MCP_DIR" ]]; then
-    check_file_exists "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "UIForge MCP rules README"
-    check_file_exists "$UIFORGE_MCP_DIR/.windsurf/rules/project-specific.md" "UIForge MCP project-specific rules"
+    check_file_exists "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "Forge Space MCP rules README"
+    check_file_exists "$UIFORGE_MCP_DIR/.windsurf/rules/project-specific.md" "Forge Space MCP project-specific rules"
     
-    # Validate specific references from UIForge MCP README
-    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/agent-rules.md" "UIForge MCP agent rules reference"
-    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/testing.md" "UIForge MCP testing standards reference"
-    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/README.md" "UIForge MCP quality standards reference"
-    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/development-workflows/README.md" "UIForge MCP development workflows reference"
+    # Validate specific references from Forge Space MCP README
+    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/agent-rules.md" "Forge Space MCP agent rules reference"
+    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/testing.md" "Forge Space MCP testing standards reference"
+    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/quality-standards/README.md" "Forge Space MCP quality standards reference"
+    validate_relative_reference "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" "../../../forge-patterns/docs/shared-rules/development-workflows/README.md" "Forge Space MCP development workflows reference"
 else
-    print_status "WARN" "UIForge MCP directory not found: $UIFORGE_MCP_DIR"
+    print_status "WARN" "Forge Space MCP directory not found: $UIFORGE_MCP_DIR"
 fi
 
 echo ""
