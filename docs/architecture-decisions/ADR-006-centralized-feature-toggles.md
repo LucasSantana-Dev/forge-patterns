@@ -6,8 +6,8 @@ Accepted
 
 ## Context
 
-As the UIForge ecosystem grew to include multiple projects (mcp-gateway,
-uiforge-mcp, uiforge-webapp), we faced challenges with feature management:
+As the Forge Space ecosystem grew to include multiple projects (mcp-gateway,
+ui-mcp, siza), we faced challenges with feature management:
 
 - Inconsistent feature flags across projects
 - No unified way to enable/disable features ecosystem-wide
@@ -39,8 +39,8 @@ feature management backend with a custom CLI tool for developer interaction.
 
 - **Global Features**: `global.debug-mode`, `global.beta-features`,
   `global.experimental-ui`
-- **Project-Specific**: `mcp-gateway.rate-limiting`, `uiforge-mcp.ai-chat`,
-  `uiforge-webapp.dark-mode`
+- **Project-Specific**: `mcp-gateway.rate-limiting`, `ui-mcp.ai-chat`,
+  `siza.dark-mode`
 
 ### Integration Points
 
@@ -90,7 +90,7 @@ forge-features enable global.beta-features
 
 # Enable project-specific features
 forge-features enable mcp-gateway.rate-limiting
-forge-features enable uiforge-mcp.ai-chat
+forge-features enable ui-mcp.ai-chat
 
 # Check feature status
 forge-features status --global
@@ -100,11 +100,11 @@ forge-features status --project=mcp-gateway
 ### Library Integration
 
 ```javascript
-const UIForgeFeatureToggles = require('@uiforge/feature-toggles');
+const Forge SpaceFeatureToggles = require('@forge-space/feature-toggles');
 
-const features = new UIForgeFeatureToggles({
-  appName: 'uiforge-mcp',
-  projectNamespace: 'uiforge-mcp'
+const features = new Forge SpaceFeatureToggles({
+  appName: 'ui-mcp',
+  projectNamespace: 'ui-mcp'
 });
 
 // Check feature status
@@ -140,7 +140,7 @@ projects:
         - name: 'default'
           parameters: {}
 
-  uiforge-mcp:
+  ui-mcp:
     features:
       - ai-chat
       - template-management

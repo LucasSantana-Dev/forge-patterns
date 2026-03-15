@@ -6,10 +6,11 @@ Accepted (Updated 2025-02-17)
 
 ## Context
 
-The UIForge ecosystem consists of three main components: a management interface,
-a central coordination service, and specialized AI generation servers. We needed
-to decide on the overall architectural pattern that would balance modularity,
-performance, and maintainability while supporting future growth.
+The Forge Space ecosystem consists of three main components: a management
+interface, a central coordination service, and specialized AI generation
+servers. We needed to decide on the overall architectural pattern that would
+balance modularity, performance, and maintainability while supporting future
+growth.
 
 Key considerations:
 
@@ -156,7 +157,7 @@ class MCPServer:
 
 ```typescript
 // WebApp connects only to gateway
-class UIForgeClient {
+class Forge SpaceClient {
   constructor(private gatewayUrl: string) {}
 
   async generateComponent(description: string): Promise<Component> {
@@ -185,4 +186,4 @@ class UIForgeClient {
 
 ---
 
-_Decision made on 2025-02-17 by the UIForge architecture team._
+_Decision made on 2025-02-17 by the Forge Space architecture team._

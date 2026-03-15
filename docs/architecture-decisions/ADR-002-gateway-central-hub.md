@@ -162,9 +162,9 @@ class RoutingService:
     async def route_request(self, request: Request, user: User) -> MCPServer:
         # Determine target server based on request
         if request.path.startswith("/api/generate"):
-            server_name = "uiforge-mcp"
+            server_name = "ui-mcp"
         elif request.path.startswith("/api/templates"):
-            server_name = "uiforge-mcp"
+            server_name = "ui-mcp"
         else:
             raise RoutingError(f"Unknown route: {request.path}")
 
@@ -239,4 +239,4 @@ class GatewayAwareMCPServer:
 
 ---
 
-_Decision made on 2025-02-17 by the UIForge architecture team._
+_Decision made on 2025-02-17 by the Forge Space architecture team._

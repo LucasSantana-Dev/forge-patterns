@@ -1,9 +1,9 @@
-# UIForge Ecosystem Development Standards
+# Forge Space Ecosystem Development Standards
 
 ## 🎯 **Overview**
 
 This document establishes the development standards and best practices for the
-UIForge ecosystem. These standards ensure consistency, quality, and
+Forge Space ecosystem. These standards ensure consistency, quality, and
 maintainability across all projects while enabling efficient collaboration and
 development workflows.
 
@@ -78,7 +78,7 @@ const generateComponent = async () => {
 
 // Constants: UPPER_SNAKE_CASE
 const MAX_RETRY_ATTEMPTS = 3;
-const API_BASE_URL = 'https://api.uiforge.com';
+const API_BASE_URL = 'https://api.forge-space.com';
 
 // Files: kebab-case
 // component-generator.tsx
@@ -1041,5 +1041,5 @@ repos:
 
 ---
 
-_These development standards should be followed across all UIForge ecosystem
+_These development standards should be followed across all Forge Space ecosystem
 projects to ensure consistency, quality, and maintainability._

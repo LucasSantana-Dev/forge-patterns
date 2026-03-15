@@ -1,8 +1,8 @@
-# UIForge Ecosystem Architecture
+# Forge Space Ecosystem Architecture
 
 ## 🏗️ **System Architecture Overview**
 
-The UIForge ecosystem follows a **hub-and-spoke architecture** with the
+The Forge Space ecosystem follows a **hub-and-spoke architecture** with the
 forge-mcp-gateway as the central hub and specialized MCP servers as spokes. This
 design enables centralized management while maintaining modularity and
 extensibility.
@@ -75,7 +75,7 @@ graph TB
 - **Health Monitoring**: Server health checks and status tracking
 - **Resource Management**: CPU, memory, and network resource allocation
 
-### **uiforge-mcp (UI Generation Server)**
+### **ui-mcp (UI Generation Server)**
 
 ```mermaid
 graph TB
@@ -125,7 +125,7 @@ graph TB
 - **Code Formatter**: Format generated code according to standards
 - **Framework Adapters**: Support for multiple UI frameworks
 
-### **uiforge-webapp (Management Interface)**
+### **siza (Management Interface)**
 
 ```mermaid
 graph TB
@@ -575,5 +575,5 @@ spec:
 ---
 
 _This architecture document provides the technical foundation for understanding
-how the UIForge ecosystem components work together. For implementation details,
-please refer to the specific project documentation._
+how the Forge Space ecosystem components work together. For implementation
+details, please refer to the specific project documentation._

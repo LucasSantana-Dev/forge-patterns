@@ -1,8 +1,8 @@
 # Developer Onboarding Guide
 
-## Welcome to UIForge Patterns!
+## Welcome to Forge Space Core!
 
-This guide will help you get started with UIForge Patterns quickly and
+This guide will help you get started with Forge Space Core quickly and
 effectively. Whether you're a new developer joining the team or an existing
 developer exploring the patterns, this guide will walk you through everything
 you need to know.
@@ -22,7 +22,7 @@ Before you begin, ensure you have:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/uiforge/forge-patterns.git
+git clone https://github.com/forge-space/forge-patterns.git
 cd forge-patterns
 
 # 2. Install dependencies
@@ -42,9 +42,9 @@ ls patterns/
 
 ### Phase 1: Understanding the Basics (Day 1)
 
-#### 1.1 What are UIForge Patterns?
+#### 1.1 What are Forge Space Core?
 
-UIForge Patterns is a comprehensive collection of:
+Forge Space Core is a comprehensive collection of:
 
 - **Shared configurations** for consistent development
 - **Architectural patterns** for scalable applications
@@ -118,7 +118,7 @@ node ../forge-patterns/test/feature-toggle-validation.js
 **Recommended Reading:**
 
 - [MCP Gateway Integration Guide](MCP_GATEWAY_INTEGRATION_GUIDE.md)
-- [UIForge MCP Integration Guide](UIFORGE_MCP_INTEGRATION_GUIDE.md)
+- [Forge Space MCP Integration Guide](UIFORGE_MCP_INTEGRATION_GUIDE.md)
 - [Feature Toggle Documentation](../patterns/feature-toggles/README.md)
 
 ### Phase 3: Practical Implementation (Day 4-5)
@@ -127,10 +127,10 @@ node ../forge-patterns/test/feature-toggle-validation.js
 
 ```javascript
 // Import the feature toggle library
-const UIForgeFeatureToggles = require('./patterns/feature-toggles/libraries/nodejs/index.js');
+const Forge SpaceFeatureToggles = require('./patterns/feature-toggles/libraries/nodejs/index.js');
 
 // Initialize the system
-const features = new UIForgeFeatureToggles({
+const features = new Forge SpaceFeatureToggles({
   appName: 'my-app',
   projectNamespace: 'mcp-gateway'
 });
@@ -274,7 +274,7 @@ npm audit
 node scripts/integrate.js integrate --project=mcp-gateway
 ```
 
-### UIForge MCP Projects
+### Forge Space MCP Projects
 
 **Use Case**: AI-powered MCP servers, UI generation services
 
@@ -288,10 +288,10 @@ node scripts/integrate.js integrate --project=mcp-gateway
 **Getting Started**:
 
 ```bash
-node scripts/integrate.js integrate --project=uiforge-mcp
+node scripts/integrate.js integrate --project=ui-mcp
 ```
 
-### UIForge WebApp Projects
+### Forge Space WebApp Projects
 
 **Use Case**: Frontend applications, web interfaces
 
@@ -305,7 +305,7 @@ node scripts/integrate.js integrate --project=uiforge-mcp
 **Getting Started**:
 
 ```bash
-node scripts/integrate.js integrate --project=uiforge-webapp
+node scripts/integrate.js integrate --project=siza
 ```
 
 ## 🔧 Tools and Commands
@@ -505,5 +505,5 @@ Remember: Every expert was once a beginner. Don't hesitate to ask for help!
 
 ---
 
-**Welcome to the UIForge Patterns community! We're excited to have you aboard.**
+**Welcome to the Forge Space Core community! We're excited to have you aboard.**
 🚀
