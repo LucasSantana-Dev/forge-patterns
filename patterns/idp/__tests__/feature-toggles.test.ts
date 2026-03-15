@@ -54,15 +54,15 @@ describe('FileToggleStore', () => {
       expect(toggle.createdAt).toBeTruthy();
     });
 
-    it('creates a toggle with options', () => {
+    it('creates a toggle with options (new canonical namespaces)', () => {
       const store = new FileToggleStore(STORE_PATH);
-      const toggle = store.create('ENABLE_BETA', 'uiforge-webapp', {
+      const toggle = store.create('ENABLE_BETA', 'siza', {
         description: 'Beta features',
         enabled: true
       });
       expect(toggle.enabled).toBe(true);
       expect(toggle.description).toBe('Beta features');
-      expect(toggle.namespace).toBe('uiforge-webapp');
+      expect(toggle.namespace).toBe('siza');
     });
 
     it('throws when toggle already exists', () => {
@@ -168,6 +168,84 @@ describe('FileToggleStore', () => {
     it('returns false for non-existent toggle', () => {
       const store = new FileToggleStore(STORE_PATH);
       expect(store.isEnabled('UNKNOWN')).toBe(false);
+    });
+  });
+
+  describe('canonical namespaces', () => {
+    it('accepts ui-mcp namespace', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      const t = store.create('UI_FEATURE', 'ui-mcp');
+      expect(t.namespace).toBe('ui-mcp');
+    });
+
+    it('accepts siza namespace', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      const t = store.create('SIZA_FEATURE', 'siza', { enabled: true });
+      expect(t.namespace).toBe('siza');
+      expect(t.enabled).toBe(true);
+    });
+
+    it('accepts legacy uiforge-mcp namespace for backwards compat', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      const t = store.create('LEGACY_MCP', 'uiforge-mcp');
+      expect(t.namespace).toBe('uiforge-mcp');
+    });
+
+    it('filters by ui-mcp namespace', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      store.create('A', 'ui-mcp', { enabled: true });
+      store.create('B', 'siza');
+      store.create('C', 'global');
+      const result = store.list({ namespace: 'ui-mcp' });
+      expect(result).toHaveLength(1);
+      expect(result[0]?.name).toBe('A');
+    });
+
+    it('filters by siza namespace', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      store.create('A', 'ui-mcp');
+      store.create('B', 'siza', { enabled: true });
+      store.create('C', 'siza');
+      const result = store.list({ namespace: 'siza' });
+      expect(result).toHaveLength(2);
+    });
+  });
+
+  describe('create with custom strategies', () => {
+    it('persists custom strategy config', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      const toggle = store.create('GRADUAL', 'global', {
+        strategies: [{ name: 'gradual-rollout', parameters: { rollout: 50 } }]
+      });
+      expect(toggle.strategies[0]?.name).toBe('gradual-rollout');
+      expect(toggle.strategies[0]?.parameters?.['rollout']).toBe(50);
+    });
+
+    it('persists user-ids strategy', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      const toggle = store.create('BETA_USERS', 'global', {
+        strategies: [{ name: 'user-ids', parameters: { ids: ['u1', 'u2'] } }]
+      });
+      expect(toggle.strategies[0]?.name).toBe('user-ids');
+    });
+  });
+
+  describe('list filtering edge cases', () => {
+    it('filters by disabled (enabled: false)', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      store.create('ON', 'global', { enabled: true });
+      store.create('OFF1', 'global');
+      store.create('OFF2', 'mcp-gateway');
+      const result = store.list({ enabled: false });
+      expect(result).toHaveLength(2);
+      expect(result.every(t => !t.enabled)).toBe(true);
+    });
+
+    it('returns empty array for namespace with no toggles', () => {
+      const store = new FileToggleStore(STORE_PATH);
+      store.create('A', 'global');
+      const result = store.list({ namespace: 'ui-mcp' });
+      expect(result).toHaveLength(0);
     });
   });
 
