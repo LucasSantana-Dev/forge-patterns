@@ -618,3 +618,482 @@ describe('collectGovernanceFindings', () => {
     });
   });
 });
+
+// ─── EXPANDED COVERAGE TESTS ─────────────────────────────────────────────────
+
+describe('collectSecurityFindings — rule patterns', () => {
+  it('detects eval() usage', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/bad.js', 'eval(userInput)');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('eval()'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('detects dangerouslySetInnerHTML XSS risk', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/bad.tsx', '<div dangerouslySetInnerHTML={{ __html: x }} />');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('dangerouslySetInnerHTML'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('detects innerHTML assignment XSS risk', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/bad.js', 'el.innerHTML = userInput;');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('innerHTML'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('detects SQL string concatenation', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/db.js', "const q = 'SELECT * FROM users WHERE id = ' + id;");
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('SQL'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('detects unrestricted CORS', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/server.js', 'app.use(cors())');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('CORS'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('detects AWS access key pattern', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/config.ts', 'const key = "AKIAIOSFODNN7EXAMPLE";');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('AWS access key'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('critical');
+    });
+  });
+
+  it('detects child_process exec command injection', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/run.js', 'child_process.exec(cmd)');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('exec()'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('detects private key in source', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'src/key.ts', '-----BEGIN RSA PRIVATE KEY-----\nMIIE...');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('Private key'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('critical');
+    });
+  });
+
+  it('flags no .env file but no .gitignore present', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.env', 'SECRET=xxx');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('No .gitignore but .env'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('critical');
+    });
+  });
+
+  it('flags missing SECURITY.md', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env');
+      const result = collectSecurityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('No SECURITY.md'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('low');
+    });
+  });
+
+  it('scores 100 for clean project', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.gitignore', '.env\nnode_modules');
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, 'src/clean.ts', 'export const x = 1;');
+      const result = collectSecurityFindings(makeCtx(dir));
+      expect(result.score).toBe(100);
+      expect(result.grade).toBe('A');
+    });
+  });
+});
+
+describe('collectQualityFindings — expanded paths', () => {
+  it('flags missing linter', () => {
+    withTmpDir((dir) => {
+      const result = collectQualityFindings(makeCtx(dir, { hasLinting: false }));
+      const f = result.findings.find(f => f.message.includes('No linter'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('flags missing type checking', () => {
+    withTmpDir((dir) => {
+      const result = collectQualityFindings(makeCtx(dir, { hasTypeChecking: false }));
+      const f = result.findings.find(f => f.message.includes('No type checking'));
+      expect(f).toBeTruthy();
+    });
+  });
+
+  it('flags missing code formatter', () => {
+    withTmpDir((dir) => {
+      const result = collectQualityFindings(makeCtx(dir, { hasFormatting: false }));
+      const f = result.findings.find(f => f.message.includes('No code formatter'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('low');
+    });
+  });
+
+  it('flags no CI pipeline', () => {
+    withTmpDir((dir) => {
+      const result = collectQualityFindings(makeCtx(dir, { hasCi: false }));
+      const f = result.findings.find(f => f.message.includes('No CI'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('flags high empty catch count as high severity', () => {
+    withTmpDir((dir) => {
+      const catches = Array(7).fill('try { x() } catch(e) {}').join('\n');
+      writeFile(dir, 'src/bad.ts', catches);
+      const result = collectQualityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('empty catch'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('flags many TODO comments', () => {
+    withTmpDir((dir) => {
+      const todos = Array(12).fill('// TODO: fix this').join('\n');
+      writeFile(dir, 'src/messy.ts', todos);
+      const result = collectQualityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('TODO'));
+      expect(f).toBeTruthy();
+    });
+  });
+
+  it('flags low test ratio', () => {
+    withTmpDir((dir) => {
+      // 12 source files, 1 test → ratio = 1/12 ≈ 0.083 < 0.1
+      for (let i = 0; i < 12; i++) {
+        writeFile(dir, `src/module${i}.ts`, `export const x${i} = ${i};`);
+      }
+      writeFile(dir, 'src/module0.test.ts', 'test("x",()=>{})');
+      const result = collectQualityFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('Low test ratio'));
+      expect(f).toBeTruthy();
+    });
+  });
+
+  it('returns clean result for well-configured project', () => {
+    withTmpDir((dir) => {
+      const result = collectQualityFindings(makeCtx(dir));
+      expect(result.score).toBe(100);
+      expect(result.grade).toBe('A');
+    });
+  });
+});
+
+describe('collectArchitectureFindings — expanded paths', () => {
+  it('detects god file over 1000 lines as critical', () => {
+    withTmpDir((dir) => {
+      const bigContent = Array(1001).fill('const x = 1;').join('\n');
+      writeFile(dir, 'src/giant.ts', bigContent);
+      const result = collectArchitectureFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('God file'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('critical');
+    });
+  });
+
+  it('detects high coupling from many imports', () => {
+    withTmpDir((dir) => {
+      const imports = Array(16)
+        .fill(null)
+        .map((_, i) => `import { x${i} } from './mod${i}.js';`)
+        .join('\n');
+      writeFile(dir, 'src/coupled.ts', imports + '\nconst x = 1;');
+      const result = collectArchitectureFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('High coupling'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('detects function sprawl over 20 functions', () => {
+    withTmpDir((dir) => {
+      const fns = Array(21)
+        .fill(null)
+        .map((_, i) => `export function fn${i}() { return ${i}; }`)
+        .join('\n');
+      writeFile(dir, 'src/sprawl.ts', fns);
+      const result = collectArchitectureFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('Function sprawl'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('flags flat project structure with many files in ≤2 top dirs', () => {
+    withTmpDir((dir) => {
+      // 21+ files all in the same single subdirectory → topDirs.size = 1
+      for (let i = 0; i < 22; i++) {
+        writeFile(dir, `src/file${i}.ts`, `export const x${i} = ${i};`);
+      }
+      const result = collectArchitectureFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('Flat project'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('low');
+    });
+  });
+
+  it('flags high average file size', () => {
+    withTmpDir((dir) => {
+      // 6 files each with 201 lines
+      for (let i = 0; i < 6; i++) {
+        writeFile(dir, `src/big${i}.ts`, Array(201).fill(`const x${i} = 1;`).join('\n'));
+      }
+      const result = collectArchitectureFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('High avg file size'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('scores 100 for clean small project', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, 'src/index.ts', 'export const x = 1;');
+      const result = collectArchitectureFindings(makeCtx(dir));
+      expect(result.score).toBe(100);
+    });
+  });
+});
+
+describe('collectReadinessFindings — expanded paths', () => {
+  it('flags TypeScript-less JavaScript project', () => {
+    withTmpDir((dir) => {
+      mkdirSync(join(dir, 'src'), { recursive: true });
+      const ctx = makeCtx(dir, {
+        language: 'javascript',
+        hasTypeChecking: false
+      });
+      const result = collectReadinessFindings(ctx);
+      const f = result.findings.find(f => f.message.includes('JavaScript without TypeScript'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('skips TypeScript check for non-JS languages', () => {
+    withTmpDir((dir) => {
+      const ctx = makeCtx(dir, { language: 'python', hasTypeChecking: false });
+      const result = collectReadinessFindings(ctx);
+      const f = result.findings.find(f => f.message.includes('JavaScript without TypeScript'));
+      expect(f).toBeUndefined();
+    });
+  });
+
+  it('flags missing documentation', () => {
+    withTmpDir((dir) => {
+      const result = collectReadinessFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('No documentation'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('passes when docs/ directory exists', () => {
+    withTmpDir((dir) => {
+      mkdirSync(join(dir, 'docs'), { recursive: true });
+      const result = collectReadinessFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('No documentation'));
+      expect(f).toBeUndefined();
+    });
+  });
+
+  it('flags global state pollution over 3 assignments', () => {
+    withTmpDir((dir) => {
+      const globalCode = [
+        'window.myApp = {};',
+        'window.config = {};',
+        'window.utils = {};',
+        'window.state = {};'
+      ].join('\n');
+      writeFile(dir, 'src/globals.js', globalCode);
+      const result = collectReadinessFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('Global state pollution'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('flags missing CI pipeline', () => {
+    withTmpDir((dir) => {
+      const result = collectReadinessFindings(makeCtx(dir, { hasCi: false }));
+      const f = result.findings.find(f => f.message.includes('No CI pipeline'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('high');
+    });
+  });
+
+  it('flags missing test framework as critical', () => {
+    withTmpDir((dir) => {
+      const result = collectReadinessFindings(makeCtx(dir, { testFramework: undefined }));
+      const f = result.findings.find(f => f.message.includes('No test framework'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('critical');
+    });
+  });
+
+  it('grades A for well-configured project with README', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, 'README.md', '# My Project');
+      const result = collectReadinessFindings(makeCtx(dir));
+      expect(result.grade).toBe('A');
+      expect(result.score).toBe(100);
+    });
+  });
+});
+
+describe('collectDependencyFindings — expanded paths', () => {
+  it('handles missing package.json gracefully', () => {
+    withTmpDir((dir) => {
+      const result = collectDependencyFindings(makeCtx(dir));
+      expect(result.score).toBe(100);
+      expect(result.findings).toHaveLength(0);
+    });
+  });
+
+  it('flags excessive deps (50-100) as medium', () => {
+    withTmpDir((dir) => {
+      const deps: Record<string, string> = {};
+      for (let i = 0; i < 55; i++) deps[`pkg-${i}`] = '^1.0.0';
+      writePackageJson(dir, {
+        dependencies: deps,
+        devDependencies: { jest: '^29.0.0' },
+        engines: { node: '>=18' }
+      });
+      writeFile(dir, 'package-lock.json', '{}');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('Excessive dependencies'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('flags excessive deps (>100) as high', () => {
+    withTmpDir((dir) => {
+      const deps: Record<string, string> = {};
+      for (let i = 0; i < 105; i++) deps[`pkg-${i}`] = '^1.0.0';
+      writePackageJson(dir, {
+        dependencies: deps,
+        devDependencies: { jest: '^29.0.0' },
+        engines: { node: '>=18' }
+      });
+      writeFile(dir, 'package-lock.json', '{}');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const f = result.findings.find(
+        f => f.message.includes('Excessive') && f.severity === 'high'
+      );
+      expect(f).toBeTruthy();
+    });
+  });
+
+  it('flags no engine constraint', () => {
+    withTmpDir((dir) => {
+      writePackageJson(dir, {
+        dependencies: {},
+        devDependencies: { jest: '^29.0.0' }
+      });
+      writeFile(dir, 'package-lock.json', '{}');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('No engine constraint'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('low');
+    });
+  });
+
+  it('flags missing devDependencies', () => {
+    withTmpDir((dir) => {
+      writePackageJson(dir, {
+        dependencies: { express: '^4.0.0' },
+        engines: { node: '>=18' }
+      });
+      writeFile(dir, 'package-lock.json', '{}');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const f = result.findings.find(f => f.message.includes('No devDependencies'));
+      expect(f).toBeTruthy();
+      expect(f!.severity).toBe('medium');
+    });
+  });
+
+  it('accepts yarn.lock as valid lockfile', () => {
+    withTmpDir((dir) => {
+      writePackageJson(dir, {
+        dependencies: {},
+        devDependencies: { jest: '^29.0.0' },
+        engines: { node: '>=18' }
+      });
+      writeFile(dir, 'yarn.lock', '# yarn lockfile');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const lockFinding = result.findings.find(f => f.message.includes('No lockfile'));
+      expect(lockFinding).toBeUndefined();
+    });
+  });
+
+  it('accepts pnpm-lock.yaml as valid lockfile', () => {
+    withTmpDir((dir) => {
+      writePackageJson(dir, {
+        dependencies: {},
+        devDependencies: { jest: '^29.0.0' },
+        engines: { node: '>=18' }
+      });
+      writeFile(dir, 'pnpm-lock.yaml', 'lockfileVersion: 6.0');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const lockFinding = result.findings.find(f => f.message.includes('No lockfile'));
+      expect(lockFinding).toBeUndefined();
+    });
+  });
+
+  it('detects multiple legacy packages', () => {
+    withTmpDir((dir) => {
+      writePackageJson(dir, {
+        dependencies: { grunt: '^1.0.0', gulp: '^4.0.0', bower: '^1.8.0' },
+        devDependencies: { jest: '^29.0.0' },
+        engines: { node: '>=18' }
+      });
+      writeFile(dir, 'package-lock.json', '{}');
+      const result = collectDependencyFindings(makeCtx(dir));
+      const legacyFindings = result.findings.filter(f => f.message.includes('Legacy package'));
+      expect(legacyFindings).toHaveLength(3);
+      expect(legacyFindings.every(f => f.severity === 'high')).toBe(true);
+    });
+  });
+});
