@@ -172,6 +172,23 @@ describe('PolicyEngine', () => {
         expect(evaluateCondition('matches', 42, '\\d+')).toBe(false);
         expect(evaluateCondition('matches', 'test', 123 as any)).toBe(false);
       });
+
+      it('should reject patterns longer than 200 characters', () => {
+        const longPattern = 'a'.repeat(201);
+        expect(evaluateCondition('matches', 'test', longPattern)).toBe(false);
+      });
+
+      it('should accept patterns at exactly 200 characters', () => {
+        const exactPattern = 'a'.repeat(200);
+        const input = 'a'.repeat(200);
+        expect(evaluateCondition('matches', input, exactPattern)).toBe(true);
+      });
+    });
+
+    describe('unknown operator', () => {
+      it('should return false for unsupported operators', () => {
+        expect(evaluateCondition('unknown' as any, 'a', 'b')).toBe(false);
+      });
     });
   });
 
@@ -227,6 +244,47 @@ describe('PolicyEngine', () => {
         meta: { count: 2 }
       };
       expect(resolveFieldPath(obj, 'meta.count')).toBe(2);
+    });
+
+    it('should block __proto__ access', () => {
+      expect(resolveFieldPath({ __proto__: 'evil' } as any, '__proto__')).toBeUndefined();
+    });
+
+    it('should block constructor access', () => {
+      expect(resolveFieldPath({ constructor: 'evil' } as any, 'constructor')).toBeUndefined();
+    });
+
+    it('should block prototype access', () => {
+      expect(resolveFieldPath({ prototype: 'evil' } as any, 'prototype')).toBeUndefined();
+    });
+
+    it('should block nested prototype-pollution paths', () => {
+      expect(resolveFieldPath({ a: { __proto__: 'x' } } as any, 'a.__proto__')).toBeUndefined();
+      expect(resolveFieldPath({ a: { constructor: 'x' } } as any, 'a.constructor')).toBeUndefined();
+    });
+
+    it('should reject paths deeper than MAX_DEPTH (10)', () => {
+      const keys = Array.from({ length: 11 }, (_, i) => `k${i}`);
+      let obj: Record<string, unknown> = { value: true };
+      for (let i = 10; i >= 0; i--) {
+        obj = { [keys[i]]: obj };
+      }
+      expect(resolveFieldPath(obj, keys.join('.'))).toBeUndefined();
+    });
+
+    it('should allow paths at exactly MAX_DEPTH (10)', () => {
+      const keys = Array.from({ length: 10 }, (_, i) => `k${i}`);
+      let inner: Record<string, unknown> = { leaf: 42 };
+      for (let i = 9; i >= 0; i--) {
+        inner = { [keys[i]]: inner };
+      }
+      expect(resolveFieldPath(inner, [...keys, 'leaf'].join('.'))).toBeUndefined();
+      expect(resolveFieldPath(inner, keys.join('.'))).toBeDefined();
+    });
+
+    it('should return undefined when traversing a primitive', () => {
+      expect(resolveFieldPath({ a: 'string' }, 'a.b')).toBeUndefined();
+      expect(resolveFieldPath({ a: 42 }, 'a.b')).toBeUndefined();
     });
   });
 
@@ -772,6 +830,167 @@ describe('PolicyEngine', () => {
 
         const policies = await loadPoliciesFromDir(tempDir);
         expect(policies).toEqual([]);
+      });
+    });
+
+    describe('validation errors', () => {
+      it('should reject non-object policy', () => {
+        const filePath = join(tempDir, 'bad.policy.json');
+        writeFileSync(filePath, '"not an object"');
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must be an object'
+        );
+      });
+
+      it('should reject null policy', () => {
+        const filePath = join(tempDir, 'null.policy.json');
+        writeFileSync(filePath, 'null');
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must be an object'
+        );
+      });
+
+      it('should reject policy without id', () => {
+        const filePath = join(tempDir, 'no-id.policy.json');
+        writeFileSync(filePath, JSON.stringify({ name: 'test', rules: [] }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must have a string id'
+        );
+      });
+
+      it('should reject policy with empty id', () => {
+        const filePath = join(tempDir, 'empty-id.policy.json');
+        writeFileSync(filePath, JSON.stringify({ id: '', name: 'test', rules: [] }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must have a string id'
+        );
+      });
+
+      it('should reject policy without name', () => {
+        const filePath = join(tempDir, 'no-name.policy.json');
+        writeFileSync(filePath, JSON.stringify({ id: 'test', rules: [] }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must have a string name'
+        );
+      });
+
+      it('should reject policy with empty name', () => {
+        const filePath = join(tempDir, 'empty-name.policy.json');
+        writeFileSync(filePath, JSON.stringify({ id: 'test', name: '', rules: [] }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must have a string name'
+        );
+      });
+
+      it('should reject policy without rules array', () => {
+        const filePath = join(tempDir, 'no-rules.policy.json');
+        writeFileSync(filePath, JSON.stringify({ id: 'test', name: 'test' }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Policy must have a rules array'
+        );
+      });
+
+      it('should reject rule without string id', () => {
+        const filePath = join(tempDir, 'bad-rule.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{ conditions: [], actions: [] }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'Rule must have a string id'
+        );
+      });
+
+      it('should reject rule without conditions array', () => {
+        const filePath = join(tempDir, 'no-cond.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{ id: 'r1', actions: [] }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'must have conditions array'
+        );
+      });
+
+      it('should reject invalid condition operator', () => {
+        const filePath = join(tempDir, 'bad-op.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{
+            id: 'r1',
+            conditions: [{ field: 'x', operator: 'bogus', value: 1 }],
+            actions: []
+          }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'invalid operator "bogus"'
+        );
+      });
+
+      it('should reject condition without field', () => {
+        const filePath = join(tempDir, 'no-field.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{
+            id: 'r1',
+            conditions: [{ operator: 'eq', value: 1 }],
+            actions: []
+          }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'condition missing field'
+        );
+      });
+
+      it('should reject condition with empty field', () => {
+        const filePath = join(tempDir, 'empty-field.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{
+            id: 'r1',
+            conditions: [{ field: '', operator: 'eq', value: 1 }],
+            actions: []
+          }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'condition missing field'
+        );
+      });
+
+      it('should reject rule without actions array', () => {
+        const filePath = join(tempDir, 'no-actions.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{
+            id: 'r1',
+            conditions: []
+          }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'must have actions array'
+        );
+      });
+
+      it('should reject invalid action type', () => {
+        const filePath = join(tempDir, 'bad-action.policy.json');
+        writeFileSync(filePath, JSON.stringify({
+          id: 'test',
+          name: 'test',
+          rules: [{
+            id: 'r1',
+            conditions: [],
+            actions: [{ type: 'explode', message: 'boom' }]
+          }]
+        }));
+        expect(() => loadPolicyFromFile(filePath)).toThrow(
+          'invalid action type "explode"'
+        );
       });
     });
   });
