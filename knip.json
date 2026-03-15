@@ -19,14 +19,6 @@
     "test/**/*.js"
   ],
   "ignore": [
-    "patterns/ai-tools/**",
-    "patterns/code-quality/**",
-    "patterns/coverage/**",
-    "patterns/feature-toggles/libraries/**",
-    "patterns/ide-extensions/**",
-    "patterns/monitoring/**",
-    "patterns/plugin-system/**",
-    "patterns/shared-infrastructure/**",
     "test/performance-benchmark.js"
   ],
   "ignoreDependencies": [

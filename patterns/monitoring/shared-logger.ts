@@ -1,5 +1,5 @@
 /**
- * Shared Logging Utilities for UIForge Ecosystem
+ * Shared Logging Utilities for Forge Space Ecosystem
  * Provides unified logging across all projects with service identification
  */
 

@@ -2,7 +2,7 @@
 # patterns/git/pre-commit/base.sh
 set -euo pipefail
 
-echo "🚀 Running UIForge pre-commit validations..."
+echo "🚀 Running Forge Space pre-commit validations..."
 
 FAILED=0
 

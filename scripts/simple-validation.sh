@@ -8,13 +8,13 @@ echo "=================================="
 
 FORGE_PATTERNS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MCP_GATEWAY_DIR="$FORGE_PATTERNS_DIR/../mcp-gateway"
-UIFORGE_WEBAPP_DIR="$FORGE_PATTERNS_DIR/../uiforge-webapp"
-UIFORGE_MCP_DIR="$FORGE_PATTERNS_DIR/../uiforge-mcp"
+SIZA_DIR="$FORGE_PATTERNS_DIR/../siza"
+UI_MCP_DIR="$FORGE_PATTERNS_DIR/../ui-mcp"
 
 echo "Forge Patterns: $FORGE_PATTERNS_DIR"
 echo "MCP Gateway: $MCP_GATEWAY_DIR"
-echo "UIForge WebApp: $UIFORGE_WEBAPP_DIR"
-echo "UIForge MCP: $UIFORGE_MCP_DIR"
+echo "Siza: $SIZA_DIR"
+echo "UI MCP: $UI_MCP_DIR"
 echo ""
 
 # Test centralized files exist
@@ -28,8 +28,8 @@ echo ""
 # Test project README files exist
 echo "Testing project README files..."
 test -f "$MCP_GATEWAY_DIR/.windsurf/rules/README.md" && echo "✓ MCP Gateway README exists" || echo "✗ MCP Gateway README missing"
-test -f "$UIFORGE_WEBAPP_DIR/.windsurf/rules/README.md" && echo "✓ UIForge WebApp README exists" || echo "✗ UIForge WebApp README missing"
-test -f "$UIFORGE_MCP_DIR/.windsurf/rules/README.md" && echo "✓ UIForge MCP README exists" || echo "✗ UIForge MCP README missing"
+test -f "$SIZA_DIR/.windsurf/rules/README.md" && echo "✓ Siza README exists" || echo "✗ Siza README missing"
+test -f "$UI_MCP_DIR/.windsurf/rules/README.md" && echo "✓ UI MCP README exists" || echo "✗ UI MCP README missing"
 echo ""
 
 # Test specific references work
@@ -39,13 +39,13 @@ echo "Testing specific references..."
 AGENT_RULES_PATH="$MCP_GATEWAY_DIR/../forge-patterns/docs/shared-rules/agent-rules.md"
 test -f "$AGENT_RULES_PATH" && echo "✓ MCP Gateway can access agent rules" || echo "✗ MCP Gateway cannot access agent rules"
 
-# Test UIForge WebApp reference to testing standards
-TESTING_STANDARDS_PATH="$UIFORGE_WEBAPP_DIR/../forge-patterns/docs/shared-rules/quality-standards/testing.md"
-test -f "$TESTING_STANDARDS_PATH" && echo "✓ UIForge WebApp can access testing standards" || echo "✗ UIForge WebApp cannot access testing standards"
+# Test Siza reference to testing standards
+TESTING_STANDARDS_PATH="$SIZA_DIR/../forge-patterns/docs/shared-rules/quality-standards/testing.md"
+test -f "$TESTING_STANDARDS_PATH" && echo "✓ Siza can access testing standards" || echo "✗ Siza cannot access testing standards"
 
-# Test UIForge MCP reference to security standards
-SECURITY_STANDARDS_PATH="$UIFORGE_MCP_DIR/../forge-patterns/docs/shared-rules/quality-standards/security.md"
-test -f "$SECURITY_STANDARDS_PATH" && echo "✓ UIForge MCP can access security standards" || echo "✗ UIForge MCP cannot access security standards"
+# Test UI MCP reference to security standards
+SECURITY_STANDARDS_PATH="$UI_MCP_DIR/../forge-patterns/docs/shared-rules/quality-standards/security.md"
+test -f "$SECURITY_STANDARDS_PATH" && echo "✓ UI MCP can access security standards" || echo "✗ UI MCP cannot access security standards"
 
 echo ""
 echo "=================================="

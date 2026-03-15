@@ -176,7 +176,7 @@ if [ "$CI_PROFILE" = "limit-aware" ]; then
   fi
 fi
 
-echo "🚀 Bootstrapping new UIForge project..."
+echo "🚀 Bootstrapping new Forge Space project..."
 echo "Creating project: $PROJECT_NAME (type: $PROJECT_TYPE, ci-profile: $CI_PROFILE)"
 
 # Create project directory
@@ -189,8 +189,8 @@ git init
 # Create basic structure
 mkdir -p src docs tests scripts feature-toggles
 
-# Copy patterns from uiforge-patterns
-echo "📋 Copying patterns from uiforge-patterns..."
+# Copy patterns from forge-space-core
+echo "📋 Copying patterns from forge-space-core..."
 
 # Copy ESLint config
 if [ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ]; then
@@ -264,7 +264,7 @@ if [ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ]; then
 {
   "name": "$PROJECT_NAME",
   "version": "1.0.0",
-  "description": "UIForge project: $PROJECT_NAME",
+  "description": "Forge Space project: $PROJECT_NAME",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -341,8 +341,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "$PROJECT_NAME"
 version = "1.0.0"
-description = "UIForge project: $PROJECT_NAME"
-authors = [{name = "UIForge Team"}]
+description = "Forge Space project: $PROJECT_NAME"
+authors = [{name = "Forge Space Team"}]
 license = {text = "MIT"}
 dependencies = []
 
@@ -448,7 +448,7 @@ EOF
 cat > README.md << EOF
 # $PROJECT_NAME
 
-UIForge project: $PROJECT_NAME
+Forge Space project: $PROJECT_NAME
 
 ## 🚀 Quick Start
 
@@ -496,7 +496,7 @@ docker-compose -f docker-compose.prod.yml up -d
 
 ## 🎛️ Centralized Feature Toggles
 
-This project includes centralized feature toggle management for the UIForge ecosystem:
+This project includes centralized feature toggle management for the Forge Space ecosystem:
 
 ### Start Unleash Instance
 \`\`\`bash
@@ -518,7 +518,7 @@ open http://localhost:4242
 
 # Enable project-specific features
 ./scripts/forge-features enable mcp-gateway.rate-limiting
-./scripts/forge-features enable uiforge-mcp.ai-chat
+./scripts/forge-features enable ui-mcp.ai-chat
 
 # Check feature status
 ./scripts/forge-features status --global
@@ -535,7 +535,7 @@ This project includes feature toggle patterns for dynamic feature management:
 ### Feature Toggle Setup
 \`\`\`bash
 # Install feature toggle library
-npm install @uiforge/feature-toggles
+npm install @forgespace/core
 
 # Configure feature toggles
 cp feature-toggles/config/unleash.template.yml unleash.yml
@@ -566,7 +566,7 @@ cat >> README.md << EOF
 
 ## 🧪 Testing
 
-This project uses UIForge patterns for consistent testing:
+This project uses Forge Space patterns for consistent testing:
 
 - **Unit Tests**: Test individual functions and components
 - **Integration Tests**: Test module interactions
@@ -579,7 +579,7 @@ $([ "$PROJECT_TYPE" = "node" ] || [ "$PROJECT_TYPE" = "nextjs" ] && echo "npm ru
 
 ## 🔒 Security
 
-This project follows UIForge security patterns:
+This project follows Forge Space security patterns:
 
 - No secrets in repository
 - Automated security scanning
@@ -588,7 +588,7 @@ This project follows UIForge security patterns:
 
 ## 📚 Documentation
 
-- [UIForge Patterns](https://github.com/Forge-Space/core)
+- [Forge Space Patterns](https://github.com/Forge-Space/core)
 - [Security Guidelines](docs/SECURITY.md)
 - [Development Guide](docs/DEVELOPMENT.md)
 - [Docker Patterns](docs/DOCKER.md)
@@ -652,7 +652,7 @@ describe('hello function', () => {
   });
 
   it('should return greeting with custom name', () => {
-    expect(hello('UIForge')).toBe('Hello, UIForge!');
+    expect(hello('Forge Space')).toBe('Hello, Forge Space!');
   });
 });
 EOF
@@ -668,7 +668,7 @@ def test_hello_default():
 
 
 def test_hello_custom():
-    assert hello("UIForge") == "Hello, UIForge!"
+    assert hello("Forge Space") == "Hello, Forge Space!"
 EOF
 fi
 

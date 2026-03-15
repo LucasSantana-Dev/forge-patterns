@@ -46,7 +46,7 @@ const PROJECT_CONFIGS = {
     example: 'examples/mcp-gateway-integration.js'
   },
   'uiforge-mcp': {
-    name: 'UIForge MCP',
+    name: 'UI MCP (legacy)',
     description: 'MCP server with AI integration and template management',
     patterns: [
       'mcp-servers/ai-providers',
@@ -66,10 +66,10 @@ const PROJECT_CONFIGS = {
       'prettier',
       'typescript'
     ],
-    example: 'examples/uiforge-mcp-integration.js'
+    example: 'examples/ui-mcp-integration.js'
   },
   'uiforge-webapp': {
-    name: 'UIForge WebApp',
+    name: 'Siza Web App (legacy)',
     description: 'Next.js web application with feature toggles and code quality',
     patterns: [
       'code-quality/eslint',
@@ -88,7 +88,52 @@ const PROJECT_CONFIGS = {
       'prettier',
       'typescript'
     ],
-    example: 'examples/uiforge-webapp-integration.js'
+    example: 'examples/siza-integration.js'
+  },  // Canonical Forge Space project names (aliases for backwards compat)
+  'ui-mcp': {
+    name: 'Forge UI MCP',
+    description: 'MCP server with AI integration and template management (canonical name)',
+    patterns: [
+      'mcp-servers/ai-providers',
+      'mcp-servers/templates',
+      'mcp-servers/ui-generation',
+      'mcp-servers/streaming',
+      'shared-infrastructure/sleep-architecture',
+      'feature-toggles/libraries/nodejs',
+      'feature-toggles/config/centralized-config.yml'
+    ],
+    configFiles: ['.eslintrc.js', '.prettierrc.json', 'tsconfig.json'],
+    dependencies: [
+      '@typescript-eslint/eslint-plugin',
+      '@typescript-eslint/parser',
+      'eslint',
+      'eslint-config-prettier',
+      'prettier',
+      'typescript'
+    ],
+    example: 'examples/ui-mcp-integration.js'
+  },
+  'siza': {
+    name: 'Siza Web App',
+    description: 'Next.js web application with feature toggles and code quality (canonical name)',
+    patterns: [
+      'code-quality/eslint',
+      'code-quality/prettier',
+      'code-quality/typescript',
+      'feature-toggles/libraries/nodejs',
+      'feature-toggles/config/centralized-config.yml',
+      'feature-toggles'
+    ],
+    configFiles: ['.eslintrc.js', '.prettierrc.json'],
+    dependencies: [
+      '@typescript-eslint/eslint-plugin',
+      '@typescript-eslint/parser',
+      'eslint',
+      'eslint-config-prettier',
+      'prettier',
+      'typescript'
+    ],
+    example: 'examples/siza-integration.js'
   }
 };
 
@@ -279,8 +324,8 @@ app.use('/api/mcp/*', router.middleware);
 export { app, router, cache };
 `;
     } else if (projectType === 'uiforge-mcp') {
-      exampleContent = `// UIForge MCP Integration Example
-// This file demonstrates how to use Forge Patterns in your UIForge MCP project
+      exampleContent = `// UI MCP Integration Example
+// This file demonstrates how to use Forge Patterns in your ui-mcp project
 
 import { AIProviderManager } from '../patterns/mcp-servers/ai-providers/ai-provider-manager';
 import { TemplateManager } from '../patterns/mcp-servers/templates/template-manager';
@@ -414,8 +459,8 @@ export class MCPUIGenerationServer {
 export { MCPUIGenerationServer, providerManager, templateManager };
 `;
     } else if (projectType === 'uiforge-webapp') {
-      exampleContent = `// UIForge WebApp Integration Example
-// This file demonstrates how to use Forge Patterns in your UIForge WebApp project
+      exampleContent = `// Siza Integration Example
+// This file demonstrates how to use Forge Patterns in your siza project
 
 import { FeatureToggleManager } from '../patterns/feature-toggles/libraries/nodejs';
 
@@ -634,7 +679,7 @@ program
 program
   .command('integrate')
   .description('Integrate Forge Patterns into a project')
-  .option('-p, --project <type>', 'Project type (mcp-gateway, uiforge-mcp, uiforge-webapp)')
+  .option('-p, --project <type>', 'Project type (mcp-gateway, ui-mcp, siza) — legacy: uiforge-mcp, uiforge-webapp')
   .option('-d, --dir <path>', 'Target directory (default: current directory)')
   .option('--force', 'Force overwrite existing files')
   .action(async options => {
