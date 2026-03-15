@@ -116,3 +116,5 @@ verify-claude-code-phase2.sh
 
 .windsurf/plans/
 .claude/plans/
+patterns/ide-extensions/vscode/coverage/
+opencode.jsonc
