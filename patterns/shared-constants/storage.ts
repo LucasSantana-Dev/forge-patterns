@@ -6,7 +6,7 @@
  *
  * @example
  * ```ts
- * import { createStorageConfig } from '@uiforge/forge-patterns/shared-constants';
+ * import { createStorageConfig } from '@forgespace/core';
  *
  * const storageConfig = createStorageConfig('myapp_storage', ['api_keys', 'user_preferences']);
  * ```
@@ -23,7 +23,7 @@ export interface IndexedDBStoreConfig {
 /**
  * Create a typed IndexedDB configuration object.
  *
- * @param dbName - The database name (e.g. `"uiforge_storage"`)
+ * @param dbName - The database name (e.g. `"forge_storage"`)
  * @param stores - List of object store names
  * @param version - DB schema version (default: `DEFAULT_DB_VERSION`)
  */

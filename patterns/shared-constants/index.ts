@@ -1,12 +1,12 @@
 /**
- * @uiforge/forge-patterns — Shared Constants
+ * @forgespace/core — Shared Constants
  *
  * Central registry of reusable constants, types, and factory helpers
- * extracted from mcp-gateway, uiforge-mcp, and UIForge.
+ * shared across the Forge Space ecosystem (mcp-gateway, ui-mcp, siza).
  *
  * @example
  * ```ts
- * import { DEFAULT_TIMEOUT_MS, MAX_RETRIES, AI_PROVIDERS, createFeatureFlags } from './index.js';
+ * import { DEFAULT_TIMEOUT_MS, MAX_RETRIES, AI_PROVIDERS, createFeatureFlags } from '@forgespace/core';
  * ```
  */
 
