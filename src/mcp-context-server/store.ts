@@ -1,51 +1,20 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'fs';
-import { resolve, sep, dirname } from 'path';
+import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { validateProjectSlug, safeResolve } from './validation.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const STORE_DIR = process.env.MCP_CONTEXT_STORE_PATH
+const STORE_DIR = process.env.MCP_CONTEXT_STORE_PATH
   ? resolve(process.env.MCP_CONTEXT_STORE_PATH)
   : resolve(__dirname, '..', '..', 'src', 'mcp-context-server', 'context-store');
 
-export interface ProjectEntry {
+interface ProjectMeta {
   project: string;
   title: string;
   description: string;
   updatedAt: string;
-  contentPath: string;
-}
-
-export interface ProjectMeta {
-  project: string;
-  title: string;
-  description: string;
-  updatedAt: string;
-}
-
-const SAFE_PROJECT_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-
-export function validateProjectSlug(project: string): void {
-  if (!SAFE_PROJECT_SLUG.test(project)) {
-    throw new Error(
-      `Invalid project slug "${project}". ` +
-        'Slugs must be lowercase kebab-case (e.g. "my-project").'
-    );
-  }
-}
-
-function safeResolve(base: string, filename: string): string {
-  // Explicit path traversal prevention for static analysis
-  if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
-    throw new Error(`Path traversal detected: "${filename}" contains invalid characters.`);
-  }
-
-  const resolved = resolve(base, filename);
-  if (resolved !== base && !resolved.startsWith(base + sep)) {
-    throw new Error(`Path traversal detected: "${filename}" escapes the store directory.`);
-  }
-  return resolved;
 }
 
 function metaPath(project: string): string {
@@ -120,12 +89,4 @@ export function writeContext(
   writeFileSync(mp, JSON.stringify(meta, null, 2), 'utf-8');
 
   return meta;
-}
-
-export function getContentPath(project: string): string {
-  return contentPath(project);
-}
-
-export function getMetaPath(project: string): string {
-  return metaPath(project);
 }

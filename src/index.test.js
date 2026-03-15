@@ -11,6 +11,11 @@ describe('Forge Patterns Main Module', () => {
       expect(typeof VERSION).toBe('string');
       expect(VERSION).toMatch(/^\d+\.\d+\.\d+$/);
     });
+
+    it('should match package.json version', () => {
+      const pkgVersion = require('../package.json').version;
+      expect(VERSION).toBe(pkgVersion);
+    });
   });
 
   describe('createProjectConfig', () => {

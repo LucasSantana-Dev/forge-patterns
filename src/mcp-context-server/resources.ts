@@ -1,12 +1,7 @@
-import {
-  listProjects,
-  readContext,
-  readMeta,
-  projectExists,
-  validateProjectSlug
-} from './store.js';
+import { listProjects, readContext, readMeta, projectExists } from './store.js';
+import { validateProjectSlug } from './validation.js';
 
-export interface ProjectResource {
+interface ProjectResource {
   uri: string;
   name: string;
   description: string;
@@ -62,8 +57,4 @@ export function findResourceByUri(uri: string): ProjectResource | undefined {
     mimeType: 'text/markdown',
     project
   };
-}
-
-export function findResourceByProject(project: string): ProjectResource | undefined {
-  return findResourceByUri(`forge-space://context/${project}`);
 }

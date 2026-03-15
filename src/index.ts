@@ -5,8 +5,8 @@
  * It provides easy access to all patterns and utilities.
  */
 
-// Version information
-export const VERSION = '1.1.1';
+// Version information — kept in sync with package.json by scripts/release-core.sh
+export const VERSION = '1.11.0';
 
 // Type definitions
 export interface ProjectConfig {
