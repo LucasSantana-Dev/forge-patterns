@@ -54,7 +54,10 @@ module.exports = {
     '!patterns/ide-extensions/**',
     '!patterns/monitoring/**',
     '!patterns/shared-infrastructure/logger/**',
-    '!src/mcp-context-server/**'
+    '!src/mcp-context-server/index.ts',
+    '!src/mcp-context-server/store.ts',
+    '!src/mcp-context-server/resources.ts',
+    '!src/mcp-context-server/tools.ts'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
