@@ -5,8 +5,17 @@ echo "⚙️  [test-autogen] pre-commit (phase0 warn)"
 TENANT_ID="${FORGE_TENANT_ID:-}"
 TENANT_PROFILE_REF="${FORGE_TENANT_PROFILE_REF:-}"
 
+# Auto-detect from inline config when env vars are not set
+INLINE_PROFILE=".forge/tenant-profile.yml"
+if [ -z "$TENANT_ID" ] && [ -f "$INLINE_PROFILE" ]; then
+  TENANT_ID=$(grep '^tenant_id:' "$INLINE_PROFILE" | awk '{print $2}' || true)
+fi
+if [ -z "$TENANT_PROFILE_REF" ] && [ -f "$INLINE_PROFILE" ]; then
+  TENANT_PROFILE_REF="$INLINE_PROFILE"
+fi
+
 if [ -z "$TENANT_ID" ] || [ -z "$TENANT_PROFILE_REF" ]; then
-  echo "⚠️  FORGE_TENANT_ID/FORGE_TENANT_PROFILE_REF ausentes; pulando test-autogen (warn-only)."
+  echo "⚠️  FORGE_TENANT_ID/FORGE_TENANT_PROFILE_REF ausentes e .forge/tenant-profile.yml nao encontrado; pulando test-autogen (warn-only)."
   exit 0
 fi
 
