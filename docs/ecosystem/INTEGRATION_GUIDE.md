@@ -1,10 +1,10 @@
-# UIForge Ecosystem Integration Guide
+# Forge Space Ecosystem Integration Guide
 
 ## 🎯 **Overview**
 
 This guide provides step-by-step instructions for setting up and integrating the
-complete UIForge ecosystem. It covers everything from initial setup to advanced
-configuration and troubleshooting.
+complete Forge Space ecosystem. It covers everything from initial setup to
+advanced configuration and troubleshooting.
 
 ## 📋 **Prerequisites**
 
@@ -45,7 +45,7 @@ make register
 ```bash
 # Clone the MCP server repository
 git clone https://github.com/Forge-Space/ui-mcp.git
-cd uiforge-mcp
+cd ui-mcp
 
 # Install dependencies
 npm install
@@ -59,7 +59,7 @@ npm run dev
 ```bash
 # Clone the webapp repository
 git clone https://github.com/Forge-Space/UI.git
-cd uiforge-webapp
+cd siza
 
 # Install dependencies
 npm install
@@ -89,8 +89,8 @@ open http://localhost:3000
 
 ```bash
 # Create workspace directory
-mkdir uiforge-ecosystem
-cd uiforge-ecosystem
+mkdir forge-space-ecosystem
+cd forge-space-ecosystem
 
 # Clone all repositories
 git clone https://github.com/Forge-Space/mcp-gateway.git
@@ -106,7 +106,7 @@ tree -L 2
 ```bash
 # Create shared environment file
 cat > .env.shared << EOF
-# UIForge Ecosystem Configuration
+# Forge Space Ecosystem Configuration
 NODE_ENV=development
 LOG_LEVEL=debug
 
@@ -123,7 +123,7 @@ WEBAPP_URL=http://localhost:3000
 WEBAPP_PORT=3000
 
 # Database Configuration
-DATABASE_URL=postgresql://localhost:5432/uiforge
+DATABASE_URL=postgresql://localhost:5432/forge-space
 SUPABASE_URL=http://localhost:54321
 SUPABASE_ANON_KEY=your-anon-key
 EOF
@@ -202,7 +202,7 @@ npx @modelcontextprotocol/cli list-tools
 #### **3.1 UI Generation Server Installation**
 
 ```bash
-cd ../uiforge-mcp
+cd ../ui-mcp
 
 # Install dependencies
 npm install
@@ -253,7 +253,7 @@ curl http://localhost:3001/api/templates
 #### **4.1 WebApp Installation**
 
 ```bash
-cd ../uiforge-webapp
+cd ../siza
 
 # Install dependencies
 npm install
@@ -346,7 +346,7 @@ WORKERS=4                    # Number of worker processes
 # Gateway Integration
 GATEWAY_URL=http://localhost:8080  # Gateway URL
 GATEWAY_API_KEY=your-key     # API key for gateway
-SERVER_NAME=uiforge-mcp      # Server name
+SERVER_NAME=ui-mcp      # Server name
 SERVER_DESCRIPTION=UI Generation MCP Server  # Server description
 
 # AI Model Configuration
@@ -395,7 +395,7 @@ DEV_MODE=true               # Development mode
 #!/bin/bash
 # health-check.sh
 
-echo "🔍 Checking UIForge Ecosystem Health..."
+echo "🔍 Checking Forge Space Ecosystem Health..."
 
 # Check Gateway
 echo "📡 Checking Gateway..."
@@ -536,7 +536,7 @@ JWT_SECRET=$(openssl rand -base64 32)
 NEXTAUTH_SECRET=$(openssl rand -base64 32)
 
 # Database (PostgreSQL)
-DATABASE_URL=postgresql://user:pass@localhost:5432/uiforge_prod
+DATABASE_URL=postgresql://user:pass@localhost:5432/forge-space_prod
 SUPABASE_URL=https://your-project.supabase.co
 
 # Performance
@@ -562,7 +562,7 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/uiforge
+      - DATABASE_URL=postgresql://postgres:password@db:5432/forge-space
       - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - db
@@ -570,7 +570,7 @@ services:
       - ./data:/app/data
 
   mcp-server:
-    build: ./uiforge-mcp
+    build: ./ui-mcp
     ports:
       - '3001:3001'
     environment:
@@ -581,7 +581,7 @@ services:
       - ollama
 
   webapp:
-    build: ./uiforge-webapp
+    build: ./siza
     ports:
       - '3000:3000'
     environment:
@@ -594,7 +594,7 @@ services:
   db:
     image: postgres:15
     environment:
-      - POSTGRES_DB=uiforge
+      - POSTGRES_DB=forge-space
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     volumes:
@@ -646,26 +646,26 @@ rm -rf data/cache/*
 curl http://localhost:8080/api/servers/status
 
 # Check MCP server logs
-tail -f uiforge-mcp/logs/server.log
+tail -f ui-mcp/logs/server.log
 
 # Restart MCP server
 npm run restart
 
 # Verify configuration
-cat uiforge-mcp/.env
+cat ui-mcp/.env
 ```
 
 #### **WebApp Integration Problems**
 
 ```bash
 # Check environment variables
-cat uiforge-webapp/.env.local
+cat siza/.env.local
 
 # Test gateway connection
 curl http://localhost:3000/api/gateway/status
 
 # Clear Next.js cache
-rm -rf uiforge-webapp/.next
+rm -rf siza/.next
 
 # Restart development server
 npm run dev
@@ -696,6 +696,6 @@ ps aux | grep -E "(gateway|mcp|webapp)"
 
 ---
 
-_This integration guide should help you get the complete UIForge ecosystem
+_This integration guide should help you get the complete Forge Space ecosystem
 running. For additional support, please refer to the troubleshooting section or
 create an issue in the respective repositories._

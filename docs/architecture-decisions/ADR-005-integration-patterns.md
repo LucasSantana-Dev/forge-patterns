@@ -720,4 +720,4 @@ class RetryPolicy {
 
 ---
 
-_Decision made on 2025-02-17 by the UIForge architecture team._
+_Decision made on 2025-02-17 by the Forge Space architecture team._

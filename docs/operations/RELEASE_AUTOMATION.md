@@ -52,8 +52,8 @@ npm run release:major    # Major version
 
 Updates `@forgespace/core` dependency in all dependent projects:
 
-- `uiforge-mcp`
-- `uiforge-webapp`
+- `ui-mcp`
+- `siza`
 
 **Usage:**
 
@@ -169,8 +169,8 @@ The release process includes these quality checks:
 
 ### Supported Projects
 
-- **uiforge-mcp**: UIForge MCP server
-- **uiforge-webapp**: UIForge web application
+- **ui-mcp**: Forge Space MCP server
+- **siza**: Forge Space web application
 
 ### Update Process
 

@@ -6,8 +6,8 @@ Accepted
 
 ## Context
 
-We needed to design the uiforge-webapp as the management interface for the
-UIForge ecosystem. The key requirements were:
+We needed to design the siza as the management interface for the Forge Space
+ecosystem. The key requirements were:
 
 - Modern, responsive user interface for ecosystem management
 - Real-time monitoring and status updates
@@ -18,8 +18,8 @@ UIForge ecosystem. The key requirements were:
 
 ## Decision
 
-We designed the uiforge-webapp using a **modern React-based architecture** with
-the following key decisions:
+We designed the siza using a **modern React-based architecture** with the
+following key decisions:
 
 - **Next.js Framework**: React-based framework with SSR/SSG capabilities
 - **Supabase Backend**: PostgreSQL database with real-time capabilities
@@ -478,4 +478,4 @@ class GatewayAuth {
 
 ---
 
-_Decision made on 2025-02-17 by the UIForge architecture team._
+_Decision made on 2025-02-17 by the Forge Space architecture team._

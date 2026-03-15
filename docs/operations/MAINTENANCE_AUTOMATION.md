@@ -3,8 +3,8 @@
 ## 🎯 Overview
 
 This guide outlines the comprehensive maintenance processes and automation
-strategies for the UIForge ecosystem, ensuring system reliability, security, and
-optimal performance through automated monitoring, updates, and operational
+strategies for the Forge Space ecosystem, ensuring system reliability, security,
+and optimal performance through automated monitoring, updates, and operational
 procedures.
 
 ## 📋 Maintenance Categories
@@ -281,11 +281,11 @@ jobs:
       - name: Rotate application logs
         run: |
           # Rotate logs older than 30 days
-          find /var/log/uiforge -name "*.log" -mtime +30 -exec gzip {} \;
-          find /var/log/uiforge -name "*.log.gz" -mtime +90 -delete
+          find /var/log/forge-space -name "*.log" -mtime +30 -exec gzip {} \;
+          find /var/log/forge-space -name "*.log.gz" -mtime +90 -delete
 
           # Clean up temporary files
-          find /tmp/uiforge -type f -mtime +7 -delete
+          find /tmp/forge-space -type f -mtime +7 -delete
 
           # Clean up Docker unused resources
           docker system prune -f --volumes
@@ -311,14 +311,14 @@ jobs:
       - name: Backup verification
         run: |
           # Verify recent backups
-          latest_backup=$(aws s3 ls s3://uiforge-backups/ --recursive | sort | tail -n 1 | awk '{print $4}')
+          latest_backup=$(aws s3 ls s3://forge-space-backups/ --recursive | sort | tail -n 1 | awk '{print $4}')
           if [ -z "$latest_backup" ]; then
             echo "No recent backup found"
             exit 1
           fi
 
           # Test backup restoration
-          aws s3 cp "s3://uiforge-backups/$latest_backup" /tmp/test-backup.sql.gz
+          aws s3 cp "s3://forge-space-backups/$latest_backup" /tmp/test-backup.sql.gz
           gunzip -c /tmp/test-backup.sql.gz | head -n 10
           rm /tmp/test-backup.sql.gz
 ```
@@ -396,7 +396,7 @@ set -euo pipefail
 # Configuration
 SERVICES=("gateway:3001" "mcp-server:3002" "webapp:3000")
 ALERT_WEBHOOK="${ALERT_WEBHOOK_URL:-}"
-LOG_FILE="/var/log/uiforge/health-check.log"
+LOG_FILE="/var/log/forge-space/health-check.log"
 
 # Logging function
 log() {
@@ -465,7 +465,7 @@ set -euo pipefail
 
 # Configuration
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-LOG_FILE="/var/log/uiforge/dependency-updates.log"
+LOG_FILE="/var/log/forge-space/dependency-updates.log"
 
 # Logging function
 log() {
@@ -549,8 +549,8 @@ set -euo pipefail
 
 # Configuration
 DATABASE_URL="${DATABASE_URL:-}"
-BACKUP_BUCKET="${BACKUP_BUCKET:-uiforge-backups}"
-LOG_FILE="/var/log/uiforge/database-maintenance.log"
+BACKUP_BUCKET="${BACKUP_BUCKET:-forge-space-backups}"
+LOG_FILE="/var/log/forge-space/database-maintenance.log"
 
 # Logging function
 log() {
@@ -696,7 +696,7 @@ scrape_configs:
 ```yaml
 # monitoring/alert_rules.yml
 groups:
-  - name: uiforge.rules
+  - name: forge-space.rules
     rules:
       # Service health alerts
       - alert: ServiceDown
@@ -763,7 +763,7 @@ groups:
 ```json
 {
   "dashboard": {
-    "title": "UIForge System Overview",
+    "title": "Forge Space System Overview",
     "panels": [
       {
         "title": "Service Health",
@@ -1107,6 +1107,6 @@ jobs:
 - [ ] Maintenance procedures optimized
 - [ ] Team training and knowledge sharing
 
-This comprehensive maintenance automation guide ensures the UIForge ecosystem
-remains reliable, secure, and performant through systematic monitoring,
-automated updates, and proactive maintenance procedures.
+This comprehensive maintenance automation guide ensures the Forge Space
+ecosystem remains reliable, secure, and performant through systematic
+monitoring, automated updates, and proactive maintenance procedures.

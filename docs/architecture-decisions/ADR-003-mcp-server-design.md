@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-We needed to design the uiforge-mcp server that specializes in AI-powered UI
+We needed to design the ui-mcp server that specializes in AI-powered UI
 generation. The key requirements were:
 
 - Integration with the Model Context Protocol (MCP) standard
@@ -70,7 +70,7 @@ interface MCPTool {
   handler: (input: unknown) => Promise<unknown>;
 }
 
-class UIForgeMCPServer {
+class Forge SpaceMCPServer {
   private tools: Map<string, MCPTool> = new Map();
   private aiProvider: AIProvider;
   private templateManager: TemplateManager;
@@ -170,6 +170,6 @@ const result = await server.callTool('generate-from-template', {
 ## References
 
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [UIForge Component Library](https://github.com/Forge-Space/ui-mcp)
+- [Forge Space Component Library](https://github.com/Forge-Space/ui-mcp)
 - [React Documentation](https://react.dev/)
 - [Vue.js Documentation](https://vuejs.org/)
