@@ -74,6 +74,7 @@ describe('Shared Constants Index', () => {
 
     it('should export all MCP protocol constants', () => {
       expect(SharedConstants.MCP_UIFORGE_SERVER_NAME).toBeDefined();
+      expect(SharedConstants.MCP_UI_SERVER_NAME).toBeDefined();
     });
 
     it('should export all environment constants', () => {

@@ -10,7 +10,11 @@ export const MCP_SERVER_VERSION = '0.1.0';
 
 export const MCP_GATEWAY_CLIENT_NAME = 'forge-mcp-gateway-client';
 
+/** @deprecated Use MCP_UI_SERVER_NAME instead */
 export const MCP_UIFORGE_SERVER_NAME = 'uiforge';
+
+/** Canonical name for the UI generation MCP server (ui-mcp) */
+export const MCP_UI_SERVER_NAME = 'forge-ui';
 
 export const MCP_PROTOCOL_METHODS = {
   TOOLS_LIST: 'tools/list',

@@ -11,6 +11,7 @@ import {
   MCP_SERVER_VERSION,
   MCP_GATEWAY_CLIENT_NAME,
   MCP_UIFORGE_SERVER_NAME,
+  MCP_UI_SERVER_NAME,
   MCP_PROTOCOL_METHODS,
   type McpProtocolMethod
 } from '../mcp-protocol';
@@ -32,6 +33,11 @@ describe('MCP Protocol Constants', () => {
       expect(MCP_UIFORGE_SERVER_NAME).toBe('uiforge');
       expect(typeof MCP_GATEWAY_CLIENT_NAME).toBe('string');
       expect(typeof MCP_UIFORGE_SERVER_NAME).toBe('string');
+    });
+
+    it('MCP_UI_SERVER_NAME should be the canonical Forge Space server name', () => {
+      expect(MCP_UI_SERVER_NAME).toBe('forge-ui');
+      expect(typeof MCP_UI_SERVER_NAME).toBe('string');
     });
   });
 
