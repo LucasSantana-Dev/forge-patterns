@@ -72,16 +72,10 @@ jobs:
       issues: write
     steps:
       - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
-      - uses: actions/checkout@v6
-        continue-on-error: true
-        with:
-          repository: Forge-Space/forge-tenant-profiles
-          path: .forge-tenant-profiles
-          token: ${{ secrets.FORGE_TENANT_PROFILES_READ_TOKEN || secrets.GITHUB_TOKEN }}
       - name: Detect tenant profile availability
         id: tenant_profile_check
         run: |
-          if [ -f .forge-tenant-profiles/tenants/acme-sandbox/profile.yaml ]; then
+          if [ -f ".forge/tenant-profile.yml" ]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
@@ -95,10 +89,10 @@ jobs:
         with:
           command: test-autogen-check
           tenant: acme-sandbox
-          tenant_profile_ref: .forge-tenant-profiles/tenants/acme-sandbox/profile.yaml
+          tenant_profile_ref: .forge/tenant-profile.yml
           test_autogen_phase: warn
           comment: true
           annotations: true
-      - name: Skip parity when tenant profile repo is unavailable
+      - name: Skip parity when tenant profile is unavailable
         if: steps.tenant_profile_check.outputs.available != 'true'
-        run: 'echo "Skipping test-autogen parity: tenant profile repo/path unavailable."'
+        run: 'echo "Skipping test-autogen parity: .forge/tenant-profile.yml not found."'
