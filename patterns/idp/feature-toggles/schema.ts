@@ -1,4 +1,11 @@
-export type ToggleNamespace = 'global' | 'mcp-gateway' | 'uiforge-mcp' | 'uiforge-webapp';
+/** Canonical Forge Space namespaces. Legacy 'uiforge-mcp'/'uiforge-webapp' kept for backwards compat. */
+export type ToggleNamespace =
+  | 'global'
+  | 'mcp-gateway'
+  | 'ui-mcp'
+  | 'siza'
+  | 'uiforge-mcp' // @deprecated — use 'ui-mcp'
+  | 'uiforge-webapp'; // @deprecated — use 'siza'
 
 export type ToggleStrategy = 'default' | 'gradual-rollout' | 'user-ids';
 

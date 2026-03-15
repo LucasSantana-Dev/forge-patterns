@@ -7,8 +7,10 @@ import type { ToggleNamespace } from './schema.js';
 const VALID_NAMESPACES: ToggleNamespace[] = [
   'global',
   'mcp-gateway',
-  'uiforge-mcp',
-  'uiforge-webapp'
+  'ui-mcp',
+  'siza',
+  'uiforge-mcp', // legacy — prefer 'ui-mcp'
+  'uiforge-webapp' // legacy — prefer 'siza'
 ];
 
 function parseArgs(args: string[]) {
@@ -48,7 +50,7 @@ Usage:
 
 Options:
   --store <path>      Toggle store file (default: .forge/features.json)
-  --namespace <ns>    Filter by namespace: global, mcp-gateway, uiforge-mcp, uiforge-webapp
+  --namespace <ns>    Filter by namespace: global, mcp-gateway, ui-mcp, siza
   --description <d>   Toggle description
   --enabled           Filter or create as enabled
   --disabled          Filter by disabled
