@@ -1,6 +1,6 @@
 {
   "name": "@forgespace/core",
-  "version": "1.12.0",
+  "version": "1.12.3",
   "description": "Shared configuration, workflows, and architectural patterns for the Forgespace ecosystem",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
