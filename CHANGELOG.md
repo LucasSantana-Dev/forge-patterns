@@ -1,5 +1,35 @@
 ## [Unreleased]
 
+## [1.12.3] - 2026-03-15
+
+### Changed
+- **CI hygiene**: `actions/checkout` and `actions/setup-node` upgraded **v4 → v6**
+  across all 13 reusable workflow files (40 references), eliminating Node.js 20
+  deprecation warnings ahead of the June 2026 deadline (#143).
+- **Tenant profile inlined**: `.forge/tenant-profile.yml` committed directly into the
+  repo, eliminating the fragile cross-repo PAT checkout (`FORGE_TENANT_PROFILES_READ_TOKEN`)
+  that silently skipped the `test-autogen-warn` CI job on token expiry (#142).
+- **Git hooks auto-detect tenant profile**: pre-commit and pre-push hooks now read
+  `.forge/tenant-profile.yml` as fallback when `FORGE_TENANT_ID`/`FORGE_TENANT_PROFILE_REF`
+  env vars are unset — eliminates the recurring "ausentes" warning (#144).
+- **Complete UIForge → Forge Space rebrand** in scripts, patterns, and Serena memories:
+  `ForgeSpaceFeatureToggles` (canonical), `UIForgeFeatureToggles` (backwards-compat alias),
+  `integrate.js` canonical project names (`ui-mcp`, `siza`), 8 stale `knip.json` ignores
+  removed (#141).
+
+### Added
+- **`.forge/tenant-profile.yml`**: Inline tenant configuration (no secrets) for
+  CI and git hooks without requiring cross-repo access (#142).
+- **`.github/FUNDING.yml`**: GitHub Sponsors configuration.
+
+### Fixed
+- **knip.json**: Removed 8 stale `patterns/**` ignore entries that matched no files
+  in the project scope; `knip` now reports 0 issues with no configuration hints (#141).
+
+### Infrastructure
+- **`.forge/test-autogen-telemetry.jsonl`** and **`.forge/test-autogen-baseline.json`**
+  added to `.gitignore` — these are ephemeral hook runtime artifacts (#145).
+
 ## [1.12.0] - 2026-03-15
 
 ### Added
