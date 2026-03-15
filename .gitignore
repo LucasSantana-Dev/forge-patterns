@@ -27,8 +27,8 @@ out/
 *.log
 logs/
 
-# Coverage
-coverage/
+# Coverage (root-level only, not patterns/coverage/)
+/coverage/
 htmlcov/
 .coverage
 .nyc_output

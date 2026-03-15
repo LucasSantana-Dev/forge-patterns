@@ -1,0 +1,46 @@
+codecov:
+  require_ci_to_pass: true
+  
+  coverage:
+    precision: 2
+    round: down
+    range: "70...100"
+    status:
+      project:
+        default:
+          target: 80%
+          threshold: 1%
+      patch:
+        default:
+          target: 80%
+          threshold: 1%
+  
+  flags:
+    unit:
+      paths:
+        - src/**/__tests__/**/*.unit.*
+      carryforward: true
+    integration:
+      paths:
+        - src/**/__tests__/**/*.integration.*
+      carryforward: true
+    e2e:
+      paths:
+        - tests/e2e/**/*.test.*
+      carryforward: true
+  
+  ignore:
+    - "tests/**"
+    - "**/test_*.py"
+    - "**/*_test.py"
+    - "__pycache__/**"
+    - "*.pyc"
+    - ".git/**"
+    - "node_modules/**"
+    - "build/**"
+    - "dist/**"
+  
+  github_checks:
+    annotations: true
+  
+  bot: "codecov/feedback"
