@@ -11,7 +11,7 @@ export interface SharedLogEntry {
   environment: string;
   level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   correlationId?: string;
   userId?: string;
   sessionId?: string;
@@ -33,6 +33,7 @@ export interface SharedLoggerConfig {
 
 export class SharedLogger {
   private config: SharedLoggerConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private supabase: any;
 
   constructor(config: SharedLoggerConfig) {
@@ -97,27 +98,27 @@ export class SharedLogger {
   /**
    * Convenience methods for different log levels
    */
-  async trace(message: string, context?: Record<string, any>): Promise<void> {
+  async trace(message: string, context?: Record<string, unknown>): Promise<void> {
     await this.log({ level: 'trace', message, context });
   }
 
-  async debug(message: string, context?: Record<string, any>): Promise<void> {
+  async debug(message: string, context?: Record<string, unknown>): Promise<void> {
     await this.log({ level: 'debug', message, context });
   }
 
-  async info(message: string, context?: Record<string, any>): Promise<void> {
+  async info(message: string, context?: Record<string, unknown>): Promise<void> {
     await this.log({ level: 'info', message, context });
   }
 
-  async warn(message: string, context?: Record<string, any>): Promise<void> {
+  async warn(message: string, context?: Record<string, unknown>): Promise<void> {
     await this.log({ level: 'warn', message, context });
   }
 
-  async error(message: string, context?: Record<string, any>): Promise<void> {
+  async error(message: string, context?: Record<string, unknown>): Promise<void> {
     await this.log({ level: 'error', message, context });
   }
 
-  async fatal(message: string, context?: Record<string, any>): Promise<void> {
+  async fatal(message: string, context?: Record<string, unknown>): Promise<void> {
     await this.log({ level: 'fatal', message, context });
   }
 
@@ -128,7 +129,7 @@ export class SharedLogger {
     correlationId: string,
     level: SharedLogEntry['level'],
     message: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     await this.log({
       level,
@@ -146,7 +147,7 @@ export class SharedLogger {
     spanId: string,
     level: SharedLogEntry['level'],
     message: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     await this.log({
       level,
@@ -164,7 +165,7 @@ export class SharedLogger {
     userId: string,
     sessionId: string,
     action: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     await this.log({
       level: 'info',
@@ -191,7 +192,7 @@ export class SharedLogger {
     endpoint: string,
     statusCode: number,
     duration?: number,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     await this.log({
       level: statusCode >= 400 ? 'error' : 'info',
@@ -221,7 +222,7 @@ export class SharedLogger {
     table: string,
     success: boolean,
     duration?: number,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     await this.log({
       level: success ? 'info' : 'error',
@@ -249,7 +250,7 @@ export class SharedLogger {
     toolName: string,
     success: boolean,
     duration?: number,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     await this.log({
       level: success ? 'info' : 'error',

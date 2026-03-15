@@ -72,9 +72,7 @@ function isEvidence(value: unknown): value is SecuritySpokeEvidence {
     return false;
   }
 
-  const kind = value.kind;
-  const file = value.file;
-  const line = value.line;
+  const { kind, file, line } = value;
 
   if (!isString(value.value)) {
     return false;

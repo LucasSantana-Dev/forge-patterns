@@ -106,6 +106,25 @@ module.exports = [
     }
   },
   {
+    files: ['**/*.test.ts', '**/*.test.js', '**/*.spec.ts', '**/*.spec.js'],
+    languageOptions: {
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        test: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        jest: 'readonly'
+      }
+    },
+    rules: {
+      'no-magic-numbers': 'off'
+    }
+  },
+  {
     files: ['scripts/**/*.js'],
     rules: {
       'no-console': 'off'

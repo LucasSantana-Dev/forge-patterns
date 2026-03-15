@@ -2,8 +2,6 @@
  * Unit tests for Forge Patterns main entry point
  */
 
-/* global describe, it, expect, beforeEach, jest */
-
 const { VERSION, createProjectConfig, ForgePatterns } = require('./index');
 
 describe('Forge Patterns Main Module', () => {

@@ -365,4 +365,256 @@ describe('collectGovernanceFindings', () => {
       expect(finding).toBeTruthy();
     });
   });
+
+  it('accepts .cursorrules as valid AI coding rules', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.cursorrules', 'Always write tests');
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'SECURITY.md', '# Security');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const ruleFinding = result.findings.find(f =>
+        f.message.includes('No AI coding rules'),
+      );
+      expect(ruleFinding).toBeUndefined();
+    });
+  });
+
+  it('accepts .github/copilot-instructions.md as valid AI coding rules', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.github/copilot-instructions.md', '# Copilot instructions');
+      writeFile(dir, '.gitignore', '.env');
+      writeFile(dir, 'SECURITY.md', '# Security');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const ruleFinding = result.findings.find(f =>
+        f.message.includes('No AI coding rules'),
+      );
+      expect(ruleFinding).toBeUndefined();
+    });
+  });
+
+  it('flags missing CLAUDE.md even when cursorrules present', () => {
+    withTmpDir((dir) => {
+      writeFile(dir, '.cursorrules', 'rules here');
+      writeFile(dir, '.gitignore', '.env');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('Missing CLAUDE.md'),
+      );
+      expect(finding).toBeTruthy();
+      expect(finding!.severity).toBe('medium');
+    });
+  });
+
+  it('flags missing .claude/skills directory', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('No .claude/skills/'),
+      );
+      expect(finding).toBeTruthy();
+      expect(finding!.severity).toBe('low');
+    });
+  });
+
+  it('flags .claude/skills/ with no skill files', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      mkdirSync(join(dir, '.claude', 'skills'), { recursive: true });
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('no skill files'),
+      );
+      expect(finding).toBeTruthy();
+    });
+  });
+
+  it('passes when .claude/skills/ has skill files', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.claude/skills/my-skill.md', '# My Skill');
+      writeFile(dir, '.github/workflows/ci.yml', 'trufflehog\nsemgrep');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const skillFinding = result.findings.find(f =>
+        f.message.includes('skill'),
+      );
+      expect(skillFinding).toBeUndefined();
+    });
+  });
+
+  it('flags missing .claude/settings.json hooks', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('settings.json'),
+      );
+      expect(finding).toBeTruthy();
+      expect(finding!.severity).toBe('medium');
+    });
+  });
+
+  it('flags settings.json with no hooks configured', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.claude/settings.json', JSON.stringify({ hooks: {} }));
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('no hooks'),
+      );
+      expect(finding).toBeTruthy();
+      expect(finding!.severity).toBe('low');
+    });
+  });
+
+  it('flags invalid settings.json JSON', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.claude/settings.json', '{bad json}');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('not valid JSON'),
+      );
+      expect(finding).toBeTruthy();
+    });
+  });
+
+  it('passes with PreToolUse hooks configured', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.claude/skills/skill.md', '# Skill');
+      writeFile(dir, '.github/workflows/ci.yml', 'trufflehog\nsemgrep');
+      writeFile(
+        dir,
+        '.claude/settings.json',
+        JSON.stringify({ hooks: { PreToolUse: ['npm run lint'] } })
+      );
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const hookFinding = result.findings.find(f =>
+        f.message.includes('hooks'),
+      );
+      expect(hookFinding).toBeUndefined();
+    });
+  });
+
+  it('flags missing SAST tool in CI', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.github/workflows/ci.yml', 'name: CI\ntrufflehog: yes');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const finding = result.findings.find(f =>
+        f.message.includes('SAST'),
+      );
+      expect(finding).toBeTruthy();
+      expect(finding!.severity).toBe('medium');
+    });
+  });
+
+  it('accepts semgrep as SAST tool', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.claude/skills/skill.md', '# Skill');
+      writeFile(
+        dir,
+        '.claude/settings.json',
+        JSON.stringify({ hooks: { PreToolUse: ['lint'] } })
+      );
+      writeFile(dir, '.github/workflows/ci.yml', 'trufflehog: true\nsemgrep: true');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const sastFinding = result.findings.find(f =>
+        f.message.includes('SAST'),
+      );
+      expect(sastFinding).toBeUndefined();
+    });
+  });
+
+  it('accepts codeql as SAST tool', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.github/workflows/ci.yml', 'trufflehog: true\ncodeql: true');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const sastFinding = result.findings.find(f =>
+        f.message.includes('SAST'),
+      );
+      expect(sastFinding).toBeUndefined();
+    });
+  });
+
+  it('accepts snyk as SAST tool', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.github/workflows/ci.yml', 'trufflehog: true\nsnyk: true');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const sastFinding = result.findings.find(f =>
+        f.message.includes('SAST'),
+      );
+      expect(sastFinding).toBeUndefined();
+    });
+  });
+
+  it('accepts gitguardian as secret scanning tool', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir);
+      writeFile(dir, 'SECURITY.md', '# Security');
+      writeFile(dir, '.github/workflows/ci.yml', 'gitguardian: true\nsemgrep: true');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      const secretFinding = result.findings.find(f =>
+        f.message.includes('secret scanning'),
+      );
+      expect(secretFinding).toBeUndefined();
+    });
+  });
+
+  it('grades poorly for project with critical findings', () => {
+    withTmpDir((dir) => {
+      // No CLAUDE.md (critical, 25) + no .gitignore (high, 15) + more = score < 60
+      const result = collectGovernanceFindings(makeCtx(dir));
+      expect(['D', 'F']).toContain(result.grade);
+      expect(result.score).toBeLessThan(60);
+    });
+  });
+
+  it('grades A for fully compliant project', () => {
+    withTmpDir((dir) => {
+      writeGovernancePrereqs(dir, '.env\nnode_modules');
+      writeFile(dir, 'SECURITY.md', '# Security Policy');
+      writeFile(dir, '.claude/skills/skill.md', '# Skill');
+      writeFile(
+        dir,
+        '.claude/settings.json',
+        JSON.stringify({ hooks: { PostToolUse: ['npm run format'] } })
+      );
+      writeFile(dir, '.github/workflows/ci.yml', 'trufflehog: true\nsemgrep: true');
+
+      const result = collectGovernanceFindings(makeCtx(dir));
+      expect(result.grade).toBe('A');
+      expect(result.score).toBeGreaterThanOrEqual(90);
+    });
+  });
 });

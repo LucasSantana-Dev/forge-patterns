@@ -3,11 +3,17 @@
  * Defines the severity levels for logging
  */
 export enum LogLevel {
+  // eslint-disable-next-line no-unused-vars
   TRACE = 0,
+  // eslint-disable-next-line no-unused-vars
   DEBUG = 1,
+  // eslint-disable-next-line no-unused-vars
   INFO = 2,
+  // eslint-disable-next-line no-unused-vars
   WARN = 3,
+  // eslint-disable-next-line no-unused-vars
   ERROR = 4,
+  // eslint-disable-next-line no-unused-vars
   FATAL = 5
 }
 

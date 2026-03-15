@@ -4,7 +4,7 @@ import type { AssessmentFinding, AssessmentContext, CategoryScore, Grade } from 
 
 export function collectGovernanceFindings(ctx: AssessmentContext): CategoryScore {
   const findings: AssessmentFinding[] = [];
-  const dir = ctx.dir;
+  const { dir } = ctx;
 
   checkCodingRules(dir, findings);
   checkAiSkills(dir, findings);
