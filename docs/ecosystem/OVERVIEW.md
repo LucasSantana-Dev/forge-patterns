@@ -1,249 +1,138 @@
-# UIForge Ecosystem Overview
+# Forge Space Ecosystem Overview
 
-## 🎯 **Ecosystem Vision: Unified AI-Powered UI Generation Platform**
+## Vision: "The Open Full-Stack AI Workspace"
 
-The UIForge ecosystem consists of three integrated components that work together
-to provide a comprehensive AI-powered UI generation platform:
+> **Generate. Integrate. Ship.**
 
-- **forge-mcp-gateway**: Central hub for aggregation, routing, and
-  authentication
-- **uiforge-mcp**: Specialized MCP server for UI generation and template
-  management
-- **uiforge-webapp**: Management interface for configuration and monitoring
+Forge Space is an open, MCP-native platform for full-stack AI-assisted
+development. Every AI code tool generates beautiful frontends — Forge Space owns
+the full-stack integration layer: auth, DB, APIs, deployment, and governance.
 
-## 🏗️ **System Architecture**
+## Ecosystem Repos
 
-### **Component Integration Diagram**
+| Repo             | GitHub                   | Version | Purpose                                          | Tests |
+| ---------------- | ------------------------ | ------- | ------------------------------------------------ | ----- |
+| **core**         | Forge-Space/core         | 1.11.2  | Shared patterns, IDP, MCP context server         | 599   |
+| **siza**         | Forge-Space/siza         | 0.10.0  | Web app + API (Next.js 16, Cloudflare Workers)   | —     |
+| **siza-gen**     | Forge-Space/siza-gen     | 0.5.0   | AI generation engine (npm: @forgespace/siza-gen) | 465   |
+| **ui-mcp**       | Forge-Space/ui-mcp       | 0.9.0   | MCP server adapter (21 tools)                    | 394   |
+| **mcp-gateway**  | Forge-Space/mcp-gateway  | 1.7.4   | MCP tool routing hub (Python + Node.js)          | 1567  |
+| **branding-mcp** | Forge-Space/branding-mcp | 0.2.0   | Brand identity MCP server (7 tools)              | ~100  |
 
-```mermaid
-graph TB
-    A[User] --> B[uiforge-webapp]
-    B --> C[forge-mcp-gateway]
-    C --> D[uiforge-mcp]
-    D --> E[Generated UI Components]
-
-    F[Developer] --> G[IDE/CLI Tools]
-    G --> C
-    C --> H[Other MCP Servers]
-
-    I[Admin] --> B
-    B --> J[Supabase Database]
-    C --> K[SQLite/PostgreSQL]
-
-    subgraph "UIForge Ecosystem"
-        B
-        C
-        D
-    end
-
-    subgraph "External Integrations"
-        E
-        G
-        H
-        J
-        K
-    end
-```
-
-### **Component Responsibilities**
-
-#### **forge-mcp-gateway** (Central Hub)
-
-- **Aggregation**: Collects and routes requests between components
-- **Authentication**: Centralized JWT-based authentication and authorization
-- **Virtual Server Management**: Dynamic server lifecycle and configuration
-- **API Gateway**: RESTful API for webapp and external integrations
-- **Monitoring**: Health checks, metrics, and observability
-
-#### **uiforge-mcp** (UI Generation Server)
-
-- **UI Generation**: AI-powered component and template creation
-- **Template Management**: Template storage, versioning, and retrieval
-- **Component Library**: Reusable UI component catalog
-- **Design System Integration**: Consistent design patterns and tokens
-- **Code Generation**: Production-ready code output in multiple frameworks
-
-#### **uiforge-webapp** (Management Interface)
-
-- **User Interface**: Web-based management dashboard
-- **Configuration Management**: Component and server configuration
-- **Monitoring Dashboard**: Real-time system status and metrics
-- **User Management**: Authentication and user preferences
-- **Project Management**: UI generation project organization
-
-## 🔄 **Data Flow Architecture**
-
-### **Primary User Journey**
+## Architecture: Hub-and-Spoke
 
 ```
-User Request → WebApp → Gateway → MCP Server → Generated UI
-     ↑            ↑         ↑          ↑
-     │            │         │          │
-     └─────── Configuration & Monitoring ──────────┘
+                    ┌─────────────────────┐
+                    │   @forgespace/core   │
+                    │  (patterns, IDP,     │
+                    │   MCP context server)│
+                    └──────────┬──────────┘
+                               │ shared contracts
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+        ┌──────────┐    ┌─────────────┐  ┌──────────┐
+        │ siza-gen │    │ mcp-gateway │  │   siza   │
+        │ (AI lib) │    │ (hub/router)│  │ (webapp) │
+        └────┬─────┘    └──────┬──────┘  └──────────┘
+             │                 │
+        ┌────▼─────┐    ┌──────▼──────┐
+        │  ui-mcp  │    │branding-mcp │
+        │(21 tools)│    │ (7 tools)   │
+        └──────────┘    └─────────────┘
 ```
 
-### **Developer Integration Flow**
+**Key principle**: `mcp-gateway` is the **single auth authority** — MCP servers
+(ui-mcp, branding-mcp) are stateless spokes that never authenticate directly.
 
-```
-Developer → IDE/CLI → Gateway → MCP Server → Code Generation
-     ↑           ↑         ↑          ↑
-     │           │         │          │
-     └─────── Development Tools & Debugging ────────┘
-```
+## What `@forgespace/core` Provides
 
-### **Admin Management Flow**
+### Pattern Library (23 categories)
 
-```
-Admin → WebApp → Gateway → System Management
-   ↑       ↑         ↑          ↑
-   │       │         │          │
-   └─────── Monitoring & Configuration ────────┘
-```
+| Category                | Description                                                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `idp`                   | IDP patterns: policy engine, scorecards, migration assessor, feature toggles, security spoke                                    |
+| `shared-constants`      | Typed constants shared across all repos (11 TypeScript modules)                                                                 |
+| `mcp-servers`           | MCP server implementation patterns (AI providers, streaming, templates)                                                         |
+| `mcp-gateway`           | Gateway routing, auth, performance, security patterns                                                                           |
+| `docker`                | Container and compose patterns                                                                                                  |
+| `security`              | Auth, env templates, middleware, OWASP patterns                                                                                 |
+| `monitoring`            | Shared logger (Supabase + Sentry), observability                                                                                |
+| `feature-toggles`       | Unleash-based centralized feature flags                                                                                         |
+| `shared-infrastructure` | Production logger with transports and observability                                                                             |
+| `ai` / `ai-tools`       | AI/ML project templates, code generation, code analyzer                                                                         |
+| `code-quality`          | ESLint and Prettier shared configs                                                                                              |
+| `testing`               | Test creation framework and quality validation                                                                                  |
+| + 11 more               | `cloud-native`, `config`, `coverage`, `git`, `ide-extensions`, `java`, `localstack`, `plugin-system`, `python`, `shell`, `java` |
 
-## 🔗 **Integration Points**
+### IDP (Internal Developer Platform)
 
-### **API Contracts**
+Six modules for platform governance:
 
-- **WebApp ↔ Gateway**: RESTful API with JWT authentication
-- **Gateway ↔ MCP Server**: MCP protocol with custom extensions
-- **External Tools ↔ Gateway**: Standard MCP protocol support
+1. **Policy Engine** — Rule-based evaluation (8 operators, path traversal
+   protection)
+2. **Project Scorecards** — Health scoring: Security, Quality, Performance,
+   Compliance, Dependency
+3. **Migration Assessor** — 6-category project assessment (score 0-100, grade
+   A-F)
+4. **Feature Toggles** — File-based Unleash-compatible flag store
+5. **Security Spoke** — Typed contract artifacts for security report aggregation
+6. **Project Init** — Scaffolding with template-based CI and scorecard seeding
 
-### **Authentication Flow**
+### MCP Context Server
 
-1. **User Authentication**: WebApp handles initial user login
-2. **JWT Token Generation**: Gateway creates and signs JWT tokens
-3. **Token Propagation**: Tokens passed to MCP servers for authorization
-4. **Session Management**: Centralized session management in gateway
+Stdio MCP server that exposes project contexts as resources:
 
-### **Configuration Management**
+- URI scheme: `forge-space://context/{project-slug}`
+- Tools: `get_project_context`, `update_project_context`, `list_projects`
+- Store: file-based per-project markdown + JSON metadata
 
-- **Centralized Configuration**: Gateway manages system-wide settings
-- **Component Configuration**: Each component maintains local config
-- **Environment Variables**: Secure configuration via environment
-- **Runtime Updates**: Dynamic configuration updates without restart
+## Quality Standards
 
-### **Data Persistence**
+| Metric                   | Requirement       | Current             |
+| ------------------------ | ----------------- | ------------------- |
+| Test coverage            | ≥ 80% all metrics | **100%**            |
+| Tests                    | —                 | **599** (27 suites) |
+| Security vulnerabilities | 0                 | **0**               |
+| Lint errors              | 0                 | **0** (7 warnings)  |
+| Knip dead code           | 0                 | **0**               |
+| Pattern documentation    | 100%              | **23/23 ✅**        |
 
-- **WebApp**: Supabase for user data and project management
-- **Gateway**: SQLite/PostgreSQL for routing and authentication data
-- **MCP Server**: File-based storage for templates and components
-- **Caching**: Redis for session and performance optimization
+## Dependency Graph (change ordering)
 
-## 🚀 **Key Capabilities**
+When making cross-repo changes, always update in this order:
 
-### **For End Users**
+1. `core` — shared contracts first
+2. `siza-gen` — AI/registry layer
+3. `ui-mcp` — MCP tools
+4. `branding-mcp` — brand tools (parallel with ui-mcp)
+5. `mcp-gateway` — routing and orchestration
+6. `siza` — web app last
 
-- **Intuitive UI Generation**: Natural language to UI component conversion
-- **Template Library**: Pre-built templates for common UI patterns
-- **Customization**: Brand-aware and style-adaptive generation
-- **Export Options**: Multiple framework outputs (React, Vue, Angular, etc.)
+## Business Rules
 
-### **For Developers**
+| Rule                          | Requirement                                                  |
+| ----------------------------- | ------------------------------------------------------------ |
+| **BR-001** Zero Secrets       | No hardcoded credentials; use `{{PLACEHOLDER}}` in templates |
+| **BR-002** Pattern Versioning | Semantic versioning for all patterns                         |
+| **BR-003** Quality Gates      | ≥ 80% test coverage on all metrics                           |
+| **BR-004** Documentation      | Complete README.md for all pattern directories               |
+| **BR-005** Performance        | Measurable performance targets per service                   |
 
-- **IDE Integration**: Seamless integration with popular IDEs
-- **CLI Tools**: Command-line interface for automation and scripting
-- **API Access**: RESTful API for custom integrations
-- **Extensibility**: Plugin architecture for custom generators
+## Key ADRs
 
-### **For Administrators**
+| ADR     | Decision                                 |
+| ------- | ---------------------------------------- |
+| ADR-001 | Hub-and-spoke ecosystem architecture     |
+| ADR-002 | `mcp-gateway` as single auth authority   |
+| ADR-003 | stdio-only MCP servers (no HTTP)         |
+| ADR-004 | Next.js 16 + Cloudflare Workers for siza |
+| ADR-005 | Cross-repo integration patterns          |
+| ADR-006 | Centralized Unleash feature toggles      |
 
-- **Centralized Management**: Single dashboard for system administration
-- **Monitoring**: Real-time metrics and health monitoring
-- **User Management**: Role-based access control and permissions
-- **Scalability**: Horizontal scaling and load balancing support
+## Related Docs
 
-## 🛡️ **Security Architecture**
-
-### **Authentication Layers**
-
-- **WebApp Authentication**: User login and session management
-- **Gateway Authentication**: JWT token validation and refresh
-- **MCP Server Authentication**: Service-to-service authentication
-- **API Security**: Rate limiting, CORS, and input validation
-
-### **Data Protection**
-
-- **Encryption**: Data encrypted at rest and in transit
-- **Privacy**: User data isolation and privacy controls
-- **Audit Logging**: Comprehensive security event logging
-- **Compliance**: GDPR and data protection regulation compliance
-
-## 📊 **Performance & Scalability**
-
-### **Performance Characteristics**
-
-- **Response Times**: Sub-second UI generation for common patterns
-- **Throughput**: High-concurrency support for multiple users
-- **Caching**: Multi-level caching for improved performance
-- **Optimization**: AI model optimization for faster inference
-
-### **Scalability Design**
-
-- **Horizontal Scaling**: Stateless design for easy scaling
-- **Load Balancing**: Intelligent request routing and load distribution
-- **Resource Management**: Dynamic resource allocation and optimization
-- **Monitoring**: Real-time performance metrics and alerting
-
-## 🔄 **Ecosystem Evolution**
-
-### **Current State (v1.0)**
-
-- ✅ Basic UI generation capabilities
-- ✅ Central gateway with authentication
-- ✅ Web-based management interface
-- ✅ Template management system
-- ✅ IDE and CLI integration
-
-### **Near Future (v1.5-2.0)**
-
-- 🔄 Advanced AI model integration
-- 🔄 Multi-framework support expansion
-- 🔄 Enhanced customization capabilities
-- 🔄 Performance optimizations
-- 🔄 Advanced monitoring and analytics
-
-### **Long-term Vision (v3.0+)**
-
-- 📅 Full-stack application generation
-- 📅 Collaborative design features
-- 📅 Enterprise-grade security and compliance
-- 📅 Advanced analytics and insights
-- 📅 Ecosystem marketplace and community features
-
-## 🎯 **Success Metrics**
-
-### **User Experience Metrics**
-
-- **Time to Value**: Users generate useful UI components within 5 minutes
-- **Success Rate**: 95% of generation requests produce satisfactory results
-- **User Satisfaction**: 4.5+ star rating from user feedback
-- **Adoption Rate**: Growing user base and active usage
-
-### **Technical Metrics**
-
-- **Performance**: Sub-2 second response times for 95% of requests
-- **Reliability**: 99.9% uptime and availability
-- **Scalability**: Support for 1000+ concurrent users
-- **Quality**: 90%+ code quality scores for generated components
-
-### **Business Metrics**
-
-- **Developer Productivity**: 10x improvement in UI development speed
-- **Cost Reduction**: 50% reduction in UI development costs
-- **Time to Market**: 75% faster UI feature delivery
-- **User Retention**: 80%+ monthly active user retention
-
-## 📚 **Related Documentation**
-
-- [Architecture Details](./ARCHITECTURE.md)
 - [Integration Guide](./INTEGRATION_GUIDE.md)
-- [User Journey Documentation](./USER_JOURNEY.md)
-- [Deployment Playbook](./DEPLOYMENT_PLAYBOOK.md)
-- [Development Standards](../standards/DEVELOPMENT.md)
-- [Security Standards](../standards/SECURITY.md)
-
----
-
-_This overview serves as the entry point for understanding the UIForge
-ecosystem. For detailed technical information, please refer to the specific
-documentation sections._
+- [Architecture](./ARCHITECTURE.md)
+- [Developer Onboarding](../guides/DEVELOPER_ONBOARDING.md)
+- [MCP Context Server](../guides/MCP_CONTEXT_SERVER.md)
+- [Policy Engine Integration](../guides/policy-engine-integration.md)

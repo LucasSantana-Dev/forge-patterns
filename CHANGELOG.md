@@ -1,5 +1,62 @@
 ## [Unreleased]
 
+## [1.11.2] - 2026-03-15
+
+### Added
+- **Migration assessor test coverage** — All 6 migration collectors fully tested
+  (81 tests, up from 40):
+  - `collectSecurityFindings`: eval(), XSS via innerHTML/dangerouslySetInnerHTML,
+    SQL injection, unrestricted CORS, AWS access key pattern, exec() command
+    injection, private key in source, .env without .gitignore, missing SECURITY.md
+  - `collectQualityFindings`: missing linter/type-checker/formatter/CI, high
+    empty-catch count (→ high severity), TODO flood, low test ratio (<10%)
+  - `collectArchitectureFindings`: god file >1000 lines (critical), high coupling,
+    function sprawl, flat project structure, high average file size
+  - `collectReadinessFindings`: JS without TypeScript, missing docs, global state
+    pollution (window./global.), missing CI/test-framework
+  - `collectDependencyFindings`: no package.json (graceful), excessive deps,
+    no engine constraint, no devDependencies, yarn.lock/pnpm-lock acceptance
+- **SonarCloud configuration** — Added `sonar-project.properties` with project
+  key, organization, source paths, exclusions, and LCOV coverage path to resolve
+  SonarCloud advisory CI failures.
+
+## [1.11.1] - 2026-03-15
+
+### Added
+- **MCP context server validation module** — Extracted `src/mcp-context-server/validation.ts`
+  as a pure-function module (no `import.meta.url`) with 23 unit tests covering:
+  - `validateProjectSlug`: kebab-case enforcement, null-byte injection, path separators
+  - `isSafePathWithinBase`: path traversal detection (`..`, `/`, `\`)
+  - `safeResolve`: base-escape protection with descriptive error messages
+- **knip dead-code detection** — Added `knip.json` configuration; 0 unused
+  files, exports, or types (was 34 files + 7 exports).
+- **Pattern documentation complete** — All **23/23** pattern directories now
+  have `README.md` documentation (`java`, `localstack` were the final two).
+
+### Fixed
+- **VERSION constant drift** — `src/index.ts` hardcoded `'1.1.1'`; corrected to
+  `'1.11.0'`. Added regression test: `VERSION must match package.json version`.
+  Updated `scripts/release-core.sh` to auto-sync `VERSION` on every future release.
+- **High-severity `flatted` CVE** — Resolved via `npm audit fix` (0 vulnerabilities).
+- **Stale `.bak` workflow file** — Removed
+  `.github/workflows/reusable/release-detect.yml.bak`.
+- **MCP context server dead code** — Removed unused exports (`STORE_DIR`,
+  `ProjectEntry`, `ProjectMeta`, `ProjectResource`, `getContentPath`,
+  `getMetaPath`, `findResourceByProject`) and the thin-wrapper functions they
+  duplicated.
+
+### Changed
+- **MCP context server refactored** — `validateProjectSlug` and `safeResolve`
+  moved to `validation.ts`; `store.ts`, `resources.ts`, and `tools.ts` import
+  from the shared module.
+- **`.gitignore` scoping** — `coverage/` rule scoped to root only (`/coverage/`)
+  to stop blocking `patterns/coverage/` from being committed.
+- **ESLint globals** — Added jest globals config for test files, eliminating
+  `no-undef` errors in `.test.ts` files; removed redundant `/* global */`
+  comments from JS test files.
+
+## [1.11.0] - 2026-03-15
+
 ### Added
 - **Security Spoke v1 contract** — Added canonical security-spoke artifacts
   under `patterns/idp/security-spoke/`:
