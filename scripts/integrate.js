@@ -89,7 +89,7 @@ const PROJECT_CONFIGS = {
       'typescript'
     ],
     example: 'examples/siza-integration.js'
-  },  // Canonical Forge Space project names (aliases for backwards compat)
+  }, // Canonical Forge Space project names (aliases for backwards compat)
   'ui-mcp': {
     name: 'Forge UI MCP',
     description: 'MCP server with AI integration and template management (canonical name)',
@@ -113,7 +113,7 @@ const PROJECT_CONFIGS = {
     ],
     example: 'examples/ui-mcp-integration.js'
   },
-  'siza': {
+  siza: {
     name: 'Siza Web App',
     description: 'Next.js web application with feature toggles and code quality (canonical name)',
     patterns: [
@@ -258,12 +258,18 @@ async function createIntegrationExample(targetDir, projectType) {
 
   try {
     const examplesDir = path.join(targetDir, 'examples');
-    const exampleFile = path.join(examplesDir, `${projectType}-integration.js`);
+
+    // Normalise legacy aliases to canonical names
+    const LEGACY_MAP = { 'uiforge-mcp': 'ui-mcp', 'uiforge-webapp': 'siza' };
+    const canonicalType = LEGACY_MAP[projectType] ?? projectType;
+
+    const exampleFile = path.join(examplesDir, `${canonicalType}-integration.js`);
 
     await fs.ensureDir(examplesDir);
 
     // Create example based on project type
     let exampleContent = '';
+    const effectiveType = canonicalType;
 
     if (projectType === 'mcp-gateway') {
       exampleContent = `// MCP Gateway Integration Example
@@ -679,7 +685,10 @@ program
 program
   .command('integrate')
   .description('Integrate Forge Patterns into a project')
-  .option('-p, --project <type>', 'Project type (mcp-gateway, ui-mcp, siza) — legacy: uiforge-mcp, uiforge-webapp')
+  .option(
+    '-p, --project <type>',
+    'Project type (mcp-gateway, ui-mcp, siza) — legacy: uiforge-mcp, uiforge-webapp'
+  )
   .option('-d, --dir <path>', 'Target directory (default: current directory)')
   .option('--force', 'Force overwrite existing files')
   .action(async options => {
