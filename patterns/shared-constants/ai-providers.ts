@@ -2,7 +2,7 @@
  * AI provider registry shared across the Forge ecosystem.
  *
  * Centralises base URLs, supported models, rate limits, and token caps
- * for OpenAI, Anthropic, and Google AI — used by uiforge-mcp and UIForge.
+ * for OpenAI, Anthropic, and Google AI — used by ui-mcp and siza.
  */
 
 export type AIProvider = 'openai' | 'anthropic' | 'google';

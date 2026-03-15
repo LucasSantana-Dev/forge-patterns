@@ -17,8 +17,8 @@ PROJECTS=(
 # Integration scripts
 INTEGRATION_SCRIPTS=(
     "integrate-mcp-gateway.sh"
-    "integrate-uiforge-mcp.sh"
-    "integrate-uiforge-webapp.sh"
+    "integrate-ui-mcp.sh"
+    "integrate-siza.sh"
 )
 
 echo "📋 Forge Patterns directory: $FORGE_PATTERNS_DIR"

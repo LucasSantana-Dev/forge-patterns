@@ -1,6 +1,6 @@
 {
   "name": "@forgespace/core",
-  "version": "1.11.2",
+  "version": "1.12.0",
   "description": "Shared configuration, workflows, and architectural patterns for the Forgespace ecosystem",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -58,8 +58,8 @@
     "release:update-deps": "bash scripts/update-dependencies.sh",
     "integrate": "node scripts/integrate.js",
     "integrate:mcp-gateway": "node scripts/integrate.js --project=mcp-gateway",
-    "integrate:uiforge-mcp": "node scripts/integrate.js --project=uiforge-mcp",
-    "integrate:uiforge-webapp": "node scripts/integrate.js --project=uiforge-webapp",
+    "integrate:ui-mcp": "node scripts/integrate.js --project=ui-mcp",
+    "integrate:siza": "node scripts/integrate.js --project=siza",
     "patterns": "node scripts/forge-patterns-cli.js",
     "patterns:list": "node scripts/forge-patterns-cli.js list",
     "patterns:search": "node scripts/forge-patterns-cli.js search",

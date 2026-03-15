@@ -1,5 +1,41 @@
 ## [Unreleased]
 
+## [1.12.0] - 2026-03-15
+
+### Added
+- **`ui-mcp` and `siza` namespaces** in `ToggleNamespace` type — canonical Forge Space
+  names for the UI generation server and web app. Legacy `'uiforge-mcp'` and
+  `'uiforge-webapp'` kept for backwards compatibility with `@deprecated` comments.
+- **`MCP_UI_SERVER_NAME = 'forge-ui'`** in shared-constants — canonical server name
+  for the ui-mcp spoke; `MCP_UIFORGE_SERVER_NAME` marked `@deprecated`.
+- **Feature-toggle tests expanded**: 18 → 27 tests covering canonical namespaces,
+  custom strategy configs (gradual-rollout, user-ids), disabled filtering, and
+  empty-namespace edge case.
+
+### Changed
+- **Dependency upgrades**:
+  - `eslint`: 9.x → **10.0.3** (with `preserve-caught-error` rule fixes in pattern files)
+  - `@eslint/js`: 9.x → **10.0.1**
+  - `jest`: 29.7.0 → **30.3.0**
+  - `@types/jest`: 29.x → **30.0.0**
+  - `commander`: 11.x → **14.0.3**
+  - `@commitlint/*`: 20.4.3 → **20.4.4**
+  - `@types/node`: 25.3.5 → **25.5.0**
+  - `lint-staged`: 16.3.2 → **16.4.0**
+- **Rebranding**: 12 documentation files updated from `UIForge` → `Forge Space`
+  (DEVELOPER_ONBOARDING, DEVELOPMENT, INTEGRATION_GUIDE, ARCHITECTURE, ADR-001–006,
+  MAINTENANCE_AUTOMATION, RELEASE_AUTOMATION).
+
+### Removed
+- **`eslint-plugin-import`** and **`eslint-import-resolver-typescript`** — these
+  were installed but not referenced in `eslint.config.js`. Removed to eliminate
+  the ESLint v10 peer dependency conflict in CI.
+
+### Fixed
+- **ESLint v10 `preserve-caught-error` violations** — added `{ cause: error }` to
+  4 catch-rethrow patterns in `patterns/ai-tools/code-analyzer.js` and
+  `patterns/plugin-system/plugin-manager.js`.
+
 ## [1.11.2] - 2026-03-15
 
 ### Added
