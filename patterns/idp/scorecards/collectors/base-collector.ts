@@ -40,5 +40,5 @@ export abstract class BaseCollector {
 
   abstract get name(): string;
 
-  protected abstract doCollect(context: Record<string, unknown>): Promise<CollectorResult>;
+  protected abstract doCollect(_context: Record<string, unknown>): Promise<CollectorResult>;
 }

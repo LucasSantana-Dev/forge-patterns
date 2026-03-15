@@ -43,9 +43,9 @@ export function collectArchitectureFindings(ctx: AssessmentContext, maxFiles = 5
   const files = walkSourceFiles(ctx.dir, maxFiles);
 
   let totalLines = 0;
-  let godFileCount = 0;
-  let highCouplingCount = 0;
-  let sprawlCount = 0;
+  let _godFileCount = 0;
+  let _highCouplingCount = 0;
+  let _sprawlCount = 0;
 
   for (const f of files) {
     totalLines += f.lines;
@@ -57,7 +57,7 @@ export function collectArchitectureFindings(ctx: AssessmentContext, maxFiles = 5
         message: `God file: ${f.lines} lines`,
         file: f.path
       });
-      godFileCount++;
+      _godFileCount++;
     } else if (f.lines > 500) {
       findings.push({
         category: 'architecture',
@@ -65,7 +65,7 @@ export function collectArchitectureFindings(ctx: AssessmentContext, maxFiles = 5
         message: `Large file: ${f.lines} lines`,
         file: f.path
       });
-      godFileCount++;
+      _godFileCount++;
     }
 
     if (f.imports > 15) {
@@ -75,7 +75,7 @@ export function collectArchitectureFindings(ctx: AssessmentContext, maxFiles = 5
         message: `High coupling: ${f.imports} imports`,
         file: f.path
       });
-      highCouplingCount++;
+      _highCouplingCount++;
     }
 
     if (f.functions > 20) {
@@ -85,7 +85,7 @@ export function collectArchitectureFindings(ctx: AssessmentContext, maxFiles = 5
         message: `Function sprawl: ${f.functions} functions`,
         file: f.path
       });
-      sprawlCount++;
+      _sprawlCount++;
     }
   }
 

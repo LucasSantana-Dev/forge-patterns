@@ -2,7 +2,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { assessProject, detectStrategy } from './assessor.js';
+import { assessProject } from './assessor.js';
 import type { AssessmentContext, Grade } from './types.js';
 
 function parseArgs(args: string[]) {

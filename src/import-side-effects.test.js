@@ -1,5 +1,3 @@
-/* global describe, it, expect, beforeEach, afterEach, jest */
-
 const fs = require('node:fs');
 
 describe('Core package import side effects', () => {

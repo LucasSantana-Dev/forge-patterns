@@ -1,6 +1,6 @@
 import type { ConditionOperator } from './schema.js';
 
-type MatcherFn = (actual: unknown, expected: unknown) => boolean;
+type MatcherFn = (_actual: unknown, _expected: unknown) => boolean;
 
 function toNumber(val: unknown): number | null {
   if (typeof val === 'number') return val;

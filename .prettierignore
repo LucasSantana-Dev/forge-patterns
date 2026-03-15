@@ -21,6 +21,7 @@ coverage/
 
 # Config files
 *.json
+*.jsonc
 !package.json
 !tsconfig.json
 !.eslintrc.js

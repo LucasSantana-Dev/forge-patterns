@@ -225,7 +225,7 @@ export class FilteredTransport implements LoggerTransport {
   private transport: LoggerTransport;
   private filter: (_entry: LogEntry) => boolean;
 
-  constructor(transport: LoggerTransport, filter: (entry: LogEntry) => boolean, level?: LogLevel) {
+  constructor(transport: LoggerTransport, filter: (_entry: LogEntry) => boolean, level?: LogLevel) {
     this.transport = transport;
     this.filter = filter;
     this.level = level ?? transport.level;
