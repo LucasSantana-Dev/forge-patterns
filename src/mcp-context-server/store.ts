@@ -5,11 +5,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const STORE_DIR = process.env.MCP_CONTEXT_STORE_PATH
+const STORE_DIR = process.env.MCP_CONTEXT_STORE_PATH
   ? resolve(process.env.MCP_CONTEXT_STORE_PATH)
   : resolve(__dirname, '..', '..', 'src', 'mcp-context-server', 'context-store');
 
-export interface ProjectEntry {
+interface ProjectEntry {
   project: string;
   title: string;
   description: string;
@@ -17,7 +17,7 @@ export interface ProjectEntry {
   contentPath: string;
 }
 
-export interface ProjectMeta {
+interface ProjectMeta {
   project: string;
   title: string;
   description: string;
@@ -122,10 +122,10 @@ export function writeContext(
   return meta;
 }
 
-export function getContentPath(project: string): string {
+function getContentPath(project: string): string {
   return contentPath(project);
 }
 
-export function getMetaPath(project: string): string {
+function getMetaPath(project: string): string {
   return metaPath(project);
 }

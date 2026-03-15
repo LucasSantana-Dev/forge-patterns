@@ -6,7 +6,7 @@ import {
   validateProjectSlug
 } from './store.js';
 
-export interface ProjectResource {
+interface ProjectResource {
   uri: string;
   name: string;
   description: string;
@@ -64,6 +64,6 @@ export function findResourceByUri(uri: string): ProjectResource | undefined {
   };
 }
 
-export function findResourceByProject(project: string): ProjectResource | undefined {
+function findResourceByProject(project: string): ProjectResource | undefined {
   return findResourceByUri(`forge-space://context/${project}`);
 }

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": [
+    "src/index.ts",
+    "src/mcp-context-server/index.ts",
+    "scripts/*.js",
+    "patterns/idp/feature-toggles/cli.ts",
+    "patterns/idp/migration/cli.ts",
+    "patterns/idp/policy-engine/cli.ts",
+    "patterns/idp/scorecards/cli.ts",
+    "patterns/idp/init/cli.ts"
+  ],
+  "project": [
+    "src/**/*.ts",
+    "patterns/shared-constants/**/*.ts",
+    "patterns/idp/**/*.ts",
+    "scripts/**/*.js",
+    "test/**/*.ts",
+    "test/**/*.js"
+  ],
+  "ignore": [
+    "patterns/ai-tools/**",
+    "patterns/code-quality/**",
+    "patterns/coverage/**",
+    "patterns/feature-toggles/libraries/**",
+    "patterns/ide-extensions/**",
+    "patterns/monitoring/**",
+    "patterns/plugin-system/**",
+    "patterns/shared-infrastructure/**",
+    "test/performance-benchmark.js"
+  ],
+  "ignoreDependencies": [
+    "semver",
+    "@types/semver",
+    "globals",
+    "typescript-eslint"
+  ],
+  "ignoreBinaries": [
+    "forge-policy",
+    "forge-scorecard",
+    "forge-ai-init"
+  ]
+}
