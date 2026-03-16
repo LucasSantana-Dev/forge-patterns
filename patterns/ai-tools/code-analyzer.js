@@ -575,8 +575,7 @@ class AICodeAnalyzer {
     };
 
     for (const [name, metric] of this.qualityMetrics) {
-      // eslint-disable-next-line no-useless-assignment
-      let value = 0;
+      let value;
 
       switch (metric.measurement) {
         case 'lines':
