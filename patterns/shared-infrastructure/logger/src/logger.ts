@@ -294,7 +294,8 @@ export class Logger implements ILogger {
 
     // Calculate error rate
     const errorLogs =
-      this.metrics.logsByLevel[LogLevel.ERROR] + this.metrics.logsByLevel[LogLevel.FATAL];
+      (this.metrics.logsByLevel[LogLevel.ERROR] || 0) +
+      (this.metrics.logsByLevel[LogLevel.FATAL] || 0);
     this.metrics.errorRate = this.metrics.totalLogs > 0 ? errorLogs / this.metrics.totalLogs : 0;
 
     // Update average log size (simplified)
