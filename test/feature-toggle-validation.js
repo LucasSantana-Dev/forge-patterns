@@ -14,12 +14,12 @@ const FILE_PERMISSION_MASK = 0o111;
 
 // Test configuration
 const TEST_CONFIG = {
-  projects: ['mcp-gateway', 'uiforge-mcp', 'uiforge-webapp'],
+  projects: ['mcp-gateway', 'ui-mcp', 'siza'],
   globalFeatures: ['debug-mode', 'beta-features', 'experimental-ui'],
   projectFeatures: {
     'mcp-gateway': ['rate-limiting', 'request-validation', 'security-headers'],
-    'uiforge-mcp': ['ai-chat', 'template-management', 'ui-generation'],
-    'uiforge-webapp': ['dark-mode', 'advanced-analytics']
+    'ui-mcp': ['ai-chat', 'template-management', 'ui-generation'],
+    'siza': ['dark-mode', 'advanced-analytics']
   }
 };
 
