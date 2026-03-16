@@ -29,7 +29,7 @@ aws --endpoint-url=http://localhost:4566 s3 mb s3://my-test-bucket
 
 ## Network
 
-Runs on `uiforge-local-network`. Other containers connect via hostname `localstack:4566`.
+Runs on `forgespace-local-network`. Other containers connect via hostname `localstack:4566`.
 
 ## Security
 

@@ -1,6 +1,6 @@
-# Shared Logging Implementation for UIForge Ecosystem
+# Shared Logging Implementation for Forge Space Ecosystem
 
-This document provides comprehensive guidance for implementing shared logging across the UIForge ecosystem with Sentry integration and service identification.
+This document provides comprehensive guidance for implementing shared logging across the Forge Space ecosystem with Sentry integration and service identification.
 
 ## Overview
 
@@ -15,7 +15,7 @@ The shared logging system provides:
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   mcp-gateway     │    │   uiforge-mcp     │    │   uiforge-webapp   │
+│   mcp-gateway     │    │   ui-mcp     │    │   siza   │
 │   (Python)         │    │   (Node.js)       │    │   (Next.js)       │
 └─────────┬────────┘    └─────────┬────────┘    └─────────┬────────┘
          │                        │                        │
@@ -87,7 +87,7 @@ init_sentry(
 await monitor_mcp_tool_execution('tool_name', success=True, duration=1500)
 ```
 
-### uiforge-mcp (Node.js)
+### ui-mcp (Node.js)
 
 #### Files Created:
 - `src/lib/sentry-shared.ts` - Enhanced Sentry integration with shared logging
@@ -109,7 +109,7 @@ import { getSharedLogger } from './lib/shared-logger';
 initSentry({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  serviceName: 'uiforge-mcp',
+  serviceName: 'ui-mcp',
   enableSupabase: true,
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseKey: process.env.SUPABASE_KEY
@@ -119,7 +119,7 @@ initSentry({
 await monitorMcpToolExecution('tool_name', success=True, duration=1500);
 ```
 
-### uiforge-webapp (Next.js)
+### siza (Next.js)
 
 #### Files Created:
 - `apps/web/src/lib/sentry-shared.ts` - Enhanced Sentry integration with shared logging
@@ -142,7 +142,7 @@ import { getSharedLoggerClient } from './lib/shared-logger';
 initClientSentry({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  serviceName: 'uiforge-webapp',
+  serviceName: 'siza',
   enableSupababase: true,
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
   supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -195,7 +195,7 @@ async def handle_request(request):
 ```
 
 ```typescript
-// Node.js (uiforge-mcp)
+// Node.js (ui-mcp)
 import { createCorrelationContext } from './lib/sentry-shared';
 
 const { correlationId, cleanup } = createCorrelationId();
@@ -207,7 +207,7 @@ try {
 ```
 
 ```typescript
-// Next.js (uiforge-webapp)
+// Next.js (siza)
 import { createCorrelationContext } from './lib/sentry-shared';
 
 const { correlationId, cleanup } = createCorrelationContext();
@@ -274,7 +274,7 @@ The monitoring dashboard provides:
 - **Sentry Integration**: Direct links to Sentry traces
 
 ### Access:
-- Navigate to `/monitoring` in the uiforge-webapp
+- Navigate to `/monitoring` in the siza
 - View real-time logs from all three services
 - Filter and search for specific events
 - Export data for analysis

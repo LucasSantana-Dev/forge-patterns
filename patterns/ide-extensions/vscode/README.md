@@ -51,4 +51,4 @@ npx vsce package  # Build .vsix for distribution
 
 ## MCP Integration
 
-This extension is designed to work alongside the UIForge Context MCP Server. Set `forgePatterns.mcpServerUrl` when that integration is available.
+This extension is designed to work alongside the Forge Space Context MCP Server. Set `forgePatterns.mcpServerUrl` when that integration is available.

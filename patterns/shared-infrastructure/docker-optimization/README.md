@@ -1,4 +1,4 @@
-# Docker Optimization Patterns for UIForge Projects
+# Docker Optimization Patterns for Forge Space Projects
 
 ## 🎯 Overview
 
@@ -116,10 +116,10 @@ forge-features enable global.docker-optimization
 forge-features enable mcp-gateway.multi-stage-builds
 
 # Enable resource monitoring
-forge-features enable uiforge-mcp.resource-monitoring
+forge-features enable ui-mcp.resource-monitoring
 
 # Enable auto-scaling
-forge-features enable uiforge-webapp.auto-scaling
+forge-features enable siza.auto-scaling
 ```
 
 ## 🚀 Performance Metrics
@@ -133,9 +133,9 @@ forge-features enable uiforge-webapp.auto-scaling
 
 ### Optimization Techniques
 ```javascript
-const UIForgeFeatureToggles = require('@uiforge/feature-toggles');
+const Forge SpaceFeatureToggles = require('@forgespace/feature-toggles');
 
-const features = new UIForgeFeatureToggles({
+const features = new Forge SpaceFeatureToggles({
   appName: 'docker-optimizer',
   projectNamespace: 'shared-infrastructure'
 });
@@ -269,20 +269,20 @@ services:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uiforge-app
+  name: forgespace-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: uiforge-app
+      app: forgespace-app
   template:
     metadata:
       labels:
-        app: uiforge-app
+        app: forgespace-app
     spec:
       containers:
       - name: app
-        image: uiforge/app:optimized
+        image: forgespace/app:optimized
         resources:
           requests:
             memory: "256Mi"

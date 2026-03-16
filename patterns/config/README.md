@@ -28,8 +28,8 @@ feature_toggles:
   global_features: true
   project_namespaces:
     mcp-gateway: "mcp-gateway"
-    uiforge-mcp: "uiforge-mcp"
-    uiforge-webapp: "uiforge-webapp"
+    ui-mcp: "ui-mcp"
+    siza: "siza"
 ```
 
 ## Usage
@@ -38,8 +38,8 @@ This config is read by the integration scripts when pushing patterns to downstre
 
 ```bash
 npm run integrate:mcp-gateway   # Uses this config to determine which patterns to push
-npm run integrate:uiforge-mcp
-npm run integrate:uiforge-webapp
+npm run integrate:ui-mcp
+npm run integrate:siza
 ```
 
 See `patterns/feature-toggles/README.md` for the Unleash integration details.

@@ -31,11 +31,11 @@ This directory contains streaming patterns designed for real-time communication 
 ### Server-Sent Events Example
 
 ```javascript
-const UIForgeFeatureToggles = require('@uiforge/feature-toggles');
+const Forge SpaceFeatureToggles = require('@forgespace/feature-toggles');
 
-const features = new UIForgeFeatureToggles({
-  appName: 'uiforge-mcp',
-  projectNamespace: 'uiforge-mcp'
+const features = new Forge SpaceFeatureToggles({
+  appName: 'ui-mcp',
+  projectNamespace: 'ui-mcp'
 });
 
 // SSE streaming middleware
@@ -132,13 +132,13 @@ patterns/mcp-servers/streaming/
 
 ```bash
 # Enable SSE streaming
-forge-features enable uiforge-mcp.sse-streaming
+forge-features enable ui-mcp.sse-streaming
 
 # Enable WebSocket streaming
-forge-features enable uiforge-mcp.websocket-streaming
+forge-features enable ui-mcp.websocket-streaming
 
 # Enable real-time analytics
-forge-features enable uiforge-mcp.real-time-analytics
+forge-features enable ui-mcp.real-time-analytics
 
 # Enable stream compression
 forge-features enable global.stream-compression
