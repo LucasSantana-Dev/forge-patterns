@@ -271,6 +271,10 @@ export class MultiTransport implements LoggerTransport {
   }
 
   async close(): Promise<void> {
-    await Promise.all(this.transports.filter(t => 'close' in t).map(t => (t as unknown).close()));
+    await Promise.all(
+      this.transports
+        .filter((t): t is LoggerTransport & { close(): Promise<void> } => 'close' in t)
+        .map(t => t.close())
+    );
   }
 }
