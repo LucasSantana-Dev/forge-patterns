@@ -1,10 +1,10 @@
-# Centralized Feature Toggle System for UIForge Ecosystem
+# Centralized Feature Toggle System for Forge Space Ecosystem
 
 Cross-project feature management with Unleash for unified control.
 
 ## 🎯 Overview
 
-This directory contains a centralized feature toggle system designed to manage features across the entire UIForge ecosystem (MCP Gateway, UIForge MCP, UIForge WebApp). The system uses self-hosted Unleash with zero licensing costs and provides unified feature management capabilities across all projects.
+This directory contains a centralized feature toggle system designed to manage features across the entire Forge Space ecosystem (MCP Gateway, Forge UI MCP, Forge Space WebApp). The system uses self-hosted Unleash with zero licensing costs and provides unified feature management capabilities across all projects.
 
 ## 📋 Available Patterns
 
@@ -64,17 +64,17 @@ open http://localhost:4242
 # Create default admin user
 curl -X POST http://localhost:4242/api/admin/users \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@uiforge.local","name":"Admin User"}'
+  -d '{"email":"admin@forgespace.local","name":"Admin User"}'
 
 # Create API token
 curl -X POST http://localhost:4242/api/admin/api-tokens \
   -H "Content-Type: application/json" \
-  -d '{"name":"uiforge-token","type":"CLIENT"}'
+  -d '{"name":"forgespace-token","type":"CLIENT"}'
 ```
 
 ### Centralized Feature Management CLI
 
-The `forge-features` CLI tool provides centralized management of features across all UIForge projects:
+The `forge-features` CLI tool provides centralized management of features across all Forge Space projects:
 
 ```bash
 # Enable global features (affects all projects)
@@ -83,8 +83,8 @@ forge-features enable global.beta-features
 
 # Enable project-specific features
 forge-features enable mcp-gateway.rate-limiting
-forge-features enable uiforge-mcp.ai-chat
-forge-features enable uiforge-webapp.dark-mode
+forge-features enable ui-mcp.ai-chat
+forge-features enable siza.dark-mode
 
 # Disable features
 forge-features disable global.experimental-ui
@@ -102,8 +102,8 @@ forge-features list
 
 - **Global Features**: `global.debug-mode`, `global.beta-features`, `global.experimental-ui`, `global.enhanced-logging`
 - **MCP Gateway**: `mcp-gateway.rate-limiting`, `mcp-gateway.request-validation`, `mcp-gateway.security-headers`
-- **UIForge MCP**: `uiforge-mcp.ai-chat`, `uiforge-mcp.template-management`, `uiforge-mcp.ui-generation`
-- **UIForge WebApp**: `uiforge-webapp.dark-mode`, `uiforge-webapp.advanced-analytics`, `uiforge-webapp.experimental-components`
+- **Forge UI MCP**: `ui-mcp.ai-chat`, `ui-mcp.template-management`, `ui-mcp.ui-generation`
+- **Forge Space WebApp**: `siza.dark-mode`, `siza.advanced-analytics`, `siza.experimental-components`
 
 ## 📁 Pattern Structure
 
@@ -125,12 +125,12 @@ patterns/feature-toggles/
 // libraries/nodejs/feature-toggles.js
 const { UnleashClient } = require('unleash-client-node');
 
-class UIForgeFeatureToggles {
+class Forge SpaceFeatureToggles {
   constructor(config = {}) {
     this.client = new UnleashClient({
-      appName: 'uiforge-app',
+      appName: 'forgespace-app',
       url: config.unleashUrl || 'http://localhost:4242/api',
-      clientKey: config.clientKey || 'uiforge-token',
+      clientKey: config.clientKey || 'forgespace-token',
       refreshInterval: 60000, // 1 minute
       metricsInterval: 60000,  // 1 minute
     });
@@ -181,7 +181,7 @@ class UIForgeFeatureToggles {
   }
 }
 
-module.exports = UIForgeFeatureToggles;
+module.exports = Forge SpaceFeatureToggles;
 ```
 
 ### Python Integration
@@ -191,13 +191,13 @@ module.exports = UIForgeFeatureToggles;
 from unleash_client import UnleashClient
 from typing import Dict, Any, Optional
 
-class UIForgeFeatureToggles:
+class Forge SpaceFeatureToggles:
     def __init__(self, config: Dict[str, Any] = None):
         self.config = config or {}
         self.client = UnleashClient(
             url=self.config.get('unleash_url', 'http://localhost:4242/api'),
-            app_name='uiforge-app',
-            client_key=self.config.get('client_key', 'uiforge-token'),
+            app_name='forgespace-app',
+            client_key=self.config.get('client_key', 'forgespace-token'),
             refresh_interval=60,  # 1 minute
             metrics_interval=60,  # 1 minute
         )
@@ -282,7 +282,7 @@ interface FeatureToggleProviderProps {
 export const FeatureToggleProvider: React.FC<FeatureToggleProviderProps> = ({
   children,
   unleashUrl = 'http://localhost:4242/api',
-  clientKey = 'uiforge-token',
+  clientKey = 'forgespace-token',
   userId
 }) => {
   const [client, setClient] = useState<UnleashClient | null>(null);
@@ -290,7 +290,7 @@ export const FeatureToggleProvider: React.FC<FeatureToggleProviderProps> = ({
 
   useEffect(() => {
     const unleashClient = new UnleashClient({
-      appName: 'uiforge-webapp',
+      appName: 'siza',
       url: unleashUrl,
       clientKey,
       refreshInterval: 60000,
@@ -485,7 +485,7 @@ unleash:
   authentication:
     type: 'unsecure'  # For local development
     createAdminUser: true
-    adminEmail: 'admin@uiforge.local'
+    adminEmail: 'admin@forgespace.local'
 
   database:
     type: 'postgres'

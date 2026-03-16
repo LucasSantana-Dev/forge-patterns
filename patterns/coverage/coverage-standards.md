@@ -105,8 +105,8 @@ echo "✅ Coverage $COVERAGE% meets 80% threshold"
 ```bash
 #!/bin/bash
 # Compare coverage across projects
-echo "Comparing coverage across UIForge projects..."
-for project in mcp-gateway uiforge-webapp uiforge-mcp; do
+echo "Comparing coverage across Forge Space projects..."
+for project in mcp-gateway siza ui-mcp; do
   echo "📊 $project coverage:"
   cd "/path/to/$project"
   npm run test:coverage -- --coverageReporters=json | jq '.total.lines.pct'
@@ -121,8 +121,8 @@ done
 
 ## Project Coverage Summary
 - **mcp-gateway**: X% (status: ✅/⚠️/❌)
-- **uiforge-webapp**: X% (status: ✅/⚠️/❌)
-- **uiforge-mcp**: X% (status: ✅/⚠️/❌)
+- **siza**: X% (status: ✅/⚠️/❌)
+- **ui-mcp**: X% (status: ✅/⚠️/❌)
 
 ## Coverage Trends
 - Overall trend: ↗️/↘️/➡️

@@ -1,8 +1,8 @@
-# UIForge Docker Patterns
+# Forge Space Docker Patterns
 
-## 🐳 Docker Standards for UIForge Projects
+## 🐳 Docker Standards for Forge Space Projects
 
-This directory contains Docker patterns and configurations for consistent containerization across all UIForge projects.
+This directory contains Docker patterns and configurations for consistent containerization across all Forge Space projects.
 
 ## 📋 Available Patterns
 
@@ -62,7 +62,7 @@ docker-compose up -d dev
 
 ### Production Build
 ```bash
-docker build -t uiforge/app:latest .
+docker build -t forgespace/app:latest .
 ```
 
 ### Testing Environment

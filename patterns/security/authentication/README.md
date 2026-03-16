@@ -1,8 +1,8 @@
-# Authentication Patterns for UIForge Projects
+# Authentication Patterns for Forge Space Projects
 
 ## 🎯 Overview
 
-This directory contains authentication patterns designed for secure, zero-secrets development across the UIForge ecosystem. All patterns support centralized feature toggle integration and follow security best practices.
+This directory contains authentication patterns designed for secure, zero-secrets development across the Forge Space ecosystem. All patterns support centralized feature toggle integration and follow security best practices.
 
 ## 📋 Available Patterns
 
@@ -31,10 +31,10 @@ This directory contains authentication patterns designed for secure, zero-secret
 ### JWT Authentication Example
 
 ```javascript
-const UIForgeFeatureToggles = require('@uiforge/feature-toggles');
+const Forge SpaceFeatureToggles = require('@forgespace/feature-toggles');
 
 // Initialize feature toggles
-const features = new UIForgeFeatureToggles({
+const features = new Forge SpaceFeatureToggles({
   appName: 'mcp-gateway',
   projectNamespace: 'mcp-gateway'
 });
@@ -110,13 +110,13 @@ patterns/security/authentication/
 forge-features enable mcp-gateway.jwt-auth
 
 # Enable OAuth authentication
-forge-features enable uiforge-webapp.oauth-auth
+forge-features enable siza.oauth-auth
 
 # Enable API key authentication
 forge-features enable mcp-gateway.api-key-auth
 
 # Enable multi-factor authentication
-forge-features enable uiforge-webapp.multi-factor-auth
+forge-features enable siza.multi-factor-auth
 ```
 
 ## 🔒 Security Considerations

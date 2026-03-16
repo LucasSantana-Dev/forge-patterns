@@ -1,7 +1,7 @@
 # Sentry Supabase Monitoring Pattern
 
 ## Overview
-Sentry error tracking and performance monitoring with Supabase integration for the UIForge ecosystem.
+Sentry error tracking and performance monitoring with Supabase integration for the Forge Space ecosystem.
 
 ## Category
 Monitoring
@@ -11,8 +11,8 @@ sentry, supabase, monitoring, error-tracking, performance
 
 ## Framework Support
 - Python (mcp-gateway)
-- Node.js (uiforge-mcp)
-- Next.js (uiforge-webapp)
+- Node.js (ui-mcp)
+- Next.js (siza)
 
 ## Dependencies
 
@@ -67,12 +67,12 @@ Set up environment variables for each project in `.env.local`
 pip install sentry-sdk[fastapi] structlog psycopg2-binary
 ```
 
-#### Node.js (uiforge-mcp)
+#### Node.js (ui-mcp)
 ```bash
 npm install @sentry/node @sentry/tracing @supabase/sentry-js-integration
 ```
 
-#### Next.js (uiforge-webapp)
+#### Next.js (siza)
 ```bash
 npm install @sentry/nextjs @supabase/sentry-js-integration
 ```
@@ -223,4 +223,4 @@ Track AI model usage and performance
 ## Support Resources
 - Sentry Documentation: https://docs.sentry.io/
 - Supabase Integration Guide: https://supabase.com/docs/guides/platform/sentry
-- UIForge Documentation
+- Forge Space Documentation

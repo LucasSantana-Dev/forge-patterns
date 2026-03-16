@@ -1,8 +1,8 @@
-# Security Middleware Patterns for UIForge Projects
+# Security Middleware Patterns for Forge Space Projects
 
 ## 🎯 Overview
 
-This directory contains security middleware patterns designed to provide comprehensive protection for UIForge applications. All middleware integrates with the centralized feature toggle system and follows zero-secrets principles.
+This directory contains security middleware patterns designed to provide comprehensive protection for Forge Space applications. All middleware integrates with the centralized feature toggle system and follows zero-secrets principles.
 
 ## 📋 Available Patterns
 
@@ -36,10 +36,10 @@ This directory contains security middleware patterns designed to provide compreh
 ### Rate Limiting Example
 
 ```javascript
-const UIForgeFeatureToggles = require('@uiforge/feature-toggles');
+const Forge SpaceFeatureToggles = require('@forgespace/feature-toggles');
 
 // Initialize feature toggles
-const features = new UIForgeFeatureToggles({
+const features = new Forge SpaceFeatureToggles({
   appName: 'mcp-gateway',
   projectNamespace: 'mcp-gateway'
 });
@@ -138,7 +138,7 @@ forge-features enable mcp-gateway.rate-limiting
 forge-features enable mcp-gateway.security-headers
 
 # Enable CORS protection
-forge-features enable uiforge-webapp.cors-protection
+forge-features enable siza.cors-protection
 
 # Enable input validation
 forge-features enable mcp-gateway.input-validation
@@ -254,7 +254,7 @@ app.prepare().then(() => {
 ### Environment Variables
 ```bash
 # CORS Configuration
-CORS_ORIGINS=http://localhost:3000,https://uiforge.com
+CORS_ORIGINS=http://localhost:3000,https://forgespace.co
 CORS_METHODS=GET,POST,PUT,DELETE
 CORS_CREDENTIALS=true
 

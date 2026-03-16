@@ -3,7 +3,7 @@
 Centralised constants, types, and factory helpers extracted from all Forge ecosystem projects.
 
 **Version:** 1.0.0
-**Sources:** `mcp-gateway`, `uiforge-mcp`, `UIForge`
+**Sources:** `mcp-gateway`, `ui-mcp`, `Forge Space`
 
 ---
 
@@ -34,7 +34,7 @@ import {
   AI_PROVIDERS,
   createFeatureFlags,
   createStorageConfig,
-} from '@uiforge/forge-patterns/shared-constants';
+} from '@forgespace/forge-patterns/shared-constants';
 ```
 
 ---
