@@ -143,16 +143,16 @@ class CrossProjectIntegrationTester {
     });
   }
 
-  async testUIForgeMCPIntegration() {
-    await this.testScenario('UIForge MCP Integration', async () => {
-      const projectDir = path.join(this.testDir, 'uiforge-mcp');
+  async testUIMCPIntegration() {
+    await this.testScenario('Forge UI MCP Integration', async () => {
+      const projectDir = path.join(this.testDir, 'ui-mcp');
       await fs.ensureDir(projectDir);
       
       // Create package.json
       await fs.writeFile(
         path.join(projectDir, 'package.json'),
         JSON.stringify({
-          name: 'test-uiforge-mcp',
+          name: 'test-ui-mcp',
           version: '1.0.0',
           devDependencies: {}
         }, null, 2)
@@ -161,7 +161,7 @@ class CrossProjectIntegrationTester {
       // Run integration
       const { code, stderr } = await this.runCommand(
         process.execPath,
-        [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=uiforge-mcp'],
+        [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=ui-mcp'],
         projectDir
       );
       
@@ -184,16 +184,16 @@ class CrossProjectIntegrationTester {
     });
   }
 
-  async testUIForgeWebAppIntegration() {
-    await this.testScenario('UIForge WebApp Integration', async () => {
-      const projectDir = path.join(this.testDir, 'uiforge-webapp');
+  async testSizaIntegration() {
+    await this.testScenario('Siza Integration', async () => {
+      const projectDir = path.join(this.testDir, 'siza');
       await fs.ensureDir(projectDir);
       
       // Create package.json
       await fs.writeFile(
         path.join(projectDir, 'package.json'),
         JSON.stringify({
-          name: 'test-uiforge-webapp',
+          name: 'test-siza',
           version: '1.0.0',
           devDependencies: {}
         }, null, 2)
@@ -202,7 +202,7 @@ class CrossProjectIntegrationTester {
       // Run integration
       const { code, stderr } = await this.runCommand(
         process.execPath,
-        [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=uiforge-webapp'],
+        [path.join(__dirname, '../scripts/integrate.js'), 'integrate', '--project=siza'],
         projectDir
       );
       
@@ -221,7 +221,7 @@ class CrossProjectIntegrationTester {
 
   async testFeatureToggleConsistency() {
     await this.testScenario('Feature Toggle Consistency Across Projects', async () => {
-      const projects = ['mcp-gateway', 'uiforge-mcp', 'uiforge-webapp'];
+      const projects = ['mcp-gateway', 'ui-mcp', 'siza'];
       
       for (const project of projects) {
         const projectDir = path.join(this.testDir, project);
@@ -249,7 +249,7 @@ class CrossProjectIntegrationTester {
 
   async testCLIConsistency() {
     await this.testScenario('CLI Tool Consistency', async () => {
-      const projects = ['mcp-gateway', 'uiforge-mcp', 'uiforge-webapp'];
+      const projects = ['mcp-gateway', 'ui-mcp', 'siza'];
       
       for (const project of projects) {
         const projectDir = path.join(this.testDir, project);
@@ -271,7 +271,7 @@ class CrossProjectIntegrationTester {
 
   async testPackageJsonUpdates() {
     await this.testScenario('Package.json Updates Consistency', async () => {
-      const projects = ['mcp-gateway', 'uiforge-mcp', 'uiforge-webapp'];
+      const projects = ['mcp-gateway', 'ui-mcp', 'siza'];
       
       for (const project of projects) {
         const projectDir = path.join(this.testDir, project);
@@ -309,8 +309,8 @@ class CrossProjectIntegrationTester {
       await this.setup();
       
       await this.testMCPGatewayIntegration();
-      await this.testUIForgeMCPIntegration();
-      await this.testUIForgeWebAppIntegration();
+      await this.testUIMCPIntegration();
+      await this.testSizaIntegration();
       await this.testFeatureToggleConsistency();
       await this.testCLIConsistency();
       await this.testPackageJsonUpdates();
