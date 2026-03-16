@@ -1,5 +1,5 @@
 # Centralized Feature Toggle Configuration
-# Controls features across all UIForge projects
+# Controls features across all Forge Space projects
 
 # Global Unleash Configuration
 unleash:
@@ -27,9 +27,9 @@ projects:
       - circuit-breaker
       - health-checks
 
-  uiforge-mcp:
-    namespace: "uiforge-mcp"
-    description: "UIForge MCP - AI-powered UI generation"
+  ui-mcp:
+    namespace: "ui-mcp"
+    description: "Forge UI MCP - AI-powered UI generation"
     features:
       - ai-chat
       - template-management
@@ -38,9 +38,9 @@ projects:
       - provider-load-balancing
       - streaming-responses
 
-  uiforge-webapp:
-    namespace: "uiforge-webapp"
-    description: "UIForge WebApp - Frontend application"
+  siza:
+    namespace: "siza"
+    description: "Siza - AI workspace frontend application"
     features:
       - dark-mode
       - advanced-analytics
@@ -118,12 +118,12 @@ environments:
     auto_create_features: true
 
   staging:
-    unleash_url: "https://staging-unleash.uiforge.com"
+    unleash_url: "https://staging-unleash.forgespace.co"
     client_key: "staging:production"
     auto_create_features: false
 
   production:
-    unleash_url: "https://unleash.uiforge.com"
+    unleash_url: "https://unleash.forgespace.co"
     client_key: "production:client"
     auto_create_features: false
 
@@ -140,7 +140,7 @@ security:
   allowed_origins:
     - "http://localhost:3000"
     - "http://localhost:8080"
-    - "https://uiforge.com"
+    - "https://forgespace.co"
 
 # Cache Configuration
 cache:
