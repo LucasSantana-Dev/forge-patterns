@@ -23,7 +23,7 @@ module.exports = [
     ]
   },
   {
-    files: ['**/*.js', '**/*.ts'],
+    files: ['**/*.js', '**/*.cjs', '**/*.ts'],
     plugins: {
       '@typescript-eslint': tsPlugin
     },
@@ -100,7 +100,7 @@ module.exports = [
     }
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', '**/*.cjs'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off'
     }
@@ -125,7 +125,7 @@ module.exports = [
     }
   },
   {
-    files: ['scripts/**/*.js'],
+    files: ['scripts/**/*.js', 'scripts/**/*.cjs'],
     rules: {
       'no-console': 'off'
     }
