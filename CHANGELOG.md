@@ -124,6 +124,9 @@
 ## [1.11.0] - 2026-03-15
 
 ### Added
+- **NLnet funding ops automation** — Added a tracked project manifest, ignored
+  applicant overlay, packet renderer, and weekly NLnet status workflow for the
+  `mcp-gateway` funding lane
 - **Security Spoke v1 contract** — Added canonical security-spoke artifacts
   under `patterns/idp/security-spoke/`:
   - JSON schema `security-spoke-report-v1.schema.json`
@@ -164,6 +167,12 @@
   to keep publish detection reliable.
 
 ### Changed
+- **README funding guidance** — Documented the NLnet packet flow, local
+  applicant overlay path, and generated artifact contract for manual submission
+  handoff
+- **Distribution surfaces** — README now exposes the public npm package,
+  docs/community entry points, and `ui-mcp` naming while preserving the
+  existing `siza-mcp` integration CLI alias
 - **Bootstrap contract (new projects)** — `scripts/bootstrap/project.sh` now
   defaults to `--ci-profile=limit-aware`, requires `--org` and
   `--actions-cap-minutes` for that profile, and generates limit-aware CI

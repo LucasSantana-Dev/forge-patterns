@@ -10,6 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
+[![npm version](https://img.shields.io/npm/v/@forgespace/core)](https://www.npmjs.com/package/@forgespace/core)
 
 Part of [Forge Space](https://github.com/Forge-Space) — the open full-stack AI workspace. This repo provides the foundation that all other Forge Space projects build on: code quality standards, security framework, CI/CD workflows, and a local MCP context server for IDE integration.
 
@@ -79,7 +80,7 @@ resolution failures in CI.
 ## 📋 Projects Using These Patterns
 
 - **[siza](https://github.com/Forge-Space/siza)**: Next.js web application with multi-environment deployment
-- **[siza-mcp](https://github.com/Forge-Space/ui-mcp)**: MCP server for AI-powered UI generation
+- **[ui-mcp](https://github.com/Forge-Space/ui-mcp)**: MCP server for AI-powered UI generation
 - **[mcp-gateway](https://github.com/Forge-Space/mcp-gateway)**: Python/Node.js MCP gateway with comprehensive CI/CD
 - **[branding-mcp](https://github.com/Forge-Space/branding-mcp)**: AI-powered brand identity generation
 - **[siza-gen](https://github.com/Forge-Space/siza-gen)**: AI generation engine with component registry
@@ -96,7 +97,7 @@ This core repository provides the foundation for the entire Forge Space ecosyste
 **Related Projects:**
 - [**Siza**](https://github.com/Forge-Space/siza) - AI-powered full-stack workspace
 - [**MCP Gateway**](https://github.com/Forge-Space/mcp-gateway) - Central tool aggregation and routing
-- [**Siza MCP**](https://github.com/Forge-Space/ui-mcp) - MCP server for UI generation
+- [**ui-mcp**](https://github.com/Forge-Space/ui-mcp) - MCP server for UI generation
 
 **Documentation:**
 - [**Documentation Hub**](docs/README.md) - Complete documentation
@@ -217,6 +218,9 @@ For complete documentation, see our **[Documentation Hub](docs/README.md)** whic
 npm install @forgespace/core
 ```
 
+Published on npm as
+[`@forgespace/core`](https://www.npmjs.com/package/@forgespace/core).
+
 ### 2. Integrate into Your Project
 
 ```bash
@@ -230,6 +234,30 @@ npx forge-patterns integrate --project=mcp-gateway
 npx forge-patterns integrate --project=siza-mcp
 npx forge-patterns integrate --project=siza
 ```
+
+`--project=siza-mcp` is the current integration CLI alias for the `ui-mcp`
+server in this repo.
+
+## Community
+
+- [Documentation hub](https://docs.forgespace.co/docs)
+- [GitHub Discussions](https://github.com/orgs/Forge-Space/discussions)
+
+## Funding Ops
+
+The repo includes an NLnet packet generator for the `mcp-gateway` funding lane.
+Project facts stay in `ops/funding/nlnet/project.json`, while personal/contact
+details belong in the ignored `ops/funding/nlnet/applicant.local.json`.
+
+```bash
+cp ops/funding/nlnet/applicant.local.example.json ops/funding/nlnet/applicant.local.json
+npm run funding:nlnet:render
+npm run funding:nlnet:check
+```
+
+Generated artifacts land in `ops/funding/nlnet/generated/` and stay redacted for
+workflow-safe issue updates and browser-assisted handoff.
+- [Issue tracker](https://github.com/Forge-Space/core/issues)
 
 ## 📁 Repository Structure
 

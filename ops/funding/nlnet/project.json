@@ -1,0 +1,112 @@
+{
+  "program": {
+    "name": "NGI Zero Commons Fund",
+    "landingUrl": "https://nlnet.nl/commonsfund/",
+    "guideUrl": "https://nlnet.nl/commonsfund/guideforapplicants",
+    "applyUrl": "https://nlnet.nl/propose/"
+  },
+  "project": {
+    "title": "Forge Space MCP Gateway Commons Infrastructure",
+    "slug": "forge-space-mcp-gateway-commons",
+    "website": "https://forgespace.co",
+    "summary": "Forge Space is building a self-hosted Model Context Protocol gateway and governance layer that helps small teams aggregate MCP servers, route tools safely, and keep agent workflows interoperable.",
+    "problem": "Teams adopting agentic tooling hit IDE tool limits, fragmented authentication, weak governance, and a fast-growing surface area of MCP servers that are hard to combine safely.",
+    "solution": "The funded work focuses on the open mcp-gateway stack: self-hosted aggregation, registry-aware onboarding, policy controls, auditable routing, and maintainable deployment patterns that reduce lock-in.",
+    "fit": "The work is MIT-licensed, self-hostable, public-by-default, and improves interoperability for the broader MCP ecosystem rather than a closed hosted-only product.",
+    "audience": "Open-source maintainers, small product teams, internal platform teams, and consultants adopting MCP-based workflows.",
+    "durationMonths": 6,
+    "requestedAmountEUR": 40000
+  },
+  "repos": [
+    {
+      "name": "mcp-gateway",
+      "url": "https://github.com/Forge-Space/mcp-gateway",
+      "role": "Self-hosted MCP gateway, routing, registration, and admin operations"
+    },
+    {
+      "name": "core",
+      "url": "https://github.com/Forge-Space/core",
+      "role": "Shared governance patterns, scorecards, and release conventions"
+    },
+    {
+      "name": "ui-mcp",
+      "url": "https://github.com/Forge-Space/ui-mcp",
+      "role": "Reference MCP server used for package and registry distribution validation"
+    }
+  ],
+  "deliverables": [
+    "A reproducible self-hosted gateway deployment path with documented hardening and registry-aware server onboarding.",
+    "Open governance and routing patterns for MCP aggregation, including auditable policy and scorecard hooks.",
+    "Reference packaging and discovery flows for Forge Space MCP servers so public distribution stays aligned with self-hosted infrastructure.",
+    "Public documentation, example stacks, and dissemination updates that help external teams adopt the gateway."
+  ],
+  "milestones": [
+    {
+      "name": "Gateway hardening and deployment baseline",
+      "months": "1-2",
+      "budgetEUR": 12000,
+      "outcomes": [
+        "Self-host deployment baseline with reproducible install path",
+        "Operational validation for auth, health, and failure recovery",
+        "Public deployment and operator documentation"
+      ]
+    },
+    {
+      "name": "Registry-aware interoperability flow",
+      "months": "2-4",
+      "budgetEUR": 9000,
+      "outcomes": [
+        "Registry-aware onboarding and validation flow for MCP servers",
+        "Reference package and metadata automation for public MCP servers",
+        "Cross-repo compatibility checks across gateway and server packages"
+      ]
+    },
+    {
+      "name": "Governance, routing, and audit surfaces",
+      "months": "4-5",
+      "budgetEUR": 11000,
+      "outcomes": [
+        "Policy and scorecard guidance for self-hosted agent workflows",
+        "Auditable routing and visibility improvements",
+        "Public examples for safe MCP aggregation"
+      ]
+    },
+    {
+      "name": "Documentation and dissemination",
+      "months": "5-6",
+      "budgetEUR": 8000,
+      "outcomes": [
+        "Public docs, demos, and adoption guides",
+        "Design-partner feedback capture and iteration log",
+        "Final public project update with adoption guidance"
+      ]
+    }
+  ],
+  "budget": [
+    {
+      "label": "Core engineering and maintenance",
+      "amountEUR": 26000,
+      "rationale": "Implementation, packaging, validation, and release work across the gateway and supporting repos."
+    },
+    {
+      "label": "Documentation and dissemination",
+      "amountEUR": 7000,
+      "rationale": "Public docs, examples, operator guides, and external communication."
+    },
+    {
+      "label": "Design-partner validation",
+      "amountEUR": 4000,
+      "rationale": "Structured feedback, testing time, and adoption-oriented iteration with early users."
+    },
+    {
+      "label": "Infrastructure and operational costs",
+      "amountEUR": 3000,
+      "rationale": "Release infrastructure, package distribution, observability, and lightweight hosting needed to validate the open stack."
+    }
+  ],
+  "sustainability": {
+    "distribution": "Distribution is open-source first: GitHub repos, npm packages, MCP Registry metadata, docs, and public discussions feed the acquisition loop.",
+    "maintenance": "Forge Space maintains the repositories in public and uses the same governance tooling internally, so funded outputs stay in the mainline repos instead of a one-off grant branch.",
+    "postGrant": "The longer-term commercial surface is optional hosted support and design-partner work, while the funded deliverables remain self-hostable and openly documented."
+  }
+}

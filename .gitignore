@@ -62,6 +62,8 @@ POST_CLEANUP_CHECKLIST.md
 stdin
 test.local.js
 *.local
+ops/funding/nlnet/applicant.local.json
+ops/funding/nlnet/generated/
 
 # Cache
 .cache/

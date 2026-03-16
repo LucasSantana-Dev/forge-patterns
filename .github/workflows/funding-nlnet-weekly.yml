@@ -1,0 +1,106 @@
+name: Funding NLnet Weekly
+
+on:
+  schedule:
+    - cron: "0 13 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  nlnet-funding-status:
+    name: Refresh NLnet funding status issue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run funding:nlnet:render
+
+      - name: Check NLnet packet readiness
+        id: funding_check
+        continue-on-error: true
+        run: npm run funding:nlnet:check
+
+      - name: Read funding report
+        id: report
+        run: |
+          {
+            echo "body<<EOF"
+            cat ops/funding/nlnet/generated/check.md
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create or update issue
+        uses: actions/github-script@v8
+        env:
+          REPORT_BODY: ${{ steps.report.outputs.body }}
+          FUNDING_OUTCOME: ${{ steps.funding_check.outcome }}
+        with:
+          script: |
+            const labels = [
+              { name: 'funding-ops', color: 'fbca04', description: 'Recurring grant and funding operations status' },
+              { name: 'automated', color: '5319e7', description: 'Updated by automation' },
+            ];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                });
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ...label,
+                });
+              }
+            }
+
+            const title = 'NLnet Funding Status';
+            const body = `${process.env.REPORT_BODY}\n\n- Workflow outcome: \`${process.env.FUNDING_OUTCOME}\`\n\n---\n\n_Updated automatically by \`${context.workflow}\`._`;
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = issues.data.find((issue) => !issue.pull_request && issue.title === title);
+
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                title,
+                body,
+                labels: labels.map((label) => label.name),
+              });
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: labels.map((label) => label.name),
+            });
+
+      - name: Upload funding artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nlnet-funding-${{ github.run_id }}
+          path: ops/funding/nlnet/generated
+          if-no-files-found: error
