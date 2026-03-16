@@ -65,6 +65,10 @@ test.local.js
 ops/funding/nlnet/applicant.local.json
 ops/funding/nlnet/generated/
 
+# Auto-generated test stubs (forge-ai-init test-autogen pre-commit hook)
+tests/unit/
+tests/integration/
+
 # Cache
 .cache/
 .pytest_cache/
