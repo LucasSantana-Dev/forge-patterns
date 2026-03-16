@@ -100,7 +100,7 @@ jobs:
 
       - name: Upload audit results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: audit-results-${{ matrix.language }}
           path: audit-results.json
@@ -173,7 +173,7 @@ jobs:
 
       - name: Upload outdated report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: outdated-${{ matrix.language }}
           path: outdated-${{ matrix.language }}.json

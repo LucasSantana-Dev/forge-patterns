@@ -42,7 +42,7 @@ core/
 4. **BR-004 Documentation Coverage**: Complete README.md for all patterns (23/23 ✅)
 5. **BR-005 Performance Standards**: Measurable performance targets
 
-## Coverage & Quality (v1.12.0)
+## Coverage & Quality (v1.13.0)
 - **100% test coverage** across all metrics (statements, branches, functions, lines)
 - **609 tests, 27 suites**
 - ESM mcp-context-server excluded from coverage (needs Vitest, not Jest)
@@ -63,24 +63,24 @@ core/
 - **mcp-gateway** v1.7.4: Python/Node.js MCP tool routing hub, 91.46% coverage, 1567 tests
 - **branding-mcp** v0.2.0: 7 MCP tools for brand identity generation, 97.63% coverage
 
-## Recent Changes (2026-03-15 — v1.12.0)
-- **v1.12.0 released** (PR #140): CHANGELOG, version sync, rebrand scripts & docs
-- **chore/complete-rebrand branch**: complete UIForge → Forge Space rename in scripts/patterns/memories + knip cleanup
-  - ForgeSpaceFeatureToggles (UIForgeFeatureToggles alias for backwards compat)
-  - integrate.js: canonical project names (ui-mcp, siza) + legacy aliases
-  - knip.json: 8 stale ignores removed, now clean
-- Dep bumps (#139): eslint v10, jest v30, commander v14
-- MCP_UI_SERVER_NAME='forge-ui' added, MCP_UIFORGE_SERVER_NAME deprecated
-- Docs fully rebranded UIForge → Forge Space (PR #136)
-- sonar-project.properties added (fixes SonarCloud CI)
-- Skills: forge-audit, forge-space-resume created
-- Open PRs: chore/complete-rebrand (pending)
+## Recent Changes (2026-03-16 — v1.13.0)
+- **v1.13.0**: scorecard A-F grades + features --dry-run (PR #153, closes #90/#91)
+- fix(scorer): regex for index-key detection (PR #154)
+- forge-init --template flag (PR #155)
+- logger real unit tests 44 tests, NaN errorRate bug fix (PR #158)
+- chore: remove unused @jest/globals dep + unexport InitResult (PR #159)
+- MCP context store updated to Siza v0.48.0 and mcp-gateway v1.28.2
+- UIForge → Forge Space rebrand complete across 14 pattern READMEs (PR #162)
+- Test project names updated: UIForge → ui-mcp and siza (PR #163)
+- Dep bumps: forge-ai-action 1.3.0, upload-artifact v7
+- Open PRs: 0
+- NLnet application: project.json complete, applicant.local.json needs personal data (April 1 deadline)
 
 ## 23 Pattern Categories
 ai, ai-tools, cloud-native, code-quality, config, coverage, docker, feature-toggles, git, ide-extensions, idp, java, localstack, mcp-gateway, mcp-servers, monitoring, plugin-system, python, security, shared-constants, shared-infrastructure, shell, testing
 
 ## Package Information
 - **Name**: @forgespace/core
-- **Version**: 1.12.0
+- **Version**: 1.13.0
 - **License**: MIT
 - **Repository**: https://github.com/Forge-Space/core.git
