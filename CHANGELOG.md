@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+## [1.13.0] - 2026-03-16
+
+### Added
+- **NLnet funding ops automation**: `ops/funding/nlnet/project.json` manifest (NGI Zero Commons Fund, €40k, 6 months), applicant overlay template, render/check scripts, and weekly GitHub Actions cron that creates/updates a funding-status issue with labels `funding-ops` + `automated` (#150).
+- **ESLint `.cjs` coverage**: extended `eslint.config.js` to apply all globals and rules to `.cjs` files, fixing lint errors in the new funding scripts (#150).
+
+### Changed
+- **README**: Added npm version badge alongside existing CI, License, TypeScript, and PRs Welcome badges (#149).
+
 ## [1.12.3] - 2026-03-15
 
 ### Changed
