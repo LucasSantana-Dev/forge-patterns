@@ -1,0 +1,16 @@
+{
+  "applicant": {
+    "legalName": "Your legal name or entity",
+    "publicName": "Forge Space",
+    "email": "founder@example.com",
+    "city": "Sao Paulo",
+    "country": "Brazil",
+    "entityType": "Individual or company",
+    "website": "https://forgespace.co",
+    "githubProfile": "https://github.com/LucasSantana-Dev"
+  },
+  "submission": {
+    "requestedAmountEUR": 40000,
+    "durationMonths": 6
+  }
+}
