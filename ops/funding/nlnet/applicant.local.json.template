@@ -1,0 +1,22 @@
+{
+  "_instructions": [
+    "Copy this file to applicant.local.json in the same directory.",
+    "Fill in all fields marked with FILL_IN.",
+    "This file is gitignored — it contains personal contact data.",
+    "Run: npm run funding:nlnet:render   (generates ops/funding/nlnet/generated/)",
+    "Run: npm run funding:nlnet:check    (validates deadline and completeness)",
+    "Entity types: 'individual', 'company', 'non-profit', 'foundation', 'research-institute'"
+  ],
+  "applicant": {
+    "legalName": "FILL_IN: your full legal name or organization legal name",
+    "publicName": "FILL_IN: your public name or project name (e.g. Forge Space)",
+    "email": "FILL_IN: your contact email",
+    "city": "FILL_IN: your city",
+    "country": "FILL_IN: your country (e.g. Brazil)",
+    "entityType": "FILL_IN: individual | company | non-profit | foundation | research-institute"
+  },
+  "submission": {
+    "requestedAmountEUR": 40000,
+    "durationMonths": 6
+  }
+}
