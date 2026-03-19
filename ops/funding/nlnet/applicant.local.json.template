@@ -1,8 +1,10 @@
 {
   "_instructions": [
     "Copy this file to applicant.local.json in the same directory.",
+    "Or generate it from environment variables via: npm run funding:nlnet:init-local",
     "Fill in all fields marked with FILL_IN.",
     "This file is gitignored — it contains personal contact data.",
+    "Required env vars: NLNET_APPLICANT_LEGAL_NAME, NLNET_APPLICANT_PUBLIC_NAME, NLNET_APPLICANT_EMAIL, NLNET_APPLICANT_CITY, NLNET_APPLICANT_COUNTRY, NLNET_APPLICANT_ENTITY_TYPE, NLNET_REQUESTED_AMOUNT_EUR, NLNET_DURATION_MONTHS",
     "Run: npm run funding:nlnet:render   (generates ops/funding/nlnet/generated/)",
     "Run: npm run funding:nlnet:check    (validates deadline and completeness)",
     "Entity types: 'individual', 'company', 'non-profit', 'foundation', 'research-institute'"

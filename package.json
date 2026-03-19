@@ -61,6 +61,7 @@
     "integrate:ui-mcp": "node scripts/integrate.js --project=ui-mcp",
     "integrate:siza": "node scripts/integrate.js --project=siza",
     "funding:nlnet:render": "node scripts/funding/render-nlnet-packet.cjs",
+    "funding:nlnet:init-local": "node scripts/funding/init-nlnet-applicant.cjs",
     "funding:nlnet:check": "node scripts/funding/check-nlnet-deadline.cjs",
     "ecosystem:health": "bash scripts/ecosystem-health.sh",
     "ecosystem:prs": "bash scripts/ecosystem-health.sh --prs",

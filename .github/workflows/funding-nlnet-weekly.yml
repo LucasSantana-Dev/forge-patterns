@@ -13,6 +13,15 @@ jobs:
   nlnet-funding-status:
     name: Refresh NLnet funding status issue
     runs-on: ubuntu-latest
+    env:
+      NLNET_APPLICANT_LEGAL_NAME: ${{ secrets.NLNET_APPLICANT_LEGAL_NAME }}
+      NLNET_APPLICANT_PUBLIC_NAME: ${{ secrets.NLNET_APPLICANT_PUBLIC_NAME }}
+      NLNET_APPLICANT_EMAIL: ${{ secrets.NLNET_APPLICANT_EMAIL }}
+      NLNET_APPLICANT_CITY: ${{ secrets.NLNET_APPLICANT_CITY }}
+      NLNET_APPLICANT_COUNTRY: ${{ secrets.NLNET_APPLICANT_COUNTRY }}
+      NLNET_APPLICANT_ENTITY_TYPE: ${{ secrets.NLNET_APPLICANT_ENTITY_TYPE }}
+      NLNET_REQUESTED_AMOUNT_EUR: ${{ secrets.NLNET_REQUESTED_AMOUNT_EUR }}
+      NLNET_DURATION_MONTHS: ${{ secrets.NLNET_DURATION_MONTHS }}
     steps:
       - uses: actions/checkout@v6
 
@@ -22,6 +31,12 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Generate applicant packet from NLnet secrets
+        id: funding_init
+        continue-on-error: true
+        run: npm run funding:nlnet:init-local -- --force
+
       - run: npm run funding:nlnet:render
 
       - name: Check NLnet packet readiness
@@ -43,6 +58,7 @@ jobs:
         env:
           REPORT_BODY: ${{ steps.report.outputs.body }}
           FUNDING_OUTCOME: ${{ steps.funding_check.outcome }}
+          FUNDING_INIT_OUTCOME: ${{ steps.funding_init.outcome }}
         with:
           script: |
             const labels = [
@@ -69,7 +85,11 @@ jobs:
             }
 
             const title = 'NLnet Funding Status';
-            const body = `${process.env.REPORT_BODY}\n\n- Workflow outcome: \`${process.env.FUNDING_OUTCOME}\`\n\n---\n\n_Updated automatically by \`${context.workflow}\`._`;
+            const initOutcome = process.env.FUNDING_INIT_OUTCOME || 'skipped';
+            const initHint = initOutcome === 'success'
+              ? ''
+              : '\n- Applicant init hint: configure NLnet applicant/submission secrets so weekly automation can populate private form fields automatically.';
+            const body = `${process.env.REPORT_BODY}\n\n- Applicant init outcome: \`${initOutcome}\`\n- Workflow outcome: \`${process.env.FUNDING_OUTCOME}\`${initHint}\n\n---\n\n_Updated automatically by \`${context.workflow}\`._`;
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
