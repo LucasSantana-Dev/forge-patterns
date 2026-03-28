@@ -243,6 +243,17 @@ server in this repo.
 - [Documentation hub](https://docs.forgespace.co/docs)
 - [GitHub Discussions](https://github.com/orgs/Forge-Space/discussions)
 
+## GitHub Workflow
+
+This repository follows the shared Forge Space GitHub work-management baseline:
+
+- Discussions for ideas, RFCs, Q&A, and announcements
+- Issues for actionable delivery work
+- Projects for roadmap visibility and cross-repo reporting
+
+See [Forge-Space/.github `GOVERNANCE.md`](https://github.com/Forge-Space/.github/blob/main/GOVERNANCE.md)
+for the org-wide contract.
+
 ## Funding Ops
 
 The repo includes an NLnet packet generator for the `mcp-gateway` funding lane.

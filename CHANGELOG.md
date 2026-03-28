@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+### Changed
+- This repo now inherits the Forge Space org-level GitHub issue forms and
+  work-management governance from `Forge-Space/.github`, keeping Discussions
+  for intake, Issues for actionable delivery work, and Projects for
+  roadmap/reporting.
+
 ## [1.13.0] - 2026-03-16
 
 ### Added
