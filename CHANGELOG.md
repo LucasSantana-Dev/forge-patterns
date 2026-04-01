@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+### Fixed
+- **SonarCloud coverage**: configured patterns/idp modules to be included in Jest coverage collection and added SonarCloud coverage exclusions for CLI entry points and test directories. Added CPD (duplicate code) exclusions for collector modules that share similar structural patterns.
+
 ### Changed
 - This repo now inherits the Forge Space org-level GitHub issue forms and
   work-management governance from `Forge-Space/.github`, keeping Discussions
