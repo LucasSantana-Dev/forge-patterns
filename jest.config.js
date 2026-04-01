@@ -38,6 +38,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.ts',
     'patterns/shared-constants/**/*.ts',
+    'patterns/idp/**/*.ts',
     '!src/**/*.d.ts',
     '!patterns/**/*.d.ts',
     '!src/**/*.test.ts',
@@ -54,6 +55,8 @@ module.exports = {
     '!patterns/ide-extensions/**',
     '!patterns/monitoring/**',
     '!patterns/shared-infrastructure/logger/**',
+    '!patterns/idp/*/cli.ts',
+    '!patterns/idp/**/__tests__/**',
     '!src/mcp-context-server/index.ts',
     '!src/mcp-context-server/store.ts',
     '!src/mcp-context-server/resources.ts',
