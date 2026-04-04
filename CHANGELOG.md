@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [1.14.0] - 2026-04-04
+
 ### Fixed
 - **SonarCloud coverage**: configured patterns/idp modules to be included in Jest coverage collection and added SonarCloud coverage exclusions for CLI entry points and test directories. Added CPD (duplicate code) exclusions for collector modules that share similar structural patterns.
 
