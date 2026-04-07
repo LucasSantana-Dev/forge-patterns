@@ -25,6 +25,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "api:extract": "api-extractor run --local",
+    "api:check": "api-extractor run",
+    "api:docs": "api-documenter markdown --input-folder temp --output-folder docs/api",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "format": "prettier --write .",
@@ -94,6 +97,8 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
+    "@microsoft/api-documenter": "^7.29.10",
+    "@microsoft/api-extractor": "^7.58.1",
     "@types/fs-extra": "^11.0.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.0",
