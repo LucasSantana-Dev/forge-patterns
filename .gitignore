@@ -133,5 +133,9 @@ opencode.jsonc
 .forge/test-autogen-telemetry.jsonl
 .forge/test-autogen-baseline.json
 
-# API Extractor temp outputs (committed: etc/*.api.md)
+# API Extractor outputs
+# - etc/*.api.md is COMMITTED (baseline report, CI verifies)
+# - temp/ is transient (regenerated on every run)
+# - docs/api/ is generated via `npm run api:docs`, not committed (use locally or publish via Pages)
 temp/
+docs/api/
