@@ -1,7 +1,7 @@
 /**
  * Forgespace Core - Main entry point
  *
- * This is the main entry point for the @forgespace/core package.
+ * This is the main entry point for the `\@forgespace/core` package.
  * It provides easy access to all patterns and utilities.
  */
 

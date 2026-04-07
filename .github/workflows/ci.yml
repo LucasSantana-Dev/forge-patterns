@@ -33,6 +33,25 @@ jobs:
       - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
       - run: npm run build
 
+  api-check:
+    name: API Surface Check
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: Forge-Space/.github/.github/actions/setup-node@6fbe56bc610ddf84b70f213c752b95196bcadd95
+      - name: Build TypeScript declarations
+        run: npm run build
+      - name: Verify API report is up to date
+        run: npm run api:check
+      - name: Upload diff on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: api-extractor-diff
+          path: |
+            etc/*.api.md
+            temp/*.api.md
+
   validation:
     name: Pattern Validation
     runs-on: ubuntu-latest
