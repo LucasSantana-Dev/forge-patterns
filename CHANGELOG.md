@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [1.14.1] - 2026-04-07
+
+### Fixed
+- **`forge-patterns` bin entry**: `package.json` declared `"forge-patterns": "dist/cli.js"`, but no `src/cli.ts` ever existed and `dist/cli.js` was never built, so `npx @forgespace/core forge-patterns` failed for every npm consumer of v1.4.0–v1.14.0. The bin now points at the existing `scripts/forge-patterns-cli.js` (already shipped under `pkg.files`, has a `#!/usr/bin/env node` shebang). The script was also marked executable. Added `src/bin-entries.test.js` to assert that every `pkg.bin` entry resolves to a real file, has a node shebang, and lives under a path declared in `pkg.files` — preventing this regression class going forward.
+
 ## [1.14.0] - 2026-04-04
 
 ### Fixed
