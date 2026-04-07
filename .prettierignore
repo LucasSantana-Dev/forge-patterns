@@ -18,6 +18,10 @@ coverage/
 # Documentation (handled separately)
 *.md
 !docs/**/*.md
+# Auto-generated API reference — owned by api-documenter
+docs/api/**
+# Auto-generated API surface report — owned by api-extractor
+etc/*.api.md
 
 # Config files
 *.json
