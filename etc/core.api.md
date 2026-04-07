@@ -711,7 +711,7 @@ export interface ToggleStrategyConfig {
 export function validateTenantProfile(value: unknown): value is TenantProfile;
 
 // @public
-export const VERSION = "1.14.0";
+export const VERSION = "1.14.1";
 
 // (No @packageDocumentation comment for this package)
 
