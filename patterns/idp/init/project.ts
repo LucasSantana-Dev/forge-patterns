@@ -116,7 +116,7 @@ jobs:
 `;
 }
 
-interface InitResult {
+export interface InitResult {
   created: string[];
   skipped: string[];
 }

@@ -290,14 +290,20 @@ export class ForgePatterns {
 // @public (undocumented)
 export type Grade = 'A' | 'B' | 'C' | 'D' | 'F';
 
-// Warning: (ae-forgotten-export) The symbol "InitResult" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export function initProject(targetDir: string, options?: {
     force?: boolean;
     dryRun?: boolean;
     template?: TemplateName;
 }): InitResult;
+
+// @public (undocumented)
+export interface InitResult {
+    // (undocumented)
+    created: string[];
+    // (undocumented)
+    skipped: string[];
+}
 
 // @public (undocumented)
 export function isSecuritySpokeReportV1(value: unknown): value is SecuritySpokeReportV1;
@@ -628,6 +634,12 @@ export interface SecuritySpokeSummary {
 export type Severity = 'critical' | 'high' | 'medium' | 'low';
 
 // @public (undocumented)
+export const TEMPLATE_NAMES: readonly ["react", "nextjs", "node"];
+
+// @public (undocumented)
+export type TemplateName = (typeof TEMPLATE_NAMES)[number];
+
+// @public (undocumented)
 export interface TenantCiPolicy {
     // (undocumented)
     enforce_pr_checks: boolean;
@@ -700,10 +712,6 @@ export function validateTenantProfile(value: unknown): value is TenantProfile;
 
 // @public
 export const VERSION = "1.14.0";
-
-// Warnings were encountered during analysis:
-//
-// patterns/idp/init/project.ts:168:5 - (ae-forgotten-export) The symbol "TemplateName" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
