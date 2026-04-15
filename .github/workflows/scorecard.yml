@@ -35,7 +35,7 @@ jobs:
 
       - name: Comment on PR
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const body = `## Project Scorecard\n\n\`\`\`\n${process.env.SCORECARD_RESULT}\n\`\`\``;
